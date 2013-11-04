@@ -27,6 +27,9 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
      */
     public AipGffGFF3RecordHandler (Model model) {
         super(model);
+	refsAndCollections.put("Exon", "transcripts");
+	refsAndCollections.put("MRNA", "gene");
+
     }
 
     /**
@@ -39,7 +42,7 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
         // are from the last column of the file are available in a map with the attribute name as
         // the key.   For example:
         //
-        //     Item feature = getFeature();
+             Item feature = getFeature();
         //     String symbol = record.getAttributes().get("symbol");
         //     feature.setAttrinte("symbol", symbol);
         //
@@ -52,6 +55,17 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
         //
         // You should make sure that new Items you create are unique, i.e. by storing in a map by
         // some identifier. 
+	String clsName = feature.getClassName();
+        if("Gene".equals(clsName) || "MRNA".equals(clsName)){
+            if(record.getAttributes().get("Note") != null){
+                String note = record.getAttributes().get("Note").iterator().next();
+                if(note != null){
+                    feature.setAttribute("Note", note);
+                }   
+            }    
+        }
+	
+
 
     }
 
