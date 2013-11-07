@@ -29,6 +29,10 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
         super(model);
 	refsAndCollections.put("Exon", "transcripts");
 	refsAndCollections.put("MRNA", "gene");
+        refsAndCollections.put("TransposonFragment", "transposableelements");
+        refsAndCollections.put("PseudogenicExon","pseudogenictranscripts");
+        refsAndCollections.put("PseudogenicTranscript","pseudogene");
+	
 
     }
 
@@ -56,7 +60,7 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
         // You should make sure that new Items you create are unique, i.e. by storing in a map by
         // some identifier. 
 	String clsName = feature.getClassName();
-        if("Gene".equals(clsName) || "MRNA".equals(clsName)){
+        if("Gene".equals(clsName) || "MRNA".equals(clsName) || "TransposableElementGene".equals(clsName)|| "Pseudogene".equals(clsName) || "PseudogenicTranscript".equals(clsName)){
             if(record.getAttributes().get("Note") != null){
                 String note = record.getAttributes().get("Note").iterator().next();
                 if(note != null){
