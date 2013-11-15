@@ -22,14 +22,14 @@
       <property name="fasta.includes" value="*.fas"/>
       <property name="src.data.dir" location="/local/ifs2_projects/AIP/ThaleMineData/TAIR10_refined/fasta/"/>  
     </source>
+
+    <source name="bar-interactions" type="bar-interactions" dump="true">
+      <property name="source.db.name" value="bar"/>
+    </source>
   </sources>
-
-
-
   <post-processing>
    <post-process name="create-references"/>
    <post-process name="create-search-index"/>
-
   </post-processing>
 
 </project>
