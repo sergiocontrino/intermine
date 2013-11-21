@@ -22,6 +22,7 @@ import org.intermine.metadata.Model;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.sql.Database;
 import org.intermine.xml.full.Item;
+import org.xml.sax.SAXException;
 
 /**
  * 
@@ -34,6 +35,7 @@ public class BarInteractionsConverter extends BioDBConverter
     private static final int TAXON_ID = 3702;
     private Map<String, String> genes = new HashMap<String, String>();
     private Map<String, String> publications = new HashMap<String, String>();
+    private Map<String, String> terms = new HashMap<String, String>();
     private static final String INTERACTION_TYPE = "physical";
     private static final String PUBMED_PREFIX = "PubMed";
 
@@ -92,26 +94,30 @@ public class BarInteractionsConverter extends BioDBConverter
     	Item interaction = createItem("Interaction");
     	interaction.setReference("gene1", geneRefId1);
     	interaction.setReference("gene2", geneRefId2);
-    	interaction.addToCollection("details", getDetails(geneRefId1, geneRefId2, pubString));
+    	interaction.addToCollection("details", getDetails(geneRefId1, geneRefId2, pubString, 
+    			interactionsDetectionMI, interactionsTypeMI));
     	store(interaction);
     }
     
-    private String getDetails(String geneRefId1, String geneRefId2, String pubString) 
+    private String getDetails(String geneRefId1, String geneRefId2, String pubString, String 
+    		interactionsDetectionMI, String interactionsTypeMI) 
     		throws ObjectStoreException {
     	Item detail = createItem("InteractionDetail");
     	detail.setAttribute("type", INTERACTION_TYPE);
-    	detail.addToCollection("dataSets", getDataSourceItem());
+    	detail.setReference("relationshipType", getTerm(interactionsTypeMI));
+    	detail.addToCollection("dataSets", getDataSourceItem(getDataSetTitle(TAXON_ID)));
         detail.addToCollection("allInteractors", geneRefId1);
         detail.addToCollection("allInteractors", geneRefId2);
-        detail.setReference("experiment", getExperiment(pubString));
+        detail.setReference("experiment", getExperiment(pubString, interactionsDetectionMI));
         return detail.getIdentifier();
     }
     
-    private String getExperiment(String pubString) throws ObjectStoreException {
+    private String getExperiment(String pubString, String interactionsDetectionMI) 
+    		throws ObjectStoreException {
         Item experiment = createItem("InteractionExperiment");
         experiment.setReference("publication", getPublication(pubString));
+        experiment.setReference("interactionDetectionMethods", getTerm(interactionsDetectionMI));
         store(experiment);
-        // TODO add interactionDetectionMethods
         return experiment.getIdentifier();
     }
     
@@ -128,7 +134,7 @@ public class BarInteractionsConverter extends BioDBConverter
         publications.put(pubMedId, pubRefId);
         return pubRefId;
     }
-    
+
     private String getGene(String identifier) 
     		throws ObjectStoreException {
     	String geneRefId = genes.get(identifier);
@@ -151,7 +157,19 @@ public class BarInteractionsConverter extends BioDBConverter
     	
     	return gene.getIdentifier();
     }
-    
+
+    private String getTerm(String identifier) throws ObjectStoreException {
+    	String refId = terms.get(identifier);
+    	if (refId != null) {
+    		return refId;
+    	}
+    	Item item = createItem("InteractionTerm");
+    	item.setAttribute("identifier", identifier);
+    	terms.put(identifier, item.getIdentifier());
+   		store(item);
+    	return item.getIdentifier();
+    }
+
     /**
      * Default implementation that makes a data set title based on the data source name.
      * {@inheritDoc}
