@@ -12,18 +12,17 @@ package org.intermine.bio.dataconversion;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.intermine.bio.dataconversion.BioDBConverter;
 import org.intermine.dataconversion.ItemWriter;
 import org.intermine.metadata.Model;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.sql.Database;
 import org.intermine.xml.full.Item;
-import org.xml.sax.SAXException;
 
 /**
  * 
@@ -54,28 +53,34 @@ public class BarInteractionsConverter extends BioDBConverter
      * {@inheritDoc}
      */
     public void process() throws Exception {
-    	// a database has been initialised from properties starting with db.bar-interactions
-    	Connection connection = getDatabase().getConnection();
 
-    	// process data with direct SQL queries on the source database, for example:
-    	String query = "select protein1, protein2, quality, index, pcc, bind_id, " +
-    			"interactions_detection_mi, interactions_detection, interactions_type_mi, " +
-    			"interactions_type from interactions;";
-
-    	Statement stmt = connection.createStatement();
-    	ResultSet res = stmt.executeQuery(query);
+    	Connection connection = null;
+    	
+        if (getDatabase() == null) {
+            // no Database when testing and no connection needed
+            connection = null;
+        } else {
+        	// a database has been initialised from properties starting with db.bar-interactions
+            connection = getDatabase().getConnection();
+        }
+        processQueryResults(connection);
+    }
+    
+    private void processQueryResults(Connection connection)    	
+        throws SQLException, ObjectStoreException {
+        ResultSet res = runInteractionsQuery(connection);
     	while (res.next()) {
-    		String gene1 = res.getString("protein1");
-    		String gene2 = res.getString("protein2");
-    		Integer quality = new Integer(res.getInt("quality"));
-    		Integer index = new Integer(res.getInt("index"));
+    		String gene1 = res.getString(1);
+    		String gene2 = res.getString(2);
+    		Integer quality = new Integer(res.getInt(3));
+    		Integer index = new Integer(res.getInt(4));
     		// is this a confidence score?
-    		Double pcc = new Double(res.getDouble("pcc"));
-    		String pubString = res.getString("bind_id");
-    		String interactionsDetectionMI = res.getString("interactions_detection_mi");
-//    		String interactionsDetection = res.getString("interactions_detection");
-    		String interactionsTypeMI = res.getString("interactions_type_mi");
-//    		String interactionsType = res.getString("interactions_type");
+    		Double pcc = new Double(res.getDouble(5));
+    		String pubString = res.getString(6);
+    		String interactionsDetectionMI = res.getString(7);
+//    		String interactionsDetection = res.getString(8);
+    		String interactionsTypeMI = res.getString(8);
+//    		String interactionsType = res.getString(10);
 
     		// strings that represent the stored gene
     		String geneRefId1 = getGene(gene1);
@@ -184,7 +189,7 @@ public class BarInteractionsConverter extends BioDBConverter
     		return refId;
     	}
     	Item item = createItem("InteractionTerm");
-    	item.setAttribute("identifier", identifier);
+    	item.setAttribute("identifier", "MI:" + identifier);
     	terms.put(identifier, item.getIdentifier());
    		store(item);
     	return item.getIdentifier();
@@ -199,4 +204,19 @@ public class BarInteractionsConverter extends BioDBConverter
         return DATA_SOURCE_NAME + " interactions data set";
     }
 
+    /**
+     * Return the interactions from the bar-interactions table
+     * This is a protected method so that it can be overriden for testing.
+     * @param connection the bar database connection
+     * @throws SQLException if there is a problem while querying
+     * @return the interactions
+     */
+    protected ResultSet runInteractionsQuery(Connection connection) throws SQLException {
+        Statement stmt = connection.createStatement();
+    	String query = "select protein1, protein2, quality, index, pcc, bind_id, " +
+    			"interactions_detection_mi, interactions_detection, interactions_type_mi, " +
+    			"interactions_type from interactions;";
+        ResultSet res = stmt.executeQuery(query);
+        return res;
+    }
 }
