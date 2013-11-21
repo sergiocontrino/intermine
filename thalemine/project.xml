@@ -12,7 +12,7 @@
       <property name="gff3.seqClsName" value="Chromosome"/>
       <property name="gff3.dataSetTitle" value="Arabidopsis thaliana"/>
       <property name="src.data.dir" location="/micklem/data/thale/gff/" />
-<--       <property name="src.data.dir" location="/local/ifs2_projects/AIP/ThaleMineData/TAIR10_refined/gff/" /> -->
+<!--       <property name="src.data.dir" location="/local/ifs2_projects/AIP/ThaleMineData/TAIR10_refined/gff/" /> -->
      </source>
 
     <source name="aip-chromosome-fasta" type="fasta" dump="true">

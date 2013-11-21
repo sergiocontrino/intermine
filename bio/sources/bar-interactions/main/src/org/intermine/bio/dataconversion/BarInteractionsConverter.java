@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.intermine.bio.dataconversion.BioDBConverter;
 import org.intermine.dataconversion.ItemWriter;
 import org.intermine.metadata.Model;
@@ -104,25 +105,44 @@ public class BarInteractionsConverter extends BioDBConverter
     		throws ObjectStoreException {
     	Item detail = createItem("InteractionDetail");
     	detail.setAttribute("type", INTERACTION_TYPE);
-    	detail.setReference("relationshipType", getTerm(interactionsTypeMI));
+    	if (StringUtils.isNotEmpty(interactionsTypeMI)) {
+    		detail.setReference("relationshipType", getTerm(interactionsTypeMI));
+    	}
     	detail.addToCollection("dataSets", getDataSourceItem(getDataSetTitle(TAXON_ID)));
         detail.addToCollection("allInteractors", geneRefId1);
         detail.addToCollection("allInteractors", geneRefId2);
-        detail.setReference("experiment", getExperiment(pubString, interactionsDetectionMI));
+        if (StringUtils.isNotEmpty(interactionsDetectionMI + pubString)) {
+        	detail.setReference("experiment", getExperiment(pubString, interactionsDetectionMI));
+        }
+        store(detail);
         return detail.getIdentifier();
     }
     
     private String getExperiment(String pubString, String interactionsDetectionMI) 
     		throws ObjectStoreException {
         Item experiment = createItem("InteractionExperiment");
-        experiment.setReference("publication", getPublication(pubString));
-        experiment.setReference("interactionDetectionMethods", getTerm(interactionsDetectionMI));
+        // some publications don't start with PubMed, what are those?
+        if (StringUtils.isNotEmpty(pubString) && pubString.startsWith(PUBMED_PREFIX) 
+        		&& pubString.length() >  PUBMED_PREFIX.length() + 1) {
+        	String pubRefId = getPublication(pubString);
+        	if (StringUtils.isNotEmpty(pubRefId)) {
+        		experiment.setReference("publication", pubRefId);
+        	}
+        }
+        if (StringUtils.isNotEmpty(interactionsDetectionMI)) {
+        	experiment.addToCollection("interactionDetectionMethods", 
+        			getTerm(interactionsDetectionMI));
+        }
         store(experiment);
         return experiment.getIdentifier();
     }
     
     private String getPublication(String pubString) throws ObjectStoreException {
         String pubMedId =  pubString.substring(PUBMED_PREFIX.length());
+    	
+    	// why do some look like this?
+    	// PubMed18849490                  +
+    	        
         String pubRefId = publications.get(pubMedId);
         if (pubRefId != null) {
         	return pubRefId;
