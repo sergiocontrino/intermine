@@ -86,26 +86,27 @@ public class BarInteractionsConverter extends BioDBConverter
     		String geneRefId1 = getGene(gene1);
     		String geneRefId2 = getGene(gene2);
     		
-    		processInteraction(geneRefId1, geneRefId2, quality, index, pcc, 
-    				pubString, interactionsDetectionMI, interactionsTypeMI);
-    		
+    		String interactionRefId = processInteraction(geneRefId1, geneRefId2, quality, index, 
+    				pcc, pubString, interactionsDetectionMI, interactionsTypeMI);
+    		processInteractionDetails(interactionRefId, geneRefId1, geneRefId2, pubString, 
+    				interactionsDetectionMI, interactionsTypeMI);
     	}   
     	res.close();
     }
     
-    private void processInteraction(String geneRefId1, String geneRefId2, Integer quality, 
-    		Integer index, Double pcc, String pubString, String interactionsDetectionMI, 
-    		String interactionsTypeMI) throws ObjectStoreException {
+    private String processInteraction(String geneRefId1, String geneRefId2, 
+    		Integer quality, Integer index, Double pcc, String pubString, 
+    		String interactionsDetectionMI, String interactionsTypeMI) throws ObjectStoreException {
     	
     	Item interaction = createItem("Interaction");
     	interaction.setReference("gene1", geneRefId1);
     	interaction.setReference("gene2", geneRefId2);
-    	interaction.addToCollection("details", getDetails(geneRefId1, geneRefId2, pubString, 
-    			interactionsDetectionMI, interactionsTypeMI));
     	store(interaction);
+    	return interaction.getIdentifier();
     }
     
-    private String getDetails(String geneRefId1, String geneRefId2, String pubString, String 
+    private String processInteractionDetails(String interactionRefId, String geneRefId1, 
+    		String geneRefId2, String pubString, String 
     		interactionsDetectionMI, String interactionsTypeMI) 
     		throws ObjectStoreException {
     	Item detail = createItem("InteractionDetail");
@@ -119,6 +120,7 @@ public class BarInteractionsConverter extends BioDBConverter
         if (StringUtils.isNotEmpty(interactionsDetectionMI + pubString)) {
         	detail.setReference("experiment", getExperiment(pubString, interactionsDetectionMI));
         }
+        detail.setReference("interaction", interactionRefId);
         store(detail);
         return detail.getIdentifier();
     }
