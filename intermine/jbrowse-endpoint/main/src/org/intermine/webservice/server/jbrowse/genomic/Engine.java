@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -15,6 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.commons.collections.keyvalue.MultiKey;
 import org.intermine.api.InterMineAPI;
 import org.intermine.api.query.MainHelper;
 import org.intermine.metadata.Model;
@@ -71,8 +73,8 @@ public class Engine extends CommandRunner {
 
     @Override
     public Map<String, Object> stats(Command command) {
-        Query q = getStatsQuery(command);
         Map<String, Object> stats;
+        Query q = getStatsQuery(command);
         // Stats can be expensive to calculate, so they are independently cached.
         synchronized(STATS_CACHE) {
             stats = STATS_CACHE.get(command);
@@ -112,14 +114,15 @@ public class Engine extends CommandRunner {
 
     @Override
     public Map<String, Object> features(Command command) {
-        Query q = getFeatureQuery(command);
         List<Map<String, Object>> features = new ArrayList<Map<String, Object>>();
-        for (Object o: getResults(q)) {
-            FastPathObject fpo = (FastPathObject) o;
-            features.add(makeFeatureWithSubFeatures(fpo));
+        if (command.getSegment() != Segment.NEGATIVE_SEGMENT) {
+            Query q = getFeatureQuery(command);
+            for (Object o: getResults(q)) {
+                FastPathObject fpo = (FastPathObject) o;
+                features.add(makeFeatureWithSubFeatures(fpo));
+            }
         }
         Map<String, Object> result = new HashMap<String, Object>();
-
         result.put("features", features);
         return result;
     }
@@ -131,8 +134,10 @@ public class Engine extends CommandRunner {
             throw new IllegalArgumentException("segment must be non null with defined width");
         List<Segment> subsegments = new ArrayList<Segment>();
         int sliceWidth = segment.getWidth() / n;
-        for (int i = segment.getStart(); i < segment.getEnd(); i += sliceWidth) {
-            subsegments.add(segment.subsegment(i, i + sliceWidth));
+        int inital = Math.max(0, segment.getStart());
+        int end = segment.getEnd();
+        for (int i = inital; i < end; i += sliceWidth) {
+            subsegments.add(segment.subsegment(i, Math.min(end, i + sliceWidth)));
         }
         return subsegments;
     }
@@ -154,11 +159,13 @@ public class Engine extends CommandRunner {
         }
     }
 
+    static private Map<MultiKey, Integer> maxima = new ConcurrentHashMap<MultiKey, Integer>();
+
     /**
      */
     @Override
     public Map<String, Object> densities(Command command) {
-        final int nSlices = 10;
+        final int nSlices = getNumberOfSlices(command);
         List<PathQuery> segmentQueries = getSliceQueries(command, nSlices);
         List<Future<Integer>> pending = countInParallel(segmentQueries);
         List<Integer> results = new ArrayList<Integer>();
@@ -180,8 +187,21 @@ public class Engine extends CommandRunner {
 
         Map<String, Object> result = new HashMap<String, Object>();
         Map<String, Number> binStats = new HashMap<String, Number>();
-        binStats.put("basesPerBin", command.getSegment().getWidth() / nSlices);
-        binStats.put("max", max);
+        Integer currentMax = 0;
+        if (command.getSegment() != Segment.NEGATIVE_SEGMENT) {
+            Integer bpb = command.getSegment().getWidth() / nSlices;
+            binStats.put("basesPerBin", bpb);
+            MultiKey maxKey = new MultiKey( // Key by domain, type, ref-seq and band size
+                    command.getDomain(),
+                    command.getType("SequenceFeature"),
+                    command.getSegment().getSection(),
+                    bpb);
+            currentMax = maxima.get(maxKey);
+            if (currentMax == null || max > currentMax) {
+                maxima.put(maxKey, Integer.valueOf(max));
+            }
+        }
+        binStats.put("max", (currentMax != null && max < currentMax) ? currentMax : max);
         binStats.put("mean", mean);
 
         result.put("bins", results);
@@ -191,7 +211,23 @@ public class Engine extends CommandRunner {
 
     //------------ PRIVATE METHODS --------------------//
 
+    private int getNumberOfSlices(Command command) {
+        int defaultNum = 10;
+        String bpb = command.getParameter("basesPerBin");
+        if (command == null
+                || bpb == null
+                || command.getSegment() == null
+                || command.getSegment().getWidth() == null) {
+            return defaultNum;
+        }
+        int width = command.getSegment().getWidth();
+        int numBPB = Integer.valueOf(bpb);
+        return width / numBPB;
+    }
+
     private List<PathQuery> getSliceQueries(Command command, final int nSlices) {
+        if (command.getSegment() == Segment.NEGATIVE_SEGMENT)
+            return Collections.emptyList();
         List<Segment> slices = sliceUp(nSlices, command.getSegment());
         List<PathQuery> segmentQueries = new ArrayList<PathQuery>();
         for (Segment s: slices) {
@@ -201,6 +237,8 @@ public class Engine extends CommandRunner {
     }
 
     private List<Future<Integer>> countInParallel(List<PathQuery> segmentQueries) {
+        if (segmentQueries.isEmpty())
+            return Collections.emptyList();
         ExecutorService executor = Executors.newFixedThreadPool(segmentQueries.size());
         List<Future<Integer>> pending = new ArrayList<Future<Integer>>();
         for (PathQuery pq: segmentQueries) {
