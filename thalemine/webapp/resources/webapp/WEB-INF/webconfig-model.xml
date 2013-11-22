@@ -231,7 +231,7 @@
                      jspName="model/cytoscapeNetworkDisplayer.jsp"
                      replacesFields="interactions"
                      placement="Interactions"
-                     types="Gene,Protein"/>
+                     types="Genomics,Protein"/>
 
    <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneOntologyDisplayer"
                      jspName="model/geneOntologyDisplayer.jsp"
@@ -255,7 +255,7 @@
                      jspName="model/uniProtCommentsDisplayer.jsp"
                      replacesFields=""
                      placement="Proteins"
-                     types="Gene,Protein"/>
+                     types="Genomics,Protein"/>
 
   </reportdisplayers>
 
