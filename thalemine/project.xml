@@ -32,6 +32,72 @@
       <property name="src.data.file" location="/micklem/data/psi/ontology/current/psi-mi.obo"/>
     </source>
 
+
+
+    <source name="uniprot" type="uniprot" dump="true">
+      <property name="uniprot.organisms" value="3702"/>
+      <property name="src.data.dir" location="/micklem/data/uniprot/current"/>
+      <property name="createinterpro" value="true"/>
+      <property name="creatego" value="true"/>
+    </source>
+
+    <source name="uniprot-fasta" type="fasta">
+      <property name="fasta.taxonId" value="3702"/>
+      <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
+      <property name="fasta.classAttribute" value="primaryAccession"/>
+      <property name="fasta.dataSetTitle" value="UniProt data set"/>
+      <property name="fasta.dataSourceName" value="UniProt"/>
+      <property name="src.data.dir" location="/micklem/data/uniprot/current"/>
+      <property name="fasta.includes" value="uniprot_sprot_varsplic.fasta"/>
+      <property name="fasta.sequenceType" value="protein" />
+      <property name="fasta.loaderClassName"
+                value="org.intermine.bio.dataconversion.UniProtFastaLoaderTask"/>
+    </source>
+
+    <source name="uniprot-keywords" type="uniprot-keywords">
+      <property name="src.data.dir" location="/micklem/data/uniprot/current"/>
+      <property name="src.data.dir.includes" value="keywlist.xml"/>
+    </source>
+
+    <source name="interpro" type="interpro">
+      <property name="src.data.dir" location="/micklem/data/interpro/current"/>
+    </source>
+
+    <source name="pdb" type="pdb">
+      <property name="src.data.dir" location="/micklem/data/pdb/current"/>
+      <property name="pdb.organisms" value="3702"/>
+    </source>
+
+    <source name="so" type="so">
+      <property name="src.data.file" location="../../bio/sources/so/so.obo"/>
+    </source>
+
+    <source name="go" type="go" dump="true">
+      <property name="src.data.file" location="/micklem/data/go-annotation/current/gene_ontology.obo"/>
+    </source>
+    <source name="go-annotation" type="go-annotation">
+      <property name="ontologyfile" location="/micklem/data/go-annotation/current/gene_ontology.obo"/>
+      <property name="src.data.dir" location="/micklem/data/go-annotation/thale"/>
+      <property name="ontologyPrefix" value="GO"/>
+    </source>
+
+    <source name="reactome" type="biopax">
+      <property name="src.data.dir" location="/micklem/data/reactome/current"/>
+      <property name="biopax.organisms" value="3702"/>
+      <property name="biopax.datasourcename" value="Reactome"/>
+      <property name="biopax.datasetname" value="Reactome data set"/>
+      <property name="biopax.curated" value="false"/>
+    </source>
+    <source name="psi-intact" type="psi" dump="true">
+      <property name="src.data.dir" location="/micklem/data/psi/intact/current"/>
+      <property name="intact.organisms" value="3702"/>
+    </source>
+    <source name="biogrid" type="biogrid">
+      <property name="src.data.dir" location="/micklem/data/biogrid/current"/>
+      <property name="src.data.dir.includes" value="*psi25.xml"/>
+      <property name="biogrid.organisms" value="3702"/>
+    </source>
+
     <!-- have to be the last sources run -->
     <source name="entrez-organism" type="entrez-organism">
       <property name="src.data.file" location="build/organisms.xml"/>
