@@ -5,9 +5,12 @@
 <!-- add any <class> elements here -->
   <class name="Gene" is-interface="true">
      <attribute name="Note" type="java.lang.String"/>
+     <attribute name="Alias" type="java.lang.String"/>
   </class>
   <class name="MRNA" is-interface="true">
      <attribute name="Note" type="java.lang.String"/>
+     <attribute name="computational_description" type="java.lang.String"/>
+     <attribute name="curator_summary" type="java.lang.String"/>
   </class>
   <class name="Pseudogene" extends="Gene" is-interface="true">
      <attribute name="Note" type="java.lang.String"/>
@@ -24,13 +27,10 @@
    <class name="TransposableElement"  is-interface="true">
         <attribute name="Alias" type="java.lang.String"/>
          <collection name="transposonfragments" referenced-type="TransposonFragment" reverse-reference="transposableelements"/>
-
    </class>
    <class name="TransposonFragment" extends="SequenceFeature" is-interface="true">
        <collection name="transposableelements" referenced-type="TransposableElement" reverse-reference="transposonfragments"/>
-
    </class>
-
    <class name="TransposableElementGene" extends="Gene" is-interface="true">
        <attribute name="Note" type="java.lang.String"/>
    </class>

@@ -13,6 +13,7 @@ package org.intermine.bio.dataconversion;
 import org.intermine.bio.io.gff3.GFF3Record;
 import org.intermine.metadata.Model;
 import org.intermine.xml.full.Item;
+import java.util.List;
 
 /**
  * A converter/retriever for the AipGff dataset via GFF files.
@@ -68,9 +69,35 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                 }   
             }    
         }
-	
-
-
+	if("TransposableElement".equals(clsName)|| "Gene".equals(clsName)){
+	    //if(record.getAttributes().get("Alias") != null){
+	    //	String alias = record.getAttributes().get("Alias").iterator().next();
+            //		if(alias != null){
+	    //	      feature.setAttribute("Alias",alias);
+            //    }
+            //}
+	    List<String> aliases = record.getAliases();
+            if(aliases != null){
+                String alias = "";
+                for (String s : aliases){
+		   alias += s+",";
+		}
+               feature.setAttribute("Alias",alias);
+            }
+        }
+        if("MRNA".equals(clsName)){
+             if(record.getAttributes().get("computational_description") != null){
+                String comp_descr = record.getAttributes().get("computational_description").iterator().next();
+                if(comp_descr != null){
+                    feature.setAttribute("computational_description",comp_descr );
+                }   
+            }    
+	    if(record.getAttributes().get("curator_summary") != null){
+                String cur_summary = record.getAttributes().get("curator_summary").iterator().next();
+                if(cur_summary != null){
+                    feature.setAttribute("curator_summary", cur_summary);
+                }   
+            }    
+ 	}
     }
-
 }
