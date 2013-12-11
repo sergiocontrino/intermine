@@ -10,8 +10,8 @@
       <property name="gff3.seqDataSourceName" value="JCVI"/>
       <property name="gff3.dataSourceName" value="JCVI"/>
       <property name="gff3.seqClsName" value="Chromosome"/>
-      <property name="gff3.dataSetTitle" value="Arabidopsis thaliana"/>
-      <property name="src.data.dir" location="/local/ifs2_projects/AIP/ThaleMineData/TAIR10_refined/gff/" />
+      <property name="gff3.dataSetTitle" value="Arabidopsis thaliana gff general annotation"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/gff/" />
      </source>
 
     <source name="aip-chromosome-fasta" type="fasta" dump="true">
@@ -20,16 +20,46 @@
       <property name="fasta.dataSetTitle" value="Arabidopsis thaliana chromosome sequence"/>
       <property name="fasta.taxonId" value="3702"/>
       <property name="fasta.includes" value="*.fas"/>
-      <property name="src.data.dir" location="/local/ifs2_projects/AIP/ThaleMineData/TAIR10_refined/fasta/"/>  
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/fasta/"/>  
+    </source>
+
+    <source name="so" type="so">
+      <property name="src.data.file" location="../../bio/sources/so/so.obo"/>
+    </source>
+
+    <source name="go" type="go" dump="true">
+      <property name="src.data.file" location="/usr/local/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
+    </source>
+    <source name="go-annotation" type="go-annotation">
+      <property name="ontologyfile" location="/usr/local/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
+     <!-- <property name="src.data.dir" location="/usr/local/projects/AIP/DataProviders/TAIR/ftp.arabidopsis.org/Ontologies/Gene_Ontology/ATH_GO_GOSLIM.txt"/> -->
+      <property name="src.data.dir" location="/local/ifs2_projects/AIP/ThaleMineData/go_annotation/" />
+      <property name="ontologyPrefix" value="GO"/>
+    </source>
+
+    <!-- have to be the last sources run -->
+    <source name="entrez-organism" type="entrez-organism">
+      <property name="src.data.file" location="build/organisms.xml"/>
+    </source>
+   <source name="update-publications" type="update-publications" dump="true">
+      <property name="src.data.file" location="build/publications.xml"/>
     </source>
   </sources>
 
-
-
   <post-processing>
-   <post-process name="create-references"/>
-   <post-process name="create-search-index"/>
-
+    <post-process name="create-references" />
+    <post-process name="create-chromosome-locations-and-lengths"/>
+    <post-process name="transfer-sequences" dump="true"/>
+    <post-process name="do-sources" />
+    <post-process name="create-attribute-indexes"/>
+    <post-process name="summarise-objectstore"/>
+    <post-process name="create-autocomplete-index"/>
+    <post-process name="create-search-index"/>
+<!--
+   <post-process name="create-bioseg-location-index" />
+    <post-process name="create-overlap-view" />
+    <post-process name="create-attribute-indexes"/>
+-->
   </post-processing>
 
 </project>
