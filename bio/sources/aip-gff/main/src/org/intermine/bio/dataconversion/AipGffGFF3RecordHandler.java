@@ -98,16 +98,9 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                     feature.setAttribute("curator_summary", cur_summary);
                 }   
             }    
-	    if(record.getAttributes().get("Index") != null){
-                String idx = record.getAttributes().get("Index").iterator().next();
-                if(idx != null){
-                    feature.setAttribute("Index", idx);
-                }   
-            }    
  	}
 	
 
 
     }
-
 }
