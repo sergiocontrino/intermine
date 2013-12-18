@@ -33,7 +33,7 @@
     <source name="go-annotation" type="go-annotation">
       <property name="ontologyfile" location="/usr/local/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
      <!-- <property name="src.data.dir" location="/usr/local/projects/AIP/DataProviders/TAIR/ftp.arabidopsis.org/Ontologies/Gene_Ontology/ATH_GO_GOSLIM.txt"/> -->
-      <property name="src.data.dir" location="/local/ifs2_projects/AIP/ThaleMineData/go_annotation/" />
+     <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/go_annotation/" />
       <property name="ontologyPrefix" value="GO"/>
     </source>
 
