@@ -22,76 +22,49 @@
       <property name="fasta.includes" value="*.fas"/>
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/fasta/"/>  
     </source>
-    <source name="bar-interactions" type="bar-interactions" dump="true">
-      <property name="source.db.name" value="bar"/>
-    </source>
-
-    <source name="psi-mi-ontology" type="psi-mi-ontology">
-      <property name="src.data.file" location="/micklem/data/psi/ontology/current/psi-mi.obo"/>
-    </source>
-    <source name="uniprot" type="uniprot" dump="true">
-      <property name="uniprot.organisms" value="3702"/>
-      <property name="src.data.dir" location="/micklem/data/uniprot/current"/>
-      <property name="createinterpro" value="true"/>
-      <property name="creatego" value="true"/>
-    </source>
-
-    <source name="uniprot-fasta" type="fasta">
-      <property name="fasta.taxonId" value="3702"/>
-      <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
-      <property name="fasta.classAttribute" value="primaryAccession"/>
-      <property name="fasta.dataSetTitle" value="UniProt data set"/>
-      <property name="fasta.dataSourceName" value="UniProt"/>
-      <property name="src.data.dir" location="/micklem/data/uniprot/current"/>
-      <property name="fasta.includes" value="uniprot_sprot_varsplic.fasta"/>
-      <property name="fasta.sequenceType" value="protein" />
-      <property name="fasta.loaderClassName"
-                value="org.intermine.bio.dataconversion.UniProtFastaLoaderTask"/>
-    </source>
-
-    <source name="uniprot-keywords" type="uniprot-keywords">
-      <property name="src.data.dir" location="/micklem/data/uniprot/current"/>
-      <property name="src.data.dir.includes" value="keywlist.xml"/>
-    </source>
-
-    <source name="interpro" type="interpro">
-      <property name="src.data.dir" location="/micklem/data/interpro/current"/>
-    </source>
-
-    <source name="pdb" type="pdb">
-      <property name="src.data.dir" location="/micklem/data/pdb/current"/>
-      <property name="pdb.organisms" value="3702"/>
-    </source>
 
     <source name="so" type="so">
       <property name="src.data.file" location="../../bio/sources/so/so.obo"/>
     </source>
 
     <source name="go" type="go" dump="true">
-      <property name="src.data.file" location="/micklem/data/go-annotation/current/gene_ontology.obo"/>
+      <property name="src.data.file" location="/usr/local/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
     </source>
     <source name="go-annotation" type="go-annotation">
-      <property name="ontologyfile" location="/micklem/data/go-annotation/current/gene_ontology.obo"/>
-      <property name="src.data.dir" location="/micklem/data/go-annotation/thale"/>
+      <property name="ontologyfile" location="/usr/local/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
+     <!-- <property name="src.data.dir" location="/usr/local/projects/AIP/DataProviders/TAIR/ftp.arabidopsis.org/Ontologies/Gene_Ontology/ATH_GO_GOSLIM.txt"/> -->
+      <property name="src.data.dir" location="/local/ifs2_projects/AIP/ThaleMineData/go_annotation/" />
       <property name="ontologyPrefix" value="GO"/>
     </source>
+    <source name="psi-mi-ontology" type="psi-mi-ontology">
+      <property name="src.data.file" location="/usr/local/projects/AIP/ThaleMineData/psi/psi-mi.obo"/>
+    </source>
+    <source name="uniprot" type="uniprot" dump="true">
+      <property name="uniprot.organisms" value="3702"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
+      <property name="createinterpro" value="true"/>
+      <property name="creatego" value="true"/>
+<property name="allowduplicates" value="false"/>
+<property name="loadfragments" value="false"/> 
+<property name="loadtrembl" value="true"/>
+    </source>
+   <source name="uniprot-fasta" type="fasta">
+      <property name="fasta.taxonId" value="3702"/>
+      <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
+      <property name="fasta.classAttribute" value="primaryAccession"/>
+      <property name="fasta.dataSetTitle" value="UniProt data set"/>
+      <property name="fasta.dataSourceName" value="UniProt"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
+      <property name="fasta.includes" value="uniprot_sprot_varsplic.fasta"/>
+      <property name="fasta.sequenceType" value="protein" />
+      <property name="fasta.loaderClassName"
+                value="org.intermine.bio.dataconversion.UniProtFastaLoaderTask"/>
+    </source>
+   <source name="uniprot-keywords" type="uniprot-keywords">
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
+      <property name="src.data.dir.includes" value="keywlist.xml"/>
+    </source>
 
-    <source name="reactome" type="biopax">
-      <property name="src.data.dir" location="/micklem/data/reactome/current"/>
-      <property name="biopax.organisms" value="3702"/>
-      <property name="biopax.datasourcename" value="Reactome"/>
-      <property name="biopax.datasetname" value="Reactome data set"/>
-      <property name="biopax.curated" value="false"/>
-    </source>
-    <source name="psi-intact" type="psi" dump="true">
-      <property name="src.data.dir" location="/micklem/data/psi/intact/current"/>
-      <property name="intact.organisms" value="3702"/>
-    </source>
-    <source name="biogrid" type="biogrid">
-      <property name="src.data.dir" location="/micklem/data/biogrid/current"/>
-      <property name="src.data.dir.includes" value="*psi25.xml"/>
-      <property name="biogrid.organisms" value="3702"/>
-    </source>
 
     <!-- have to be the last sources run -->
     <source name="entrez-organism" type="entrez-organism">
@@ -109,12 +82,17 @@
     <post-process name="do-sources" />
     <post-process name="create-attribute-indexes"/>
     <post-process name="summarise-objectstore"/>
-    <post-process name="create-autocomplete-index"/>
     <post-process name="create-search-index"/>
+    <post-process name="create-intron-features">
+      <property name="organisms" value="3702"/>
+    </post-process>
+
+<!--
+    <post-process name="create-autocomplete-index"/>
    <post-process name="create-bioseg-location-index" />
     <post-process name="create-overlap-view" />
     <post-process name="create-attribute-indexes"/>
+-->
   </post-processing>
 
 </project>
-
