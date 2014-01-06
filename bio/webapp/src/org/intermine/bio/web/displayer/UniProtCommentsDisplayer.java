@@ -58,7 +58,7 @@ public class UniProtCommentsDisplayer extends ReportDisplayer
     // allowed comment types
     private final String[] allowedCommentTypes = new String []{"similarity", "function",
         "tissue specificity", "subcellular location", "catalytic activity", "disease",
-        "developmental stage", "pathway", "pharmaceutical"};
+        "developmental stage", "pathway", "pharmaceutical","cofactor", "miscellaneous"};
 
     @SuppressWarnings("unchecked")
     @Override
