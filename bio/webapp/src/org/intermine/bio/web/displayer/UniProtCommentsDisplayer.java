@@ -229,8 +229,8 @@ public class UniProtCommentsDisplayer extends ReportDisplayer
                 "Protein.primaryIdentifier");
         query.addOrderBy("Protein.comments.type", OrderDirection.ASC);
         query.addConstraint(Constraints.eq("Protein.id", proteinID));
-        query.addConstraint(Constraints.oneOfValues("Protein.comments.type",
-                Arrays.asList(allowedCommentTypes)));
+       // query.addConstraint(Constraints.oneOfValues("Protein.comments.type",
+       //         Arrays.asList(allowedCommentTypes)));
         return query;
     }
 }
