@@ -32,8 +32,7 @@
     </source>
     <source name="go-annotation" type="go-annotation">
       <property name="ontologyfile" location="/usr/local/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
-     <!-- <property name="src.data.dir" location="/usr/local/projects/AIP/DataProviders/TAIR/ftp.arabidopsis.org/Ontologies/Gene_Ontology/ATH_GO_GOSLIM.txt"/> -->
-      <property name="src.data.dir" location="/local/ifs2_projects/AIP/ThaleMineData/go_annotation/" />
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/go_annotation/" />
       <property name="ontologyPrefix" value="GO"/>
     </source>
     <source name="psi-mi-ontology" type="psi-mi-ontology">
@@ -44,9 +43,6 @@
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
       <property name="createinterpro" value="true"/>
       <property name="creatego" value="true"/>
-<property name="allowduplicates" value="false"/>
-<property name="loadfragments" value="false"/> 
-<property name="loadtrembl" value="true"/>
     </source>
    <source name="uniprot-fasta" type="fasta">
       <property name="fasta.taxonId" value="3702"/>
@@ -86,13 +82,10 @@
     <post-process name="create-intron-features">
       <property name="organisms" value="3702"/>
     </post-process>
-
-<!--
     <post-process name="create-autocomplete-index"/>
-   <post-process name="create-bioseg-location-index" />
+    <post-process name="create-bioseg-location-index" />
     <post-process name="create-overlap-view" />
     <post-process name="create-attribute-indexes"/>
--->
   </post-processing>
 
 </project>
