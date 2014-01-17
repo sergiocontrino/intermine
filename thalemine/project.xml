@@ -32,10 +32,35 @@
     </source>
     <source name="go-annotation" type="go-annotation">
       <property name="ontologyfile" location="/usr/local/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
-     <!-- <property name="src.data.dir" location="/usr/local/projects/AIP/DataProviders/TAIR/ftp.arabidopsis.org/Ontologies/Gene_Ontology/ATH_GO_GOSLIM.txt"/> -->
-     <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/go_annotation/" />
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/go_annotation/" />
       <property name="ontologyPrefix" value="GO"/>
     </source>
+    <source name="psi-mi-ontology" type="psi-mi-ontology">
+      <property name="src.data.file" location="/usr/local/projects/AIP/ThaleMineData/psi/psi-mi.obo"/>
+    </source>
+    <source name="uniprot" type="uniprot" dump="true">
+      <property name="uniprot.organisms" value="3702"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
+      <property name="createinterpro" value="true"/>
+      <property name="creatego" value="true"/>
+    </source>
+   <source name="uniprot-fasta" type="fasta">
+      <property name="fasta.taxonId" value="3702"/>
+      <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
+      <property name="fasta.classAttribute" value="primaryAccession"/>
+      <property name="fasta.dataSetTitle" value="UniProt data set"/>
+      <property name="fasta.dataSourceName" value="UniProt"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
+      <property name="fasta.includes" value="uniprot_sprot_varsplic.fasta"/>
+      <property name="fasta.sequenceType" value="protein" />
+      <property name="fasta.loaderClassName"
+                value="org.intermine.bio.dataconversion.UniProtFastaLoaderTask"/>
+    </source>
+   <source name="uniprot-keywords" type="uniprot-keywords">
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
+      <property name="src.data.dir.includes" value="keywlist.xml"/>
+    </source>
+
 
     <!-- have to be the last sources run -->
     <source name="entrez-organism" type="entrez-organism">
@@ -53,14 +78,14 @@
     <post-process name="do-sources" />
     <post-process name="create-attribute-indexes"/>
     <post-process name="summarise-objectstore"/>
-    <post-process name="create-autocomplete-index"/>
     <post-process name="create-search-index"/>
-<!--
-   <post-process name="create-bioseg-location-index" />
+    <post-process name="create-intron-features">
+      <property name="organisms" value="3702"/>
+    </post-process>
+    <post-process name="create-autocomplete-index"/>
+    <post-process name="create-bioseg-location-index" />
     <post-process name="create-overlap-view" />
     <post-process name="create-attribute-indexes"/>
--->
   </post-processing>
 
 </project>
-
