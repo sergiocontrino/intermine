@@ -23,6 +23,10 @@
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/fasta/"/>  
     </source>
 
+    <source name="bar-interactions" type="bar-interactions" dump="true">
+      <property name="source.db.name" value="bar"/>
+    </source>
+
     <source name="so" type="so">
       <property name="src.data.file" location="../../bio/sources/so/so.obo"/>
     </source>
