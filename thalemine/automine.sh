@@ -192,12 +192,8 @@ LOG="$LOGDIR/$USER.$REL.$P"`date "+%y%m%d.%H%M"`  # timestamp of stag operations
 #IFS=$'\t\n'
 #else
 
-#SOURCES=entrez-organism,thalemine-static,modencode-metadata,fly-expression-score
-#SOURCES=chado-db-wormbase-c_elegans,wormbase-c_elegans-chromosome-fasta,thalemine-static,modencode-metadata
-SOURCES=chado-db-wormbase-c_elegans,thalemine-static,modencode-metadata,worm-expression-score
-#SOURCES=thalemine-static,modencode-metadata,worm-expression-score
-#SOURCES=thalemine-static,modencode-metadata
-#SOURCES=modencode-metadata,worm-network
+#SOURCES=chado-db-wormbase-c_elegans,wormbase-c_elegans-chromosome-fasta,modencode-metadata,worm-network
+SOURCES=aip-gff,bar
 
 #fi
 
