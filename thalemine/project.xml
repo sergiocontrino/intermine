@@ -20,7 +20,19 @@
       <property name="fasta.dataSetTitle" value="Arabidopsis thaliana chromosome sequence"/>
       <property name="fasta.taxonId" value="3702"/>
       <property name="fasta.includes" value="*.fas"/>
-      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/fasta/"/>  
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/fasta/"/>
+  </source>
+
+    <source name="aip-cds-fasta" type="fasta">
+      <property name="fasta.loaderClassName"
+                value="org.intermine.bio.dataconversion.AIPCDSFastaLoaderTask"/>
+      <property name="fasta.taxonId" value="3702"/>
+      <property name="fasta.className" value="org.intermine.model.bio.CDS"/>
+      <property name="fasta.classAttribute" value="primaryIdentifier"/>
+      <property name="fasta.includes" value="*cds*.fas"/>
+      <property name="fasta.dataSetTitle" value="CDS fasta data set for Arabidopsis thaliana"/>
+      <property name="fasta.dataSourceName" value="JCVI"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/fasta/"/>
     </source>
 
     <source name="so" type="so">

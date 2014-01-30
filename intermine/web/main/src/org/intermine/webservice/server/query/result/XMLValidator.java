@@ -27,13 +27,13 @@ import org.xml.sax.SAXParseException;
 
 /**
  * XMLValidator is class that validates xml string according an XML Schema at specified url.
- * @author Radek Štěpán after Jakub Kulaviak
+ * @author Radek Stepan after Jakub Kulaviak
  **/
 public class XMLValidator
 {
 
     private XMLValidatorErrorHandler errorHandler = null;
-    
+
     private static final Logger LOG = Logger.getLogger(XMLValidator.class);
 
     /**
@@ -42,9 +42,9 @@ public class XMLValidator
      * @param xmlSchemaUrl the URL of an XML Schema.
      */
     public void validate(String xml, String xmlSchemaUrl) {
-        
+
     	errorHandler = new XMLValidatorErrorHandler();
-        
+
     	try {
         	// `query.xsd` had to be edited to allow the `QueryType` to be exported. But this means
         	//  that now a `<query>` has to have a namespace associated. Here we do a simply
@@ -54,21 +54,21 @@ public class XMLValidator
         		xml = xml.replaceAll(Pattern.quote("<query"), "<xsq:query xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsq=\"http://intermine.org/query/1.0\" xsi:schemaLocation=\"http://intermine.org/query/1.0 query.xsd\"");
         		xml = xml.replaceAll(Pattern.quote("</query>"), "</xsq:query>");
         	}
-        	
+
 			SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			Schema schema = factory.newSchema(new StreamSource(new StringReader(xmlSchemaUrl)));
 
 			Validator validator = schema.newValidator();
 			validator.setErrorHandler(errorHandler);
 			validator.validate(new StreamSource(new StringReader(xml)));
-			
+
     	} catch (SAXParseException e) {
     		// Ignore.
 		} catch (Exception e) {
 			throw new InternalErrorException("XML validation failed.", e);
 		}
     }
-    
+
     /**
      * Returns errors occurred during parsing xml.
      * @return errors
