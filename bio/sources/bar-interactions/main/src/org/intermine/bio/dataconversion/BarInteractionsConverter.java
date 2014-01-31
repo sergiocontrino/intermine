@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.intermine.dataconversion.ItemWriter;
@@ -30,6 +31,8 @@ import org.intermine.xml.full.Item;
  */
 public class BarInteractionsConverter extends BioDBConverter
 {
+    private static final Logger LOG =
+        Logger.getLogger(BarInteractionsConverter.class);
     private static final String DATASET_TITLE = "Interactions data set";
     private static final String DATA_SOURCE_NAME = "BAR";
     private static final int TAXON_ID = 3702;
@@ -85,7 +88,7 @@ public class BarInteractionsConverter extends BioDBConverter
     		// strings that represent the stored gene
     		String geneRefId1 = getGene(gene1);
     		String geneRefId2 = getGene(gene2);
-    		
+
     		String interactionRefId = processInteraction(geneRefId1, geneRefId2, quality, index, 
     				pcc, pubString, interactionsDetectionMI, interactionsTypeMI);
     		processInteractionDetails(interactionRefId, geneRefId1, geneRefId2, pubString, 
@@ -168,7 +171,7 @@ public class BarInteractionsConverter extends BioDBConverter
 
     	// we've already seen this gene, don't store again
     	if (geneRefId != null) {
-    		return geneRefId;
+		return geneRefId;
     	}
     	
     	// create new gene 
@@ -177,6 +180,7 @@ public class BarInteractionsConverter extends BioDBConverter
     	gene.setAttribute("primaryIdentifier", identifier);
     
     	// put in our map 
+	geneRefId=gene.getIdentifier();
     	genes.put(identifier, geneRefId);
     	
     	// store to database
