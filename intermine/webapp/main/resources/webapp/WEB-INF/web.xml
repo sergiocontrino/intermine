@@ -1900,4 +1900,18 @@
     </jsp-property-group>
   </jsp-config>
 
+  <security-constraint>
+    <web-resource-collection>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>user</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>Araport ThaleMine</realm-name>
+  </login-config>
+
 </web-app>
