@@ -45,7 +45,6 @@ public class AIPCDSFastaLoaderTask extends AIPFeatureFastaLoaderTask
         Annotation annotation = bioJavaSequence.getAnnotation();
         String mrnaIdentifier = bioJavaSequence.getName();
         String header = (String) annotation.getProperty("description");
-        //String mrnaIdentifier = getMRNAIdentifier(header);
 
         ObjectStore os = getIntegrationWriter().getObjectStore();
         Model model = os.getModel();
@@ -80,19 +79,7 @@ public class AIPCDSFastaLoaderTask extends AIPFeatureFastaLoaderTask
         String header = (String) annotation.getProperty("description");
 
         // it doesn't matter too much what the CDS identifier is
-        //return getMRNAIdentifier(header) + "_CDS";
         return mrnaIdentifier + "_CDS";
 
-    }
-
-    private String getMRNAIdentifier(String header) {
-        final String regexp = "(AT\\w+G\\d+\\.\\d+).*";
-        Pattern p = Pattern.compile(regexp);
-        Matcher m = p.matcher(header);
-
-        if (m.matches()) {
-            return m.group(1);
-        }
-        throw new RuntimeException("can't find AGI identifier in header: " + header);
     }
 }

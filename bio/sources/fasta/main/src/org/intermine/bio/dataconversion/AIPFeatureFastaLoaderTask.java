@@ -64,7 +64,7 @@ public class AIPFeatureFastaLoaderTask extends FastaLoaderTask
     protected Location getLocationFromHeader(String header, SequenceFeature lsf,
                                              Organism organism)
         throws ObjectStoreException {
-        final String regexp = "^.+(chr\\S+):([0-9]+-[0-9]+)\\s+(\\S+)\\s+LENGTH.+$";
+        final String regexp = "^.+\\s+(\\S+):([0-9]+-[0-9]+)\\s+(\\S+)\\s+LENGTH.+$";
         Pattern p = Pattern.compile(regexp);
         Matcher m = p.matcher(header);
         if (m.matches()) {
