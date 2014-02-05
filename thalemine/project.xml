@@ -11,7 +11,7 @@
       <property name="gff3.dataSourceName" value="JCVI"/>
       <property name="gff3.seqClsName" value="Chromosome"/>
       <property name="gff3.dataSetTitle" value="Arabidopsis thaliana gff general annotation"/>
-      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/gff/" />
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/genome/gff/" />
      </source>
 
     <source name="aip-chromosome-fasta" type="fasta" dump="true">
@@ -19,8 +19,8 @@
       <property name="fasta.dataSourceName" value="JCVI"/>
       <property name="fasta.dataSetTitle" value="Arabidopsis thaliana chromosome sequence"/>
       <property name="fasta.taxonId" value="3702"/>
-      <property name="fasta.includes" value="*chr*.fas"/>
-      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/fasta/"/>
+      <property name="fasta.includes" value="*Chr*"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/genome/fasta/"/>
   </source>
 
     <source name="aip-cds-fasta" type="fasta">
@@ -29,10 +29,10 @@
       <property name="fasta.taxonId" value="3702"/>
       <property name="fasta.className" value="org.intermine.model.bio.CDS"/>
       <property name="fasta.classAttribute" value="primaryIdentifier"/>
-      <property name="fasta.includes" value="*cds*.fas"/>
+      <property name="fasta.includes" value="*cds*"/>
       <property name="fasta.dataSetTitle" value="CDS fasta data set for Arabidopsis thaliana"/>
       <property name="fasta.dataSourceName" value="JCVI"/>
-      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/fasta/"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/genome/fasta/"/>
     </source>
 
     <source name="so" type="so">

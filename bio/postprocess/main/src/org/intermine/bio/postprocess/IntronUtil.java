@@ -315,7 +315,7 @@ public class IntronUtil
             int newLocStart = nextIntronStart + tranStart;
             int newLocEnd = intronEnd + tranStart;
 
-            String identifier = "intron_chr" + chr.getPrimaryIdentifier()
+            String identifier = "intron_" + chr.getPrimaryIdentifier()
                 + "_" + Integer.toString(newLocStart) + ".." + Integer.toString(newLocEnd);
 
             if (intronMap.get(identifier) == null) {
