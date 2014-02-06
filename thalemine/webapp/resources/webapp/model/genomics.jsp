@@ -19,17 +19,17 @@
     <td>
       <div class="body">
         <p>
-          <a href="/malariamine">MalariaMine</a> contains <i>Plasmodium falciparum 3D7</i> genome
+          <a href="/thalemine">ThaleMine</a> contains <i>Arabidopsis thaliana</i> genome
           data from:
         </p>
         <ul>
           <li>
             <a href="http://www.genedb.org/">
-              Fasta sequences for <i>P. falciparum 3D7</i></a>
+              Fasta sequences for <i>Arabidopsis thaliana</i></a>
           </li>
           <li>
             <a href="http://www.genedb.org/">
-              GFF3 for <i>P. falciparum 3D7</i> genome features</a>
+              GFF3 for <i>Arabidopsis thaliana</i> genome features</a>
           </li>
         </ul>
       </div>
@@ -38,7 +38,7 @@
       <div class="body">
         <ul>
           <li>
-            <im:querylink text="All <i>P. falciparum 3D7</i> genes identifiers, chromosome positions and chromosome identifiers" skipBuilder="true">
+            <im:querylink text="All <i>Arabidopsis thaliana</i> genes identifiers, chromosome positions and chromosome identifiers" skipBuilder="true">
 <query name="" model="genomic" view="Gene.primaryIdentifier Gene.secondaryIdentifier Gene.organism.shortName Gene.chromosome.primaryIdentifier Gene.chromosomeLocation.start Gene.chromosomeLocation.end" sortOrder="Gene.primaryIdentifier asc">
 </query>
             </im:querylink>
