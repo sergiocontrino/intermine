@@ -35,5 +35,7 @@ public class JBrowseDisplayer extends ReportDisplayer
 
     @Override
     public void display(HttpServletRequest request, ReportObject reportObject) {
+        String className = reportObject.getClassDescriptor().getUnqualifiedName();
+        request.setAttribute("className", className);
     }
 }

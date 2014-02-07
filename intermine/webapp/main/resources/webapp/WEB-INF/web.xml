@@ -650,7 +650,7 @@
         Then the user should supply the following parameters to run it with the default values:
           constraint1=Gene.symbol&amp;op1=eq&amp;value1=eve&amp;constraint2=Gene.length&amp;op2=gt&amp;value2=1000
         The value of the number used to identify each constraint is ignored - it must however be
-        consistent for each parameter. 
+        consistent for each parameter.
         </description>
         <param type="String" required="true" description="The name of the template to run">name</param>
         <param type="String[]" required="true" description="One of a variable set of parameters used to supply constraint values">?</param>
@@ -685,7 +685,7 @@
         <description>
         This service allows the user to create a list from the result set of running a template
         with a given set of parameters. The parameters for running the template are the same as when
-        requesting results, and in addition to these parameters the user needs to supply a name 
+        requesting results, and in addition to these parameters the user needs to supply a name
         and optional description for the list to be created.
         To define which part of the template results, the user must supply a path parameter which
         indicates a valid column from the output to be used.
@@ -697,7 +697,7 @@
         Then the user should supply the following parameters to run it with the default values:
           constraint1=Gene.symbol&amp;op1=eq&amp;value1=eve&amp;constraint2=Gene.length&amp;op2=gt&amp;value2=1000
         The value of the number used to identify each constraint is ignored - it must however be
-        consistent for each parameter. 
+        consistent for each parameter.
         </description>
         <param type="String" required="true" description="The name of the template to run">name</param>
         <param type="String" required="true" description="The path to use to compose the results">path</param>
@@ -733,7 +733,7 @@
         <description>
         This service allows the user to add items to a list from the result set of running a template
         with a given set of parameters. The parameters for running the template are the same as when
-        requesting results, and in addition to these parameters the user needs to supply a name 
+        requesting results, and in addition to these parameters the user needs to supply a name
         and optional description for the list to be created.
         To define which part of the template results, the user must supply a path parameter which
         indicates a valid column from the output to be used.
@@ -745,7 +745,7 @@
         Then the user should supply the following parameters to run it with the default values:
           constraint1=Gene.symbol&amp;op1=eq&amp;value1=eve&amp;constraint2=Gene.length&amp;op2=gt&amp;value2=1000
         The value of the number used to identify each constraint is ignored - it must however be
-        consistent for each parameter. 
+        consistent for each parameter.
         </description>
         <param type="String" required="true" description="The name of the template to run">name</param>
         <param type="String" required="true" description="The path to use to compose the results">path</param>
@@ -873,7 +873,7 @@
   <servlet-mapping>
     <servlet-name>ws-check-resource</servlet-name>
     <url-pattern>/service/check/*</url-pattern>
-    
+
   </servlet-mapping>
 
   <!-- NEW IN VERSION 6 -->
@@ -1325,7 +1325,7 @@
     <servlet-name>ws-new-user</servlet-name>
     <servlet-class>org.intermine.webservice.server.user.NewUserServlet</servlet-class>
     <!--
-    This config should be used when there are some tests set up for it. 
+    This config should be used when there are some tests set up for it.
     <servlet-class>org.intermine.webservice.server.core.RestfulServlet</servlet-class>
      <init-param>
         <param-name>POST</param-name>
@@ -1393,7 +1393,7 @@
   </servlet-mapping>
 
       <!-- NEW IN VERSION 10 -->
-      
+
    <servlet>
      <servlet-name>ws-id-resolver</servlet-name>
      <servlet-class>org.intermine.webservice.server.idresolution.IdResolutionServlet</servlet-class>
@@ -1457,14 +1457,14 @@
         </method>
       </metadata>
    </servlet-mapping>
-   
+
    <!-- NEW IN VERSION 11 -->
-   
+
    <servlet>
      <servlet-name>ws-list-invitations</servlet-name>
      <servlet-class>org.intermine.webservice.server.lists.ListSharingInvitationServlet</servlet-class>
    </servlet>
-   
+
    <servlet-mapping>
      <servlet-name>ws-list-invitations</servlet-name>
      <url-pattern>/service/lists/invitations/*</url-pattern>
@@ -1520,13 +1520,13 @@
       </method>
      </metadata>
    </servlet-mapping>
-   
-    
+
+
    <servlet>
      <servlet-name>ws-list-shares</servlet-name>
      <servlet-class>org.intermine.webservice.server.lists.ListShareServlet</servlet-class>
    </servlet>
-   
+
    <servlet-mapping>
      <servlet-name>ws-list-shares</servlet-name>
      <url-pattern>/service/lists/shares/*</url-pattern>
@@ -1559,7 +1559,7 @@
           <description>
             Get information about each list that is shared by or with the authenticating
             user. The service returns a map with two keys "sharedByUser" and "sharedWithUser"
-            which are themselves each maps, with list names as keys, and either lists of 
+            which are themselves each maps, with list names as keys, and either lists of
             users with access as values, or the name of the original owner as values.
           </description>
           <returns>
@@ -1582,7 +1582,7 @@
       </method>
      </metadata>
    </servlet-mapping>
-   
+
     <servlet>
      <servlet-name>ws-user-preferences</servlet-name>
      <servlet-class>org.intermine.webservice.server.core.RestfulServlet</servlet-class>
@@ -1603,7 +1603,7 @@
         <param-value>org.intermine.webservice.server.user.DeletePreferencesService</param-value>
      </init-param>
    </servlet>
-   
+
    <servlet-mapping>
      <servlet-name>ws-user-preferences</servlet-name>
      <url-pattern>/service/user/preferences/*</url-pattern>
@@ -1694,7 +1694,7 @@
         </method>
     </metadata>
   </servlet-mapping>
-  
+
   <!-- NEW IN VERSION 13 -->
 
     <servlet>
@@ -1709,7 +1709,7 @@
             <param-value>org.intermine.webservice.server.clob.SequenceService</param-value>
         </init-param>
 	</servlet>
-	
+
 	<servlet-mapping>
 	   <servlet-name>ws-sequence</servlet-name>
 	   <url-pattern>/service/sequence/*</url-pattern>
@@ -1721,7 +1721,7 @@
             <description>
                 Get either the entire sequence of a character-sequence like thing, or
                 fetch an indexed sub-sequence of it.
-                
+
                 This service expects a query with a single output column that resolves
                 tp a sub-sequenceable object.
             </description>
@@ -1734,7 +1734,7 @@
         </method>
     </metadata>
 	</servlet-mapping>
-    
+
     <!--  New in version 14 -->
     <servlet>
      <servlet-name>ws-jbrowse</servlet-name>
@@ -1748,12 +1748,12 @@
         <param-value>org.intermine.webservice.server.jbrowse.Endpoint</param-value>
      </init-param>
    </servlet>
-   
+
    <servlet-mapping>
     <servlet-name>ws-jbrowse</servlet-name>
     <url-pattern>/service/jbrowse/*</url-pattern>
    </servlet-mapping>
-   
+
 
   <!-- MUST BE LISTED LAST OF ALL WEBSERVICES AS IT IS THE MOST GENERAL -->
   <servlet-mapping>
@@ -1853,19 +1853,19 @@
     <filter-name>ExpireHeader</filter-name>
     <url-pattern>*.css</url-pattern>
   </filter-mapping>
-  
+
   <filter>
   	<filter-name>ReleaseEtags</filter-name>
   	<filter-class>org.intermine.web.filters.ReleaseEtagFilter</filter-class>
   </filter>
-  
+
   <filter-mapping>
   	<filter-name>ReleaseEtags</filter-name>
   	<servlet-name>ws-model</servlet-name>
   	<dispatcher>REQUEST</dispatcher>
   	<dispatcher>FORWARD</dispatcher>
   </filter-mapping>
-  
+
  <filter>
   <filter-name>CompressingFilter</filter-name>
   <filter-class>com.planetj.servlet.filter.compression.CompressingFilter</filter-class>
