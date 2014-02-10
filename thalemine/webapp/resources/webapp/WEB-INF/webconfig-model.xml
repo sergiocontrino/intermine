@@ -82,7 +82,7 @@
       <fieldconfig fieldExpr="description"/>
     </fields>
   </class>
-  
+
   <class className="org.intermine.model.bio.InteractionTerm">
     <fields>
       <fieldconfig fieldExpr="identifier"/>
@@ -231,9 +231,9 @@
                      jspName="model/cytoscapeNetworkDisplayer.jsp"
                      replacesFields="interactions"
                      placement="Interactions"
-                     types="Genomics,Protein"/>
+                     types="Genomics"/>
 
-   <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneOntologyDisplayer"
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneOntologyDisplayer"
                      jspName="model/geneOntologyDisplayer.jsp"
                      replacesFields="goAnnotation,ontologyAnnotations"
                      placement="Genomics"
@@ -244,6 +244,18 @@
                      replacesFields="transcripts,exons,CDSs,introns,UTRs,fivePrimeUTR,threePrimeUTR"
                      placement="Genomics"
                      types="Gene,Transcript,Exon,Intron,UTR,CDS"/>
+
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.JBrowseDisplayer"
+                     jspName="model/jbrowseDisplayer.jsp"
+                     replacesFields=""
+                     placement="Genomics"
+                     types="SequenceFeature"/>
+
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.OverlappingFeaturesDisplayer"
+                     jspName="model/overlappingFeaturesDisplayer.jsp"
+                     replacesFields="overlappingFeatures"
+                     placement="Genomics"
+                     types="SequenceFeature"/>
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.SequenceFeatureDisplayer"
                      jspName="model/sequenceFeatureDisplayer.jsp"
@@ -277,8 +289,8 @@
                       constraints="organism.name=[Organism]"
                       views="primaryIdentifier, symbol, secondaryIdentifier, organism.name, chromosome.primaryIdentifier,
                              chromosomeLocation.start, chromosomeLocation.end, chromosomeLocation.strand"/>
-                             
-                             
+
+
       <enrichmentwidgetdisplayer id="publication_enrichment"
                                  title="Publication Enrichment"
                                  description="Publications enriched for genes in this list."
