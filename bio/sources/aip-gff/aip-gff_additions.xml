@@ -6,9 +6,12 @@
   <class name="Gene" is-interface="true">
      <attribute name="Note" type="java.lang.String"/>
      <attribute name="Alias" type="java.lang.String"/>
+     <attribute name="computational_description" type="java.lang.String"/>
+     <attribute name="curator_summary" type="java.lang.String"/>
   </class>
   <class name="MRNA" is-interface="true">
      <attribute name="Note" type="java.lang.String"/>
+     <attribute name="Alias" type="java.lang.String"/>
      <attribute name="computational_description" type="java.lang.String"/>
      <attribute name="curator_summary" type="java.lang.String"/>
   </class>
