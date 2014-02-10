@@ -69,20 +69,15 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                 }   
             }    
         }
-	if("TransposableElement".equals(clsName)|| "Gene".equals(clsName)){
-	    //if(record.getAttributes().get("Alias") != null){
-	    //	String alias = record.getAttributes().get("Alias").iterator().next();
-            //		if(alias != null){
-	    //	      feature.setAttribute("Alias",alias);
-            //    }
-            //}
+	if("TransposableElement".equals(clsName)|| "Gene".equals(clsName) || "MRNA".equals(clsName)){
 	    List<String> aliases = record.getAliases();
             if(aliases != null){
-                String alias = "";
-                for (String s : aliases){
-		   alias += s+",";
+                String alias = aliases.get(0);
+		StringBuilder sb = new StringBuilder(alias);
+		for (int i=1; i < aliases.size(); i++){
+		    sb.append(" ").append(aliases.get(i));
 		}
-               feature.setAttribute("Alias",alias);
+               feature.setAttribute("Alias",sb.toString());
             }
         }
         if("MRNA".equals(clsName)){
