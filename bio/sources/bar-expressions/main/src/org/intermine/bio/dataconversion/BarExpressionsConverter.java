@@ -37,7 +37,7 @@ public class BarExpressionsConverter extends BioDBConverter
         Logger.getLogger(BarExpressionsConverter.class);
     private static final String DATASET_TITLE = "Expressions data set";
     private static final String EXPERIMENT_CATEGORY = "hormone";
-    private static final String DATA_SOURCE_NAME = "BAR1";
+    private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
     private static final int TAXON_ID = 3702;
     private Map<String, String> genes = new HashMap<String, String>();
     private Map<String, String> publications = new HashMap<String, String>();
@@ -75,10 +75,12 @@ public class BarExpressionsConverter extends BioDBConverter
         }
 
         LOG.info("START");
-        processQueryResults(connection);
+        processExperiment(connection);
+//        processSample(connection);
+
     }
 
-    private void processQueryResults(Connection connection)
+    private void processExperiment(Connection connection)
         throws SQLException, ObjectStoreException {
         ResultSet res = getExperiments(connection);
     	while (res.next()) {
@@ -129,6 +131,7 @@ public class BarExpressionsConverter extends BioDBConverter
     				throws ObjectStoreException {
     	LOG.info("PROCEXP");
     	Item experiment = createItem("Experiment");
+    	experiment.setAttribute("experimentBarId", experimentBarId.toString());
     	experiment.setAttribute("title", title);
     	experiment.setAttribute("category", EXPERIMENT_CATEGORY);
 
