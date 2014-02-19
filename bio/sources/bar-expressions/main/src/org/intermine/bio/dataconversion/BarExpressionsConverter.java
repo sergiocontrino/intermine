@@ -161,6 +161,7 @@ public class BarExpressionsConverter extends BioDBConverter
 		return lab.getIdentifier();
 	}
 
+	/*
     private String processExpression(String geneRefId1, String geneRefId2,
     		Integer quality, Integer index, Double pcc, String pubString,
     		String expressionsDetectionMI, String expressionsTypeMI) throws ObjectStoreException {
@@ -191,6 +192,7 @@ public class BarExpressionsConverter extends BioDBConverter
         store(detail);
         return detail.getIdentifier();
     }
+*/
 
 //    private String getExperiment(String pubString, String expressionsDetectionMI)
 //    		throws ObjectStoreException {
