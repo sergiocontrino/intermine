@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<classes>
+<class name="Lab" extends="DataSource" is-interface="true">
+  <attribute name="name" type="java.lang.String" />
+  <attribute name="surname" type="java.lang.String" />
+  <attribute name="affiliation" type="java.lang.String" />
+  <attribute name="address" type="java.lang.String" />
+  <collection name="experiments" referenced-type="Experiment" reverse-reference="lab" />
+  <collection name="samples" referenced-type="Sample" reverse-reference="lab" />
+</class>
+
+<class name="Experiment" is-interface="true">
+  <attribute name="experimentBarId" type="java.lang.Integer" />
+  <attribute name="title" type="java.lang.String" />
+  <attribute name="category" type="java.lang.String" />
+  <reference name="lab" referenced-type="Lab" reverse-reference="experiments" />
+  <collection name="samples" referenced-type="Sample" reverse-reference="experiment" />
+</class>
+
+<class name="Sample" extends="DataSet" is-interface="true">
+  <attribute name="barId" type="java.lang.Integer" />
+  <attribute name="name" type="java.lang.String" />
+  <attribute name="description" type="java.lang.String" />
+  <attribute name="alias" type="java.lang.String" />
+  <attribute name="design" type="java.lang.String" />
+  <attribute name="control" type="java.lang.String" />
+  <attribute name="replication" type="java.lang.Integer" />
+  <attribute name="file" type="java.lang.String" />
+
+  <reference name="organism" referenced-type="Organism" />
+  <reference name="publication" referenced-type="Publication"/>
+  <reference name="experiment" referenced-type="Experiment" reverse-reference="samples" />
+  <reference name="lab" referenced-type="Lab" reverse-reference="samples" />
+  <collection name="sampleData" referenced-type="SampleData" reverse-reference="sample" />
+
+  <collection name="properties" referenced-type="SampleProperty" reverse-reference="samples"/>
+</class>
+
+<class name="SampleData" is-interface="true">
+  <attribute name="probeSet" type="java.lang.String" />
+  <attribute name="signal" type="java.lang.Double" />
+  <attribute name="call" type="java.lang.String" />
+  <attribute name="pValue" type="java.lang.Double" />
+  <reference name="sample" referenced-type="Sample" reverse-reference="sampleData" />
+</class>
+
+<class name="SampleProperty" is-interface="true">
+  <attribute name="name" type="java.lang.String"/>
+  <attribute name="type" type="java.lang.String"/>
+<!--
+  <reference name="ontologyTerm" referenced-type="OntologyTerm" reverse-reference="sampleProperty" />
+-->
+  <collection name="samples" referenced-type="Sample" reverse-reference="properties" />
+</class>
+
+</classes>
