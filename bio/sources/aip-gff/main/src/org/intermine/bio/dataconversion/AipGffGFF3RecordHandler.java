@@ -14,6 +14,8 @@ import org.intermine.bio.io.gff3.GFF3Record;
 import org.intermine.metadata.Model;
 import org.intermine.xml.full.Item;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A converter/retriever for the AipGff dataset via GFF files.
@@ -61,7 +63,11 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
             // You should make sure that new Items you create are unique, i.e. by storing in a map by
             // some identifier.
             String clsName = feature.getClassName();
-            if("Gene".equals(clsName) || "MRNA".equals(clsName) || "TransposableElementGene".equals(clsName)|| "Pseudogene".equals(clsName) || "PseudogenicTranscript".equals(clsName)){
+
+            String regexp = "Gene|MRNA|MiRNA|NcRNA|RRNA|SnRNA|SnoRNA|TRNA|Pseudogene|PseudogenicTranscript|TransposableElementGene";
+            Pattern p = Pattern.compile(regexp);
+            Matcher m = p.matcher(clsName);
+            if(m.find()) {
                 if(record.getAttributes().get("Note") != null){
                     String note = record.getAttributes().get("Note").iterator().next();
                     if(note != null){
@@ -69,17 +75,28 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                     }
                 }
             }
-            if("TransposableElement".equals(clsName)|| "Gene".equals(clsName) || "MRNA".equals(clsName)){
+
+            regexp = "Gene|MRNA|TransposableElement|TransposableElementGene";
+            p = Pattern.compile(regexp);
+            m = p.matcher(clsName);
+            if(m.find()) {
                 List<String> aliases = record.getAliases();
                 if(aliases != null){
-                    StringBuilder sb = new StringBuilder(aliases.get(0));
-                    for (int i=1; i < aliases.size(); i++){
-                        sb.append(" ").append(aliases.get(i));
+                    feature.setAttribute("symbol", aliases.get(0));
+                    if (aliases.size() > 1) {
+                        StringBuilder sb = new StringBuilder(aliases.get(1));
+                        for (int i = 2; i < aliases.size(); i++){
+                            sb.append(" ").append(aliases.get(i));
+                        }
+                        feature.setAttribute("Alias", sb.toString());
                     }
-                    feature.setAttribute("Alias",sb.toString());
                 }
             }
-            if("MRNA".equals(clsName) || "Gene".equals(clsName)){
+
+            regexp = "Gene|MRNA|MiRNA|NcRNA|RRNA|SnRNA|SnoRNA|TRNA|PseudogenicTranscript";
+            p = Pattern.compile(regexp);
+            m = p.matcher(clsName);
+            if(m.find()) {
                 if(record.getAttributes().get("computational_description") != null){
                     String comp_descr = record.getAttributes().get("computational_description").iterator().next();
                     if(comp_descr != null){
@@ -94,7 +111,19 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                 }
             }
 
-
-
+            if("MRNA".equals(clsName)) {
+                if(record.getAttributes().get("conf_class") != null){
+                    String conf_class = record.getAttributes().get("conf_class").iterator().next();
+                    if(conf_class != null){
+                        feature.setAttribute("confidenceClass", conf_class);
+                    }
+                }
+                if(record.getAttributes().get("conf_rating") != null){
+                    String conf_rating = record.getAttributes().get("conf_rating").iterator().next();
+                    if(conf_rating != null){
+                        feature.setAttribute("confidenceRating", conf_rating);
+                    }
+                }
+            }
         }
 }

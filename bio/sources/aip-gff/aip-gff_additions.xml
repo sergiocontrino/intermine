@@ -4,37 +4,78 @@
 <classes>
 <!-- add any <class> elements here -->
   <class name="Gene" is-interface="true">
+     <attribute name="symbol" type="java.lang.String"/>
      <attribute name="Note" type="java.lang.String"/>
      <attribute name="Alias" type="java.lang.String"/>
      <attribute name="computationalDescription" type="java.lang.String"/>
      <attribute name="curatorSummary" type="java.lang.String"/>
   </class>
   <class name="MRNA" is-interface="true">
+     <attribute name="symbol" type="java.lang.String"/>
      <attribute name="Note" type="java.lang.String"/>
      <attribute name="Alias" type="java.lang.String"/>
      <attribute name="computationalDescription" type="java.lang.String"/>
      <attribute name="curatorSummary" type="java.lang.String"/>
+     <attribute name="confidenceClass" type="java.lang.String"/>
+     <attribute name="confidenceRating" type="java.lang.String"/>
+     <reference name="fivePrimeUTR" referenced-type="FivePrimeUTR"/>
+     <reference name="threePrimeUTR" referenced-type="ThreePrimeUTR"/>
+ </class>
+ <class name="MiRNA" is-interface="true">
+    <attribute name="Note" type="java.lang.String"/>
+    <attribute name="computationalDescription" type="java.lang.String"/>
+    <attribute name="curatorSummary" type="java.lang.String"/>
+  </class>
+ <class name="NcRNA" is-interface="true">
+    <attribute name="Note" type="java.lang.String"/>
+    <attribute name="computationalDescription" type="java.lang.String"/>
+    <attribute name="curatorSummary" type="java.lang.String"/>
+  </class>
+ <class name="RRNA" is-interface="true">
+    <attribute name="Note" type="java.lang.String"/>
+    <attribute name="computationalDescription" type="java.lang.String"/>
+    <attribute name="curatorSummary" type="java.lang.String"/>
+  </class>
+ <class name="SnRNA" is-interface="true">
+    <attribute name="Note" type="java.lang.String"/>
+    <attribute name="computationalDescription" type="java.lang.String"/>
+    <attribute name="curatorSummary" type="java.lang.String"/>
+  </class>
+ <class name="SnoRNA" is-interface="true">
+    <attribute name="Note" type="java.lang.String"/>
+    <attribute name="computationalDescription" type="java.lang.String"/>
+    <attribute name="curatorSummary" type="java.lang.String"/>
+  </class>
+ <class name="TRNA" is-interface="true">
+    <attribute name="Note" type="java.lang.String"/>
+    <attribute name="computationalDescription" type="java.lang.String"/>
+    <attribute name="curatorSummary" type="java.lang.String"/>
   </class>
   <class name="Pseudogene" extends="Gene" is-interface="true">
      <attribute name="Note" type="java.lang.String"/>
      <collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogene"/>
    </class>
    <class name="PseudogenicTranscript" extends="Transcript" is-interface="true">
-        <attribute name="Note" type="java.lang.String"/>
-	<reference name="pseudogene" referenced-type="Pseudogene" reverse-reference="pseudogenictranscripts"/>
-	<collection name="pseudogenicexons" referenced-type="PseudogenicExon" reverse-reference="pseudogenictranscripts"/>
+     <attribute name="Note" type="java.lang.String"/>
+     <attribute name="computationalDescription" type="java.lang.String"/>
+     <attribute name="curatorSummary" type="java.lang.String"/>
+     <reference name="pseudogene" referenced-type="Pseudogene" reverse-reference="pseudogenictranscripts"/>
+     <collection name="pseudogenicexons" referenced-type="PseudogenicExon" reverse-reference="pseudogenictranscripts"/>
    </class>
    <class name="PseudogenicExon" extends="Exon" is-interface="true">
-	<collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogenicexons"/>
+     <collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogenicexons"/>
    </class>
    <class name="TransposableElement"  is-interface="true">
-        <attribute name="Alias" type="java.lang.String"/>
-        <collection name="transposonfragments" referenced-type="TransposonFragment" reverse-reference="transposableelements"/>
+     <attribute name="symbol" type="java.lang.String"/>
+     <attribute name="Alias" type="java.lang.String"/>
+     <collection name="transposonfragments" referenced-type="TransposonFragment" reverse-reference="transposableelements"/>
    </class>
    <class name="TransposonFragment" extends="SequenceFeature" is-interface="true">
-       <collection name="transposableelements" referenced-type="TransposableElement" reverse-reference="transposonfragments"/>
+     <collection name="transposableelements" referenced-type="TransposableElement" reverse-reference="transposonfragments"/>
    </class>
    <class name="TransposableElementGene" extends="Gene" is-interface="true">
-       <attribute name="Note" type="java.lang.String"/>
+     <attribute name="symbol" type="java.lang.String"/>
+     <attribute name="Note" type="java.lang.String"/>
+     <attribute name="Alias" type="java.lang.String"/>
    </class>
 </classes>
