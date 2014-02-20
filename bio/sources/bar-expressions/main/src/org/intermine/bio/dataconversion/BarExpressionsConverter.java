@@ -15,12 +15,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.commons.lang.StringUtils;
 import org.intermine.dataconversion.ItemWriter;
 import org.intermine.metadata.Model;
 import org.intermine.objectstore.ObjectStoreException;
@@ -44,8 +41,6 @@ public class BarExpressionsConverter extends BioDBConverter
     private Map<String, String> terms = new HashMap<String, String>();
     private static final String PUBMED_PREFIX = "PubMed";
 
-    // barId, pi
-    private Map<Integer, String> experimentLabMap = new HashMap<Integer, String>();
     //pi, item Id
     private Map<String, String> labIdRefMap = new HashMap<String, String>();
     //barId, item Id
@@ -92,38 +87,12 @@ public class BarExpressionsConverter extends BioDBConverter
     		String pi = res.getString(3);
     		String affiliation = res.getString(4);
     		String address = res.getString(5);
-//    		Integer sampleId = new Integer(res.getInt(6));
 
     		String experimentRefId = createExperiment(experimentBarId, title,
     				pi, affiliation, address);
     		experimentIdRefMap.put(experimentBarId, experimentRefId);
-//    		processExpressionDetails(expressionRefId, geneRefId1, geneRefId2, pubString,
-//    				expressionsDetectionMI, expressionsTypeMI);
     	}
     	res.close();
-//
-//        Set<Integer> exp = experimentLabMap.keySet();
-//        Iterator<Integer> i  = exp.iterator();
-//        while (i.hasNext()) {
-//            Integer thisExp = i.next();
-//            String prov = submissionLabMap.get(thisExp);
-//            String project = submissionProjectMap.get(thisExp);
-//
-//            if (labIdMap.containsKey(prov)) {
-//                continue;
-//            }
-//            LOG.debug("PROV: " + prov);
-//            Item lab = getChadoDBConverter().createItem("Lab");
-//            lab.setAttribute("surname", prov);
-//            lab.setReference("project", projectIdRefMap.get(project));
-//
-//            Integer intermineObjectId = getChadoDBConverter().store(lab);
-//            storeInLabMaps(lab, prov, intermineObjectId);
-//        }
-//        LOG.info("created " + labIdMap.size() + " labs");
-//        LOG.info("PROCESS TIME labs: " + (System.currentTimeMillis() - bT) + " ms");
-
-
     }
 
     private void processSamples(Connection connection)
@@ -167,7 +136,6 @@ public class BarExpressionsConverter extends BioDBConverter
     private String createExperiment(Integer experimentBarId, String title,
     		String pi, String affiliation, String address)
     				throws ObjectStoreException {
-    	LOG.info("PROCEXP");
     	Item experiment = createItem("Experiment");
     	experiment.setAttribute("experimentBarId", experimentBarId.toString());
     	experiment.setAttribute("title", title);
@@ -179,15 +147,8 @@ public class BarExpressionsConverter extends BioDBConverter
     		labRefId=createLab(pi, affiliation, address);
     		labIdRefMap.put(pi, labRefId);
     	}
-//    	if (!experimentLabMap.containsValue(pi)) {
-//    		labRefId=createLab(pi, affiliation, address);
-//    	}
 
-//    	experimentLabRefMap.put(experimentBarId, labRefId);
-
-		experimentLabMap.put(experimentBarId, pi);
-//		experiment.setReference("lab", experimentLabRefMap.get(experimentBarId));
-		experiment.setReference("lab", labIdRefMap.get(pi));
+    	experiment.setReference("lab", labIdRefMap.get(pi));
 		store(experiment);
     	return experiment.getIdentifier();
     }
@@ -229,7 +190,7 @@ public class BarExpressionsConverter extends BioDBConverter
 
     	if (sampleIdRef == null) {
     		LOG.warn("Orphaned sample: id=" + sampleBarId +
-    				". The eperiment for this sample is missing.");
+    				". The experiment for this sample is missing.");
     		return "orphaned sample";
     	}
 
@@ -257,17 +218,11 @@ public class BarExpressionsConverter extends BioDBConverter
      */
     protected ResultSet getExperiments(Connection connection) throws SQLException {
         Statement stmt = connection.createStatement();
-        LOG.info("PREQ");
     	String query =
-    			"select p.proj_id, p.proj_res_area, p.proj_pi, p.proj_pi_inst, "
-    			+ " p.proj_pi_addr "
-    			+ " from proj_info p;";
-//		"select p.proj_id, p.proj_res_area, p.proj_pi, p.proj_pi_inst, "
-//		+ " p.proj_pi_addr, s.sample_id "
-//		+ " from proj_info p, sample_biosource_info s "
-//		+ " where p.proj_id=s.proj_id;";
+    			"SELECT p.proj_id, p.proj_res_area, p.proj_pi, "
+    			+ " p.proj_pi_inst, p.proj_pi_addr "
+    			+ " FROM proj_info p;";
         ResultSet res = stmt.executeQuery(query);
-        LOG.info("POSTQ");
         return res;
     }
 
@@ -280,7 +235,6 @@ public class BarExpressionsConverter extends BioDBConverter
      */
     protected ResultSet getSamples(Connection connection) throws SQLException {
         Statement stmt = connection.createStatement();
-        LOG.info("PREQs");
     	String query =
     	"SELECT p.proj_id, sb.sample_id, sb.sample_bio_name, sb.sample_alias, "
     	+ "sg.sample_desc, sg.sample_ctrl, sg.sample_repl, sg.sample_file_name "
@@ -288,7 +242,6 @@ public class BarExpressionsConverter extends BioDBConverter
     	+ "WHERE sb.sample_id=sg.sample_id "
     	+ "AND p.proj_id=sb.proj_id;";
     	ResultSet res = stmt.executeQuery(query);
-        LOG.info("POSTQS");
         return res;
     }
 
@@ -301,122 +254,14 @@ public class BarExpressionsConverter extends BioDBConverter
      */
     protected ResultSet getSampleData(Connection connection) throws SQLException {
         Statement stmt = connection.createStatement();
-        LOG.info("PREQs");
     	String query =
     			"SELECT sample_id, data_probeset_id, data_signal, "
     			+ "data_call, data_p_val "
     			+ "FROM sample_data;";
     	ResultSet res = stmt.executeQuery(query);
-        LOG.info("POSTQS");
         return res;
     }
 
-
-	/*
-    private String processExpression(String geneRefId1, String geneRefId2,
-    		Integer quality, Integer index, Double pcc, String pubString,
-    		String expressionsDetectionMI, String expressionsTypeMI) throws ObjectStoreException {
-
-    	Item expression = createItem("Expression");
-    	expression.setReference("gene1", geneRefId1);
-    	expression.setReference("gene2", geneRefId2);
-    	store(expression);
-    	return expression.getIdentifier();
-    }
-
-    private String processExpressionDetails(String expressionRefId, String geneRefId1,
-    		String geneRefId2, String pubString, String
-    		expressionsDetectionMI, String expressionsTypeMI)
-    		throws ObjectStoreException {
-    	Item detail = createItem("ExpressionDetail");
-//    	detail.setAttribute("type", EXPRESSION_TYPE);
-    	if (StringUtils.isNotEmpty(expressionsTypeMI)) {
-    		detail.setReference("relationshipType", getTerm(expressionsTypeMI));
-    	}
-    	detail.addToCollection("dataSets", getDataSourceItem(getDataSetTitle(TAXON_ID)));
-        detail.addToCollection("allInteractors", geneRefId1);
-        detail.addToCollection("allInteractors", geneRefId2);
-        if (StringUtils.isNotEmpty(expressionsDetectionMI + pubString)) {
-        	detail.setReference("experiment", getExperiment(pubString, expressionsDetectionMI));
-        }
-        detail.setReference("expression", expressionRefId);
-        store(detail);
-        return detail.getIdentifier();
-    }
-*/
-
-//    private String getExperiment(String pubString, String expressionsDetectionMI)
-//    		throws ObjectStoreException {
-//        Item experiment = createItem("ExpressionExperiment");
-//        // some publications don't start with PubMed, what are those?
-//        if (StringUtils.isNotEmpty(pubString) && pubString.startsWith(PUBMED_PREFIX)
-//        		&& pubString.length() >  PUBMED_PREFIX.length() + 1) {
-//        	String pubRefId = getPublication(pubString);
-//        	if (StringUtils.isNotEmpty(pubRefId)) {
-//        		experiment.setReference("publication", pubRefId);
-//        	}
-//        }
-//        if (StringUtils.isNotEmpty(expressionsDetectionMI)) {
-//        	experiment.addToCollection("expressionDetectionMethods",
-//        			getTerm(expressionsDetectionMI));
-//        }
-//        store(experiment);
-//        return experiment.getIdentifier();
-//    }
-
-//    private String getPublication(String pubString) throws ObjectStoreException {
-//        String pubMedId =  pubString.substring(PUBMED_PREFIX.length());
-//
-//    	// why do some look like this?
-//    	// PubMed18849490                  +
-//
-//        String pubRefId = publications.get(pubMedId);
-//        if (pubRefId != null) {
-//        	return pubRefId;
-//        }
-//        Item publication = createItem("Publication");
-//        publication.setAttribute("pubMedId", pubMedId);
-//        store(publication);
-//        pubRefId = publication.getIdentifier();
-//        publications.put(pubMedId, pubRefId);
-//        return pubRefId;
-//    }
-
-    private String getGene(String identifier)
-    		throws ObjectStoreException {
-    	String geneRefId = genes.get(identifier);
-
-    	// we've already seen this gene, don't store again
-    	if (geneRefId != null) {
-		return geneRefId;
-    	}
-
-    	// create new gene
-    	Item gene = createItem("Gene");
-    	gene.setReference("organism", getOrganismItem(TAXON_ID));
-    	gene.setAttribute("primaryIdentifier", identifier);
-
-    	// put in our map
-	geneRefId=gene.getIdentifier();
-    	genes.put(identifier, geneRefId);
-
-    	// store to database
-    	store(gene);
-
-    	return gene.getIdentifier();
-    }
-
-    private String getTerm(String identifier) throws ObjectStoreException {
-    	String refId = terms.get(identifier);
-    	if (refId != null) {
-    		return refId;
-    	}
-    	Item item = createItem("ExpressionTerm");
-    	item.setAttribute("identifier", "MI:" + identifier);
-    	terms.put(identifier, item.getIdentifier());
-   		store(item);
-    	return item.getIdentifier();
-    }
 
     /**
      * Default implementation that makes a data set title based on the data source name.
