@@ -185,7 +185,7 @@ public class BarExpressionsConverter extends BioDBConverter
     		String probeSet, Double signal, String call, Double pValue)
     				throws ObjectStoreException {
 
-    	// needed to compensate for missing experiments for some smples
+    	// needed to compensate for missing experiments for some samples
     	String sampleIdRef = sampleIdRefMap.get(sampleBarId);
 
     	if (sampleIdRef == null) {
@@ -217,32 +217,28 @@ public class BarExpressionsConverter extends BioDBConverter
      * @return the expressions
      */
     protected ResultSet getExperiments(Connection connection) throws SQLException {
-        Statement stmt = connection.createStatement();
     	String query =
     			"SELECT p.proj_id, p.proj_res_area, p.proj_pi, "
     			+ " p.proj_pi_inst, p.proj_pi_addr "
     			+ " FROM proj_info p;";
-        ResultSet res = stmt.executeQuery(query);
-        return res;
+        return doQuery(connection, query, "getExperiments");
     }
 
     /**
-     * Return the expressions from the bar-expressions table
+     * Return the samples from the bar-expressions table
      * This is a protected method so that it can be overridden for testing.
      * @param connection the bar database connection
      * @throws SQLException if there is a problem while querying
-     * @return the expressions
+     * @return the samples
      */
     protected ResultSet getSamples(Connection connection) throws SQLException {
-        Statement stmt = connection.createStatement();
     	String query =
     	"SELECT p.proj_id, sb.sample_id, sb.sample_bio_name, sb.sample_alias, "
     	+ "sg.sample_desc, sg.sample_ctrl, sg.sample_repl, sg.sample_file_name "
     	+ "FROM sample_biosource_info sb, sample_general_info sg, proj_info p "
     	+ "WHERE sb.sample_id=sg.sample_id "
     	+ "AND p.proj_id=sb.proj_id;";
-    	ResultSet res = stmt.executeQuery(query);
-        return res;
+        return doQuery(connection, query, "getSamples");
     }
 
     /**
@@ -253,13 +249,11 @@ public class BarExpressionsConverter extends BioDBConverter
      * @return the expressions
      */
     protected ResultSet getSampleData(Connection connection) throws SQLException {
-        Statement stmt = connection.createStatement();
     	String query =
     			"SELECT sample_id, data_probeset_id, data_signal, "
     			+ "data_call, data_p_val "
     			+ "FROM sample_data;";
-    	ResultSet res = stmt.executeQuery(query);
-        return res;
+        return doQuery(connection, query, "getSampleData");
     }
 
 
@@ -270,6 +264,27 @@ public class BarExpressionsConverter extends BioDBConverter
     @Override
     public String getDataSetTitle(int taxonId) {
         return DATA_SOURCE_NAME + " expressions data set";
+    }
+
+
+
+    /**
+     * method to wrap the execution of a query with log info)
+     * @param connection
+     * @param query
+     * @param comment for not logging
+     * @return the result set
+     * @throws SQLException
+     */
+    private ResultSet doQuery(Connection connection, String query, String comment)
+        throws SQLException {
+        // see ModEncodeMetaDataProcessor
+    	LOG.info("executing: " + query);
+        long bT = System.currentTimeMillis();
+        Statement stmt = connection.createStatement();
+        ResultSet res = stmt.executeQuery(query);
+        LOG.info("QUERY TIME " + comment + ": " + (System.currentTimeMillis() - bT) + " ms");
+        return res;
     }
 
 }
