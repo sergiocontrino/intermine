@@ -141,10 +141,10 @@ public class BarExpressionsConverter extends BioDBConverter
     	experiment.setAttribute("title", title);
     	experiment.setAttribute("category", EXPERIMENT_CATEGORY);
 
-    	String labRefId;
     	// check if lab already stored
-    	if (!labIdRefMap.containsValue(pi)) {
-    		labRefId=createLab(pi, affiliation, address);
+    	if (!labIdRefMap.containsKey(pi)) {
+    		LOG.info("LAB: " + pi);
+    		String labRefId=createLab(pi, affiliation, address);
     		labIdRefMap.put(pi, labRefId);
     	}
 
