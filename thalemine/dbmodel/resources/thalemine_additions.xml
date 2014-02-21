@@ -3,6 +3,7 @@
 
 <class name="Gene" is-interface="true">
   <collection name="expressions" referenced-type="Expression" reverse-reference="gene" />
+  <collection name="probes" referenced-type="Probe" reverse-reference="gene" />
 </class>
 
 
@@ -42,12 +43,19 @@
   <collection name="properties" referenced-type="SampleProperty" reverse-reference="samples"/>
 </class>
 
+<class name="Probe" is-interface="true">
+  <attribute name="name" type="java.lang.String" />
+  <reference name="gene" referenced-type="Gene" reverse-reference="probes" />
+  <collection name="expressions" referenced-type="Expression" reverse-reference="probe" />
+</class>
+
+
 <class name="Expression" is-interface="true">
-  <attribute name="probeSet" type="java.lang.String" />
   <attribute name="signal" type="java.lang.Double" />
   <attribute name="call" type="java.lang.String" />
   <attribute name="pValue" type="java.lang.Double" />
   <reference name="sample" referenced-type="Sample" reverse-reference="expressions" />
+  <reference name="probe" referenced-type="Probe" reverse-reference="expressions" />
   <reference name="gene" referenced-type="Gene" reverse-reference="expressions" />
 </class>
 

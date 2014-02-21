@@ -26,7 +26,7 @@ import org.intermine.xml.full.Item;
 
 /**
  *
- * @author
+ * @author sc
  */
 public class BarExpressionsConverter extends BioDBConverter
 {
@@ -47,6 +47,8 @@ public class BarExpressionsConverter extends BioDBConverter
     private Map<Integer, String> experimentIdRefMap = new HashMap<Integer, String>();
     //barId, item Id
     private Map<Integer, String> sampleIdRefMap = new HashMap<Integer, String>();
+    //probeset, item Id
+    private Map<String, String> probeIdRefMap = new HashMap<String, String>();
 
     /**
      * Construct a new BarExpressionsConverter.
@@ -194,9 +196,19 @@ public class BarExpressionsConverter extends BioDBConverter
     		return "orphaned sample";
     	}
 
+    	String probeRefId = probeIdRefMap.get(probeSet);
+    	if (probeRefId == null) {
+
+    	Item probe = createItem("Probe");
+    	probe.setAttribute("name", probeSet);
+    	store(probe);
+    	probeRefId=probe.getIdentifier();
+    	probeIdRefMap.put(probeSet, probeRefId);
+    	}
+
 
     	Item sampleData = createItem("Expression");
-    	sampleData.setAttribute("probeSet", probeSet);
+//    	sampleData.setAttribute("probeSet", probeSet);
     	sampleData.setAttribute("signal", signal.toString());
     	if (call!=null) {
     		sampleData.setAttribute("call", call);
@@ -204,6 +216,7 @@ public class BarExpressionsConverter extends BioDBConverter
     	sampleData.setAttribute("pValue", pValue.toString());
 
 		sampleData.setReference("sample", sampleIdRef);
+		sampleData.setReference("probe", probeRefId);
 		store(sampleData);
     	return sampleData.getIdentifier();
     }
@@ -252,7 +265,7 @@ public class BarExpressionsConverter extends BioDBConverter
     	String query =
     			"SELECT sample_id, data_probeset_id, data_signal, "
     			+ "data_call, data_p_val "
-    			+ "FROM sample_data;";
+    			+ "FROM sample_data limit 1000;";
         return doQuery(connection, query, "getSampleData");
     }
 
