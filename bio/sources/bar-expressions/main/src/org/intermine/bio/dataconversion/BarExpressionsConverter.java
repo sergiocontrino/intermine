@@ -195,7 +195,7 @@ public class BarExpressionsConverter extends BioDBConverter
     	}
 
 
-    	Item sampleData = createItem("SampleData");
+    	Item sampleData = createItem("Expression");
     	sampleData.setAttribute("probeSet", probeSet);
     	sampleData.setAttribute("signal", signal.toString());
     	if (call!=null) {

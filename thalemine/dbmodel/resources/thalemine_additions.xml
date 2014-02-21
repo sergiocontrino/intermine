@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <classes>
 
+<class name="Gene" is-interface="true">
+  <collection name="expressions" referenced-type="Expression" reverse-reference="gene" />
+</class>
+
+
 <class name="Lab" extends="DataSource" is-interface="true">
   <attribute name="name" type="java.lang.String" />
   <attribute name="surname" type="java.lang.String" />
@@ -32,17 +37,18 @@
   <reference name="publication" referenced-type="Publication"/>
   <reference name="experiment" referenced-type="Experiment" reverse-reference="samples" />
   <reference name="lab" referenced-type="Lab" reverse-reference="samples" />
-  <collection name="sampleData" referenced-type="SampleData" reverse-reference="sample" />
+  <collection name="expressions" referenced-type="Expression" reverse-reference="sample" />
 
   <collection name="properties" referenced-type="SampleProperty" reverse-reference="samples"/>
 </class>
 
-<class name="SampleData" is-interface="true">
+<class name="Expression" is-interface="true">
   <attribute name="probeSet" type="java.lang.String" />
   <attribute name="signal" type="java.lang.Double" />
   <attribute name="call" type="java.lang.String" />
   <attribute name="pValue" type="java.lang.Double" />
-  <reference name="sample" referenced-type="Sample" reverse-reference="sampleData" />
+  <reference name="sample" referenced-type="Sample" reverse-reference="expressions" />
+  <reference name="gene" referenced-type="Gene" reverse-reference="expressions" />
 </class>
 
 <class name="SampleProperty" is-interface="true">
