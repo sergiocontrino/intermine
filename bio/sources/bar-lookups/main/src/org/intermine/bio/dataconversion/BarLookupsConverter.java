@@ -81,10 +81,11 @@ public class BarLookupsConverter extends BioDBConverter
         	while (res.next()) {
         		String probe = res.getString(1);
         		String gene = res.getString(2).toUpperCase();
-        		LOG.info("GP: " + probe + "|"+ gene);
+//        		LOG.info("GP: " + probe + "|"+ gene);
 
         		if (!gene.startsWith("AT")) {
         			// not a gene id!
+        			LOG.warn("NOT A GENE: " + gene);
         			continue;
         		}
 

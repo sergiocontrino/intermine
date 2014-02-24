@@ -265,7 +265,8 @@ public class BarExpressionsConverter extends BioDBConverter
     	String query =
     			"SELECT sample_id, data_probeset_id, data_signal, "
     			+ "data_call, data_p_val "
-    			+ "FROM sample_data limit 1000;";
+    			+ "FROM sample_data;";
+//		+ "FROM sample_data limit 1000;";
         return doQuery(connection, query, "getSampleData");
     }
 
