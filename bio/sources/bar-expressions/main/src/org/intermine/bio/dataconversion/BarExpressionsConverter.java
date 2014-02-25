@@ -14,7 +14,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -23,6 +25,7 @@ import org.intermine.metadata.Model;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.sql.Database;
 import org.intermine.xml.full.Item;
+import org.intermine.xml.full.ReferenceList;
 
 /**
  *
@@ -41,6 +44,18 @@ public class BarExpressionsConverter extends BioDBConverter
     private Map<String, String> terms = new HashMap<String, String>();
     private static final String PUBMED_PREFIX = "PubMed";
 
+    private static final List<String> PROPERTY_TYPES =
+            Arrays.asList(
+                    "stock",
+                    "geneticVar",
+                    "tissue",
+                    "diseased",
+                    "growthCondition",
+                    "growthStage",
+                    "timePoint");
+
+
+
     //pi, item Id
     private Map<String, String> labIdRefMap = new HashMap<String, String>();
     //barId, item Id
@@ -49,6 +64,10 @@ public class BarExpressionsConverter extends BioDBConverter
     private Map<Integer, String> sampleIdRefMap = new HashMap<Integer, String>();
     //probeset, item Id
     private Map<String, String> probeIdRefMap = new HashMap<String, String>();
+    //propertyType.propertyValue, item Id
+    private Map<String, String> propertyIdRefMap = new HashMap<String, String>();
+    //propertyType.propertyValue, objectId
+    private Map<String, Integer> propertyIdMap = new HashMap<String, Integer>();
 
     /**
      * Construct a new BarExpressionsConverter.
@@ -77,7 +96,8 @@ public class BarExpressionsConverter extends BioDBConverter
 
         processExperiments(connection);
         processSamples(connection);
-        processSampleData(connection);
+        processSampleProperties(connection);
+//        processSampleData(connection);
     }
 
     private void processExperiments(Connection connection)
@@ -114,6 +134,27 @@ public class BarExpressionsConverter extends BioDBConverter
         				sampleBarId, name, alias, description, control,
         				replication, file);
         		sampleIdRefMap.put(sampleBarId, sampleRefId);
+        	}
+        	res.close();
+//    		LOG.info("sampleIdRefMap: " + sampleIdRefMap.keySet());
+    }
+
+    private void processSampleProperties(Connection connection)
+            throws SQLException, ObjectStoreException {
+            ResultSet res = getSampleProperties(connection);
+        	while (res.next()) {
+        		Integer sampleBarId = new Integer(res.getInt(1));
+        		String stock = res.getString(2);
+        		String geneticVar = res.getString(3);
+        		String tissue = res.getString(4);
+        		String diseased = res.getString(5);
+        		String growthCondition = res.getString(6);
+        		String growthStage = res.getString(7);
+        		String timePoint = res.getString(8);
+
+        		String sampleRefId = createSampleProperties(sampleBarId,
+        				stock, geneticVar, tissue, diseased,
+        				growthCondition, growthStage, timePoint);
         	}
         	res.close();
     }
@@ -182,6 +223,71 @@ public class BarExpressionsConverter extends BioDBConverter
 		store(sample);
     	return sample.getIdentifier();
     }
+
+    private String createSampleProperties(Integer sampleBarId,
+    		String stock, String geneticVar, String tissue, String diseased,
+    		String growthCondition, String growthStage, String timePoint)
+    				throws ObjectStoreException {
+
+    	// create list of values
+    	List<String> PROPERTY_VALUES =
+                Arrays.asList(
+                        stock,
+                        geneticVar,
+                        tissue,
+                        diseased,
+                        growthCondition,
+                        growthStage,
+                        timePoint);
+    	// needed to compensate for missing experiments for some samples
+    	String sampleIdRef = sampleIdRefMap.get(sampleBarId);
+
+    	if (sampleIdRef == null) {
+    		LOG.info("SAMPLE: " + sampleBarId + " has no refs.");
+    		return "properties: orphaned sample";
+    	}
+
+    	int i=0;
+    	for (String p: PROPERTY_TYPES){
+    		String name = PROPERTY_TYPES.get(i);
+    		String value = PROPERTY_VALUES.get(i);
+    		if (value == null || value.isEmpty()) {
+        		LOG.info("SAMPLE " + sampleBarId +
+        				": empty prop value for " + p);
+        		i++;
+    			continue;
+    		}
+    		String propertyRefId = propertyIdRefMap.
+    				get(name.concat(value));
+    		if (propertyRefId == null) {
+    			// prop not yet seen: store it
+    			Item property = createItem("SampleProperty");
+    			property.setAttribute("name", name);
+    			property.setAttribute("value", value);
+    			property.addToCollection("samples", sampleIdRef);
+    			Integer propObjId = store(property);
+
+    			propertyRefId=property.getIdentifier();
+    			propertyIdRefMap.put(name.concat(value), propertyRefId);
+    			propertyIdMap.put(name.concat(value), propObjId);
+        		LOG.info("SAMPLE " + sampleBarId + ": created property "
+        		+ p + " - "+ value);
+    		} else {
+ 			// setting ref if prop already in..
+    			Integer propObjId=propertyIdMap.get(name.concat(value));
+        		LOG.info("SAMPLE " + sampleBarId + ": adding property "
+        		+ p + " - "+ value + " to collection");
+
+                ReferenceList collection = new ReferenceList();
+                collection.setName("samples");
+                collection.addRefId(sampleIdRef);
+    			store(collection, propObjId);
+            }
+			i++;
+    	}
+    	return sampleIdRef;
+    }
+
 
     private String createSampleData(Integer sampleBarId,
     		String probeSet, Double signal, String call, Double pValue)
@@ -252,6 +358,22 @@ public class BarExpressionsConverter extends BioDBConverter
     	+ "WHERE sb.sample_id=sg.sample_id "
     	+ "AND p.proj_id=sb.proj_id;";
         return doQuery(connection, query, "getSamples");
+    }
+
+    /**
+     * Return the samples from the bar-expressions table
+     * This is a protected method so that it can be overridden for testing.
+     * @param connection the bar database connection
+     * @throws SQLException if there is a problem while querying
+     * @return the samples
+     */
+    protected ResultSet getSampleProperties(Connection connection) throws SQLException {
+    	String query =
+    			"SELECT sample_id, sample_stock_code, sample_genetic_var, "
+    			+ "sample_tissue, sample_diseased, sample_growth_condition, "
+    			+ "sample_growth_stage,sample_time_point "
+    			+ "FROM sample_biosource_info;";
+        return doQuery(connection, query, "getSampleProperties");
     }
 
     /**

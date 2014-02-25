@@ -61,7 +61,7 @@
 
 <class name="SampleProperty" is-interface="true">
   <attribute name="name" type="java.lang.String"/>
-  <attribute name="type" type="java.lang.String"/>
+  <attribute name="value" type="java.lang.String"/>
 <!--
   <reference name="ontologyTerm" referenced-type="OntologyTerm" reverse-reference="sampleProperty" />
 -->
