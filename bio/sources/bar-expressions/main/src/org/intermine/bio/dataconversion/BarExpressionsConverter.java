@@ -16,8 +16,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.intermine.dataconversion.ItemWriter;
@@ -68,6 +71,8 @@ public class BarExpressionsConverter extends BioDBConverter
     private Map<String, String> propertyIdRefMap = new HashMap<String, String>();
     //propertyType.propertyValue, objectId
     private Map<String, Integer> propertyIdMap = new HashMap<String, Integer>();
+    //proerty objectId, list of sampleRefId
+    private Map<Integer, Set<String>> propertySampleMap = new HashMap<Integer, Set<String>>();
 
     /**
      * Construct a new BarExpressionsConverter.
@@ -97,7 +102,8 @@ public class BarExpressionsConverter extends BioDBConverter
         processExperiments(connection);
         processSamples(connection);
         processSampleProperties(connection);
-//        processSampleData(connection);
+    	setSamplePropertiesRefs(connection);
+        processSampleData(connection);
     }
 
     private void processExperiments(Connection connection)
@@ -264,12 +270,15 @@ public class BarExpressionsConverter extends BioDBConverter
     			Item property = createItem("SampleProperty");
     			property.setAttribute("name", name);
     			property.setAttribute("value", value);
-    			property.addToCollection("samples", sampleIdRef);
+    			//property.addToCollection("samples", sampleIdRef);
     			Integer propObjId = store(property);
 
     			propertyRefId=property.getIdentifier();
     			propertyIdRefMap.put(name.concat(value), propertyRefId);
     			propertyIdMap.put(name.concat(value), propObjId);
+    			Set<String> others = new HashSet<String>();
+    			others.add(sampleIdRef);
+    			propertySampleMap.put(propObjId, others);
         		LOG.info("SAMPLE " + sampleBarId + ": created property "
         		+ p + " - "+ value);
     		} else {
@@ -277,17 +286,34 @@ public class BarExpressionsConverter extends BioDBConverter
     			Integer propObjId=propertyIdMap.get(name.concat(value));
         		LOG.info("SAMPLE " + sampleBarId + ": adding property "
         		+ p + " - "+ value + " to collection");
+    			Set<String> others = propertySampleMap.get(propObjId);
+    			others.add(sampleIdRef);
+    			propertySampleMap.put(propObjId, others);
 
-                ReferenceList collection = new ReferenceList();
-                collection.setName("samples");
-                collection.addRefId(sampleIdRef);
-    			store(collection, propObjId);
+//                ReferenceList collection = new ReferenceList();
+//                collection.setName("samples");
+//                collection.addRefId(sampleIdRef);
+//    			store(collection, propObjId);
             }
 			i++;
     	}
+
     	return sampleIdRef;
     }
-
+    private void setSamplePropertiesRefs(Connection connection)
+            throws ObjectStoreException {
+    	for(Entry<Integer, Set<String>> prop: propertySampleMap.entrySet()) {
+    		Integer thisProp = prop.getKey();
+            ReferenceList collection = new ReferenceList();
+            collection.setName("samples");
+            for (String sampleRef: prop.getValue()){
+                collection.addRefId(sampleRef);
+            }
+            if (!collection.equals(null)) {
+               store(collection, thisProp);
+            }
+    	}
+    }
 
     private String createSampleData(Integer sampleBarId,
     		String probeSet, Double signal, String call, Double pValue)
