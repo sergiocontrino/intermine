@@ -10,12 +10,18 @@ package org.intermine.bio.dataconversion;
  *
  */
 
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.commons.lang.StringUtils;
+
 import org.intermine.bio.io.gff3.GFF3Record;
 import org.intermine.metadata.Model;
 import org.intermine.xml.full.Item;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.intermine.util.StringUtil;
 
 /**
  * A converter/retriever for the AipGff dataset via GFF files.
@@ -35,8 +41,6 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
         refsAndCollections.put("TransposonFragment", "transposableelements");
         refsAndCollections.put("PseudogenicExon","pseudogenictranscripts");
         refsAndCollections.put("PseudogenicTranscript","pseudogene");
-
-
     }
 
     /**
@@ -80,16 +84,19 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
             p = Pattern.compile(regexp);
             m = p.matcher(clsName);
             if(m.find()) {
+                if(record.getAttributes().get("symbol") != null){
+                    String symbol = record.getAttributes().get("symbol").iterator().next();
+                    if(symbol != null){
+                        feature.setAttribute("symbol", symbol);
+                    }
+                }
                 List<String> aliases = record.getAliases();
                 if(aliases != null){
-                    feature.setAttribute("symbol", aliases.get(0));
-                    if (aliases.size() > 1) {
-                        StringBuilder sb = new StringBuilder(aliases.get(1));
-                        for (int i = 2; i < aliases.size(); i++){
-                            sb.append(" ").append(aliases.get(i));
-                        }
-                        feature.setAttribute("Alias", sb.toString());
+                    StringBuilder sb = new StringBuilder(aliases.get(0));
+                    for (int i = 1; i < aliases.size(); i++){
+                        sb.append(" ").append(aliases.get(i));
                     }
+                    feature.setAttribute("Alias", sb.toString());
                 }
             }
 
@@ -107,6 +114,36 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                     String cur_summary = record.getAttributes().get("curator_summary").iterator().next();
                     if(cur_summary != null){
                         feature.setAttribute("curatorSummary", cur_summary);
+                    }
+                }
+            }
+
+            regexp = "Gene|MRNA|Pseudogene|TransposableElementGene";
+            p = Pattern.compile(regexp);
+            m = p.matcher(clsName);
+            if(m.find()) {
+                List<String> dbxrefs = record.getDbxrefs();
+                if (dbxrefs != null) {
+                    Iterator<String> dbxrefsIter = dbxrefs.iterator();
+
+                    while (dbxrefsIter.hasNext()) {
+                        String dbxref = dbxrefsIter.next();
+
+                        List<String> refList = new ArrayList<String>(
+                                Arrays.asList(StringUtil.split(dbxref, ",")));
+                        for (String ref : refList) {
+                            ref = ref.trim();
+                            int colonIndex = ref.indexOf(":");
+                            if (colonIndex == -1) {
+                                throw new RuntimeException("external reference not understood: " + ref);
+                            }
+
+                            if (ref.startsWith("gene:") || ref.startsWith("locus:")) {
+                                feature.setAttribute("secondaryIdentifier", ref);
+                            } else {
+                                throw new RuntimeException("unknown external reference type: " + ref);
+                            }
+                        }
                     }
                 }
             }
