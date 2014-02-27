@@ -69,6 +69,21 @@
     </fields>
   </class>
 
+<class className="org.intermine.model.bio.GOAnnotation">
+    <fields>
+      <fieldconfig fieldExpr="subject.primaryIdentifier"/>
+      <fieldconfig fieldExpr="subject.symbol"/>
+      <fieldconfig fieldExpr="ontologyTerm.identifier" />
+      <fieldconfig fieldExpr="ontologyTerm.name" />
+    </fields>
+  </class>
+
+  <class className="org.intermine.model.bio.GOEvidenceCode">
+    <fields>
+      <fieldconfig fieldExpr="code"/>
+    </fields>
+  </class>
+
   <class className="org.intermine.model.bio.Interaction">
     <fields>
       <fieldconfig fieldExpr="gene1.symbol" />
