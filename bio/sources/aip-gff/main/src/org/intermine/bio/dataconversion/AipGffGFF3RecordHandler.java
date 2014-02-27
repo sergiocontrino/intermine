@@ -72,11 +72,8 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
             Pattern p = Pattern.compile(regexp);
             Matcher m = p.matcher(clsName);
             if(m.find()) {
-                if(record.getAttributes().get("Note") != null){
-                    String note = record.getAttributes().get("Note").iterator().next();
-                    if(note != null){
-                        feature.setAttribute("Note", note);
-                    }
+                if(record.getNote() != null){
+                    feature.setAttribute("briefDescription", record.getNote());
                 }
             }
 
@@ -84,6 +81,17 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
             p = Pattern.compile(regexp);
             m = p.matcher(clsName);
             if(m.find()) {
+                if(record.getAttributes().get("Name") != null){
+                    String name = record.getAttributes().get("Name").iterator().next();
+                    if(name != null){
+                        regexp = "^AT[A-z0-9]{1}[A-z]+[0-9]+";
+                        p = Pattern.compile(regexp);
+                        m = p.matcher(name);
+                        if(!m.find()){
+                            feature.setAttribute("name", name);
+                        }
+                    }
+                }
                 if(record.getAttributes().get("symbol") != null){
                     String symbol = record.getAttributes().get("symbol").iterator().next();
                     if(symbol != null){
@@ -96,7 +104,7 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                     for (int i = 1; i < aliases.size(); i++){
                         sb.append(" ").append(aliases.get(i));
                     }
-                    feature.setAttribute("Alias", sb.toString());
+                    feature.setAttribute("alias", sb.toString());
                 }
             }
 
