@@ -248,7 +248,7 @@
                      jspName="model/cytoscapeNetworkDisplayer.jsp"
                      replacesFields="interactions"
                      placement="Interactions"
-                     types="Genomics"/>
+                     types="Gene"/>
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneOntologyDisplayer"
                      jspName="model/geneOntologyDisplayer.jsp"
@@ -266,7 +266,7 @@
                      jspName="model/jbrowseDisplayer.jsp"
                      replacesFields=""
                      placement="Genomics"
-                     types="SequenceFeature"/>
+                     types="Gene,MRNA,MiRNA,NcRNA,RRNA,SnRNA,SnoRNA,TRNA,Pseudogene,PseudogenicTranscript,TransposableElementGene"/>
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.OverlappingFeaturesDisplayer"
                      jspName="model/overlappingFeaturesDisplayer.jsp"
@@ -285,6 +285,12 @@
                      replacesFields="md5checksum"
                      placement="Proteins"
                      types="Genomics,Protein"/>
+
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.BAReFPBrowserDisplayer"
+                     jspName="model/eFPBrowserDisplayer.jsp"
+                     replacesFields=""
+                     placement="Expression"
+                     types="Gene"/>
 
   </reportdisplayers>
 

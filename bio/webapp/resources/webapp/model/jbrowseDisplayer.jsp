@@ -4,6 +4,9 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 
 <!-- jbrowseDisplayer.jsp -->
+<div class="basic-table">
+<h3>JBrowse</h3>
+<br />
 
 <c:set var="object" value="${reportObject.object}"/>
 
@@ -12,8 +15,6 @@
                 || className == 'Chromosome') && className != 'ChromosomeBand'}">
 
 <div id="jbrowse" class="feature basic-table">
-    <!-- <h3><fmt:message key="sequenceFeature.jbrowse.message"/></h3> -->
-
   <c:set var="name" value="${object.primaryIdentifier}"/>
 
   <c:if test="${className == 'CDS' || fn:containsIgnoreCase(className, 'exon') || fn:containsIgnoreCase(className, 'UTR')}">
@@ -25,12 +26,12 @@
   <div>
       <iframe style="border: 1px solid black"
           src="${WEB_PROPERTIES['jbrowse.prefix']}/?data=${WEB_PROPERTIES['jbrowse.database.source']}&loc=${name}&tracklist=1&nav=0&overview=0&tracks=TAIR10_loci,TAIR10_genes"
-          width="600" height="250">
+          width="820" height="250">
       </iframe>
   </div>
   </c:when>
   <c:otherwise>
-   	<p>There was a problem rendering the displayer, check: <code>WEB_PROPERTIES['jbrowse.database.source']</code>.</p>
+  <p>There was a problem rendering the displayer, check: <code>${WEB_PROPERTIES['jbrowse.database.source']}</code>.</p>
 	<script type="text/javascript">
 		jQuery('#jbrowse').addClass('warning');
 	</script>

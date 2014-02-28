@@ -70,8 +70,8 @@ public class BarInteractionsConverter extends BioDBConverter
         throws SQLException, ObjectStoreException {
         ResultSet res = runInteractionsQuery(connection);
 	while (res.next()) {
-		String gene1 = res.getString(1);
-		String gene2 = res.getString(2);
+		String gene1 = res.getString(1).toUpperCase();
+		String gene2 = res.getString(2).toUpperCase();
 		Integer quality = new Integer(res.getInt(3));
 		Integer index = new Integer(res.getInt(4));
 		// is this a confidence score?
@@ -177,7 +177,8 @@ public class BarInteractionsConverter extends BioDBConverter
 	gene.setAttribute("primaryIdentifier", identifier);
 
 	// put in our map
-	genes.put(identifier, geneRefId);
+    geneRefId=gene.getIdentifier();
+    genes.put(identifier, geneRefId);
 
 	// store to database
 	store(gene);
@@ -215,9 +216,9 @@ public class BarInteractionsConverter extends BioDBConverter
      */
     protected ResultSet runInteractionsQuery(Connection connection) throws SQLException {
         Statement stmt = connection.createStatement();
-	String query = "select protein1, protein2, quality, index, pcc, bind_id, " +
-			"interactions_detection_mi, interactions_detection, interactions_type_mi, " +
-			"interactions_type from interactions;";
+	String query = "select \"Protein1\", \"Protein2\", \"Quality\", \"Index\", \"Pcc\", \"Bind_id\", " +
+			"\"Interactions_detection_mi\", \"Interactions_detection\", \"Interactions_type_mi\", " +
+			"\"Interactions_type\" from interactions;";
         ResultSet res = stmt.executeQuery(query);
         return res;
     }

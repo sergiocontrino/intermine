@@ -30,5 +30,28 @@
     <aspect-source name="FlyBase" url="http://www.flybase.org"/>
     <aspect-source name="Ensembl" url="http://www.ensembl.org/Anopheles_gambiae/"/>
   </aspect>
+  <aspect name="Expression">
+    <subtitle></subtitle>
+    <icon-image>model/images/embryos.jpg</icon-image>
+    <large-image>model/images/embryos.jpg</large-image>
+    <intro-text>
+      &lt;p&gt;
+      Gene expression data for &lt;i&gt;Arabidopsis thaliana&lt;/i&gt;.
+      &lt;/p&gt;
+    </intro-text>
+    <tile-name>model/expression.jsp</tile-name>
+    <aspect-source name="BAR" url="http://bar.utoronto.edu/"/>
+  </aspect>
+  <aspect name="Interactions">
+    <subtitle></subtitle>
+    <icon-image>model/images/interaction.gif</icon-image>
+    <large-image>model/images/interaction.gif</large-image>
+    <tile-name></tile-name>
+    <intro-text>
+      Protein-protein interactions from BAR.
+    </intro-text>
+    <tile-name>model/interactions.jsp</tile-name>
+    <aspect-source name="BAR" url="http://bar.utoronto.edu/"/>
+  </aspect>
 
 </aspects>

@@ -49,7 +49,6 @@
       <property name="ontologyPrefix" value="GO"/>
     </source>
 
-    <!--
     <source name="bar-interactions" type="bar-interactions" dump="true">
       <property name="source.db.name" value="bar"/>
     </source>
@@ -57,7 +56,6 @@
     <source name="psi-mi-ontology" type="psi-mi-ontology">
       <property name="src.data.file" location="/usr/local/projects/AIP/ThaleMineData/psi/psi-mi.obo"/>
     </source>
-    -->
 
     <source name="uniprot" type="uniprot" dump="true">
       <property name="uniprot.organisms" value="3702"/>
