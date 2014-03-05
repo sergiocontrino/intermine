@@ -1900,7 +1900,6 @@
     </jsp-property-group>
   </jsp-config>
 
-  <!--
   <security-constraint>
     <web-resource-collection>
       <url-pattern>/*</url-pattern>
@@ -1914,6 +1913,5 @@
     <auth-method>BASIC</auth-method>
     <realm-name>Araport ThaleMine</realm-name>
   </login-config>
-  -->
 
 </web-app>
