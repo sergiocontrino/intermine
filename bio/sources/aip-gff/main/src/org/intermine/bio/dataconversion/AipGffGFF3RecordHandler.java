@@ -156,6 +156,18 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                 }
             }
 
+            regexp = "Exon|CDS|UTR|Fragment";
+            p = Pattern.compile(regexp);
+            m = p.matcher(clsName);
+            if(m.find()) {
+                if(record.getAttributes().get("Name") != null){
+                    String name = record.getAttributes().get("Name").iterator().next();
+                    if(name != null){
+                        feature.setAttribute("symbol", name);
+                    }
+                }
+            }
+
             if("MRNA".equals(clsName)) {
                 if(record.getAttributes().get("conf_class") != null){
                     String conf_class = record.getAttributes().get("conf_class").iterator().next();

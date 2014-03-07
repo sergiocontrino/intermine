@@ -8,9 +8,65 @@
  *
  */
 
-1.2.3
+1.3 (Xmas 2014)
 
-#451 - Template more results & browser autocomplete fix.
+#7 - Keyword search - organism facet should be on parent class
+#64 - Jumpy display: new table controls on report pages
+#66 - Autocomplete displays underneath autocomplete suggested by browser
+#70 - Result Table popups extend beyond visible area
+#151 - Use "list" instead of "bag".
+#155 - beta - missing error msg "Your query would take too long"
+#157 - UTF characters in imjs
+#158 - im-tables css has rules for svg elements that are too broad
+#163 - Column headers not displayed
+#165 - Autocomplete broken in "Add new filter" dialog
+#166 - Sort order drag-n-drop bug.
+#184 - Error messages on results tables when user clicks before page loads.
+#194 - Webapp: Oops! - Server Error
+#197 - Results Table Gene Link open in a new window
+#207 - Save button not working following Get XML code
+#214 - Uploading lists - type issue
+#215 - Query results: fixed width columns hide data
+#218 - Export collection attributes to GFF/FASTA
+#223 - UniProt Parser Suggestion
+#224 - Results tables not appearing on IE 8
+#228 - Query too long to run warning
+#239 - Update the JS code generator
+#272 - new Pathway Tool
+#285 - Export is failing when removing columns
+#314 - Add "getting started" tutorial for webapp config
+#355 - Enable hiding specific fields from querybuilder
+#381 - Templates on home page are owned by the superuser only
+#382 - LOOKUP for protein ignores organism name
+#383 - Warning messages keep popping up when navigating between lists
+#392 - ConcurrentModificationException when adding to a list.
+#399 - YeastMine - external link icon is wrong
+#400 - Better UI for list upload resolve identifiers step (+ #489, #494, #497, #505)
+#424 - Removing particular columns from templates results in Oops!
+#431 - Show templates in summary section of report page
+#432 - AnnotationExtension should be in evidence
+#438 - GFF3 Download fails on non sequence features - should be disabled
+#442 - Download dialogue - suggestions
+#444 - Query results - need dropdowns when adding filters
+#445 - Code generation - don't use ID. never ever!
+#449 - Quick search results only retrieving first 100 rows
+#450 - Report page - results tables are being added to the query history
+#451 - Autocomplete not scrolling all the way
+#453 - ID Resolution WS update
+#454 - Update sequence feature displayer
+#461 - 500 error code response with empty query constraints.
+#469 - Homologene - correct identifiers
+#471 - Dead link to Reactome inference details on Reports Page
+#472 - OrthoDB - add option to use protein ID field
+#479 - move new list widgets to InterMine
+#483 - $ not exported on window
+#494 - List upload - download summary requires Blobs
+#496 - InitialiserPlugin should start the upgrade procedure for the super users lists
+#497 - bagName not populating when upgrading a list, results in NullPointerException
+#500 - Code generation needs platform specific line endings
+#507 - Make sure perl client is up to speed with current webservicery
+#509 - Add data set to publication
+#511 - Doubleclicking an option on QueryBuilder type selector now works in IE
 
 1.2.2 (7 August 2013)
 
@@ -30,9 +86,9 @@
 #192 - Links to external sites should always open in a new window enhancement please-test
 #213 - Do not get actual count of matches on identifier resolution page
 #279 - Updated jQuery UI to be compatible with newer jQuery
-#289 - Results table column summary fails to display when toggling between them 
+#289 - Results table column summary fails to display when toggling between them
 #292 - missing icon font stylesheet for Results Tables on Report pages
-#293 - network viewer toggle not working (flymine) 
+#293 - network viewer toggle not working (flymine)
 #294 - expression graph is blue in flymine
 #299 - remove publication displayer
 #306 - ref #279
@@ -42,20 +98,20 @@
 #313 - YeastMine GFF3 and FASTA not working
 #315 - Friendly mine links to mousemine fail
 #317 - icons on results table not showing up
-#318 - Creating lists with invidual objects doesn't work anymore 
-#319 - Downloading query XML generates an error 
+#318 - Creating lists with invidual objects doesn't work anymore
+#319 - Downloading query XML generates an error
 #320 - tables struggle with outerjoined queries and counts
 #321 - Reordering columns in download doesn't work
-#325 - Summary incorrect on numerical column 
+#325 - Summary incorrect on numerical column
 #326 - Export dialogue is purple in wormmine
-#327 - Can't filter on organism name in query results 
+#327 - Can't filter on organism name in query results
 #328 - Can't delete tags
 #329 - Do nothing if nothing is entered in search boxes on Home page
-#330 - p-values greater than 1 when adjusting for gene length 
-#331 - can't download GO widget data in Safari 
-#334 - Add filter button broken 
+#330 - p-values greater than 1 when adjusting for gene length
+#331 - can't download GO widget data in Safari
+#334 - Add filter button broken
 #335 - Submit event not suppressed in dropdown summary form bug please-test
-#336 - "Max value" ignored when correcting by gene length 
+#336 - "Max value" ignored when correcting by gene length
 #337 - Correct query not being generated when using portal
 #340 - PathQuery#verifyQuery() returns incorrect status with many OJs
 #341 - Make homepage boxes work with any length of text
@@ -64,14 +120,14 @@
 #348 - Results tables dropdown menus theme colors
 #350 - Use debug mode in List Widgets
 #351 - Cross references not linking out automatically
-#352 - Use labels in keyword search results 
+#352 - Use labels in keyword search results
 #354 - Cell formatters - make optional
 #356 - Fix Results Tables not opening from List Widgets in Firefox
 #357 - Color for MouseMine links
 #363 - Fix List Widgets failing with expecting JSONP by asking for JSON
 #367 - Limited space when renaming lists
-#368 - Inheritance not being handled correctly for list widgets 
-#371 - multiple formatters per class, based on path 
+#368 - Inheritance not being handled correctly for list widgets
+#371 - multiple formatters per class, based on path
 #378 - Show a button instead of a checkbox in List Widgets cull by gene length
 #384 - Select all items in a widget list if none are selected
 
@@ -79,10 +135,10 @@
 
 #  9 - Import templates/queries from file
 # 44 - Special characters escaped correctly
-# 45 - List operations: asymmetric difference 
+# 45 - List operations: asymmetric difference
 # 93 - Keyword search: redirects work as expected
 # 95 - Can create outer joins in 'summary' views in the query builder
-#137 - Enrichment widgets: added option to 'normalize by gene length' 
+#137 - Enrichment widgets: added option to 'normalize by gene length'
 #152 - Data source ontology
 #173 - Keyword search: can create a list with over 100 members
 #176 - Convert links on list analysis working

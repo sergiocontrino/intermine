@@ -51,6 +51,15 @@
     <attribute name="computationalDescription" type="java.lang.String"/>
     <attribute name="curatorSummary" type="java.lang.String"/>
   </class>
+  <class name="Exon" is-interface="true">
+     <attribute name="symbol" type="java.lang.String"/>
+  </class>
+  <class name="FivePrimeUTR" is-interface="true">
+     <attribute name="symbol" type="java.lang.String"/>
+  </class>
+  <class name="ThreePrimeUTR" is-interface="true">
+     <attribute name="symbol" type="java.lang.String"/>
+  </class>
   <class name="Pseudogene" extends="Gene" is-interface="true">
      <attribute name="briefDescription" type="java.lang.String"/>
      <collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogene"/>
@@ -63,6 +72,7 @@
      <collection name="pseudogenicexons" referenced-type="PseudogenicExon" reverse-reference="pseudogenictranscripts"/>
    </class>
    <class name="PseudogenicExon" extends="Exon" is-interface="true">
+     <attribute name="symbol" type="java.lang.String"/>
      <collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogenicexons"/>
    </class>
    <class name="TransposableElement"  is-interface="true">
@@ -71,6 +81,7 @@
      <collection name="transposonfragments" referenced-type="TransposonFragment" reverse-reference="transposableelements"/>
    </class>
    <class name="TransposonFragment" extends="SequenceFeature" is-interface="true">
+     <attribute name="symbol" type="java.lang.String"/>
      <collection name="transposableelements" referenced-type="TransposableElement" reverse-reference="transposonfragments"/>
    </class>
    <class name="TransposableElementGene" extends="Gene" is-interface="true">
