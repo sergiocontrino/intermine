@@ -27,6 +27,7 @@ import org.intermine.dataconversion.ItemWriter;
 import org.intermine.metadata.Model;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.sql.Database;
+import org.intermine.util.Util;
 import org.intermine.xml.full.Item;
 import org.intermine.xml.full.ReferenceList;
 
@@ -43,9 +44,11 @@ public class BarExpressionsConverter extends BioDBConverter
     private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
     private static final int TAXON_ID = 3702;
     private Map<String, String> genes = new HashMap<String, String>();
-    private Map<String, String> publications = new HashMap<String, String>();
-    private Map<String, String> terms = new HashMap<String, String>();
-    private static final String PUBMED_PREFIX = "PubMed";
+//    private Map<String, String> publications = new HashMap<String, String>();
+//    private Map<String, String> terms = new HashMap<String, String>();
+//    private static final String PUBMED_PREFIX = "PubMed";
+    private static final String SAMPLE_CONTROL = "control";
+    private static final String SAMPLE_TREATMENT = "treatment";
 
     private static final List<String> PROPERTY_TYPES =
             Arrays.asList(
@@ -71,8 +74,19 @@ public class BarExpressionsConverter extends BioDBConverter
     private Map<String, String> propertyIdRefMap = new HashMap<String, String>();
     //propertyType.propertyValue, objectId
     private Map<String, Integer> propertyIdMap = new HashMap<String, Integer>();
-    //proerty objectId, list of sampleRefId
+    //property objectId, list of sampleRefId
     private Map<Integer, Set<String>> propertySampleMap = new HashMap<Integer, Set<String>>();
+
+
+    //TODO actually we need only 1 map
+    //sample_ctrl, list of controls sample_Id
+    private Map<String, Set<Integer>> controlsMap = new HashMap<String, Set<Integer>>();
+    //sample_ctrl, list of replicates sample_Id
+    private Map<String, Set<Integer>> replicatesMap = new HashMap<String, Set<Integer>>();
+
+    //sample_Id, probeset, avgSignal
+    private Map<Integer, Map<String, Double>> averagesMap =
+    		new HashMap<Integer, Map<String, Double>>();
 
     /**
      * Construct a new BarExpressionsConverter.
@@ -101,12 +115,14 @@ public class BarExpressionsConverter extends BioDBConverter
 
         processExperiments(connection);
         processSamples(connection);
+        createSamplesAverages(connection);
         processSampleProperties(connection);
     	setSamplePropertiesRefs(connection);
         processSampleData(connection);
     }
 
-    private void processExperiments(Connection connection)
+
+	private void processExperiments(Connection connection)
         throws SQLException, ObjectStoreException {
         ResultSet res = getExperiments(connection);
     	while (res.next()) {
@@ -136,14 +152,74 @@ public class BarExpressionsConverter extends BioDBConverter
         		String replication = res.getString(7);
         		String file = res.getString(8);
 
+        		String type = null;
+        		// fill controls and replicates maps
+        		if (control.equalsIgnoreCase(replication)) {
+        			Util.addToSetMap(controlsMap, control, sampleBarId);
+        			type=SAMPLE_CONTROL;
+        		} else {
+//        			Util.addToSetMap(replicatesMap, control, sampleBarId);
+        			Util.addToSetMap(controlsMap, replication, sampleBarId);
+        			type=SAMPLE_TREATMENT;
+        		}
+
         		String sampleRefId = createSample(experimentBarId,
         				sampleBarId, name, alias, description, control,
-        				replication, file);
+        				replication, file, type);
         		sampleIdRefMap.put(sampleBarId, sampleRefId);
         	}
         	res.close();
+        	LOG.info("AAAcontrols: " + controlsMap);
+        	LOG.info("AAAreps: " + replicatesMap);
 //    		LOG.info("sampleIdRefMap: " + sampleIdRefMap.keySet());
     }
+
+    // TODO possibly better using java, instead of db
+    private void createSamplesAverages(Connection connection)
+    		throws SQLException, ObjectStoreException {
+    	// scan controls map: for each group create a sample with average
+    	// signal, with collection controls=samples in the group
+    	// idem replicates
+    	LOG.info("START sample averages");
+        long bT = System.currentTimeMillis();
+
+        for (Set<Integer> controls: controlsMap.values()){
+            //set of controls sample_Id, probeset, avgSignal
+        	Map<String, Double> thisAveragesMap =
+            		new HashMap<String, Double>();
+        	LOG.info("PARA: " + controls.toString());
+
+        	String inClause = getInClause(controls);
+
+        	// send the set as parameter
+        	ResultSet res = getAverages(connection, inClause);
+        	while (res.next()) {
+        		String probeset = res.getString(1);
+        		Double avgSignal = res.getDouble(2);
+        		thisAveragesMap.put(probeset, avgSignal);
+        	}
+
+        	for (Integer sample: controls) {
+        		LOG.info("FILLING MAP: " + sample);
+        		averagesMap.put(sample, thisAveragesMap);
+        	}
+        }
+
+        LOG.info("AVG TIME: " + (System.currentTimeMillis() - bT) + " ms");
+
+	}
+
+	private String getInClause(Set<Integer> controls) {
+		StringBuffer sb = new StringBuffer();
+		for (Integer term : controls) {
+		    sb.append(term + ",");
+		}
+		sb.delete(sb.lastIndexOf(","), sb.length());
+		LOG.info("INCLAUSE: " + sb.toString());
+		return sb.toString();
+	}
+
+
 
     private void processSampleProperties(Connection connection)
             throws SQLException, ObjectStoreException {
@@ -214,7 +290,7 @@ public class BarExpressionsConverter extends BioDBConverter
 
     private String createSample(Integer experimentBarId, Integer sampleBarId,
     		String name, String alias, String description,
-    		String control, String replication, String file)
+    		String control, String replication, String file, String type)
     				throws ObjectStoreException {
     	Item sample = createItem("Sample");
     	sample.setAttribute("barId", sampleBarId.toString());
@@ -224,6 +300,7 @@ public class BarExpressionsConverter extends BioDBConverter
     	sample.setAttribute("control", control);
     	sample.setAttribute("replication", replication);
     	sample.setAttribute("file", file);
+    	sample.setAttribute("type", type);
 
 		sample.setReference("experiment", experimentIdRefMap.get(experimentBarId));
 		store(sample);
@@ -279,12 +356,12 @@ public class BarExpressionsConverter extends BioDBConverter
     			Set<String> others = new HashSet<String>();
     			others.add(sampleIdRef);
     			propertySampleMap.put(propObjId, others);
-        		LOG.info("SAMPLE " + sampleBarId + ": created property "
+        		LOG.debug("SAMPLE " + sampleBarId + ": created property "
         		+ p + " - "+ value);
     		} else {
  			// setting ref if prop already in..
     			Integer propObjId=propertyIdMap.get(name.concat(value));
-        		LOG.info("SAMPLE " + sampleBarId + ": adding property "
+        		LOG.debug("SAMPLE " + sampleBarId + ": adding property "
         		+ p + " - "+ value + " to collection");
     			Set<String> others = propertySampleMap.get(propObjId);
     			others.add(sampleIdRef);
@@ -328,6 +405,12 @@ public class BarExpressionsConverter extends BioDBConverter
     		return "orphaned sample";
     	}
 
+    	// get the map of averages
+    	Map<String, Double> avgMap = new HashMap<String, Double>();
+    	if (averagesMap.containsKey(sampleBarId)) {
+    		avgMap=averagesMap.get(sampleBarId);
+    	}
+
     	String probeRefId = probeIdRefMap.get(probeSet);
     	if (probeRefId == null) {
 
@@ -346,6 +429,8 @@ public class BarExpressionsConverter extends BioDBConverter
     		sampleData.setAttribute("call", call);
     	}
     	sampleData.setAttribute("pValue", pValue.toString());
+
+    	sampleData.setAttribute("averageSignal", avgMap.get(probeSet).toString());
 
 		sampleData.setReference("sample", sampleIdRef);
 		sampleData.setReference("probe", probeRefId);
@@ -417,6 +502,25 @@ public class BarExpressionsConverter extends BioDBConverter
 //		+ "FROM sample_data limit 1000;";
         return doQuery(connection, query, "getSampleData");
     }
+
+    /**
+     * Return the expressions from the bar-expressions table
+     * This is a protected method so that it can be overridden for testing.
+     * @param connection the bar database connection
+     * @throws SQLException if there is a problem while querying
+     * @return the expressions
+     */
+    protected ResultSet getAverages(Connection connection, String inClause)
+    		throws SQLException {
+    	String query =
+    			"SELECT data_probeset_id, avg(data_signal) "
+    			+ "FROM sample_data "
+    			+ "WHERE sample_id in (" + inClause + ") "
+    			+ "GROUP BY data_probeset_id;";
+//		+ "FROM sample_data limit 1000;";
+        return doQuery(connection, query, "getAverages");
+    }
+
 
 
     /**

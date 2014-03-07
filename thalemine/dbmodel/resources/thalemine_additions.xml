@@ -34,12 +34,15 @@
   <attribute name="replication" type="java.lang.String" />
   <attribute name="file" type="java.lang.String" />
 
+  <attribute name="type" type="java.lang.String" />
+
   <reference name="organism" referenced-type="Organism" />
-  <reference name="publication" referenced-type="Publication"/>
   <reference name="experiment" referenced-type="Experiment" reverse-reference="samples" />
   <reference name="lab" referenced-type="Lab" reverse-reference="samples" />
+  <collection name="controls" referenced-type="Sample" />
+  <collection name="replicates" referenced-type="Sample" />
   <collection name="expressions" referenced-type="Expression" reverse-reference="sample" />
-
+  <collection name="probes" referenced-type="Probe" reverse-reference="samples" />
   <collection name="properties" referenced-type="SampleProperty" reverse-reference="samples"/>
 </class>
 
@@ -47,6 +50,7 @@
   <attribute name="name" type="java.lang.String" />
   <reference name="gene" referenced-type="Gene" reverse-reference="probes" />
   <collection name="expressions" referenced-type="Expression" reverse-reference="probe" />
+  <collection name="samples" referenced-type="Sample" reverse-reference="probes" />
 </class>
 
 
@@ -54,6 +58,7 @@
   <attribute name="signal" type="java.lang.Double" />
   <attribute name="call" type="java.lang.String" />
   <attribute name="pValue" type="java.lang.Double" />
+  <attribute name="averageSignal" type="java.lang.Double" />
   <reference name="sample" referenced-type="Sample" reverse-reference="expressions" />
   <reference name="probe" referenced-type="Probe" reverse-reference="expressions" />
   <reference name="gene" referenced-type="Gene" reverse-reference="expressions" />
