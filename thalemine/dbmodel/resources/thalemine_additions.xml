@@ -33,7 +33,6 @@
   <attribute name="control" type="java.lang.String" />
   <attribute name="replication" type="java.lang.String" />
   <attribute name="file" type="java.lang.String" />
-
   <attribute name="type" type="java.lang.String" />
 
   <reference name="organism" referenced-type="Organism" />

@@ -42,8 +42,8 @@ public class BarExpressionsConverter extends BioDBConverter
     private static final String DATASET_TITLE = "Expressions data set";
     private static final String EXPERIMENT_CATEGORY = "hormone";
     private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
-    private static final int TAXON_ID = 3702;
-    private Map<String, String> genes = new HashMap<String, String>();
+//    private static final int TAXON_ID = 3702;
+//    private Map<String, String> genes = new HashMap<String, String>();
 //    private Map<String, String> publications = new HashMap<String, String>();
 //    private Map<String, String> terms = new HashMap<String, String>();
 //    private static final String PUBMED_PREFIX = "PubMed";
@@ -60,8 +60,6 @@ public class BarExpressionsConverter extends BioDBConverter
                     "growthStage",
                     "timePoint");
 
-
-
     //pi, item Id
     private Map<String, String> labIdRefMap = new HashMap<String, String>();
     //barId, item Id
@@ -76,6 +74,9 @@ public class BarExpressionsConverter extends BioDBConverter
     private Map<String, Integer> propertyIdMap = new HashMap<String, Integer>();
     //property objectId, list of sampleRefId
     private Map<Integer, Set<String>> propertySampleMap = new HashMap<Integer, Set<String>>();
+
+    //sample id, sample objectId
+    private Map<Integer, Integer> sampleMap = new HashMap<Integer, Integer>();
 
 
     //TODO actually we need only 1 map
@@ -118,7 +119,8 @@ public class BarExpressionsConverter extends BioDBConverter
         createSamplesAverages(connection);
         processSampleProperties(connection);
     	setSamplePropertiesRefs(connection);
-        processSampleData(connection);
+    	setSampleRepRefs(connection);
+    	processSampleData(connection);
     }
 
 
@@ -303,9 +305,34 @@ public class BarExpressionsConverter extends BioDBConverter
     	sample.setAttribute("type", type);
 
 		sample.setReference("experiment", experimentIdRefMap.get(experimentBarId));
-		store(sample);
+		Integer sampleObjId = store(sample);
+		sampleMap.put(sampleBarId, sampleObjId);
     	return sample.getIdentifier();
     }
+
+    private void setSampleRepRefs(Connection connection)
+            throws ObjectStoreException {
+    	for(Entry<String, Set<Integer>> group: controlsMap.entrySet()) {
+    		String thisRep = group.getKey();
+            ReferenceList collection = new ReferenceList();
+            collection.setName("replicates");
+            for (Integer sample: group.getValue()){
+            	String sampleRef = sampleIdRefMap.get(sample);
+                collection.addRefId(sampleRef);
+            }
+            // storing the reference for all (also to self!)
+            if (!collection.equals(null)) {
+                for (Integer sample: group.getValue()){
+                	Integer sampleOId = sampleMap.get(sample);
+                	store(collection, sampleOId);
+                }
+            }
+    	}
+    }
+
+
+
+
 
     private String createSampleProperties(Integer sampleBarId,
     		String stock, String geneticVar, String tissue, String diseased,
@@ -377,6 +404,10 @@ public class BarExpressionsConverter extends BioDBConverter
 
     	return sampleIdRef;
     }
+
+
+
+
     private void setSamplePropertiesRefs(Connection connection)
             throws ObjectStoreException {
     	for(Entry<Integer, Set<String>> prop: propertySampleMap.entrySet()) {
