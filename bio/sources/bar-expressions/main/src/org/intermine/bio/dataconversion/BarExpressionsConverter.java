@@ -80,10 +80,12 @@ public class BarExpressionsConverter extends BioDBConverter
 
 
     //TODO actually we need only 1 map
-    //sample_ctrl, list of controls sample_Id
-    private Map<String, Set<Integer>> controlsMap = new HashMap<String, Set<Integer>>();
-    //sample_ctrl, list of replicates sample_Id
+    //sample_repl, list of controls sample_Id
     private Map<String, Set<Integer>> replicatesMap = new HashMap<String, Set<Integer>>();
+//    //sample_ctrl, list of replicates sample_Id
+//    private Map<String, Set<Integer>> controlsMap = new HashMap<String, Set<Integer>>();
+    //sample_id treat, list of controls sample_Id
+    private Map<Integer, Set<Integer>> treatmentControlsMap = new HashMap<Integer, Set<Integer>>();
 
     //sample_Id, probeset, avgSignal
     private Map<Integer, Map<String, Double>> averagesMap =
@@ -123,7 +125,10 @@ public class BarExpressionsConverter extends BioDBConverter
     	processSampleData(connection);
     }
 
-
+    /**
+     * process the experiments (bar projects)
+     * @param connection
+     */
 	private void processExperiments(Connection connection)
         throws SQLException, ObjectStoreException {
         ResultSet res = getExperiments(connection);
@@ -141,6 +146,11 @@ public class BarExpressionsConverter extends BioDBConverter
     	res.close();
     }
 
+
+    /**
+     * process the samples
+     * @param connection
+     */
     private void processSamples(Connection connection)
             throws SQLException, ObjectStoreException {
             ResultSet res = getSamples(connection);
@@ -155,13 +165,19 @@ public class BarExpressionsConverter extends BioDBConverter
         		String file = res.getString(8);
 
         		String type = null;
-        		// fill controls and replicates maps
-        		if (control.equalsIgnoreCase(replication)) {
-        			Util.addToSetMap(controlsMap, control, sampleBarId);
+    			// add to the replicates map
+        		// Note: "replicates" also for set of controls
+    			Util.addToSetMap(replicatesMap, replication, sampleBarId);
+    			// set sample type and fill treatment-controls map
+    			if (control.equalsIgnoreCase(replication)) {
+//        			Util.addToSetMap(replicatesMap, control, sampleBarId);
         			type=SAMPLE_CONTROL;
         		} else {
-//        			Util.addToSetMap(replicatesMap, control, sampleBarId);
-        			Util.addToSetMap(controlsMap, replication, sampleBarId);
+        			// add to the treatmentControls map
+        			// TODO: cater for the case when controls are not before treatment
+        			Set<Integer> controls = replicatesMap.get(control);
+        			// add filling of control map (sample-id, set of controls)
+        			treatmentControlsMap.put(sampleBarId, controls);
         			type=SAMPLE_TREATMENT;
         		}
 
@@ -171,10 +187,10 @@ public class BarExpressionsConverter extends BioDBConverter
         		sampleIdRefMap.put(sampleBarId, sampleRefId);
         	}
         	res.close();
-        	LOG.info("AAAcontrols: " + controlsMap);
         	LOG.info("AAAreps: " + replicatesMap);
-//    		LOG.info("sampleIdRefMap: " + sampleIdRefMap.keySet());
+        	LOG.info("AAAcontrols: " + treatmentControlsMap);
     }
+
 
     // TODO possibly better using java, instead of db
     private void createSamplesAverages(Connection connection)
@@ -185,24 +201,21 @@ public class BarExpressionsConverter extends BioDBConverter
     	LOG.info("START sample averages");
         long bT = System.currentTimeMillis();
 
-        for (Set<Integer> controls: controlsMap.values()){
+        for (Set<Integer> replicates: replicatesMap.values()){
             //set of controls sample_Id, probeset, avgSignal
         	Map<String, Double> thisAveragesMap =
             		new HashMap<String, Double>();
-        	LOG.info("PARA: " + controls.toString());
+        	String inClause = getInClause(replicates);
 
-        	String inClause = getInClause(controls);
-
-        	// send the set as parameter
+        	// get the averages for this set
         	ResultSet res = getAverages(connection, inClause);
         	while (res.next()) {
         		String probeset = res.getString(1);
         		Double avgSignal = res.getDouble(2);
         		thisAveragesMap.put(probeset, avgSignal);
         	}
-
-        	for (Integer sample: controls) {
-        		LOG.info("FILLING MAP: " + sample);
+        	// fill averages maps
+        	for (Integer sample: replicates) {
         		averagesMap.put(sample, thisAveragesMap);
         	}
         }
@@ -211,18 +224,24 @@ public class BarExpressionsConverter extends BioDBConverter
 
 	}
 
+    /**
+     * builds the in clause string for the sql statement
+     * @param the set of sample
+     */
 	private String getInClause(Set<Integer> controls) {
 		StringBuffer sb = new StringBuffer();
 		for (Integer term : controls) {
 		    sb.append(term + ",");
 		}
 		sb.delete(sb.lastIndexOf(","), sb.length());
-		LOG.info("INCLAUSE: " + sb.toString());
 		return sb.toString();
 	}
 
 
-
+    /**
+     * process the sample properties
+     * @param connection
+     */
     private void processSampleProperties(Connection connection)
             throws SQLException, ObjectStoreException {
             ResultSet res = getSampleProperties(connection);
@@ -243,6 +262,10 @@ public class BarExpressionsConverter extends BioDBConverter
         	res.close();
     }
 
+    /**
+     * process the sample data (expressions)
+     * @param connection
+     */
     private void processSampleData(Connection connection)
             throws SQLException, ObjectStoreException {
             ResultSet res = getSampleData(connection);
@@ -312,7 +335,9 @@ public class BarExpressionsConverter extends BioDBConverter
 
     private void setSampleRepRefs(Connection connection)
             throws ObjectStoreException {
-    	for(Entry<String, Set<Integer>> group: controlsMap.entrySet()) {
+
+    	// replicates
+    	for(Entry<String, Set<Integer>> group: replicatesMap.entrySet()) {
     		String thisRep = group.getKey();
             ReferenceList collection = new ReferenceList();
             collection.setName("replicates");
@@ -328,6 +353,28 @@ public class BarExpressionsConverter extends BioDBConverter
                 }
             }
     	}
+
+    	// treatment controls
+    	for(Entry<Integer, Set<Integer>> controls: treatmentControlsMap.entrySet()) {
+
+    		Integer treatment = controls.getKey();
+    		if (treatment == null) {
+    			continue;
+    		}
+    		ReferenceList collection = new ReferenceList();
+            collection.setName("controls");
+            for (Integer sample: controls.getValue()){
+            	String sampleRef = sampleIdRefMap.get(sample);
+                collection.addRefId(sampleRef);
+            }
+            // storing the references
+            if (!collection.equals(null)) {
+            	Integer sampleOId = sampleMap.get(treatment);
+            	store(collection, sampleOId);
+            }
+    	}
+
+
     }
 
 
@@ -436,20 +483,29 @@ public class BarExpressionsConverter extends BioDBConverter
     		return "orphaned sample";
     	}
 
-    	// get the map of averages
+    	// get the map of averages (replicates)
     	Map<String, Double> avgMap = new HashMap<String, Double>();
     	if (averagesMap.containsKey(sampleBarId)) {
     		avgMap=averagesMap.get(sampleBarId);
     	}
 
+    	// check this is a treatment and get the avg map for the control too
+    	Map<String, Double> controlAvgMap = new HashMap<String, Double>();
+    	Double ratio = null;
+    	if (treatmentControlsMap.containsKey(sampleBarId)) {
+    		controlAvgMap=averagesMap.
+    				get(treatmentControlsMap.get(sampleBarId).toArray()[0]);
+        	ratio = avgMap.get(probeSet)/controlAvgMap.get(probeSet);
+    	}
+
+
     	String probeRefId = probeIdRefMap.get(probeSet);
     	if (probeRefId == null) {
-
-    	Item probe = createItem("Probe");
-    	probe.setAttribute("name", probeSet);
-    	store(probe);
-    	probeRefId=probe.getIdentifier();
-    	probeIdRefMap.put(probeSet, probeRefId);
+    		Item probe = createItem("Probe");
+    		probe.setAttribute("name", probeSet);
+    		store(probe);
+    		probeRefId=probe.getIdentifier();
+    		probeIdRefMap.put(probeSet, probeRefId);
     	}
 
 
@@ -462,6 +518,12 @@ public class BarExpressionsConverter extends BioDBConverter
     	sampleData.setAttribute("pValue", pValue.toString());
 
     	sampleData.setAttribute("averageSignal", avgMap.get(probeSet).toString());
+
+    	// if this is a treatment, do the ratio between this value and the one
+    	// from the avg of the control sample for the same probe
+    	if (ratio != null) {
+    		sampleData.setAttribute("averageRatio", ratio.toString());
+    	}
 
 		sampleData.setReference("sample", sampleIdRef);
 		sampleData.setReference("probe", probeRefId);
