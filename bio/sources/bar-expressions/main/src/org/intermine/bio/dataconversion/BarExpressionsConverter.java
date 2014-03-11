@@ -491,11 +491,13 @@ public class BarExpressionsConverter extends BioDBConverter
 
     	// check this is a treatment and get the avg map for the control too
     	Map<String, Double> controlAvgMap = new HashMap<String, Double>();
-    	Double ratio = null;
+    	String ratio = null;
+    	String avgSignal = String.format("%.2f", avgMap.get(probeSet));
     	if (treatmentControlsMap.containsKey(sampleBarId)) {
     		controlAvgMap=averagesMap.
     				get(treatmentControlsMap.get(sampleBarId).toArray()[0]);
-        	ratio = avgMap.get(probeSet)/controlAvgMap.get(probeSet);
+        	Double realRatio = avgMap.get(probeSet)/controlAvgMap.get(probeSet);
+        	ratio = String.format("%.2f", realRatio);
     	}
 
 
@@ -517,12 +519,13 @@ public class BarExpressionsConverter extends BioDBConverter
     	}
     	sampleData.setAttribute("pValue", pValue.toString());
 
-    	sampleData.setAttribute("averageSignal", avgMap.get(probeSet).toString());
+//    	sampleData.setAttribute("averageSignal", avgMap.get(probeSet).toString());
+    	sampleData.setAttribute("averageSignal", avgSignal);
 
     	// if this is a treatment, do the ratio between this value and the one
     	// from the avg of the control sample for the same probe
     	if (ratio != null) {
-    		sampleData.setAttribute("averageRatio", ratio.toString());
+    		sampleData.setAttribute("averageRatio", ratio);
     	}
 
 		sampleData.setReference("sample", sampleIdRef);
