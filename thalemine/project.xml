@@ -79,6 +79,10 @@
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
       <property name="src.data.dir.includes" value="keywlist.xml"/>
     </source>
+    <source name="panther" type="panther">
+	<property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/orthologs/panther"/>
+	<property name="panther.organisms" value="3702 10116 7955 7227 10090 6239 4932 4530 3218 9606"/>
+    </source>
 
     <!-- have to be the last sources run -->
     <source name="entrez-organism" type="entrez-organism">
