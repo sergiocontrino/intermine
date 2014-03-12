@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,11 +80,8 @@ public class BarExpressionsConverter extends BioDBConverter
     private Map<Integer, Integer> sampleMap = new HashMap<Integer, Integer>();
 
 
-    //TODO actually we need only 1 map
     //sample_repl, list of controls sample_Id
     private Map<String, Set<Integer>> replicatesMap = new HashMap<String, Set<Integer>>();
-//    //sample_ctrl, list of replicates sample_Id
-//    private Map<String, Set<Integer>> controlsMap = new HashMap<String, Set<Integer>>();
     //sample_id treat, list of controls sample_Id
     private Map<Integer, Set<Integer>> treatmentControlsMap = new HashMap<Integer, Set<Integer>>();
 
@@ -170,13 +168,11 @@ public class BarExpressionsConverter extends BioDBConverter
     			Util.addToSetMap(replicatesMap, replication, sampleBarId);
     			// set sample type and fill treatment-controls map
     			if (control.equalsIgnoreCase(replication)) {
-//        			Util.addToSetMap(replicatesMap, control, sampleBarId);
         			type=SAMPLE_CONTROL;
         		} else {
-        			// add to the treatmentControls map
+        			// add to the treatmentControls map (sample-id, set of controls)
         			// TODO: cater for the case when controls are not before treatment
         			Set<Integer> controls = replicatesMap.get(control);
-        			// add filling of control map (sample-id, set of controls)
         			treatmentControlsMap.put(sampleBarId, controls);
         			type=SAMPLE_TREATMENT;
         		}
@@ -192,6 +188,11 @@ public class BarExpressionsConverter extends BioDBConverter
     }
 
 
+    /**
+     * create the averages for the groups of replicates
+     * note that this includes also groups of controls
+     * @param connection
+     */
     // TODO possibly better using java, instead of db
     private void createSamplesAverages(Connection connection)
     		throws SQLException, ObjectStoreException {
@@ -494,14 +495,23 @@ public class BarExpressionsConverter extends BioDBConverter
     	Map<String, Double> controlAvgMap = new HashMap<String, Double>();
     	String ratio = null;
     	String avgControl = null;
-    	String avgSignal = String.format("%.2f", avgMap.get(probeSet));
+//    	String avgSignal = String.format("%.2f", avgMap.get(probeSet));
+    	String avgSignal = round(avgMap.get(probeSet),"#.##");
+
     	if (treatmentControlsMap.containsKey(sampleBarId)) {
     		controlAvgMap=averagesMap.
     				get(treatmentControlsMap.get(sampleBarId).toArray()[0]);
     		Double realControl = controlAvgMap.get(probeSet);
         	Double realRatio = avgMap.get(probeSet)/controlAvgMap.get(probeSet);
-        	ratio = String.format("%.2f", realRatio);
-        	avgControl = String.format("%.2f", realControl);
+        	LOG.info("AA " + ratio + " Con:" + avgControl + " (" + realRatio
+        			+ ":" + realControl + ")");
+
+        	//        	ratio = String.format("%.2f", realRatio);
+        	ratio = round(realRatio, "#.##");
+//        	avgControl = String.format("%.2f", realControl);
+        	avgControl = round(realControl, "#.##");
+        	LOG.info("NN " + ratio + " Con:" + avgControl + " (" + realRatio
+        			+ ":" + realControl + ")");
     	}
 
 
@@ -539,6 +549,14 @@ public class BarExpressionsConverter extends BioDBConverter
     	return sampleData.getIdentifier();
     }
 
+	private String round(Double signal, String format)
+			throws ObjectStoreException {
+		if (signal.isNaN()){
+			return null;
+		}
+		DecimalFormat df = new DecimalFormat(format);
+		return Double.valueOf(df.format(signal)).toString();
+	}
 
     /**
      * Return the expressions from the bar-expressions table
