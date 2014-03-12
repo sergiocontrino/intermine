@@ -490,14 +490,18 @@ public class BarExpressionsConverter extends BioDBConverter
     	}
 
     	// check this is a treatment and get the avg map for the control too
+    	// TODO: fai rounding, not format
     	Map<String, Double> controlAvgMap = new HashMap<String, Double>();
     	String ratio = null;
+    	String avgControl = null;
     	String avgSignal = String.format("%.2f", avgMap.get(probeSet));
     	if (treatmentControlsMap.containsKey(sampleBarId)) {
     		controlAvgMap=averagesMap.
     				get(treatmentControlsMap.get(sampleBarId).toArray()[0]);
+    		Double realControl = controlAvgMap.get(probeSet);
         	Double realRatio = avgMap.get(probeSet)/controlAvgMap.get(probeSet);
         	ratio = String.format("%.2f", realRatio);
+        	avgControl = String.format("%.2f", realControl);
     	}
 
 
@@ -526,6 +530,7 @@ public class BarExpressionsConverter extends BioDBConverter
     	// from the avg of the control sample for the same probe
     	if (ratio != null) {
     		sampleData.setAttribute("averageRatio", ratio);
+    		sampleData.setAttribute("averageControl", avgControl);
     	}
 
 		sampleData.setReference("sample", sampleIdRef);
