@@ -44,10 +44,6 @@ public class BarExpressionsConverter extends BioDBConverter
     private static final String EXPERIMENT_CATEGORY = "hormone";
     private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
 //    private static final int TAXON_ID = 3702;
-//    private Map<String, String> genes = new HashMap<String, String>();
-//    private Map<String, String> publications = new HashMap<String, String>();
-//    private Map<String, String> terms = new HashMap<String, String>();
-//    private static final String PUBMED_PREFIX = "PubMed";
     private static final String SAMPLE_CONTROL = "control";
     private static final String SAMPLE_TREATMENT = "treatment";
 
@@ -183,8 +179,8 @@ public class BarExpressionsConverter extends BioDBConverter
         		sampleIdRefMap.put(sampleBarId, sampleRefId);
         	}
         	res.close();
-        	LOG.info("AAAreps: " + replicatesMap);
-        	LOG.info("AAAcontrols: " + treatmentControlsMap);
+        	LOG.debug("AAAreps: " + replicatesMap);
+        	LOG.debug("AAAcontrols: " + treatmentControlsMap);
     }
 
 
@@ -224,7 +220,6 @@ public class BarExpressionsConverter extends BioDBConverter
         }
 
         LOG.info("AVG TIME: " + (System.currentTimeMillis() - bT) + " ms");
-
 	}
 
     /**
@@ -697,7 +692,6 @@ public class BarExpressionsConverter extends BioDBConverter
     public String getDataSetTitle(int taxonId) {
         return DATA_SOURCE_NAME + " expressions data set";
     }
-
 
 
     /**
