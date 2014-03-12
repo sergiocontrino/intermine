@@ -194,16 +194,18 @@ public class BarExpressionsConverter extends BioDBConverter
      * @param connection
      */
     // TODO possibly better using java, instead of db
+    // try it
     private void createSamplesAverages(Connection connection)
     		throws SQLException, ObjectStoreException {
-    	// scan controls map: for each group create a sample with average
-    	// signal, with collection controls=samples in the group
-    	// idem replicates
+    	// scan replicates map and for each group of replicates get for each probe
+    	// the averages signal.
+    	// put this in a map, and link this map to all the samples in the group
+    	// (using another map)
     	LOG.info("START sample averages");
         long bT = System.currentTimeMillis();
 
         for (Set<Integer> replicates: replicatesMap.values()){
-            //set of controls sample_Id, probeset, avgSignal
+            //probeset, avgSignal
         	Map<String, Double> thisAveragesMap =
             		new HashMap<String, Double>();
         	String inClause = getInClause(replicates);
@@ -215,7 +217,7 @@ public class BarExpressionsConverter extends BioDBConverter
         		Double avgSignal = res.getDouble(2);
         		thisAveragesMap.put(probeset, avgSignal);
         	}
-        	// fill averages maps
+        	// fill averages map
         	for (Integer sample: replicates) {
         		averagesMap.put(sample, thisAveragesMap);
         	}
@@ -226,7 +228,7 @@ public class BarExpressionsConverter extends BioDBConverter
 	}
 
     /**
-     * builds the in clause string for the sql statement
+     * builds the in clause string for the sql statement from the elements of the set
      * @param the set of sample
      */
 	private String getInClause(Set<Integer> controls) {
@@ -284,6 +286,14 @@ public class BarExpressionsConverter extends BioDBConverter
     }
 
 
+    /**
+     * create an experiment
+     * @param bar Id
+     * @param title
+     * @param pi
+     * @param affiliation
+     * @param address
+     */
     private String createExperiment(Integer experimentBarId, String title,
     		String pi, String affiliation, String address)
     				throws ObjectStoreException {
@@ -304,6 +314,12 @@ public class BarExpressionsConverter extends BioDBConverter
     	return experiment.getIdentifier();
     }
 
+    /**
+     * create a lab
+     * @param pi
+     * @param affiliation
+     * @param address
+     */
 	private String createLab(String pi, String affiliation, String address)
 			throws ObjectStoreException {
 		Item lab = createItem("Lab");
@@ -314,6 +330,19 @@ public class BarExpressionsConverter extends BioDBConverter
 		return lab.getIdentifier();
 	}
 
+    /**
+     * create a sample
+     * @param experiment bar Id
+     * @param sample bar Id
+     * @param name
+     * @param alias
+     * @param description
+     * @param control		obsolete
+     * @param replication	obsolete
+     * @param file
+     * @param type
+     *
+     */
     private String createSample(Integer experimentBarId, Integer sampleBarId,
     		String name, String alias, String description,
     		String control, String replication, String file, String type)
@@ -334,6 +363,11 @@ public class BarExpressionsConverter extends BioDBConverter
     	return sample.getIdentifier();
     }
 
+    /**
+     * set the references between samples (all) and their respective replicates
+     * and between samples (treatments) and their controls
+     * @param connection
+     */
     private void setSampleRepRefs(Connection connection)
             throws ObjectStoreException {
 
@@ -374,14 +408,20 @@ public class BarExpressionsConverter extends BioDBConverter
             	store(collection, sampleOId);
             }
     	}
-
-
     }
 
 
-
-
-
+    /**
+     * create sample properties
+     * @param sample bar id
+     * @param stock
+     * @param geneticVar
+     * @param tissue
+     * @param diseased
+     * @param growthCondition
+     * @param growthStage
+     * @param timePoint
+     */
     private String createSampleProperties(Integer sampleBarId,
     		String stock, String geneticVar, String tissue, String diseased,
     		String growthCondition, String growthStage, String timePoint)
@@ -401,8 +441,9 @@ public class BarExpressionsConverter extends BioDBConverter
     	String sampleIdRef = sampleIdRefMap.get(sampleBarId);
 
     	if (sampleIdRef == null) {
-    		LOG.info("SAMPLE: " + sampleBarId + " has no refs.");
-    		return "properties: orphaned sample";
+    		LOG.warn("SAMPLE id = " + sampleBarId +
+    				". The experiment for this sample is missing.");
+    		return "orphaned sample";
     	}
 
     	int i=0;
@@ -410,19 +451,16 @@ public class BarExpressionsConverter extends BioDBConverter
     		String name = PROPERTY_TYPES.get(i);
     		String value = PROPERTY_VALUES.get(i);
     		if (value == null || value.isEmpty()) {
-        		LOG.info("SAMPLE " + sampleBarId +
-        				": empty prop value for " + p);
+        		LOG.info("SAMPLE " + sampleBarId + ": empty prop value for " + p);
         		i++;
     			continue;
     		}
-    		String propertyRefId = propertyIdRefMap.
-    				get(name.concat(value));
+    		String propertyRefId = propertyIdRefMap.get(name.concat(value));
     		if (propertyRefId == null) {
     			// prop not yet seen: store it
     			Item property = createItem("SampleProperty");
     			property.setAttribute("name", name);
     			property.setAttribute("value", value);
-    			//property.addToCollection("samples", sampleIdRef);
     			Integer propObjId = store(property);
 
     			propertyRefId=property.getIdentifier();
@@ -441,21 +479,18 @@ public class BarExpressionsConverter extends BioDBConverter
     			Set<String> others = propertySampleMap.get(propObjId);
     			others.add(sampleIdRef);
     			propertySampleMap.put(propObjId, others);
-
-//                ReferenceList collection = new ReferenceList();
-//                collection.setName("samples");
-//                collection.addRefId(sampleIdRef);
-//    			store(collection, propObjId);
             }
 			i++;
     	}
-
     	return sampleIdRef;
     }
 
 
 
-
+    /**
+     * set the references between sample properties and samples
+     * @param connection
+     */
     private void setSamplePropertiesRefs(Connection connection)
             throws ObjectStoreException {
     	for(Entry<Integer, Set<String>> prop: propertySampleMap.entrySet()) {
@@ -471,6 +506,14 @@ public class BarExpressionsConverter extends BioDBConverter
     	}
     }
 
+    /**
+     * create sample data (expressions)
+     * @param sample bar id
+     * @param probe
+     * @param signal
+     * @param call
+     * @param pValue
+     */
     private String createSampleData(Integer sampleBarId,
     		String probeSet, Double signal, String call, Double pValue)
     				throws ObjectStoreException {
@@ -479,8 +522,7 @@ public class BarExpressionsConverter extends BioDBConverter
     	String sampleIdRef = sampleIdRefMap.get(sampleBarId);
 
     	if (sampleIdRef == null) {
-    		LOG.warn("Orphaned sample: id=" + sampleBarId +
-    				". The experiment for this sample is missing.");
+    		// this is already logged in createSampleProperties
     		return "orphaned sample";
     	}
 
@@ -491,11 +533,12 @@ public class BarExpressionsConverter extends BioDBConverter
     	}
 
     	// check this is a treatment and get the avg map for the control too
-    	// TODO: fai rounding, not format
+    	// NOTES: - rounding for ratio is done after the calculation
+    	//        - there are 0 averages in the controls (-> ratio null)
     	Map<String, Double> controlAvgMap = new HashMap<String, Double>();
     	String ratio = null;
     	String avgControl = null;
-//    	String avgSignal = String.format("%.2f", avgMap.get(probeSet));
+    	// String avgSignal = String.format("%.2f", avgMap.get(probeSet));
     	String avgSignal = round(avgMap.get(probeSet),"#.##");
 
     	if (treatmentControlsMap.containsKey(sampleBarId)) {
@@ -503,15 +546,10 @@ public class BarExpressionsConverter extends BioDBConverter
     				get(treatmentControlsMap.get(sampleBarId).toArray()[0]);
     		Double realControl = controlAvgMap.get(probeSet);
         	Double realRatio = avgMap.get(probeSet)/controlAvgMap.get(probeSet);
-        	LOG.info("AA " + ratio + " Con:" + avgControl + " (" + realRatio
-        			+ ":" + realControl + ")");
-
-        	//        	ratio = String.format("%.2f", realRatio);
+        	// ratio = String.format("%.2f", realRatio);
+        	// avgControl = String.format("%.2f", realControl);
         	ratio = round(realRatio, "#.##");
-//        	avgControl = String.format("%.2f", realControl);
         	avgControl = round(realControl, "#.##");
-        	LOG.info("NN " + ratio + " Con:" + avgControl + " (" + realRatio
-        			+ ":" + realControl + ")");
     	}
 
 
@@ -526,7 +564,6 @@ public class BarExpressionsConverter extends BioDBConverter
 
 
     	Item sampleData = createItem("Expression");
-//    	sampleData.setAttribute("probeSet", probeSet);
     	sampleData.setAttribute("signal", signal.toString());
     	if (call!=null) {
     		sampleData.setAttribute("call", call);
@@ -549,6 +586,14 @@ public class BarExpressionsConverter extends BioDBConverter
     	return sampleData.getIdentifier();
     }
 
+    /**
+     * Returns a string representation of the Double rounded and formatted
+     * according to format
+     * If Double is not a number, returns null
+     *
+     * @param signal Double
+     * @param format String
+     */
 	private String round(Double signal, String format)
 			throws ObjectStoreException {
 		if (signal.isNaN()){
@@ -591,11 +636,11 @@ public class BarExpressionsConverter extends BioDBConverter
     }
 
     /**
-     * Return the samples from the bar-expressions table
+     * Return the samples properties from the bar-expressions table
      * This is a protected method so that it can be overridden for testing.
      * @param connection the bar database connection
      * @throws SQLException if there is a problem while querying
-     * @return the samples
+     * @return the samples properties
      */
     protected ResultSet getSampleProperties(Connection connection) throws SQLException {
     	String query =
@@ -623,9 +668,11 @@ public class BarExpressionsConverter extends BioDBConverter
     }
 
     /**
-     * Return the expressions from the bar-expressions table
+     * Return the average expressions from the bar-expressions table given a group
+     * samples.
      * This is a protected method so that it can be overridden for testing.
      * @param connection the bar database connection
+     * @param inClause String the in clause string for the query
      * @throws SQLException if there is a problem while querying
      * @return the expressions
      */
@@ -654,7 +701,7 @@ public class BarExpressionsConverter extends BioDBConverter
 
 
     /**
-     * method to wrap the execution of a query with log info)
+     * method to wrap the execution of a query with log info
      * @param connection
      * @param query
      * @param comment for not logging
