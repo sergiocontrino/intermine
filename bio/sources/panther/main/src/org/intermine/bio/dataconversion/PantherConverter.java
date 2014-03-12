@@ -90,6 +90,8 @@ public class PantherConverter extends BioFileConverter
         TYPES.put("LDO", "least diverged orthologue");
         TYPES.put("O", "orthologue");
         TYPES.put("P", "paralogue");
+	TYPES.put("X", "homologue");
+	TYPES.put("LDX", "least diverged homologue");
     }
 
     /**
@@ -379,6 +381,10 @@ public class PantherConverter extends BioFileConverter
         if ("9606".equals(taxonId)) {
             return identifier;
         }
+	if("3702".equals(taxonId)) {
+	    return identifier.toUpperCase();
+	}
+
         if (rslv == null || !rslv.hasTaxon(taxonId)) {
             // no id resolver available, so return the original identifier
             return identifier;

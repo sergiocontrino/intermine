@@ -54,4 +54,11 @@
     <aspect-source name="BAR" url="http://bar.utoronto.edu/"/>
   </aspect>
 
+  <aspect name="Homology">
+    <subtitle>Orthologues and paralogues</subtitle>
+    <intro-text>
+      Orthologues and Paralogues.
+    </intro-text>
+  </aspect>
+
 </aspects>
