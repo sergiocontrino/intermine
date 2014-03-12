@@ -36,7 +36,7 @@
     <large-image>model/images/embryos.jpg</large-image>
     <intro-text>
       &lt;p&gt;
-      Gene expression data for &lt;i&gt;Arabidopsis thaliana&lt;/i&gt;.
+      Gene expression data for &lt;i&gt;Arabidopsis thaliana col-0&lt;/i&gt;.
       &lt;/p&gt;
     </intro-text>
     <tile-name>model/expression.jsp</tile-name>

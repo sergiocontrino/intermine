@@ -17,7 +17,7 @@
             Knowledgebase</A> (version 7.5) for the following organisms have
             been loaded:
             <UL>
-              <LI><I>Arabidopsis thaliana</I></LI>
+              <LI><I>Arabidopsis thaliana col-0</I></LI>
             </UL>
             For each protein record in UniProt for each species the following
             information is extracted:
@@ -37,15 +37,15 @@
     </td>
     <td valign="top">
       <div class="heading2">
-        Bulk download <i>Arabidopsis thaliana</i> data
+        Bulk download <i>Arabidopsis thaliana col-0</i> data
       </div>
       <div class="body">
         <ul>
           <li>
             <span style="white-space:nowrap">
-              <im:querylink text="Arabidopsis thaliana proteins and corresponding genes:" skipBuilder="true">
+              <im:querylink text="Arabidopsis thaliana col-0 proteins and corresponding genes:" skipBuilder="true">
 <query name="" model="genomic" view="Protein.primaryIdentifier Protein.primaryAccession Protein.organism.name Protein.genes.primaryIdentifier Protein.genes.secondaryIdentifier Protein.genes.organism.shortName" sortOrder="Protein.primaryIdentifier asc">
-  <constraint path="Protein.organism.name" op="=" value="Arabidopsis thaliana"/>
+  <constraint path="Protein.organism.name" op="=" value="Arabidopsis thaliana col-0"/>
 </query>
               </im:querylink>
             </span>
