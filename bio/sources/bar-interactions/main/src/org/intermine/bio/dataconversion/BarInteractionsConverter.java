@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.intermine.dataconversion.ItemWriter;
@@ -30,6 +31,8 @@ import org.intermine.xml.full.Item;
  */
 public class BarInteractionsConverter extends BioDBConverter
 {
+    private static final Logger LOG =
+        Logger.getLogger(BarInteractionsConverter.class);
     private static final String DATASET_TITLE = "Interactions data set";
     private static final String DATA_SOURCE_NAME = "BAR";
     private static final int TAXON_ID = 3702;
@@ -82,35 +85,35 @@ public class BarInteractionsConverter extends BioDBConverter
     		String interactionsTypeMI = res.getString(8);
 //    		String interactionsType = res.getString(10);
 
-		// strings that represent the stored gene
-		String geneRefId1 = getGene(gene1);
-		String geneRefId2 = getGene(gene2);
+    		// strings that represent the stored gene
+    		String geneRefId1 = getGene(gene1);
+    		String geneRefId2 = getGene(gene2);
 
-		String interactionRefId = processInteraction(geneRefId1, geneRefId2, quality, index,
-				pcc, pubString, interactionsDetectionMI, interactionsTypeMI);
-		processInteractionDetails(interactionRefId, geneRefId1, geneRefId2, pubString,
-				interactionsDetectionMI, interactionsTypeMI);
-	}
-	res.close();
+    		String interactionRefId = processInteraction(geneRefId1, geneRefId2, quality, index,
+    				pcc, pubString, interactionsDetectionMI, interactionsTypeMI);
+    		processInteractionDetails(interactionRefId, geneRefId1, geneRefId2, pubString,
+    				interactionsDetectionMI, interactionsTypeMI);
+    	}
+    	res.close();
     }
 
     private String processInteraction(String geneRefId1, String geneRefId2,
-		Integer quality, Integer index, Double pcc, String pubString,
-		String interactionsDetectionMI, String interactionsTypeMI) throws ObjectStoreException {
+    		Integer quality, Integer index, Double pcc, String pubString,
+    		String interactionsDetectionMI, String interactionsTypeMI) throws ObjectStoreException {
 
-	Item interaction = createItem("Interaction");
-	interaction.setReference("gene1", geneRefId1);
-	interaction.setReference("gene2", geneRefId2);
-	store(interaction);
-	return interaction.getIdentifier();
+    	Item interaction = createItem("Interaction");
+    	interaction.setReference("gene1", geneRefId1);
+    	interaction.setReference("gene2", geneRefId2);
+    	store(interaction);
+    	return interaction.getIdentifier();
     }
 
     private String processInteractionDetails(String interactionRefId, String geneRefId1,
-		String geneRefId2, String pubString, String
-		interactionsDetectionMI, String interactionsTypeMI)
-		throws ObjectStoreException {
-	Item detail = createItem("InteractionDetail");
-	detail.setAttribute("type", INTERACTION_TYPE);
+    		String geneRefId2, String pubString, String
+    		interactionsDetectionMI, String interactionsTypeMI)
+    		throws ObjectStoreException {
+    	Item detail = createItem("InteractionDetail");
+    	detail.setAttribute("type", INTERACTION_TYPE);
     	if (StringUtils.isNotEmpty(interactionsTypeMI)) {
     		detail.setReference("relationshipType", getTerm(interactionsTypeMI));
     	}
@@ -137,8 +140,8 @@ public class BarInteractionsConverter extends BioDBConverter
 		}
         }
         if (StringUtils.isNotEmpty(interactionsDetectionMI)) {
-		experiment.addToCollection("interactionDetectionMethods",
-				getTerm(interactionsDetectionMI));
+        	experiment.addToCollection("interactionDetectionMethods",
+        			getTerm(interactionsDetectionMI));
         }
         store(experiment);
         return experiment.getIdentifier();
@@ -147,8 +150,8 @@ public class BarInteractionsConverter extends BioDBConverter
     private String getPublication(String pubString) throws ObjectStoreException {
         String pubMedId =  pubString.substring(PUBMED_PREFIX.length());
 
-	// why do some look like this?
-	// PubMed18849490                  +
+    	// why do some look like this?
+    	// PubMed18849490                  +
 
         String pubRefId = publications.get(pubMedId);
         if (pubRefId != null) {
@@ -167,23 +170,23 @@ public class BarInteractionsConverter extends BioDBConverter
     	String geneRefId = genes.get(identifier);
 
     	// we've already seen this gene, don't store again
-	if (geneRefId != null) {
+    	if (geneRefId != null) {
 		return geneRefId;
-	}
+    	}
 
-	// create new gene
-	Item gene = createItem("Gene");
-	gene.setReference("organism", getOrganismItem(TAXON_ID));
-	gene.setAttribute("primaryIdentifier", identifier);
+    	// create new gene
+    	Item gene = createItem("Gene");
+    	gene.setReference("organism", getOrganismItem(TAXON_ID));
+    	gene.setAttribute("primaryIdentifier", identifier);
 
-	// put in our map
-    geneRefId=gene.getIdentifier();
-    genes.put(identifier, geneRefId);
+    	// put in our map
+        geneRefId=gene.getIdentifier();
+    	genes.put(identifier, geneRefId);
 
-	// store to database
-	store(gene);
+    	// store to database
+    	store(gene);
 
-	return gene.getIdentifier();
+    	return gene.getIdentifier();
     }
 
     private String getTerm(String identifier) throws ObjectStoreException {
@@ -216,9 +219,9 @@ public class BarInteractionsConverter extends BioDBConverter
      */
     protected ResultSet runInteractionsQuery(Connection connection) throws SQLException {
         Statement stmt = connection.createStatement();
-	String query = "select \"Protein1\", \"Protein2\", \"Quality\", \"Index\", \"Pcc\", \"Bind_id\", " +
-			"\"Interactions_detection_mi\", \"Interactions_detection\", \"Interactions_type_mi\", " +
-			"\"Interactions_type\" from interactions;";
+        String query = "select \"Protein1\", \"Protein2\", \"Quality\", \"Index\", \"Pcc\", \"Bind_id\", " +
+                "\"Interactions_detection_mi\", \"Interactions_detection\", \"Interactions_type_mi\", " +
+                "\"Interactions_type\" from interactions;";
         ResultSet res = stmt.executeQuery(query);
         return res;
     }
