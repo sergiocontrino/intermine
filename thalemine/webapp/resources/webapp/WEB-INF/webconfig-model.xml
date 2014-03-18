@@ -284,6 +284,7 @@
                      replacesFields="transcripts,exons,CDSs,introns,UTRs,fivePrimeUTR,threePrimeUTR"
                      placement="Genomics"
                      types="Gene,Transcript,Exon,Intron,UTR,CDS"/>
+
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.HomologueDisplayer"
                      jspName="model/homologueDisplayer.jsp"
                      replacesFields="homologues"
@@ -315,7 +316,7 @@
                      placement="Proteins"
                      types="Genomics,Protein"/>
 
-    <reportdisplayer javaClass="org.intermine.bio.web.displayer.BAReFPBrowserDisplayer"
+    <reportdisplayer javaClass="org.thalemine.web.displayer.BarEfpBrowserDisplayer"
                      jspName="model/eFPBrowserDisplayer.jsp"
                      replacesFields=""
                      placement="Expression"

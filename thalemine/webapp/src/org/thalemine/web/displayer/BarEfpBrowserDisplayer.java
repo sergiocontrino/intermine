@@ -1,4 +1,4 @@
-package org.intermine.bio.web.displayer;
+package org.thalemine.web.displayer;
 
 /*
  * Copyright (C) 2002-2013 FlyMine
@@ -19,9 +19,9 @@ import org.intermine.web.logic.results.ReportObject;
 
 /**
  * Displayer for BAR eFPBrowser
- * @author rns
+ * @author vkrishna
  */
-public class BAReFPBrowserDisplayer extends ReportDisplayer
+public class BarEfpBrowserDisplayer extends ReportDisplayer
 {
 
     /**
@@ -29,7 +29,7 @@ public class BAReFPBrowserDisplayer extends ReportDisplayer
      * @param config to describe the report displayer
      * @param im the InterMine API
      */
-    public BAReFPBrowserDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
+    public BarEfpBrowserDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
         super(config, im);
     }
 
