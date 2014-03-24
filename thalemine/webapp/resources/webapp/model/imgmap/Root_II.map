@@ -1,0 +1,166 @@
+<map name="imgmap_all"><area shape="polygon" coords="474,366,664,366,664,398,474,398" title="Coexpression-based clustering of Arabidopsis root genes predicts functional modules in early phosphate deficiency signaling" href="http://www.plantphysiol.org/content/early/2011/01/19/pp.110.166520">
+<area shape="polygon" coords="474,366,664,366,664,398,474,398" title="Coexpression-based clustering of Arabidopsis root genes predicts functional modules in early phosphate deficiency signaling" href="http://www.plantphysiol.org/content/early/2011/01/19/pp.110.166520">
+<area shape="polygon" coords="701,659,954,659,954,692,701,692;700,1130,955,1130,955,1161,700,1161" title="Cell identity regulators link development and stress responses in the Arabidopsis root" href="http://www.ncbi.nlm.nih.gov/pubmed/22014526">
+<area shape="polygon" coords="701,659,954,659,954,692,701,692;700,1130,955,1130,955,1161,700,1161" title="Cell identity regulators link development and stress responses in the Arabidopsis root" href="http://www.ncbi.nlm.nih.gov/pubmed/22014526">
+<area shape="polygon" coords="168,659,206,659,206,836,168,836" title="Low pH, t=6
+Level: 131.63, SD: 5.47" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="167,429,206,429,206,605,167,605" title="Standard pH, t=6 (control)
+Level: 112.88, SD: 4.03" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="120,658,158,658,158,837,120,837" title="Low pH, t=3
+Level: 125.77, SD: 2.13" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="121,429,159,429,159,607,121,607" title="Standard pH, t=3 (Control)
+Level: 118.2, SD: 14.25" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="363,163,402,163,402,345,363,345" title="Without phosphate 6h into RNALater
+Level: 111.33, SD: 11.37" href="http://0-www.ncbi.nlm.nih.gov.ilsprod.lib.neu.edu/geo/query/acc.cgi?acc=GSE25171">
+<area shape="polygon" coords="125,168,167,168,167,344,125,344" title="With phosphate 6h into RNALater (CONTROL)
+Level: 98.64, SD: 16.05" href="http://0-www.ncbi.nlm.nih.gov.ilsprod.lib.neu.edu/geo/query/acc.cgi?acc=GSE25171">
+<area shape="polygon" coords="72,660,111,660,111,836,72,836" title="Low pH, t=1
+Level: 115.85, SD: 4.65" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="73,430,110,430,110,608,73,608" title="Standard pH, t=1 (Control)
+Level: 114.8, SD: 6.21" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="627,591,640,591,640,628,627,628" title="Standard pH, Arabidopsis root section, longitudinal zone 1 (Control)
+Level: 227.21, SD: 40.48" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="625,782,641,782,641,814,625,814" title="Low pH, Arabidopsis root section, longitudinal zone 1
+Level: 377.02, SD: 50.85" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="392,463,398,464,403,547,412,572,422,568,429,551,426,520,428,486,428,464,433,464,436,518,429,572,421,583,408,580,395,548,395,519,389,463" title="Standard pH, Arabidopsis root cells, endodermis and quiescent center (Control)
+Level: 190.46, SD: 16.96" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="521,538,514,556,522,568,543,572,562,564,562,539,549,529,534,527,526,533,524,540,534,535,549,537,554,550,552,562,540,565,528,559,524,546" title="Standard pH, Arabidopsis root cells, endodermis and quiescent center (Control)
+Level: 190.46, SD: 16.96" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="391,653,398,653,400,711,408,756,418,761,424,756,427,736,427,696,427,667,426,651,435,652,435,673,434,710,433,737,430,760,423,765,404,759,398,730" title="Low pH, Arabidopsis root cells, endodermis and quiescent center
+Level: 221.62, SD: 25.64" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="535,715,520,726,518,744,527,758,546,765,557,751,565,735,555,719,538,712,538,721,545,722,556,731,554,743,546,749,536,751,525,738,525,727,535,724" title="Low pH, Arabidopsis root cells, endodermis and quiescent center
+Level: 221.62, SD: 25.64" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="383,467,390,466,397,532,405,572,407,578,419,583,428,577,428,559,433,523,433,464,440,466,441,492,437,544,433,571,423,580,405,578,395,554,386,506" title="Standard pH, Arabidopsis root cells, cortex (Control)
+Level: 187.04, SD: 10.55" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="513,532,517,521,523,518,536,519,550,514,555,514,555,519,570,524,576,539,573,542,576,549,578,554,573,563,566,566,567,575,563,578,554,581,540,579,533,585,523,585,520,577,508,575,502,560,509,560,502,549,507,535,518,538,517,553,523,567,534,572,555,564,565,547,554,531,534,529,523,540,511,532" title="Standard pH, Arabidopsis root cells, cortex (Control)
+Level: 187.04, SD: 10.55" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="384,654,394,655,399,725,406,761,413,768,432,756,433,716,435,686,433,655,442,655,442,692,438,716,434,753,424,769,412,770,402,754,388,718" title="Low pH, Arabidopsis root cells, cortex
+Level: 208.87, SD: 21.77" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="512,724,511,713,520,704,529,706,537,711,542,701,553,701,555,711,565,714,572,717,579,729,577,733,577,746,568,755,568,761,563,771,551,772,544,768,535,773,526,773,520,765,511,761,504,753,510,745,501,736,505,725,506,723,512,723,519,723,519,744,519,751,528,754,541,761,552,753,561,749,563,733,556,722,540,718,530,720,519,724" title="Low pH, Arabidopsis root cells, cortex
+Level: 208.87, SD: 21.77" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="661,1186,619,1186,619,1121,661,1121" title="Low Sulfur, Arabidopsis root section, longitudinal zone 4
+Level: 178.67, SD: 13.25" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10497">
+<area shape="polygon" coords="659,993,619,993,619,928,659,928" title="Standard conditions, Arabidopsis root section, longitudinal zone 4
+Level: 193.52, SD: 54.72" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10497">
+<area shape="polygon" coords="218,660,254,660,254,836,218,836" title="Low pH, t=12
+Level: 173.4, SD: 6.43" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="217,428,254,428,254,607,217,607" title="Standard pH, t=12 (control)
+Level: 161.74, SD: 5.83" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="268,168,305,168,305,343,268,343" title="Without phosphate 0h into RNALater
+Level: 110.03, SD: 6.75" href="http://0-www.ncbi.nlm.nih.gov.ilsprod.lib.neu.edu/geo/query/acc.cgi?acc=GSE25171">
+<area shape="polygon" coords="27,166,72,166,72,344,27,344" title="With phosphate 0h into RNALater (CONTROL)
+Level: 120.07, SD: 13.23" href="http://0-www.ncbi.nlm.nih.gov.ilsprod.lib.neu.edu/geo/query/acc.cgi?acc=GSE25171">
+<area shape="polygon" coords="28,904,70,904,70,1084,28,1084" title="Low sulfur, t=0
+Level: 120.57, SD: 7.75" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="257,907,299,907,299,1085,257,1085" title="Low sulfur, t=48
+Level: 123.89, SD: 3.27" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="198,905,243,905,243,1081,198,1081" title="Low sulfur, t=24
+Level: 109.48, SD: 8.7" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="87,908,130,908,130,1085,87,1085" title="Low sulfur, t=3
+Level: 92.06, SD: 2.46" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="312,910,353,910,353,1084,312,1084" title="Low sulfur, t=72
+Level: 115.96, SD: 8.3" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="142,907,188,907,188,1084,142,1084" title="Low sulfur, t=12
+Level: 99.87, SD: 5.05" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="27,657,63,657,63,837,27,837" title="Low pH, t=0.5
+Level: 109.3, SD: 7.87" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="26,429,63,429,63,606,26,606" title="Standard pH, t=0.5 (Control)
+Level: 122.07, SD: 10.58" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="407,581,422,581,427,621,420,628,413,632,409,618" title="Standard pH, Arabidopsis root cells, columella root cap (Control)
+Level: 171.57, SD: 6.33" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="407,768,425,768,427,810,426,815,415,819,408,813" title="Low pH, Arabidopsis root cells, columella root cap
+Level: 179.39, SD: 33.28" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="372,465,383,467,391,537,405,579,407,624,415,630,428,624,423,582,435,573,436,549,440,511,444,466,457,467,449,544,444,589,433,622,417,633,394,611,383,556" title="Standard pH, Arabidopsis root cells, epidermis and lateral root cap (Control)
+Level: 126.7, SD: 14.25" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="512,533,516,520,523,515,536,522,543,513,556,516,556,525,567,526,575,535,576,542,576,549,578,560,568,568,570,572,566,581,557,582,548,583,539,583,532,585,524,585,519,577,507,576,502,564,506,555,500,546,504,535,493,531,485,550,488,552,487,554,465,561,465,569,491,564,497,579,503,587,488,608,496,612,508,597,516,595,523,601,534,600,536,603,541,623,544,623,547,609,546,600,561,595,569,590,578,586,584,580,593,587,600,590,601,587,605,581,586,570,590,563,592,557,592,548,603,542,613,538,612,531,589,533,581,517,576,511,585,492,577,491,565,508,553,499,543,500,539,484,539,473,532,475,534,497,529,507,515,502,509,510,499,517,488,519,473,508,470,511,476,518,483,524,490,529" title="Standard pH, Arabidopsis root cells, epidermis and lateral root cap (Control)
+Level: 126.7, SD: 14.25" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="371,656,379,724,387,784,408,815,407,768,425,768,427,811,443,788,449,753,454,699,454,654,443,655,443,698,436,746,429,765,407,765,389,725,385,677,383,654" title="Low pH, Arabidopsis root cells, epidermis and lateral root cap
+Level: 157.05, SD: 20.08" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="469,702,492,720,485,730,489,735,487,744,466,748,466,754,491,754,494,760,497,770,505,772,492,793,498,800,510,781,519,781,524,789,532,788,536,783,540,788,540,807,540,815,548,810,548,790,554,785,562,788,566,780,576,775,584,770,600,778,603,776,587,760,588,754,594,749,593,737,593,730,606,727,615,722,611,715,589,720,586,711,577,702,581,691,586,679,579,676,566,694,553,688,547,692,540,675,539,661,532,663,532,689,528,690,520,687,514,692,514,696,504,700,502,704,490,705,482,698,472,695,469,700,504,728,500,735,508,745,504,758,519,761,522,770,533,773,543,766,549,772,561,770,567,759,566,755,573,748,578,740,571,728,571,718,566,716,559,712,552,704,541,708,526,704,513,712,513,717,509,724" title="Low pH, Arabidopsis root cells, epidermis and lateral root cap
+Level: 157.05, SD: 20.08" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="310,429,355,429,355,608,310,608" title="Standard pH, t=48 (control)
+Level: 148.09, SD: 1.76" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="311,660,354,660,354,836,311,836" title="Low pH, t=48
+Level: 152.21, SD: 10.18" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="398,654,401,712,409,757,416,762,424,753,427,720,428,684,428,654" title="Low pH, Arabidopsis root cells, stele
+Level: 222.3, SD: 24.69" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="535,722,527,729,526,741,530,751,544,754,552,747,555,733,549,723,535,722" title="Low pH, Arabidopsis root cells, stele
+Level: 222.3, SD: 24.69" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="400,466,431,465,425,563,421,571,406,570,401,535" title="Standard pH, Arabidopsis root cells, stele (Control)
+Level: 164.04, SD: 1.0" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="535,534,525,541,526,552,534,559,546,565,550,557,554,548,552,535,536,532" title="Standard pH, Arabidopsis root cells, stele (Control)
+Level: 164.04, SD: 1.0" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="396,1117,397,1114,400,1204,408,1224,415,1225,422,1214,423,1162,425,1117" title="Low sulfur, Arabidopsis root cells, stele
+Level: 79.66, SD: 12.64" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="527,1188,527,1188,535,1185,551,1187,559,1196,554,1209,545,1214,545,1214,534,1213,527,1202,529,1191" title="Low sulfur, Arabidopsis root cells, stele
+Level: 79.66, SD: 12.64" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="405,928,431,929,425,1026,419,1035,413,1035,405,1002" title="Low sulfur, Arabidopsis root cells, stele (Control from GSE7641)
+Level: 133.38, SD: 15.44" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="526,1004,537,997,549,998,553,1010,554,1020,544,1028,530,1024,525,1012" title="Low sulfur, Arabidopsis root cells, stele (Control from GSE7641)
+Level: 133.38, SD: 15.44" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="264,429,302,429,302,608,264,608" title="Standard pH, t=24 (control)
+Level: 173.59, SD: 0.09" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="263,657,302,657,302,836,263,836" title="Low pH, t=24
+Level: 166.02, SD: 9.28" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="389,1116,396,1116,399,1194,406,1222,414,1226,419,1219,424,1189,424,1115,430,1117,431,1168,429,1207,421,1226,404,1226,398,1199,393,1160,388,1115" title="Low sulfur, Arabidopsis root cells, endodermis
+Level: 74.16, SD: 1.47" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="524,1187,537,1177,555,1181,565,1193,564,1213,547,1220,532,1219,528,1219,518,1205,521,1191,525,1195,528,1207,536,1213,555,1211,555,1201,553,1189,539,1183,529,1191" title="Low sulfur, Arabidopsis root cells, endodermis
+Level: 74.16, SD: 1.47" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="392,929,399,928,403,1012,408,1033,422,1034,430,1018,428,957,429,928,434,928,436,1000,429,1029,416,1037,400,1019,391,928" title="Low sulfur, Arabidopsis root cells, endodermis (control)
+Level: 156.22, SD: 10.9" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="517,1014,521,1003,538,990,556,994,563,1004,561,1027,544,1034,531,1032,514,1015,522,1015,534,1027,544,1025,554,1016,555,1005,550,993,535,996,525,1009" title="Low sulfur, Arabidopsis root cells, endodermis (control)
+Level: 156.22, SD: 10.9" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="179,169,218,169,218,344,179,344" title="With phosphate 24h into RNALater (CONTROL)
+Level: 128.73, SD: 18.77" href="http://0-www.ncbi.nlm.nih.gov.ilsprod.lib.neu.edu/geo/query/acc.cgi?acc=GSE25171">
+<area shape="polygon" coords="413,346,453,346,453,168,413,168" title="Without phosphate 24h into RNALater
+Level: 134.7, SD: 5.54" href="http://0-www.ncbi.nlm.nih.gov.ilsprod.lib.neu.edu/geo/query/acc.cgi?acc=GSE25171">
+<area shape="polygon" coords="84,166,119,166,119,345,84,345" title="With phosphate 1h into RNALater (CONTROL)
+Level: 116.26, SD: 15.15" href="http://0-www.ncbi.nlm.nih.gov.ilsprod.lib.neu.edu/geo/query/acc.cgi?acc=GSE25171">
+<area shape="polygon" coords="315,168,351,168,351,344,315,344" title="Without phosphate 1h into RNALater
+Level: 91.69, SD: 0.47" href="http://0-www.ncbi.nlm.nih.gov.ilsprod.lib.neu.edu/geo/query/acc.cgi?acc=GSE25171">
+<area shape="polygon" coords="369,1119,381,1120,384,1169,396,1220,405,1233,403,1271,407,1280,407,1280,420,1280,420,1230,429,1224,435,1195,440,1118,453,1119,448,1188,448,1188,443,1245,443,1245,425,1277,403,1280,380,1231,368,1119" title="Low sulfur, Arabidopsis root cells, epidermis and lateral root cap
+Level: 57.83, SD: 15.99" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="470,1162,496,1182,488,1192,491,1199,487,1206,487,1206,467,1212,469,1216,494,1218,497,1227,504,1237,493,1257,498,1259,516,1244,520,1246,531,1251,536,1248,541,1250,541,1268,547,1273,550,1269,551,1255,553,1248,569,1244,582,1231,602,1240,609,1237,586,1219,597,1210,590,1196,615,1188,615,1177,594,1182,588,1171,588,1171,577,1166,590,1142,582,1137,567,1159,561,1152,548,1150,541,1125,535,1122,533,1148,532,1157,520,1152,515,1159,505,1161,504,1167,513,1175,514,1185,506,1191,502,1196,510,1207,508,1219,510,1225,519,1225,524,1231,538,1236,546,1229,552,1233,564,1233,570,1224,570,1218,577,1211,579,1199,575,1194,575,1183,571,1176,564,1176,557,1165,550,1165,543,1168,530,1167,513,1172,502,1171,480,1160,470,1158" title="Low sulfur, Arabidopsis root cells, epidermis and lateral root cap
+Level: 57.83, SD: 15.99" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="370,928,384,931,388,998,407,1042,409,1088,425,1090,424,1041,434,1034,434,1034,439,988,440,928,454,928,452,985,445,1056,433,1079,417,1085,399,1082,388,1060,372,954" title="Low sulfur, Arabidopsis root cells, epidermis and lateral root cap (Control)
+Level: 96.02, SD: 7.99" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="468,974,473,967,491,981,501,983,504,973,511,971,519,962,525,967,532,961,532,936,542,935,541,963,548,965,554,963,556,967,568,970,582,947,586,954,576,973,579,979,588,993,588,993,612,991,612,996,591,1007,594,1022,586,1030,604,1044,602,1052,584,1043,572,1053,556,1061,548,1061,548,1083,542,1085,539,1066,536,1057,531,1061,521,1061,520,1058,515,1055,497,1070,492,1068,503,1051,501,1043,496,1039,493,1032,471,1032,462,1025,476,1018,492,1017,487,1010,487,995,495,995,506,1004,500,1010,507,1019,505,1033,519,1040,527,1047,543,1043,559,1045,570,1041,569,1029,576,1022,578,1008,574,1003,573,989,562,987,547,975,538,984,530,978,522,980,514,988,513,996,500,999,491,991" title="Low sulfur, Arabidopsis root cells, epidermis and lateral root cap (Control)
+Level: 96.02, SD: 7.99" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="384,1118,390,1118,392,1171,402,1223,414,1229,426,1218,430,1170,430,1116,438,1117,439,1160,431,1217,429,1226,418,1231,405,1231,394,1207,383,1167" title="Low sulfur, Arabidopsis root cells, cortex
+Level: 148.69, SD: 33.7" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="514,1184,514,1184,519,1167,539,1170,551,1165,559,1172,576,1177,576,1193,580,1202,579,1211,565,1215,569,1226,562,1233,543,1228,538,1235,525,1233,524,1224,509,1222,511,1208,503,1196,511,1186,525,1189,517,1208,527,1219,542,1223,558,1217,566,1205,566,1193,558,1181,541,1178,541,1178,527,1184,509,1183,510,1183" title="Low sulfur, Arabidopsis root cells, cortex
+Level: 148.69, SD: 33.7" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="383,929,392,929,396,993,405,1033,406,1037,423,1039,431,1009,435,928,441,929,441,977,437,1023,429,1039,423,1043,412,1043,397,1026,389,989,382,928" title="Low sulfur, Arabidopsis root cells, cortex (control)
+Level: 214.82, SD: 11.23" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="511,991,517,980,530,976,538,982,546,978,553,981,557,985,566,986,575,995,574,1005,580,1013,578,1025,568,1027,570,1033,564,1041,547,1045,533,1047,521,1039,508,1036,505,1027,507,1020,502,1010,506,1000,509,998,522,1002,519,1014,517,1018,523,1032,532,1032,541,1033,557,1027,562,1009,560,994,542,991,532,993,527,999" title="Low sulfur, Arabidopsis root cells, cortex (control)
+Level: 214.82, SD: 11.23" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="618,564,645,564,645,591,618,591" title="Standard pH, Arabidopsis root section, longitudinal zone 2
+Level: 267.22, SD: 19.81" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="619,756,646,756,646,780,619,780" title="Low pH, Arabidopsis root section, longitudinal zone 2
+Level: 400.26, SD: 7.95" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="616,1231,641,1231,641,1255,616,1255" title="Low Sulfur, Arabidopsis root section, longitudinal zone 2
+Level: 126.98, SD: 27.52" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10497">
+<area shape="polygon" coords="617,1035,643,1035,643,1064,617,1064" title="Standard conditions, Arabidopsis root section, longitudinal zone 2
+Level: 138.1, SD: 15.83" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10497">
+<area shape="polygon" coords="616,1230,642,1230,642,1182,616,1182" title="Low Sulfur, Arabidopsis root section, longitudinal zone 3
+Level: 144.85, SD: 2.17" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10497">
+<area shape="polygon" coords="621,992,643,992,643,1039,621,1039" title="Standard conditions, Arabidopsis root section, longitudinal zone 3
+Level: 180.99, SD: 7.8" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10497">
+<area shape="polygon" coords="405,1230,420,1231,421,1278,410,1282,404,1274" title="Low sulfur, Arabidopsis root cells, columella root cap
+Level: 78.36, SD: 10.92" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="407,1044,407,1088,411,1090,424,1088,424,1045" title="Low sulfur, Arabidopsis root cells, columella root cap (control)
+Level: 162.75, SD: 19.45" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="622,709,646,709,646,754,622,754" title="Low pH, Arabidopsis root section, longitudinal zone 3
+Level: 301.24, SD: 49.32" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="620,520,646,520,646,563,620,563" title="Standard pH, Arabidopsis root section, longitudinal zone 3
+Level: 149.04, SD: 25.86" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="618,1256,638,1256,638,1284,618,1284" title="Low Sulfur, Arabidopsis root section, longitudinal zone 1
+Level: 98.61, SD: 7.6" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10497">
+<area shape="polygon" coords="622,1064,644,1064,644,1091,622,1091" title="Standard conditions, Arabidopsis root section, longitudinal zone 1
+Level: 145.15, SD: 6.28" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10497">
+<area shape="polygon" coords="621,658,668,658,668,707,621,707" title="Low pH, Arabidopsis root section, longitudinal zone 4
+Level: 326.77, SD: 29.07" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="620,517,667,517,667,465,620,465" title="Standard pH, Arabidopsis root section, longitudinal zone 4
+Level: 310.46, SD: 14.6" href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30166">
+<area shape="polygon" coords="13,-80,73,0,13,0" title="The red line indicates the maximum expression of your primary gene, while the blue line, if present, indicates the maximum expression of your secondary gene" href="http://bbc.botany.utoronto.ca/affydb/BAR_instructions.html#efp_distro_root">
+</map>

@@ -1,0 +1,140 @@
+<map name="imgmap_all"><area shape="polygon" coords="479,146,515,146,515,170,479,170" title="To Embryo Development" href="#eFP-img" onclick="loadeFPimage('Tissue_Specific');">
+<area shape="polygon" coords="741,435,777,435,777,458,741,458" title="To Microgametogenesis" href="#eFP-img" onclick="loadeFPimage('Tissue_Specific');">
+<area shape="polygon" coords="309,358,345,358,345,383,309,382" title="To Root Cell Types" href="#eFP-img" onclick="loadeFPimage('Tissue_Specific');">
+<area shape="polygon" coords="195,258,230,258,230,282,195,282" title="To Xylem and Cork" href="#eFP-img" onclick="loadeFPimage('Tissue_Specific');">
+<area shape="polygon" coords="96,286,109,287,109,306,97,306" title="1st Node
+Level: 466.46, SD: 4.55" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_28">
+<area shape="polygon" coords="446,472,473,471,473,484,447,486" title="Flower Stage 12,Stamens
+Level: 278.17, SD: 5.17" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_36">
+<area shape="polygon" coords="449,506,475,505,474,518,450,518" title="Flower Stage 12,Stamens
+Level: 278.17, SD: 5.17" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_36">
+<area shape="polygon" coords="430,492,442,491,443,504,431,504" title="Flower Stage 12,Stamens
+Level: 278.17, SD: 5.17" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_36">
+<area shape="polygon" coords="479,489,491,489,491,500,480,500" title="Flower Stage 12,Stamens
+Level: 278.17, SD: 5.17" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_36">
+<area shape="polygon" coords="46,335,64,297,86,288,97,296,96,306,67,332" title="Cauline Leaf
+Level: 806.08, SD: 34.55" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_26">
+<area shape="polygon" coords="109,187,124,184,147,201,147,226,128,223,108,194" title="Cauline Leaf
+Level: 806.08, SD: 34.55" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_26">
+<area shape="polygon" coords="700,316,728,314,732,387,702,387" title="Cauline Leaf
+Level: 806.08, SD: 34.55" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_26">
+<area shape="polygon" coords="152,218,231,216,231,238,208,239,194,228,187,227,170,238,151,237" title="Cotyledon
+Level: 1036.44, SD: 51.07" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_1_">
+<area shape="polygon" coords="283,300,289,300,306,370,305,428,278,429,273,323" title="Root
+Level: 248.88, SD: 4.77" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_9_">
+<area shape="polygon" coords="7,378,73,329,201,342,223,388,170,441,136,441,115,390,107,390,63,430,7,379" title="Entire Rosette After Transition to Flowering
+Level: 814.1, SD: 57.43" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_23">
+<area shape="polygon" coords="177,471,223,465,228,545,184,547" title="Flower Stage 9
+Level: 370.3, SD: 5.58" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_31">
+<area shape="polygon" coords="234,460,341,455,342,548,237,548" title="Flower Stage 10/11
+Level: 436.78, SD: 18.74" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_32">
+<area shape="polygon" coords="347,445,411,443,411,557,350,560" title="Flower Stage 12
+Level: 394.27, SD: 10.45" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_33">
+<area shape="polygon" coords="491,429,624,421,623,458,575,532,554,536,547,528,512,521" title="Flower Stage 15
+Level: 437.58, SD: 6.81" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_39">
+<area shape="polygon" coords="448,490,472,489,472,502,449,502" title="Flower Stage 12, Carpels
+Level: 279.73, SD: 17.74" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_37">
+<area shape="polygon" coords="433,470,452,460,457,464,446,473,437,487,433,487" title="Flower Stage 12, Petals
+Level: 392.47, SD: 10.21" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_35">
+<area shape="polygon" coords="462,463,481,463,487,469,489,484,481,487,478,474" title="Flower Stage 12, Petals
+Level: 392.47, SD: 10.21" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_35">
+<area shape="polygon" coords="483,504,489,504,488,518,479,528,468,526,478,515" title="Flower Stage 12, Petals
+Level: 392.47, SD: 10.21" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_35">
+<area shape="polygon" coords="436,508,445,517,460,525,452,529,438,524" title="Flower Stage 12, Petals
+Level: 392.47, SD: 10.21" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_35">
+<area shape="polygon" coords="422,473,440,449,460,444,484,449,498,464,489,466,470,457,454,458,422,473" title="Flower Stage 12, Sepals
+Level: 822.83, SD: 28.5" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_34">
+<area shape="polygon" coords="488,467,498,469,504,489,504,515,494,522,489,522,494,498" title="Flower Stage 12, Sepals
+Level: 822.83, SD: 28.5" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_34">
+<area shape="polygon" coords="430,528,463,536,495,523,501,521,485,543,460,549,437,540,425,531" title="Flower Stage 12, Sepals
+Level: 822.83, SD: 28.5" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_34">
+<area shape="polygon" coords="430,472,428,498,436,523,435,527,428,525,417,507,417,488,424,474" title="Flower Stage 12, Sepals
+Level: 822.83, SD: 28.5" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_34">
+<area shape="polygon" coords="652,484,684,485,685,506,653,505" title="Flower Stage 15, Carpels
+Level: 320.64, SD: 7.59" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_45">
+<area shape="polygon" coords="632,485,636,468,646,458,658,453,664,457,647,470,640,484" title="Flower Stage 15, Petals
+Level: 530.24, SD: 20.01" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_42">
+<area shape="polygon" coords="676,452,687,451,697,458,703,471,702,481,695,482,691,468,677,458" title="Flower Stage 15, Petals
+Level: 530.24, SD: 20.01" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_42">
+<area shape="polygon" coords="695,506,705,505,704,516,697,529,683,537,678,536,677,532,687,523" title="Flower Stage 15, Petals
+Level: 530.24, SD: 20.01" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_42">
+<area shape="polygon" coords="634,508,643,508,648,521,662,531,664,536,657,538,648,535,638,525" title="Flower Stage 15, Petals
+Level: 530.24, SD: 20.01" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_42">
+<area shape="polygon" coords="626,455,642,440,668,435,699,442,714,455,704,457,678,446,652,448,635,456" title="Flower Stage 15, Sepals
+Level: 739.3, SD: 23.07" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_41">
+<area shape="polygon" coords="700,458,711,459,722,485,722,508,711,527,702,530,701,524,712,503,711,480" title="Flower Stage 15, Sepals
+Level: 739.3, SD: 23.07" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_41">
+<area shape="polygon" coords="526,532,634,530,656,542,682,541,706,530,712,530,711,537,689,550,661,554,643,548" title="Flower Stage 15, Sepals
+Level: 739.3, SD: 23.07" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_41">
+<area shape="polygon" coords="626,458,638,458,629,477,627,503,536,526,632,528,625,525,617,503,617,477" title="Flower Stage 15, Sepals
+Level: 739.3, SD: 23.07" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_41">
+<area shape="polygon" coords="654,466,684,465,685,478,654,478" title="Flower Stage 15, Stamen
+Level: 472.13, SD: 21.64" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_43">
+<area shape="polygon" coords="692,486,707,485,707,501,693,501" title="Flower Stage 15, Stamen
+Level: 472.13, SD: 21.64" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_43">
+<area shape="polygon" coords="652,512,680,512,680,523,654,523" title="Flower Stage 15, Stamen
+Level: 472.13, SD: 21.64" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_43">
+<area shape="polygon" coords="632,488,646,488,646,504,631,504" title="Flower Stage 15, Stamen
+Level: 472.13, SD: 21.64" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_43">
+<area shape="polygon" coords="542,530,555,537,565,535,568,551,542,558" title="Flowers Stage 15, Pedicels
+Level: 557.93, SD: 41.92" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_40">
+<area shape="polygon" coords="362,353,389,352,393,395,366,397" title="Leaf 1 + 2
+Level: 916.68, SD: 46.11" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_5_">
+<area shape="polygon" coords="533,364,561,361,565,403,530,405" title="Leaf 7, Petiole
+Level: 754.23, SD: 10.37" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_19">
+<area shape="polygon" coords="521,252,568,251,569,307,520,309" title="Leaf 7, Distal Half
+Level: 1026.83, SD: 34.47" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_21">
+<area shape="polygon" coords="520,310,569,307,569,361,522,361" title="Leaf 7, Proximal Half
+Level: 982.46, SD: 32.7" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_20">
+<area shape="polygon" coords="186,227,193,227,194,261,185,260" title="Hypocotyl
+Level: 380.78, SD: 6.24" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_2_">
+<area shape="polygon" coords="182,260,196,263,169,321,156,317,165,277" title="Root
+Level: 236.63, SD: 2.36" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_3_">
+<area shape="polygon" coords="393,350,422,347,425,393,397,394" title="Rosette Leaf 2
+Level: 967.02, SD: 29.42" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_12">
+<area shape="polygon" coords="426,320,464,321,467,393,431,395" title="Rosette Leaf 4
+Level: 965.23, SD: 15.22" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_13">
+<area shape="polygon" coords="470,267,514,267,517,402,473,404" title="Rosette Leaf 6
+Level: 864.79, SD: 67.89" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_14">
+<area shape="polygon" coords="573,266,615,267,618,401,573,401" title="Rosette Leaf 8
+Level: 815.3, SD: 18.62" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_15">
+<area shape="polygon" coords="623,303,658,302,660,399,625,398" title="Rosette Leaf 10
+Level: 775.06, SD: 37.27" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_16">
+<area shape="polygon" coords="663,307,691,307,695,394,664,396" title="Rosette Leaf 12
+Level: 657.5, SD: 19.57" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_17">
+<area shape="polygon" coords="735,315,766,313,768,393,738,395" title="Senescing Leaf
+Level: 547.56, SD: 27.71" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_25">
+<area shape="polygon" coords="235,40,357,16,373,76,240,89" title="Shoot Apex, Inflorescence
+Level: 291.18, SD: 14.79" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_29">
+<area shape="polygon" coords="234,96,341,81,347,137,232,145" title="Shoot Apex, Transition
+Level: 384.26, SD: 10.18" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_8_">
+<area shape="polygon" coords="250,164,337,156,343,212,250,219" title="Shoot Apex, Vegetative
+Level: 373.26, SD: 3.16" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_6_">
+<area shape="polygon" coords="97,195,109,196,109,287,96,286" title="Stem, 2nd Internode
+Level: 514.57, SD: 4.13" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_27">
+<area shape="polygon" coords="734,464,777,463,775,519,735,520" title="Mature Pollen
+Level: 158.71, SD: 28.25" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_73">
+<area shape="polygon" coords="387,80,421,79,425,224,386,223" title="Seeds Stage 3 w/ Siliques
+Level: 509.57, SD: 25.22" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_76">
+<area shape="polygon" coords="142,42,167,24,174,31,144,56" title="Seeds Stage 4 w/ Siliques
+Level: 526.73, SD: 22.36" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_77">
+<area shape="polygon" coords="427,59,462,60,465,222,430,222" title="Seeds Stage 4 w/ Siliques
+Level: 526.73, SD: 22.36" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_77">
+<area shape="polygon" coords="99,25,113,20,123,57,111,66" title="Seeds Stage 5 w/ Siliques
+Level: 564.46, SD: 16.38" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_78">
+<area shape="polygon" coords="469,49,505,50,507,224,470,227" title="Seeds Stage 5 w/ Siliques
+Level: 564.46, SD: 16.38" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_78">
+<area shape="polygon" coords="515,169,558,164,559,220,515,223" title="Seeds Stage 6 w/o Siliques
+Level: 554.32, SD: 26.75" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_79">
+<area shape="polygon" coords="569,167,606,167,607,222,570,221" title="Seeds Stage 7 w/o Siliques
+Level: 594.51, SD: 11.56" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_81">
+<area shape="polygon" coords="610,177,652,176,654,224,613,228" title="Seeds Stage 8 w/o Siliques
+Level: 1251.29, SD: 12.15" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_82">
+<area shape="polygon" coords="663,166,710,165,711,231,663,232" title="Seeds Stage 9 w/o Siliques
+Level: 1337.2, SD: 29.25" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_83">
+<area shape="polygon" coords="720,167,767,168,768,230,721,231" title="Seeds Stage 10 w/o Siliques
+Level: 1337.8, SD: 70.43" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_84">
+<area shape="polygon" coords="218,259,363,259,362,331,303,331,289,299,283,299,259,330,216,330" title="Vegetative Rosette
+Level: 555.89, SD: 5.29" href="http://www.bar.utoronto.ca/NASCArrays/index.php?SlideID=ATGE_89">
+<area shape="polygon" coords="5,198,66,285,5,285" title="The red line indicates the maximum expression of your primary gene, while the blue line, if present, indicates the maximum expression of your secondary gene" href="http://bbc.botany.utoronto.ca/affydb/BAR_instructions.html#efp_distro_atgenexp">
+</map>

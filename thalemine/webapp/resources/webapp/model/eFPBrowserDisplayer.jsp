@@ -51,21 +51,45 @@
           <option value="Tissue_Specific">Tissue Specific</option>
       </select>
       <br /><br />
-      <img id="${name}_eFP" src="${WEB_PROPERTIES['bar.eFPBrowser.prefix']}?request={%22agi%22:%22${name}%22,%22datasource%22:%22${datasource}%22}" />
+      <img id="eFP-img" src="" usemap="imgmap_all" />
+      <span id="eFP-img-map"></span>
   </div>
   <div id="powerby">
-      <a onmouseout="this.style.backgroundColor='white';" onmouseover="this.style.backgroundColor='#f1f1d1';" title="BAR eFP Webservices" target="_blank" href="http://bar.utoronto.ca/webservices/efp_service/efp_service.php">
-          Powered by <img border="0/" src="http://bar.utoronto.ca/ntools/bbc_logo_small.gif" height="15" width="15"> BAR eFP Webservices
+      <a onmouseout="this.style.backgroundColor='white';" onmouseover="this.style.backgroundColor='#f1f1d1';" title="BAR Webservices" target="_blank" href="http://bar.utoronto.ca/webservices/efp_service/efp_service.php">
+          Powered by <img border="0/" src="http://bar.utoronto.ca/ntools/bbc_logo_small.gif" height="15" width="15"> BAR Webservices
       </a>
   </div>
   <script type="text/javascript">
-      jQuery('#datasource').change(function() {
-          var bar_eFPBrowser_prefix = "${WEB_PROPERTIES['bar.eFPBrowser.prefix']}";
-          var agi = jQuery('#agi').val();
-          var datasource = jQuery('#datasource').val();
+    function loadeFPimage(ds) {
+        var bar_eFPBrowser_url = "${WEB_PROPERTIES['bar.eFPBrowser.prefix']}";
+        var agi = jQuery('#agi').val();
+        var datasource = ds || jQuery('#datasource').val();
+        if(ds !== undefined) {
+            jQuery('#datasource option[value="' + ds + '"]').prop('selected', true);
+        }
+        var bar_eFPBrowser_params = 'request={"agi":"' + agi + '","datasource":"' + datasource + '"}';
+        jQuery.ajax({
+            type: "GET",
+            url: bar_eFPBrowser_url,
+            data: bar_eFPBrowser_params,
+            success: function(data, textStatus, xhr) {
+                ct = xhr.getResponseHeader("content-type");
+                if(ct === "image/png") {
+                    jQuery('#eFP-img').fadeOut(250, function() { jQuery(this).attr('src', bar_eFPBrowser_url + "?" + bar_eFPBrowser_params); jQuery(this).fadeIn(250); });
+                    jQuery('#eFP-img-map').load('model/imgmap/' + datasource + '.map');
+                } else {
+                    jQuery('#eFP-img').attr('src', 'model/images/eFP_image_not_available.png');
+                }
+            }
+        });
+    }
 
-          jQuery('#'+agi+'_eFP').attr('src', bar_eFPBrowser_prefix+'?request={"agi":"'+agi+'","datasource":"'+datasource+'"}');
-      });
+    jQuery(document).ready(function(){
+            jQuery('#datasource').bind('change', function() {
+                loadeFPimage.apply(this, [undefined])
+            });
+        jQuery('#datasource').trigger('change');
+    });
   </script>
   </c:when>
   <c:otherwise>

@@ -29,7 +29,7 @@
 <meta name="msvalidate.01" content="${WEB_PROPERTIES['searchengines.msn']}" />
 
 <c:if test="${pageName == 'begin'}">
-  <%-- <html:base/> --%>
+  <html:base/>
   <%-- <base href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/${pageName}.do" /> --%>
 </c:if>
 
@@ -117,8 +117,8 @@ if ((typeof intermine != 'undefined') && (intermine.Service != null)) {
     $SERVICE.fetchVersion().fail(notification.render).done(function(v) {
         console.log("Webservice is at version " + v);
     });
-  
-    // Load list widgets.  
+
+    // Load list widgets.
     (function() {
       if (window['list-widgets'] != null) {
         // Make sure we have all deps required in `global.web.properties`, otherwise we fail!!!
@@ -126,7 +126,7 @@ if ((typeof intermine != 'undefined') && (intermine.Service != null)) {
         window.widgets = new ListWidgets({ 'root': $SERVICE.root, 'token': $SERVICE.token });
       }
     })();
-    
+
     var ua = jQuery.browser; // kinda evil, but best way to do this for now
     if (ua && ua.msie && parseInt(ua.version, 10) < 9) { // removed in 1.9.1
         new Notification({message: '<fmt:message key="old.browser"/>'}).render();

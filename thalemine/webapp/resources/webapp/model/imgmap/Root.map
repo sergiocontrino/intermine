@@ -1,0 +1,23 @@
+<map name="imgmap_all"><area shape="polygon" coords="640,0,964,0,964,33,640,33" title="eFP Browser paper in PLoS One" href="http://dx.doi.org/10.1371/journal.pone.0000718">
+<area shape="polygon" coords="640,0,964,0,964,33,640,33" title="eFP Browser paper in PLoS One" href="http://dx.doi.org/10.1371/journal.pone.0000718">
+<area shape="polygon" coords="596,6,636,6,636,36,596,36" title="Gene is induced by protoplasting if this box is outlined in red. See Supplemental Table 1 of Birnbaum et al., 2003" href="http://www.sciencemag.org/cgi/data/302/5652/1956/DC1/1">
+<area shape="polygon" coords="324,172,719,172,719,184,324,184" title="Brady et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/318/5851/801">
+<area shape="polygon" coords="324,172,719,172,719,184,324,184" title="Brady et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/318/5851/801">
+<area shape="polygon" coords="630,218,922,218,922,227,630,227" title="Cartwright et al. paper in Bioinformatics" href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/25/19/2581">
+<area shape="polygon" coords="630,218,922,218,922,227,630,227" title="Cartwright et al. paper in Bioinformatics" href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/25/19/2581">
+<area shape="polygon" coords="322,251,575,251,575,262,322,262" title="Dinneny et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/1153795">
+<area shape="polygon" coords="322,251,575,251,575,262,322,262" title="Dinneny et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/1153795">
+<area shape="polygon" coords="324,726,667,726,667,738,324,738" title="Dinneny et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/1153795">
+<area shape="polygon" coords="324,726,667,726,667,738,324,738" title="Dinneny et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/1153795">
+<area shape="polygon" coords="324,1196,612,1196,612,1207,324,1207" title="Gifford et al. paper in the Proceedings of the National Academy of Sciences, U.S.A." href="http://www.pnas.org/content/105/2/803.abstract">
+<area shape="polygon" coords="324,1196,612,1196,612,1207,324,1207" title="Gifford et al. paper in the Proceedings of the National Academy of Sciences, U.S.A." href="http://www.pnas.org/content/105/2/803.abstract">
+<area shape="polygon" coords="13,50,272,50,272,1721,13,1721" title="Brady et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/318/5851/801">
+<area shape="polygon" coords="13,50,272,50,272,1721,13,1721" title="Brady et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/318/5851/801">
+<area shape="polygon" coords="324,306,995,306,995,709,324,709" title="Dinneny et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/1153795">
+<area shape="polygon" coords="324,306,995,306,995,709,324,709" title="Dinneny et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/1153795">
+<area shape="polygon" coords="324,785,995,785,995,1184,324,1184" title="Dinneny et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/1153795">
+<area shape="polygon" coords="324,785,995,785,995,1184,324,1184" title="Dinneny et al. paper in Science" href="http://www.sciencemag.org/cgi/content/abstract/1153795">
+<area shape="polygon" coords="324,1251,995,1251,995,1687,324,1687" title="Gifford et al. paper in the Proceedings of the National Academy of Sciences, U.S.A." href="http://www.pnas.org/content/105/2/803.abstract">
+<area shape="polygon" coords="324,1251,995,1251,995,1687,324,1687" title="Gifford et al. paper in the Proceedings of the National Academy of Sciences, U.S.A." href="http://www.pnas.org/content/105/2/803.abstract">
+<area shape="polygon" coords="810,74,874,161,810,161" title="The red line indicates the maximum expression of your primary gene, while the blue line, if present, indicates the maximum expression of your secondary gene" href="http://bbc.botany.utoronto.ca/affydb/BAR_instructions.html#efp_distro_root">
+</map>

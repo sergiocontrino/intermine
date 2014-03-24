@@ -1,0 +1,40 @@
+<map name="imgmap_all"><area shape="polygon" coords="219,255,461,254,461,281,221,282,221,282" title="Time of day shapes Arabidopsis drought transcriptomes" href="http://onlinelibrary.wiley.com/doi/10.1111/j.1365-313X.2010.04274.x/full">
+<area shape="polygon" coords="219,255,461,254,461,281,221,282,221,282" title="Time of day shapes Arabidopsis drought transcriptomes" href="http://onlinelibrary.wiley.com/doi/10.1111/j.1365-313X.2010.04274.x/full">
+<area shape="polygon" coords="29,920,328,918,329,948,29,948" title="Transcriptome analyses give insights into selenium-stress responses and selenium tolerance mechanisms in Arabidopsis" href="http://www.ncbi.nlm.nih.gov/pubmed/18251864">
+<area shape="polygon" coords="29,920,328,918,329,948,29,948" title="Transcriptome analyses give insights into selenium-stress responses and selenium tolerance mechanisms in Arabidopsis" href="http://www.ncbi.nlm.nih.gov/pubmed/18251864">
+<area shape="polygon" coords="19,720,341,718,343,745,335,744,20,743" title="Genome-wide analysis of transcript abundance and translation in Arabidopsis seedlings subjected to oxygen deprivation" href="http://aob.oxfordjournals.org/content/96/4/647.abstract">
+<area shape="polygon" coords="19,720,341,718,343,745,335,744,20,743" title="Genome-wide analysis of transcript abundance and translation in Arabidopsis seedlings subjected to oxygen deprivation" href="http://aob.oxfordjournals.org/content/96/4/647.abstract">
+<area shape="polygon" coords="357,381,358,452,495,454,496,381" title="Water limited (dry), Pre-dawn
+Level: 279.02, SD: 25.41" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE19700">
+<area shape="polygon" coords="361,288,499,286,498,358,361,356" title="Well watered, pre-dawn (control)
+Level: 284.42, SD: 40.43" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE19700">
+<area shape="polygon" coords="656,295,658,370,799,367,798,294,798,294" title="Well watered, Late day (control)
+Level: 219.85, SD: 33.67" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE19700">
+<area shape="polygon" coords="659,385,661,456,803,456,803,442,804,383,804,383" title="Water limited (dry), Late day
+Level: 287.41, SD: 27.94" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE19700">
+<area shape="polygon" coords="501,881,500,851,502,851,536,849,536,849,538,918,537,918,502,918,503,917" title="Root, non-selenate treated (control)
+Level: 126.09, SD: 6.06" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE9311">
+<area shape="polygon" coords="611,851,646,851,647,919,612,918" title="Root, Selenate treated
+Level: 117.28, SD: 5.07" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE9311">
+<area shape="polygon" coords="532,377,649,377,649,453,642,453,506,448,502,377" title="Water limited (dry), Midday
+Level: 231.38, SD: 22.12" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE19700">
+<area shape="polygon" coords="507,294,645,293,644,365,508,364,508,364" title="Well watered, Midday (control)
+Level: 247.18, SD: 29.44" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE19700">
+<area shape="polygon" coords="482,795,551,796,551,835,482,836" title="Shoot, non-selenate treated (control)
+Level: 320.62, SD: 11.86" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE9311">
+<area shape="polygon" coords="474,519,473,610,554,610,556,519" title="Non Stressed (control), Total RNA
+Level: 119.11, SD: 0.0" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE2218">
+<area shape="polygon" coords="589,523,589,523,591,608,664,608,664,608,662,522" title="Hypoxia Stress, Total RNA
+Level: 124.88, SD: 0.0" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE2218">
+<area shape="polygon" coords="478,616,552,616,552,704,481,704" title="Non Stressed (control), Polysomal RNA
+Level: 168.85, SD: 0.0" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE2218">
+<area shape="polygon" coords="593,615,667,616,668,620,668,705,668,705,594,704" title="Hypoxia Stress, Polysomal RNA
+Level: 136.71, SD: 0.0" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE2218">
+<area shape="polygon" coords="588,794,621,793,662,793,662,793,661,838,586,835,588,834" title="Shoot, non- selenate treated
+Level: 283.19, SD: 20.37" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE9311">
+<area shape="polygon" coords="806,347,807,311,808,297,945,297,945,367,935,367,808,365" title="Well watered, midnight (control)
+Level: 310.56, SD: 14.24" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE19700">
+<area shape="polygon" coords="810,419,809,391,950,388,951,457,951,460,811,462" title="Water limited (dry), midnight
+Level: 320.03, SD: 3.85" href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE19700">
+<area shape="polygon" coords="880,195,940,275,880,275" title="The red line indicates the maximum expression of your primary gene, while the blue line, if present, indicates the maximum expression of your secondary gene" href="http://bbc.botany.utoronto.ca/affydb/BAR_instructions.html#efp_distro_atgenexp_stress">
+</map>
