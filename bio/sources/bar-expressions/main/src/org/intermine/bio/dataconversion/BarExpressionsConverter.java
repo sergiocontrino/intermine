@@ -40,12 +40,14 @@ public class BarExpressionsConverter extends BioDBConverter
 {
     private static final Logger LOG =
         Logger.getLogger(BarExpressionsConverter.class);
-    private static final String DATASET_TITLE = "Expressions data set";
+//    private static final String DATASET_TITLE = "Expressions data set";
     private static final String EXPERIMENT_CATEGORY = "hormone";
-    private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
-//    private static final int TAXON_ID = 3702;
+//    private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
+    private static final int TAXON_ID = 3702;
     private static final String SAMPLE_CONTROL = "control";
     private static final String SAMPLE_TREATMENT = "treatment";
+//    private String dataSourceName = null;
+//    private String dataSetTitle = null;
 
     private static final List<String> PROPERTY_TYPES =
             Arrays.asList(
@@ -91,9 +93,13 @@ public class BarExpressionsConverter extends BioDBConverter
      * @param model the Model used by the object store we will write to with the ItemWriter
      * @param writer an ItemWriter used to handle Items created
      */
-    public BarExpressionsConverter(Database database, Model model, ItemWriter writer) {
-        super(database, model, writer, DATA_SOURCE_NAME, DATASET_TITLE);
-    }
+//    public BarExpressionsConverter(Database database, Model model, ItemWriter writer) {
+//        super(database, model, writer, DATA_SOURCE_NAME, DATASET_TITLE);
+        public BarExpressionsConverter(Database database, Model model, ItemWriter writer) {
+            super(database, model, writer);
+//            dataSourceName = this.getDataSourceName();
+//            dataSetTitle = this.getDataSetTitle(TAXON_ID);
+        }
 
     /**
      * {@inheritDoc}
@@ -109,6 +115,11 @@ public class BarExpressionsConverter extends BioDBConverter
         	// a database has been initialised from properties starting with db.bar-expressions
             connection = getDatabase().getConnection();
         }
+
+      String dataSourceName = this.getDataSourceName();
+      String dataSetTitle = this.getDataSetTitle(TAXON_ID);
+
+        LOG.info("RRR: " + dataSourceName + "|" + dataSetTitle);
 
         processExperiments(connection);
         processSamples(connection);
@@ -346,7 +357,9 @@ public class BarExpressionsConverter extends BioDBConverter
     	sample.setAttribute("barId", sampleBarId.toString());
     	sample.setAttribute("name", name);
     	sample.setAttribute("alias", alias);
-    	sample.setAttribute("description", description);
+    	if (description != null) {
+    		sample.setAttribute("description", description);
+    	}
     	sample.setAttribute("control", control);
     	sample.setAttribute("replication", replication);
     	sample.setAttribute("file", file);
@@ -393,9 +406,11 @@ public class BarExpressionsConverter extends BioDBConverter
     		}
     		ReferenceList collection = new ReferenceList();
             collection.setName("controls");
+            if (controls.getValue() != null) {
             for (Integer sample: controls.getValue()){
             	String sampleRef = sampleIdRefMap.get(sample);
                 collection.addRefId(sampleRef);
+            }
             }
             // storing the references
             if (!collection.equals(null)) {
@@ -609,7 +624,8 @@ public class BarExpressionsConverter extends BioDBConverter
     	String query =
     			"SELECT p.proj_id, p.proj_res_area, p.proj_pi, "
     			+ " p.proj_pi_inst, p.proj_pi_addr "
-    			+ " FROM proj_info p;";
+//    			+ " FROM proj_info p;";
+                + " FROM proj_info p WHERE proj_id not Like 'G%';";
         return doQuery(connection, query, "getExperiments");
     }
 
@@ -626,7 +642,8 @@ public class BarExpressionsConverter extends BioDBConverter
     	+ "sg.sample_desc, sg.sample_ctrl, sg.sample_repl, sg.sample_file_name "
     	+ "FROM sample_biosource_info sb, sample_general_info sg, proj_info p "
     	+ "WHERE sb.sample_id=sg.sample_id "
-    	+ "AND p.proj_id=sb.proj_id;";
+//    	+ "AND p.proj_id=sb.proj_id;";
+    	+ "AND p.proj_id=sb.proj_id AND p.proj_id not like 'G%';";
         return doQuery(connection, query, "getSamples");
     }
 
@@ -690,7 +707,7 @@ public class BarExpressionsConverter extends BioDBConverter
      */
     @Override
     public String getDataSetTitle(int taxonId) {
-        return DATA_SOURCE_NAME + " expressions data set";
+        return getDataSourceName() + " expressions data set";
     }
 
 
