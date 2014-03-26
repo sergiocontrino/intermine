@@ -40,14 +40,12 @@ public class BarExpressionsConverter extends BioDBConverter
 {
     private static final Logger LOG =
         Logger.getLogger(BarExpressionsConverter.class);
-//    private static final String DATASET_TITLE = "Expressions data set";
-    private static final String EXPERIMENT_CATEGORY = "hormone";
-//    private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
+//  private static final String DATASET_TITLE = "Expressions data set";
+//  private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
+//    private static final String EXPERIMENT_CATEGORY = "hormone";
     private static final int TAXON_ID = 3702;
     private static final String SAMPLE_CONTROL = "control";
     private static final String SAMPLE_TREATMENT = "treatment";
-//    private String dataSourceName = null;
-//    private String dataSetTitle = null;
 
     private static final List<String> PROPERTY_TYPES =
             Arrays.asList(
@@ -62,7 +60,8 @@ public class BarExpressionsConverter extends BioDBConverter
     //pi, item Id
     private Map<String, String> labIdRefMap = new HashMap<String, String>();
     //barId, item Id
-    private Map<Integer, String> experimentIdRefMap = new HashMap<Integer, String>();
+//    private Map<Integer, String> experimentIdRefMap = new HashMap<Integer, String>();
+    private Map<String, String> experimentIdRefMap = new HashMap<String, String>();
     //barId, item Id
     private Map<Integer, String> sampleIdRefMap = new HashMap<Integer, String>();
     //probeset, item Id
@@ -97,8 +96,6 @@ public class BarExpressionsConverter extends BioDBConverter
 //        super(database, model, writer, DATA_SOURCE_NAME, DATASET_TITLE);
         public BarExpressionsConverter(Database database, Model model, ItemWriter writer) {
             super(database, model, writer);
-//            dataSourceName = this.getDataSourceName();
-//            dataSetTitle = this.getDataSetTitle(TAXON_ID);
         }
 
     /**
@@ -115,11 +112,14 @@ public class BarExpressionsConverter extends BioDBConverter
         	// a database has been initialised from properties starting with db.bar-expressions
             connection = getDatabase().getConnection();
         }
+//        String dataSourceName = this.getDataSourceName();
+//        String dataSetTitle = this.getDataSetTitle(TAXON_ID);
 
-      String dataSourceName = this.getDataSourceName();
-      String dataSetTitle = this.getDataSetTitle(TAXON_ID);
+        LOG.info("RRR: " + this.getDataSourceName());
+        if (this.getDataSourceName().contains("_")) {
+        LOG.info("RRR2: " + this.getDataSourceName().substring(9));
+        }
 
-        LOG.info("RRR: " + dataSourceName + "|" + dataSetTitle);
 
         processExperiments(connection);
         processSamples(connection);
@@ -138,7 +138,8 @@ public class BarExpressionsConverter extends BioDBConverter
         throws SQLException, ObjectStoreException {
         ResultSet res = getExperiments(connection);
     	while (res.next()) {
-    		Integer experimentBarId = new Integer(res.getInt(1));
+//    		Integer experimentBarId = new Integer(res.getInt(1));
+    		String experimentBarId = res.getString(1);
     		String title = res.getString(2);
     		String pi = res.getString(3);
     		String affiliation = res.getString(4);
@@ -159,8 +160,10 @@ public class BarExpressionsConverter extends BioDBConverter
     private void processSamples(Connection connection)
             throws SQLException, ObjectStoreException {
             ResultSet res = getSamples(connection);
+            Map<Integer, String> sampleControlMap = new HashMap<Integer, String>();
+
         	while (res.next()) {
-        		Integer experimentBarId = new Integer(res.getInt(1));
+        		String experimentBarId = res.getString(1);
         		Integer sampleBarId = new Integer(res.getInt(2));
         		String name = res.getString(3);
         		String alias = res.getString(4);
@@ -177,12 +180,15 @@ public class BarExpressionsConverter extends BioDBConverter
     			if (control.equalsIgnoreCase(replication)) {
         			type=SAMPLE_CONTROL;
         		} else {
+        			type=SAMPLE_TREATMENT;
+        			// save controls
+        			sampleControlMap.put(sampleBarId, control);
         			// add to the treatmentControls map (sample-id, set of controls)
         			// TODO: cater for the case when controls are not before treatment
-        			Set<Integer> controls = replicatesMap.get(control);
-        			treatmentControlsMap.put(sampleBarId, controls);
-        			type=SAMPLE_TREATMENT;
+//        			Set<Integer> controls = replicatesMap.get(control);
+//        			treatmentControlsMap.put(sampleBarId, controls);
         		}
+
 
         		String sampleRefId = createSample(experimentBarId,
         				sampleBarId, name, alias, description, control,
@@ -190,8 +196,14 @@ public class BarExpressionsConverter extends BioDBConverter
         		sampleIdRefMap.put(sampleBarId, sampleRefId);
         	}
         	res.close();
-        	LOG.debug("AAAreps: " + replicatesMap);
-        	LOG.debug("AAAcontrols: " + treatmentControlsMap);
+
+        	for(Entry<Integer, String> sc: sampleControlMap.entrySet()) {
+    			Set<Integer> controls = replicatesMap.get(sc.getValue());
+    			treatmentControlsMap.put(sc.getKey(), controls);
+        	}
+
+        	LOG.info("AAAreps: " + replicatesMap);
+        	LOG.info("AAAcontrols: " + treatmentControlsMap);
     }
 
 
@@ -253,7 +265,10 @@ public class BarExpressionsConverter extends BioDBConverter
      */
     private void processSampleProperties(Connection connection)
             throws SQLException, ObjectStoreException {
-            ResultSet res = getSampleProperties(connection);
+    	String source = this.getDataSourceName();
+    	LOG.info("RSOURCE " + source);
+
+            ResultSet res = getSampleProperties(connection, source);
         	while (res.next()) {
         		Integer sampleBarId = new Integer(res.getInt(1));
         		String stock = res.getString(2);
@@ -300,13 +315,13 @@ public class BarExpressionsConverter extends BioDBConverter
      * @param affiliation
      * @param address
      */
-    private String createExperiment(Integer experimentBarId, String title,
+    private String createExperiment(String experimentBarId, String title,
     		String pi, String affiliation, String address)
     				throws ObjectStoreException {
     	Item experiment = createItem("Experiment");
     	experiment.setAttribute("experimentBarId", experimentBarId.toString());
     	experiment.setAttribute("title", title);
-    	experiment.setAttribute("category", EXPERIMENT_CATEGORY);
+    	experiment.setAttribute("category", this.getDataSourceName());
 
     	// check if lab already stored
     	if (!labIdRefMap.containsKey(pi)) {
@@ -349,7 +364,7 @@ public class BarExpressionsConverter extends BioDBConverter
      * @param type
      *
      */
-    private String createSample(Integer experimentBarId, Integer sampleBarId,
+    private String createSample (String experimentBarId, Integer sampleBarId,
     		String name, String alias, String description,
     		String control, String replication, String file, String type)
     				throws ObjectStoreException {
@@ -575,7 +590,7 @@ public class BarExpressionsConverter extends BioDBConverter
 
     	Item sampleData = createItem("Expression");
     	sampleData.setAttribute("signal", signal.toString());
-    	if (call!=null) {
+    	if (call!=null && !call.isEmpty()) {
     		sampleData.setAttribute("call", call);
     	}
     	sampleData.setAttribute("pValue", pValue.toString());
@@ -624,8 +639,8 @@ public class BarExpressionsConverter extends BioDBConverter
     	String query =
     			"SELECT p.proj_id, p.proj_res_area, p.proj_pi, "
     			+ " p.proj_pi_inst, p.proj_pi_addr "
-//    			+ " FROM proj_info p;";
-                + " FROM proj_info p WHERE proj_id not Like 'G%';";
+    			+ " FROM proj_info p;";
+//                + " FROM proj_info p WHERE proj_id not Like 'G%';";
         return doQuery(connection, query, "getExperiments");
     }
 
@@ -642,8 +657,8 @@ public class BarExpressionsConverter extends BioDBConverter
     	+ "sg.sample_desc, sg.sample_ctrl, sg.sample_repl, sg.sample_file_name "
     	+ "FROM sample_biosource_info sb, sample_general_info sg, proj_info p "
     	+ "WHERE sb.sample_id=sg.sample_id "
-//    	+ "AND p.proj_id=sb.proj_id;";
-    	+ "AND p.proj_id=sb.proj_id AND p.proj_id not like 'G%';";
+    	+ "AND p.proj_id=sb.proj_id;";
+//    	+ "AND p.proj_id=sb.proj_id AND p.proj_id not like 'G%';";
         return doQuery(connection, query, "getSamples");
     }
 
@@ -651,12 +666,22 @@ public class BarExpressionsConverter extends BioDBConverter
      * Return the samples properties from the bar-expressions table
      * This is a protected method so that it can be overridden for testing.
      * @param connection the bar database connection
+     * @param source depending on the expression database the field growth condition
+     *               is present or absent.
      * @throws SQLException if there is a problem while querying
      * @return the samples properties
      */
-    protected ResultSet getSampleProperties(Connection connection) throws SQLException {
-    	String query =
-    			"SELECT sample_id, sample_stock_code, sample_genetic_var, "
+    protected ResultSet getSampleProperties(Connection connection, String source)
+    		throws SQLException {
+    	String query = null;
+    	if (source.equalsIgnoreCase("atgenexp")) {
+        	query = "SELECT sample_id, sample_stock_code, sample_genetic_var, "
+        			+ "sample_tissue, sample_diseased, 'NA', "
+        			+ "sample_growth_stage,sample_time_point "
+        			+ "FROM sample_biosource_info;";
+            return doQuery(connection, query, "getSampleProperties");
+    	}
+    	query = "SELECT sample_id, sample_stock_code, sample_genetic_var, "
     			+ "sample_tissue, sample_diseased, sample_growth_condition, "
     			+ "sample_growth_stage,sample_time_point "
     			+ "FROM sample_biosource_info;";

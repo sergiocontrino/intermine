@@ -17,7 +17,7 @@
 </class>
 
 <class name="Experiment" is-interface="true">
-  <attribute name="experimentBarId" type="java.lang.Integer" />
+  <attribute name="experimentBarId" type="java.lang.String" />
   <attribute name="title" type="java.lang.String" />
   <attribute name="category" type="java.lang.String" />
   <reference name="lab" referenced-type="Lab" reverse-reference="experiments" />
