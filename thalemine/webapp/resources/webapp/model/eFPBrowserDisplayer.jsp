@@ -51,8 +51,7 @@
           <option value="Tissue_Specific">Tissue Specific</option>
       </select>
       <br /><br />
-      <img id="eFP-img" src="" usemap="imgmap_all" />
-      <span id="eFP-img-map"></span>
+      <img id="eFP-img" src="" />
   </div>
   <div id="powerby">
       <a onmouseout="this.style.backgroundColor='white';" onmouseover="this.style.backgroundColor='#f1f1d1';" title="BAR Webservices" target="_blank" href="http://bar.utoronto.ca/webservices/efp_service/efp_service.php">
@@ -76,7 +75,6 @@
                 ct = xhr.getResponseHeader("content-type");
                 if(ct === "image/png") {
                     jQuery('#eFP-img').fadeOut(250, function() { jQuery(this).attr('src', bar_eFPBrowser_url + "?" + bar_eFPBrowser_params); jQuery(this).fadeIn(250); });
-                    jQuery('#eFP-img-map').load('model/imgmap/' + datasource + '.map');
                 } else {
                     jQuery('#eFP-img').attr('src', 'model/images/eFP_image_not_available.png');
                 }
