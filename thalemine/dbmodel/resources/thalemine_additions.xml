@@ -6,8 +6,16 @@
   <collection name="probes" referenced-type="Probe" reverse-reference="gene" />
 </class>
 
+<class name="DataSet" is-interface="true" >
+  <reference name="dataSource" referenced-type="DataSource" reverse-reference="dataSets" />
+  <collection name="experiments" referenced-type="Experiment" reverse-reference="dataSet" />
+</class>
 
-<class name="Lab" extends="DataSource" is-interface="true">
+<class name="DataSource" is-interface="true" >
+  <collection name="dataSets" referenced-type="DataSet" reverse-reference="dataSource" />
+</class>
+
+<class name="Lab" is-interface="true">
   <attribute name="name" type="java.lang.String" />
   <attribute name="surname" type="java.lang.String" />
   <attribute name="affiliation" type="java.lang.String" />
@@ -21,10 +29,11 @@
   <attribute name="title" type="java.lang.String" />
   <attribute name="category" type="java.lang.String" />
   <reference name="lab" referenced-type="Lab" reverse-reference="experiments" />
+  <reference name="dataSet" referenced-type="DataSet" reverse-reference="experiments" />
   <collection name="samples" referenced-type="Sample" reverse-reference="experiment" />
 </class>
 
-<class name="Sample" extends="DataSet" is-interface="true">
+<class name="Sample" is-interface="true">
   <attribute name="barId" type="java.lang.Integer" />
   <attribute name="name" type="java.lang.String" />
   <attribute name="description" type="java.lang.String" />
