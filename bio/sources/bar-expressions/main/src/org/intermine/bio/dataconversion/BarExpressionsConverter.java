@@ -118,15 +118,6 @@ public class BarExpressionsConverter extends BioDBConverter
         	// a database has been initialised from properties starting with db.bar-expressions
             connection = getDatabase().getConnection();
         }
-//        String dataSourceName = this.getDataSourceName();
-//        String dataSetTitle = this.getDataSetTitle(TAXON_ID);
-
-
-
-        LOG.info("RRR: " + this.getDataSourceName());
-        if (this.getDataSourceName().contains("_")) {
-        LOG.info("RRR2: " + this.getDataSourceName().substring(9));
-        }
 
         createDataSource();
         processExperiments(connection);
@@ -162,7 +153,6 @@ public class BarExpressionsConverter extends BioDBConverter
    }
 
 
-
     /**
      * process the experiments (bar projects)
      * @param connection
@@ -185,9 +175,6 @@ public class BarExpressionsConverter extends BioDBConverter
     }
 
 
-
-
-
     /**
      * process the samples
      * @param connection
@@ -207,6 +194,7 @@ public class BarExpressionsConverter extends BioDBConverter
 //        		String replication = res.getString(7);
         		String control = null;
         		String replication = null;
+        		// TODO: generalize!
         		if (sampleBarId == 244) {
             		control = "CTRL_7";
             		replication = "CTRL_7";
@@ -214,7 +202,6 @@ public class BarExpressionsConverter extends BioDBConverter
             		control = res.getString(6);
             		replication = res.getString(7);
         		}
-
 
         		String file = res.getString(8);
 
@@ -229,10 +216,6 @@ public class BarExpressionsConverter extends BioDBConverter
         			type=SAMPLE_TREATMENT;
         			// save controls
         			sampleControlMap.put(sampleBarId, control);
-        			// add to the treatmentControls map (sample-id, set of controls)
-        			// TODO: cater for the case when controls are not before treatment
-//        			Set<Integer> controls = replicatesMap.get(control);
-//        			treatmentControlsMap.put(sampleBarId, controls);
         		}
 
         		String sampleRefId = createSample(experimentBarId,
@@ -523,7 +506,7 @@ public class BarExpressionsConverter extends BioDBConverter
     		String name = PROPERTY_TYPES.get(i);
     		String value = PROPERTY_VALUES.get(i);
     		if (value == null || value.isEmpty()) {
-        		LOG.info("SAMPLE " + sampleBarId + ": empty prop value for " + p);
+        		LOG.debug("SAMPLE " + sampleBarId + ": empty prop value for " + p);
         		i++;
     			continue;
     		}
@@ -642,7 +625,6 @@ public class BarExpressionsConverter extends BioDBConverter
     	}
     	sampleData.setAttribute("pValue", pValue.toString());
 
-//    	sampleData.setAttribute("averageSignal", avgMap.get(probeSet).toString());
     	sampleData.setAttribute("averageSignal", avgSignal);
 
     	// if this is a treatment, do the ratio between this value and the one
