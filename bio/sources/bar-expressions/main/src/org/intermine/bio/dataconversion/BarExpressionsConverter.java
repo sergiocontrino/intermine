@@ -604,11 +604,25 @@ public class BarExpressionsConverter extends BioDBConverter
     		controlAvgMap=averagesMap.
     				get(treatmentControlsMap.get(sampleBarId).toArray()[0]);
     		Double realControl = controlAvgMap.get(probeSet);
-        	Double realRatio = avgMap.get(probeSet)/controlAvgMap.get(probeSet);
-        	// ratio = String.format("%.2f", realRatio);
-        	// avgControl = String.format("%.2f", realControl);
-        	ratio = round(realRatio, "#.##");
-        	avgControl = round(realControl, "#.##");
+    		LOG.info("RRcontrol = " + realControl);
+//    		Double realRatio = avgMap.get(probeSet)/controlAvgMap.get(probeSet);
+//    		ratio = round(realRatio, "#.##");
+    		ratio = getRatio(avgMap.get(probeSet), realControl, "#.##");
+
+//    		Double realRatio;
+//    		realRatio=Double.NaN;
+//    		if (realControl != null) {
+//    			realRatio = avgMap.get(probeSet)/realControl;
+//    		}
+//        	// ratio = String.format("%.2f", realRatio);
+//        	// avgControl = String.format("%.2f", realControl);
+//        	if (realRatio.isInfinite()) {
+//        		ratio = "NaN";
+//        	} else {
+//        		ratio = round(realRatio, "#.##");
+//        	}
+//        	avgControl = round(realControl, "#.##");
+        	avgControl = getRatio(realControl, "#.##");
     	}
 
 
@@ -644,6 +658,48 @@ public class BarExpressionsConverter extends BioDBConverter
     	return sampleData.getIdentifier();
     }
 
+
+    /**
+     * Returns a string representation of the Double rounded and formatted
+     * according to format
+     * If Double is not a number, returns null
+     *
+     * @param signal Double
+     * @param format String
+     */
+	private String getRatio(Double signal, Double control, String format)
+			 {
+		LOG.info("DD " + signal + "/" + control);
+		if (control == null) {
+			return "NA";
+		}
+		if (signal.isNaN()){
+			return "NA";
+		}
+
+		DecimalFormat df = new DecimalFormat(format);
+		Double ratio = signal/control;
+		if (ratio.isInfinite() || ratio.isNaN()) {
+			return "NA";
+		}
+		return Double.valueOf(df.format(ratio)).toString();
+	}
+
+	private String getRatio(Double signal, String format)
+	 {
+LOG.info("DD " + signal);
+if (signal == null) {
+	return "NA";
+}
+if (signal.isNaN()){
+	return "NA";
+}
+
+DecimalFormat df = new DecimalFormat(format);
+	return Double.valueOf(df.format(signal)).toString();
+}
+
+
     /**
      * Returns a string representation of the Double rounded and formatted
      * according to format
@@ -654,8 +710,9 @@ public class BarExpressionsConverter extends BioDBConverter
      */
 	private String round(Double signal, String format)
 			throws ObjectStoreException {
-		if (signal.isNaN()){
-			return null;
+		LOG.info("UU " + signal);
+		if (signal.isNaN() || signal == null){
+			return "NA";
 		}
 		DecimalFormat df = new DecimalFormat(format);
 		return Double.valueOf(df.format(signal)).toString();
