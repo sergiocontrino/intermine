@@ -5,8 +5,6 @@
 
 <!-- footer.jsp -->
 <br/>
-<br/>
-<br/>
 
 <div class="body" align="center" style="clear:both">
     <!-- powered -->
