@@ -69,14 +69,15 @@
     <td class="leftcol"><p><h2>Interactions</p><h2></td>
     <td>Confirmed Arabidopsis interacting proteins come from <a href="http://www.bind.ca/">BIND</a>, the Biomolecular Interaction Network Database, from high-density Arabidopsis protein microarrays (<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=AbstractPlus&list_uids=17360592&query_hl=6&itool=pubmed_ExternalLink">Popescu et al., 2007</a>; <a href="http://dx.doi.org/10.1101/gad.1740009">Popescu et al., 2009</a>), from Braun et al.'s Arabidopsis Interactome <a href="http://dx.doi.org/10.1126/science.1203877">2011</a>, from Wolf Frommer's Membrane protein INteractome Database <a href="http://associomics.org">MIND</a>, and over 1190 other literature sources.</td>
     <td><a href="http://bar.utoronto.ca/" target="_blank" class="extlink">Bio-Analytic Resource</a> for Plant Biology</td>
-    <td>Brady et al., 2009 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/19401381" target="_blank" class="extlink">PubMed: 19401381</a></td>
+    <td>Geisler-Lee et al., 2007 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/17675552">PubMed: 17675552</a></td>
   </tr>
 
   <tr>
     <td rowspan="2" class="leftcol"><p><h2>Expression</h2></p></td>
     <td>Electronic Fluorescent Pictograph (eFP) Visualization paints gene expression information from one of the AtGenExpress data sets or other compendia for a desired gene onto a diagrammatic representation of <em>Arabidopsis thaliana</em> plants.</td>
     <td>BAR Arabidopsis <a href="http://bar.utoronto.ca/webservices/efp_service/efp_service.php" target="_blank" class="extlink">eFP Webservices</a></td>
-    <td>Winter et al., 2007 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/17684564" target="_blank" class="extlink">PubMed: 17684564</a></td>
+    <td>Winter et al., 2007 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/17684564" target="_blank" class="extlink">PubMed: 17684564</a><br />
+        Brady et al., 2009 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/19401381" target="_blank" class="extlink">PubMed: 19401381</a></td>
   </tr>
   <tr>
     <td>AtGenExpress data summarizing global gene expression in Arabidopsis in response to seven basic phytohormones (auxin, cytokinin, gibberellin, brassinosteroid, abscisic acid, jasmonate and ethylene) and their inhibitors (and in related experiments), as part of the AtGenExpress project.</td>
