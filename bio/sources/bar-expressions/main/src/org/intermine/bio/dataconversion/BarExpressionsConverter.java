@@ -42,7 +42,9 @@ public class BarExpressionsConverter extends BioDBConverter
         Logger.getLogger(BarExpressionsConverter.class);
 //  private static final String DATASET_TITLE = "Expressions data set";
 //  private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
-//    private static final String EXPERIMENT_CATEGORY = "hormone";
+//  private static final String EXPERIMENT_CATEGORY = "hormone";
+    // used to carrect a data issue in this data set..
+    private static final String BAD_BAR = "atgenexp";
     private static final String BAR_URL = "http://bar.utoronto.ca/";
     private static final String DATA_SOURCE_NAME = "The Bio-Analytic Resource for Plant Biology";
 
@@ -190,19 +192,9 @@ public class BarExpressionsConverter extends BioDBConverter
         		String name = res.getString(3);
         		String alias = res.getString(4);
         		String description = res.getString(5);
-//        		String control = res.getString(6);
-//        		String replication = res.getString(7);
-        		String control = null;
-        		String replication = null;
-        		// TODO: generalize!
-        		if (sampleBarId == 244) {
-            		control = "CTRL_7";
-            		replication = "CTRL_7";
-        		} else {
-            		control = res.getString(6);
-            		replication = res.getString(7);
-        		}
-
+        		// TODO: correct data?
+        		String control = getCorrectValue(res.getString(6), sampleBarId);
+        		String replication = getCorrectValue(res.getString(7), sampleBarId);
         		String file = res.getString(8);
 
         		String type = null;
@@ -234,6 +226,18 @@ public class BarExpressionsConverter extends BioDBConverter
         	LOG.info("AAAreps: " + replicatesMap);
         	LOG.info("AAAcontrols: " + treatmentControlsMap);
     }
+
+    /**
+     * to correct data issues
+     * @param queried the value returned by the query
+     * @param sampleBarId
+     */
+	private String getCorrectValue(String queried, Integer sampleBarId) {
+		if (getDataSourceName().equalsIgnoreCase(BAD_BAR) && sampleBarId == 244) {
+			return "CTRL_7";
+		}
+		return queried;
+	}
 
 
     /**
