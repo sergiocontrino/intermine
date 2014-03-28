@@ -30,9 +30,6 @@
             <input type="submit" name="searchSubmit" value="Search" />
             <c:if test="${!empty searchTerm || !empty searchFacetValues}">
             <br />
-                <a href="<c:url value="/keywordSearchResults.do"><c:param name="searchBag" value="${searchBag}" /></c:url>">
-                    Back to index
-                </a>
             </c:if>
             <c:if test="${!empty searchFacetValues}">
                 <span>- or -</span>

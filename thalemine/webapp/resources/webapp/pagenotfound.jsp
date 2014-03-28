@@ -13,8 +13,8 @@
 
   <p>The page you attempted to access does not exist. Try...</p>
   <ol>
-    <li>going to the <a href="/thalemine">home page</a></li>
-    <li>using the <a href="/thalemine/keywordSearchResults.do">quicksearch</a></li>
+    <li>going to the home page</li>
+    <li>using the quicksearch</li>
     <li>or <a href="#" onclick="showContactForm()">Contact us</a> at araport@jcvi.org </li>
   </ol>
 </div>
