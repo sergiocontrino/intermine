@@ -131,7 +131,7 @@ EOF
 
 echo
 
-while getopts ":FMRQVP:L:Iabf:gipr:stvwx" opt; do
+while getopts ":FMRQVS:L:Iabf:gipr:stvwx" opt; do
   case $opt in
 
 # F )  echo; echo "Full ThaleMine realease"; FULL=y; BUP=y; INCR=n; REL=build;;
@@ -139,6 +139,8 @@ while getopts ":FMRQVP:L:Iabf:gipr:stvwx" opt; do
   M )  echo "- Test build (metadata only)"; META=y;;
   R )  echo "- Restart full realease"; RESTART=y; FULL=y; STAG=n; WGET=n; BUP=n; REL=build;;
   Q )  echo "- Quick restart full realease"; QRESTART=y; FULL=y; STAG=n; WGET=n; BUP=n; REL=build;;
+  S )  S=$OPTARG; META=y; S="`echo $S|tr '[A-Z]' '[a-z]'`"; echo "- Test build (metadata only) with source $S";;
+
 #  V )  echo "- Validating submission(s) in $DATADIR/new"; VALIDATING=y; META=y; BUP=n; REL=val;;
 #  P )  P=$OPTARG; META=y; P="`echo $P|tr '[A-Z]' '[a-z]'`"; echo "- Test build (metadata only) with project $P";;
 #  L )  L=$OPTARG; META=y; L="`echo $L|tr '[A-Z]' '[a-z]'`"; echo "- Test build (metadata only) with projects $L";;
@@ -191,12 +193,19 @@ LOG="$LOGDIR/$USER.$REL.$P"`date "+%y%m%d.%H%M"`  # timestamp of stag operations
 #done
 #IFS=$'\t\n'
 #else
-
 #SOURCES=chado-db-wormbase-c_elegans,wormbase-c_elegans-chromosome-fasta,modencode-metadata,worm-network
-SOURCES=aip-gff,bar
-
 #fi
 
+if [ -n "$S" ]
+then
+SOURCES="$S"
+else
+#SOURCES=chado-db-wormbase-c_elegans,wormbase-c_elegans-chromosome-fasta,modencode-metadata,worm-network
+#SOURCES=aip-gff,bar-interactions,hormone-expressions
+#SOURCES=aip-gff,at-agi,hormone-expressions
+#SOURCES=pathogen-expressions
+SOURCES=hormone-expressions,tissue-expressions
+fi
 
 
 echo
