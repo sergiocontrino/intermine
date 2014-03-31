@@ -104,8 +104,8 @@ public class KeywordSearchResultsController extends TilesAction
         LOG.debug("Initializing took " + (System.currentTimeMillis() - time) + " ms");
 
         // show overview by default
-        if (StringUtils.isBlank(searchTerm)) {
-            searchTerm = "*:*";
+        if (StringUtils.isBlank(searchTerm) || "*:*".equals(searchTerm)) {
+            searchTerm = "*";
         }
 
         //TODO remove - just  for performance testing
