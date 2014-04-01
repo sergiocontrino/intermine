@@ -81,8 +81,8 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
             p = Pattern.compile(regexp);
             m = p.matcher(clsName);
             if(m.find()) {
-                if(record.getAttributes().get("Name") != null){
-                    String name = record.getAttributes().get("Name").iterator().next();
+                if(record.getAttributes().get("full_name") != null){
+                    String name = record.getAttributes().get("full_name").iterator().next();
                     if(name != null){
                         regexp = "^AT[A-z0-9]{1}[A-z]+[0-9]+";
                         p = Pattern.compile(regexp);
