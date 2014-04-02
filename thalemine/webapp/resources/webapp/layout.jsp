@@ -52,6 +52,73 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="model/images/favicon.ico">
 
+    <c:set var="googleAnalyticsId" value="${WEB_PROPERTIES['google.analytics.id']}"/>
+    <c:if test="${!empty googleAnalyticsId}">
+        <script type="text/javascript">
+          switch ("${userTracking}") {
+            case "1":
+              var is_production = true;
+              var dev_test = /(-dev)|(-test)/;
+              var hostname = location.hostname;
+
+              if(hostname.search(dev_test) != -1) {
+                   is_production = false;
+              } // end if(hostname.search(dev_test) != -1)
+
+              if(is_production) {
+                  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+                  ga('create', '${googleAnalyticsId}', 'araport.org');
+                  ga('require', 'linkid', 'linkid.js');
+                  ga('send', 'pageview');
+              } //end if(is_production)
+
+              break;
+
+            case "2":
+              // save cookie
+              var saveTrackingAnswer = function(answer) {
+                var date = new Date();
+                date.setTime(date.getTime() + 31536000000);
+                document.cookie = "userTracking=" + escape(answer) + "; expires=" + date.toUTCString() + "; path=/";
+              };
+              // show msg
+              jQuery("#ctxHelpDiv").after( function() {
+                return el = jQuery("<div/>", { 'class': 'topBar info userTracking' })
+                .html( function() {
+                    return jQuery('<p/>', { 'text': '${userTrackingMessage}' })
+                    .append( function() {
+                      return jQuery('<a/>', {
+                        'text': 'No',
+                        'href': '#',
+                        'click': function(e) {
+                          e.preventDefault();
+                          saveTrackingAnswer("0");
+                          jQuery(el).remove();
+                        }
+                      })
+                    } )
+                    .append( function() {
+                      return jQuery('<a/>', {
+                        'text': 'Yes',
+                        'href': '#',
+                        'style': 'margin:0 10px',
+                        'click': function(e) {
+                          e.preventDefault();
+                          saveTrackingAnswer("1");
+                          jQuery(el).remove();
+                        }
+                      })
+                    } )
+                } )
+              } );
+          }
+        </script>
+    </c:if>
+
   </head>
 
   <!-- Check if the current page has fixed layout -->
@@ -177,62 +244,6 @@ if (typeof intermine != 'undefined') {
       </div>
     </c:if>
 
-    <c:set var="googleAnalyticsId" value="${WEB_PROPERTIES['google.analytics.id']}"/>
-    <c:if test="${!empty googleAnalyticsId}">
-        <script type="text/javascript">
-          switch ("${userTracking}") {
-            case "1":
-
-              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-              ga('create', '${googleAnalyticsId}', 'araport.org');
-              ga('send', 'pageview');
-
-              break;
-
-            case "2":
-              // save cookie
-              var saveTrackingAnswer = function(answer) {
-                var date = new Date();
-                date.setTime(date.getTime() + 31536000000);
-                document.cookie = "userTracking=" + escape(answer) + "; expires=" + date.toUTCString() + "; path=/";
-              };
-              // show msg
-              jQuery("#ctxHelpDiv").after( function() {
-                return el = jQuery("<div/>", { 'class': 'topBar info userTracking' })
-                .html( function() {
-                    return jQuery('<p/>', { 'text': '${userTrackingMessage}' })
-                    .append( function() {
-                      return jQuery('<a/>', {
-                        'text': 'No',
-                        'href': '#',
-                        'click': function(e) {
-                          e.preventDefault();
-                          saveTrackingAnswer("0");
-                          jQuery(el).remove();
-                        }
-                      })
-                    } )
-                    .append( function() {
-                      return jQuery('<a/>', {
-                        'text': 'Yes',
-                        'href': '#',
-                        'style': 'margin:0 10px',
-                        'click': function(e) {
-                          e.preventDefault();
-                          saveTrackingAnswer("1");
-                          jQuery(el).remove();
-                        }
-                      })
-                    } )
-                } )
-              } );
-          }
-        </script>
-    </c:if>
     <c:if test="${!empty fixedLayout}">
       </div>
     </c:if>
