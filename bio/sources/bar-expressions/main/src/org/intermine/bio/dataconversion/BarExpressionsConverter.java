@@ -604,7 +604,7 @@ public class BarExpressionsConverter extends BioDBConverter
     		controlAvgMap=averagesMap.
     				get(treatmentControlsMap.get(sampleBarId).toArray()[0]);
     		Double realControl = controlAvgMap.get(probeSet);
-    		LOG.info("RRcontrol = " + realControl);
+//    		LOG.info("RRcontrol = " + realControl);
 //    		Double realRatio = avgMap.get(probeSet)/controlAvgMap.get(probeSet);
 //    		ratio = round(realRatio, "#.##");
     		ratio = getRatio(avgMap.get(probeSet), realControl, "#.##");
@@ -669,35 +669,35 @@ public class BarExpressionsConverter extends BioDBConverter
      */
 	private String getRatio(Double signal, Double control, String format)
 			 {
-		LOG.info("DD " + signal + "/" + control);
+//		LOG.info("DD " + signal + "/" + control);
 		if (control == null) {
-			return "NA";
+			return "NaN";
 		}
 		if (signal.isNaN()){
-			return "NA";
+			return "NaN";
 		}
 
 		DecimalFormat df = new DecimalFormat(format);
 		Double ratio = signal/control;
 		if (ratio.isInfinite() || ratio.isNaN()) {
-			return "NA";
+			return "NaN";
 		}
 		return Double.valueOf(df.format(ratio)).toString();
 	}
 
 	private String getRatio(Double signal, String format)
-	 {
-LOG.info("DD " + signal);
-if (signal == null) {
-	return "NA";
-}
-if (signal.isNaN()){
-	return "NA";
-}
+	{
+//		LOG.info("GG " + signal);
+		if (signal == null) {
+			return "NaN";
+		}
+		if (signal.isNaN()){
+			return "NaN";
+		}
 
-DecimalFormat df = new DecimalFormat(format);
-	return Double.valueOf(df.format(signal)).toString();
-}
+		DecimalFormat df = new DecimalFormat(format);
+		return Double.valueOf(df.format(signal)).toString();
+	}
 
 
     /**
@@ -712,7 +712,7 @@ DecimalFormat df = new DecimalFormat(format);
 			throws ObjectStoreException {
 		LOG.info("UU " + signal);
 		if (signal.isNaN() || signal == null){
-			return "NA";
+			return "NaN";
 		}
 		DecimalFormat df = new DecimalFormat(format);
 		return Double.valueOf(df.format(signal)).toString();
@@ -789,7 +789,8 @@ DecimalFormat df = new DecimalFormat(format);
     	String query =
     			"SELECT sample_id, data_probeset_id, data_signal, "
     			+ "data_call, data_p_val "
-    			+ "FROM sample_data;";
+    			+ "FROM sample_data "
+    			+ "WHERE data_probeset_id is not null;";  // added for pathogen
 //		+ "FROM sample_data limit 1000;";
         return doQuery(connection, query, "getSampleData");
     }
