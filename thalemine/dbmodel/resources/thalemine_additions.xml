@@ -3,7 +3,7 @@
 
 <class name="Gene" is-interface="true">
   <collection name="expressions" referenced-type="Expression" reverse-reference="gene" />
-  <collection name="probes" referenced-type="Probe" reverse-reference="gene" />
+  <collection name="probes" referenced-type="Probe" reverse-reference="genes" />
 </class>
 
 <class name="DataSet" is-interface="true" >
@@ -56,7 +56,8 @@
 
 <class name="Probe" is-interface="true">
   <attribute name="name" type="java.lang.String" />
-  <reference name="gene" referenced-type="Gene" reverse-reference="probes" />
+<!--   <reference name="gene" referenced-type="Gene" reverse-reference="probes" /> -->
+  <collection name="genes" referenced-type="Gene" reverse-reference="probes" />
   <collection name="expressions" referenced-type="Expression" reverse-reference="probe" />
   <collection name="samples" referenced-type="Sample" reverse-reference="probes" />
 </class>
