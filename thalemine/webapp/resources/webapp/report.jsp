@@ -349,7 +349,7 @@
       <p>That which you were looking for does not exist. Try...
         <ol>
           <li>going to the <a href="/thalemine">home page</a></li>
-          <li>using the <a href="/thalemine/keywordSearchResults.do">quicksearch</a></li>
+          <li>using the quicksearch</li>
           <li>or <a href="#" onclick="showContactForm()">Contact us</a> at support [at] araport@jcvi.org </li>
         </ol>
       </p>
