@@ -42,6 +42,7 @@ import org.intermine.xml.full.Reference;
  * @author Wenyan Ji
  * @author Richard Smith
  * @author Fengyuan Hu
+ * @author Vivek Krishnakumar
  */
 
 public class GFF3Converter extends DataConverter
