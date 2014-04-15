@@ -180,7 +180,7 @@ public class BarInteractionsConverter extends BioDBConverter
     	gene.setAttribute("primaryIdentifier", identifier);
 
     	// put in our map
-        geneRefId=gene.getIdentifier();
+	geneRefId=gene.getIdentifier();
     	genes.put(identifier, geneRefId);
 
     	// store to database

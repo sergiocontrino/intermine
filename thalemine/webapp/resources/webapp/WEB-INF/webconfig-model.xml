@@ -256,7 +256,7 @@
       <fieldconfig fieldExpr="averageSignal"/>
       <fieldconfig fieldExpr="averageControl"/>
       <fieldconfig fieldExpr="averageRatio"/>
-      <fieldconfig fieldExpr="probe.gene.primaryIdentifier" label="gene"/>
+<!--    <fieldconfig fieldExpr="probe.genes.primaryIdentifier" label="gene"/> -->
       <fieldconfig fieldExpr="probe.name" label="probe"/>
       <fieldconfig fieldExpr="sample.name" label="sample"/>
     </fields>
