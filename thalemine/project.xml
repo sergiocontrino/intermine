@@ -49,6 +49,8 @@
 
   <source name="hormone-expressions" type="bar-expressions">
     <property name="source.db.name" value="bar-he"/>
+    <property name="dataSourceName" value="atgenexp_hormone"/>
+    <property name="dataSetTitle" value="BAR Expression Data: hormones"/>
   </source>
 
   <source name="tissue-expressions" type="bar-expressions" dump="true">
