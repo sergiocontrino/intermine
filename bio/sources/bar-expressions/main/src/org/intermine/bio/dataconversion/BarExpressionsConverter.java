@@ -81,7 +81,6 @@ public class BarExpressionsConverter extends BioDBConverter
     //sample id, sample objectId
     private Map<Integer, Integer> sampleMap = new HashMap<Integer, Integer>();
 
-
     //sample_repl, list of controls sample_Id
     private Map<String, Set<Integer>> replicatesMap = new HashMap<String, Set<Integer>>();
     //sample_id treat, list of controls sample_Id
@@ -152,7 +151,6 @@ public class BarExpressionsConverter extends BioDBConverter
     	dataSetRef = dataSet.getIdentifier(); // used in experiment
    }
 
-
     /**
      * process the experiments (bar projects)
      * @param connection
@@ -173,7 +171,6 @@ public class BarExpressionsConverter extends BioDBConverter
     	}
     	res.close();
     }
-
 
     /**
      * process the samples
@@ -237,7 +234,6 @@ public class BarExpressionsConverter extends BioDBConverter
 		return queried;
 	}
 
-
     /**
      * create the averages for the groups of replicates
      * note that this includes also groups of controls
@@ -289,7 +285,6 @@ public class BarExpressionsConverter extends BioDBConverter
 		return sb.toString();
 	}
 
-
     /**
      * process the sample properties
      * @param connection
@@ -335,7 +330,6 @@ public class BarExpressionsConverter extends BioDBConverter
         	}
         	res.close();
     }
-
 
     /**
      * create an experiment
@@ -466,7 +460,6 @@ public class BarExpressionsConverter extends BioDBConverter
             }
     	}
     }
-
 
     /**
      * create sample properties
@@ -783,8 +776,6 @@ public class BarExpressionsConverter extends BioDBConverter
         return doQuery(connection, query, "getAverages");
     }
 
-
-
     /**
      * Default implementation that makes a data set title based on the data source name.
      * {@inheritDoc}
@@ -793,7 +784,6 @@ public class BarExpressionsConverter extends BioDBConverter
     public String getDataSetTitle(int taxonId) {
         return getDataSourceName() + " expressions data set";
     }
-
 
     /**
      * method to wrap the execution of a query with log info
