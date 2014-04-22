@@ -53,16 +53,46 @@
     <property name="dataSetTitle" value="BAR Expression Data: hormones"/>
   </source>
 
-  <source name="tissue-expressions" type="bar-expressions" dump="true">
+  <source name="tissue-expressions" type="bar-expressions">
     <property name="source.db.name" value="bar-te"/>
     <property name="dataSourceName" value="atgenexp"/>
     <property name="dataSetTitle" value="BAR Expression Data: tissue"/>
   </source>
 
-  <source name="pathogen-expressions" type="bar-expressions" dump="true">
+  <source name="pathogen-expressions" type="bar-expressions">
     <property name="source.db.name" value="bar-pe"/>
     <property name="dataSourceName" value="atgenexp_pathogen"/>
     <property name="dataSetTitle" value="BAR Expression Data: pathogen"/>
+  </source>
+
+  <source name="plus-expressions" type="bar-expressions">
+    <property name="source.db.name" value="bar-ple"/>
+    <property name="dataSourceName" value="atgenexp_plus"/>
+    <property name="dataSetTitle" value="BAR Expression Data: plus"/>
+  </source>
+
+  <source name="stress-expressions" type="bar-expressions">
+    <property name="source.db.name" value="bar-se"/>
+    <property name="dataSourceName" value="atgenexp_stress"/>
+    <property name="dataSetTitle" value="BAR Expression Data: stress"/>
+  </source>
+
+  <source name="light_series-expressions" type="bar-expressions">
+    <property name="source.db.name" value="bar-lse"/>
+    <property name="dataSourceName" value="light_series"/>
+    <property name="dataSetTitle" value="BAR Expression Data: light_series"/>
+  </source>
+
+  <source name="root-expressions" type="bar-expressions">
+    <property name="source.db.name" value="bar-re"/>
+    <property name="dataSourceName" value="root"/>
+    <property name="dataSetTitle" value="BAR Expression Data: root"/>
+  </source>
+
+  <source name="seed_db-expressions" type="bar-expressions">
+    <property name="source.db.name" value="bar-sde"/>
+    <property name="dataSourceName" value="seed_db"/>
+    <property name="dataSetTitle" value="BAR Expression Data: seed_db"/>
   </source>
 
     <source name="so" type="so">

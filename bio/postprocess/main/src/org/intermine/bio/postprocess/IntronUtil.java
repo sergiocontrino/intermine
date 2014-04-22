@@ -78,12 +78,12 @@ public class IntronUtil
         this.os = osw.getObjectStore();
         this.model = os.getModel();
         dataSource = (DataSource) DynamicUtil.createObject(Collections.singleton(DataSource.class));
-        dataSource.setName("FlyMine");
+        dataSource.setName("ThaleMine");
         try {
             dataSource = (DataSource) os.getObjectByExample(dataSource,
                                                             Collections.singleton("name"));
         } catch (ObjectStoreException e) {
-            throw new RuntimeException("unable to fetch FlyMine DataSource object", e);
+            throw new RuntimeException("unable to fetch ThaleMine DataSource object", e);
         }
     }
 
@@ -109,10 +109,10 @@ public class IntronUtil
         throws ObjectStoreException {
 
         dataSet = (DataSet) DynamicUtil.createObject(Collections.singleton(DataSet.class));
-        dataSet.setName("FlyMine introns");
-        dataSet.setDescription("Introns calculated by FlyMine");
+        dataSet.setName("ThaleMine introns");
+        dataSet.setDescription("Introns calculated by ThaleMine");
         dataSet.setVersion("" + new Date()); // current time and date
-        dataSet.setUrl("http://www.flymine.org");
+        dataSet.setUrl("https://apps.araport.org/thalemine");
         dataSet.setDataSource(dataSource);
 
         // Documented as an example of how to use the query API
@@ -315,7 +315,7 @@ public class IntronUtil
             int newLocStart = nextIntronStart + tranStart;
             int newLocEnd = intronEnd + tranStart;
 
-            String identifier = "intron_chr" + chr.getPrimaryIdentifier()
+            String identifier = "intron_" + chr.getPrimaryIdentifier()
                 + "_" + Integer.toString(newLocStart) + ".." + Integer.toString(newLocEnd);
 
             if (intronMap.get(identifier) == null) {
