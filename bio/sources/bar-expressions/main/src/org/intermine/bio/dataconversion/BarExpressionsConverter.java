@@ -397,7 +397,9 @@ public class BarExpressionsConverter extends BioDBConverter
     	Item sample = createItem("Sample");
     	sample.setAttribute("barId", sampleBarId.toString());
     	sample.setAttribute("name", name);
-    	sample.setAttribute("alias", alias);
+        if(alias != null) {
+            sample.setAttribute("alias", alias);
+        }
     	if (description != null) {
     		sample.setAttribute("description", description);
     	}
