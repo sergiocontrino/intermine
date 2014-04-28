@@ -21,6 +21,16 @@
     <constraint path="Protein.organism.name" editable="true" description="Organism.name" op="=" value="Arabidopsis thaliana"/>
   </query>
 </template>
+<template name="Gene_To_Protein_Type_Converter" title="Gene to protein type converter" longDescription="" comment="">
+  <query name="Gene_To_Protein_Type_Converter" model="genomic" view="Gene.id Gene.proteins.id" longDescription="" sortOrder="Gene.id asc">
+    <constraint path="Gene.id" editable="true" description="Gene.id" op="=" value="0"/>
+  </query>
+</template>
+<template name="Protein_To_Gene_Type_Converter" title="Protein to gene type converter" longDescription="" comment="">
+  <query name="Protein_To_Gene_Type_Converter" model="genomic" view="Protein.id Protein.genes.id" longDescription="" sortOrder="Protein.id asc">
+    <constraint path="Protein.id" editable="true" description="Protein.id" op="=" value="0"/>
+  </query>
+</template>
 </template-queries>
 <tags>
   <tag name="im:public" objectIdentifier="Gene_Protein" type="template">

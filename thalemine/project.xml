@@ -43,6 +43,13 @@
       <property name="src.data.file" location="/usr/local/projects/AIP/ThaleMineData/psi/psi-mi.obo"/>
     </source>
 
+    <source name="pubmed-gene" type="pubmed-gene" >
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/pubmed"/>
+      <property name="pubmed.organisms" value="3702"/>
+      <property name="src.data.dir.includes" value="gene2pubmed"/>
+      <property name="infoFile" location="/usr/local/projects/AIP/ThaleMineData/ncbi-gene/gene_info"/>
+    </source>
+
   <source name="at-agi" type="bar-lookups">
     <property name="source.db.name" value="bar-lu"/>
   </source>

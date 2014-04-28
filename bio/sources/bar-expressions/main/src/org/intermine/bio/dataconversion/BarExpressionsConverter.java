@@ -372,7 +372,9 @@ public class BarExpressionsConverter extends BioDBConverter
 		Item lab = createItem("Lab");
 		lab.setAttribute("name", pi);
 		lab.setAttribute("affiliation", affiliation);
-		lab.setAttribute("address", address);
+        if (address != null) {
+            lab.setAttribute("address", address);
+        }
 		store(lab);
 		return lab.getIdentifier();
 	}
@@ -396,16 +398,22 @@ public class BarExpressionsConverter extends BioDBConverter
     				throws ObjectStoreException {
     	Item sample = createItem("Sample");
     	sample.setAttribute("barId", sampleBarId.toString());
-    	sample.setAttribute("name", name);
-        if(alias != null) {
+        if(name != null) {
+            sample.setAttribute("name", name);
+        }
+        if(alias != null || !alias.isEmpty()) {
             sample.setAttribute("alias", alias);
         }
-    	if (description != null) {
+        if (description != null || !description.isEmpty()) {
     		sample.setAttribute("description", description);
     	}
     	sample.setAttribute("control", control);
-    	sample.setAttribute("replication", replication);
-    	sample.setAttribute("file", file);
+        if (replication != null) {
+            sample.setAttribute("replication", replication);
+        }
+        if (file != null) {
+            sample.setAttribute("file", file);
+        }
     	sample.setAttribute("type", type);
 
 		sample.setReference("experiment", experimentIdRefMap.get(experimentBarId));
