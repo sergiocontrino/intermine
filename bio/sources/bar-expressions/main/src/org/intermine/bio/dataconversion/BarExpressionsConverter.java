@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.dataconversion.ItemWriter;
 import org.intermine.metadata.Model;
@@ -61,6 +62,11 @@ public class BarExpressionsConverter extends BioDBConverter
                     "growthCondition",
                     "growthStage",
                     "timePoint");
+
+    private static final List<String> SOURCES_NO_SAMPLE_GROWTH =
+            Arrays.asList(
+                    "atgenexp",
+                    "atgenexp-plus");
 
     //pi, item Id
     private Map<String, String> labIdRefMap = new HashMap<String, String>();
@@ -371,8 +377,10 @@ public class BarExpressionsConverter extends BioDBConverter
 			throws ObjectStoreException {
 		Item lab = createItem("Lab");
 		lab.setAttribute("name", pi);
-		lab.setAttribute("affiliation", affiliation);
-        if (address != null) {
+        if (StringUtils.isNotBlank(affiliation)) {
+        	lab.setAttribute("affiliation", affiliation);
+        }
+		if (StringUtils.isNotBlank(address)) {
             lab.setAttribute("address", address);
         }
 		store(lab);
@@ -398,20 +406,20 @@ public class BarExpressionsConverter extends BioDBConverter
     				throws ObjectStoreException {
     	Item sample = createItem("Sample");
     	sample.setAttribute("barId", sampleBarId.toString());
-        if(name != null) {
+        if(StringUtils.isNotBlank(name)) {
             sample.setAttribute("name", name);
         }
-        if(alias != null || !alias.isEmpty()) {
+        if(StringUtils.isNotBlank(alias)) {
             sample.setAttribute("alias", alias);
         }
-        if (description != null || !description.isEmpty()) {
+        if (StringUtils.isNotBlank(description)) {
     		sample.setAttribute("description", description);
     	}
     	sample.setAttribute("control", control);
-        if (replication != null) {
+        if (StringUtils.isNotBlank(replication)) {
             sample.setAttribute("replication", replication);
         }
-        if (file != null) {
+        if (StringUtils.isNotBlank(file)) {
             sample.setAttribute("file", file);
         }
     	sample.setAttribute("type", type);
@@ -622,7 +630,7 @@ public class BarExpressionsConverter extends BioDBConverter
 
     	Item sampleData = createItem("Expression");
     	sampleData.setAttribute("signal", signal.toString());
-    	if (call!=null && !call.isEmpty()) {
+    	if (StringUtils.isNotBlank(call)) {
     		sampleData.setAttribute("call", call);
     	}
     	sampleData.setAttribute("pValue", pValue.toString());
@@ -735,7 +743,9 @@ public class BarExpressionsConverter extends BioDBConverter
     protected ResultSet getSampleProperties(Connection connection, String source)
     		throws SQLException {
     	String query = null;
-    	if (source.equalsIgnoreCase("atgenexp")) {
+    	if (SOURCES_NO_SAMPLE_GROWTH.contains(source)) {
+    		//
+//    	if (source.equalsIgnoreCase("atgenexp")) {
         	query = "SELECT sample_id, sample_stock_code, sample_genetic_var, "
         			+ "sample_tissue, sample_diseased, 'NA', "
         			+ "sample_growth_stage,sample_time_point "
