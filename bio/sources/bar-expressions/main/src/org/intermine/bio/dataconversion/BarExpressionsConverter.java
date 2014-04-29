@@ -66,7 +66,7 @@ public class BarExpressionsConverter extends BioDBConverter
     private static final List<String> SOURCES_NO_SAMPLE_GROWTH =
             Arrays.asList(
                     "atgenexp",
-                    "atgenexp-plus");
+                    "atgenexp_plus");
 
     //pi, item Id
     private Map<String, String> labIdRefMap = new HashMap<String, String>();
@@ -744,7 +744,7 @@ public class BarExpressionsConverter extends BioDBConverter
     		throws SQLException {
     	String query = null;
     	if (SOURCES_NO_SAMPLE_GROWTH.contains(source)) {
-    		//
+    		// restricted version of query
 //    	if (source.equalsIgnoreCase("atgenexp")) {
         	query = "SELECT sample_id, sample_stock_code, sample_genetic_var, "
         			+ "sample_tissue, sample_diseased, 'NA', "
