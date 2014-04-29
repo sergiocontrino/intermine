@@ -52,6 +52,15 @@ public class BarExpressionsConverter extends BioDBConverter
     private static final String SAMPLE_CONTROL = "control";
     private static final String SAMPLE_TREATMENT = "treatment";
 
+    private static final List<String> SAMPLE_ATTRS =
+            Arrays.asList(
+                    "name",
+                    "alias",
+                    "description",
+                    "control",
+                    "replication",
+                    "file");
+
     private static final List<String> PROPERTY_TYPES =
             Arrays.asList(
                     "stock",
@@ -396,23 +405,31 @@ public class BarExpressionsConverter extends BioDBConverter
     		String name, String alias, String description,
     		String control, String replication, String file, String type)
     				throws ObjectStoreException {
+
+        // create list of values
+        List<String> SAMPLE_VALUES =
+                Arrays.asList(
+                        name,
+                        alias,
+                        description,
+                        control,
+                        replication,
+                        file);
+
     	Item sample = createItem("Sample");
     	sample.setAttribute("barId", sampleBarId.toString());
-        if(name != null) {
-            sample.setAttribute("name", name);
-        }
-        if(alias != null || !alias.isEmpty()) {
-            sample.setAttribute("alias", alias);
-        }
-        if (description != null || !description.isEmpty()) {
-    		sample.setAttribute("description", description);
-    	}
-    	sample.setAttribute("control", control);
-        if (replication != null) {
-            sample.setAttribute("replication", replication);
-        }
-        if (file != null) {
-            sample.setAttribute("file", file);
+
+        int i=0;
+        for (String s: SAMPLE_ATTRS) {
+            String attr = SAMPLE_ATTRS.get(i);
+            String value = SAMPLE_VALUES.get(i);
+            if (value == null || value.isEmpty()) {
+                LOG.debug("SAMPLE " + sampleBarId + ": empty sample value for " + s);
+                i++;
+                continue;
+            }
+            sample.setAttribute(attr, value);
+            i++;
         }
     	sample.setAttribute("type", type);
 
