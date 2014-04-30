@@ -431,7 +431,7 @@ public class BarExpressionsConverter extends BioDBConverter
         for (String s: SAMPLE_ATTRS) {
             String attr = SAMPLE_ATTRS.get(i);
             String value = SAMPLE_VALUES.get(i);
-            if (StringUtils.isNotBlank(value)) {
+            if (StringUtils.isBlank(value)) {
                 LOG.debug("SAMPLE " + sampleBarId + ": empty sample value for " + s);
                 i++;
                 continue;
