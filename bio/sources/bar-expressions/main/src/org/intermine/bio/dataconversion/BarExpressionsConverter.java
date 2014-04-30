@@ -72,7 +72,7 @@ public class BarExpressionsConverter extends BioDBConverter
                     "growthStage",
                     "timePoint");
 
-    private static final List<String> SOURCES_NO_SAMPLE_GROWTH =
+    private static final List<String> SOURCES_DIFF_HEADER =
             Arrays.asList(
                     "atgenexp",
                     "atgenexp_plus");
@@ -760,11 +760,10 @@ public class BarExpressionsConverter extends BioDBConverter
     protected ResultSet getSampleProperties(Connection connection, String source)
     		throws SQLException {
     	String query = null;
-    	if (SOURCES_NO_SAMPLE_GROWTH.contains(source)) {
+    	if (SOURCES_DIFF_HEADER.contains(source)) {
     		// restricted version of query
-//    	if (source.equalsIgnoreCase("atgenexp")) {
         	query = "SELECT sample_id, sample_stock_code, sample_genetic_var, "
-        			+ "sample_tissue, sample_diseased, 'NA', "
+        			+ "sample_tissue, sample_diseased, sample_growth_cond, "
         			+ "sample_growth_stage,sample_time_point "
         			+ "FROM sample_biosource_info;";
             return doQuery(connection, query, "getSampleProperties");
