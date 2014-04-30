@@ -44,7 +44,7 @@ public class BarExpressionsConverter extends BioDBConverter
 //  private static final String DATASET_TITLE = "Expressions data set";
 //  private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
 //  private static final String EXPERIMENT_CATEGORY = "hormone";
-    // used to carrect a data issue in this data set..
+    // used to correct a data issue in this data set..
     private static final String BAD_BAR = "atgenexp";
     private static final String BAR_URL = "http://bar.utoronto.ca/";
     private static final String DATA_SOURCE_NAME = "The Bio-Analytic Resource for Plant Biology";
@@ -72,10 +72,15 @@ public class BarExpressionsConverter extends BioDBConverter
                     "growthStage",
                     "timePoint");
 
-    private static final List<String> SOURCES_DIFF_HEADER =
+    private static final List<String> SOURCES_ALT_HEADER =
             Arrays.asList(
                     "atgenexp",
-                    "atgenexp_plus");
+                    "atgenexp_plus",
+                    "atgenexp_stress",
+                    "arabidopsis_ecotypes",
+                    "light_series",
+                    "seed_db",
+                    "root");
 
     //pi, item Id
     private Map<String, String> labIdRefMap = new HashMap<String, String>();
@@ -206,7 +211,10 @@ public class BarExpressionsConverter extends BioDBConverter
         		String control = getCorrectValue(res.getString(6), sampleBarId);
         		String replication = getCorrectValue(res.getString(7), sampleBarId);
         		String file = res.getString(8);
-
+        		// to overcome data issue in seed_db (see MINE-257)
+        		if (StringUtils.isBlank(replication)) {
+        			continue;
+        		}
         		String type = null;
     			// add to the replicates map
         		// Note: "replicates" also for set of controls
@@ -256,6 +264,8 @@ public class BarExpressionsConverter extends BioDBConverter
      */
     // TODO possibly better using java, instead of db
     // try it
+	// TODO don't do average if group of 1
+
     private void createSamplesAverages(Connection connection)
     		throws SQLException, ObjectStoreException {
     	// scan replicates map and for each group of replicates get for each probe
@@ -760,7 +770,7 @@ public class BarExpressionsConverter extends BioDBConverter
     protected ResultSet getSampleProperties(Connection connection, String source)
     		throws SQLException {
     	String query = null;
-    	if (SOURCES_DIFF_HEADER.contains(source)) {
+    	if (SOURCES_ALT_HEADER.contains(source)) {
     		// restricted version of query
         	query = "SELECT sample_id, sample_stock_code, sample_genetic_var, "
         			+ "sample_tissue, sample_diseased, sample_growth_cond, "
