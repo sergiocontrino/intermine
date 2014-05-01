@@ -12,8 +12,8 @@
      <attribute name="curatorSummary" type="java.lang.String"/>
      <attribute name="confidenceClass" type="java.lang.String"/>
      <attribute name="confidenceRating" type="java.lang.String"/>
-     <reference name="fivePrimeUTR" referenced-type="FivePrimeUTR"/>
-     <reference name="threePrimeUTR" referenced-type="ThreePrimeUTR"/>
+     <collection name="fivePrimeUTRs" referenced-type="FivePrimeUTR" reverse-reference="mRNAs" />
+     <collection name="threePrimeUTRs" referenced-type="ThreePrimeUTR" reverse-reference="mRNAs" />
  </class>
  <class name="MiRNA" extends="Transcript" is-interface="true">
     <attribute name="computationalDescription" type="java.lang.String"/>
@@ -44,9 +44,12 @@
   </class>
   <class name="FivePrimeUTR" is-interface="true">
      <attribute name="symbol" type="java.lang.String"/>
+     <collection name="mRNAs" referenced-type="MRNA" reverse-reference="fivePrimeUTRs" />
   </class>
   <class name="ThreePrimeUTR" is-interface="true">
      <attribute name="symbol" type="java.lang.String"/>
+     <collection name="mRNAs" referenced-type="MRNA" reverse-reference="threePrimeUTRs" />
+
   </class>
   <class name="Pseudogene" extends="Gene" is-interface="true">
      <collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogene"/>

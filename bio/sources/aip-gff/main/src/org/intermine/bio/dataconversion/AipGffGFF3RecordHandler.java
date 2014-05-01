@@ -10,18 +10,17 @@ package org.intermine.bio.dataconversion;
  *
  */
 
-import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang.StringUtils;
 
 import org.intermine.bio.io.gff3.GFF3Record;
 import org.intermine.metadata.Model;
-import org.intermine.xml.full.Item;
 import org.intermine.util.StringUtil;
+import org.intermine.xml.full.Item;
 
 /**
  * A converter/retriever for the AipGff dataset via GFF files.
@@ -38,6 +37,10 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
         super(model);
         refsAndCollections.put("Exon", "transcripts");
         refsAndCollections.put("MRNA", "gene");
+//        refsAndCollections.put("FivePrimeUTR", "gene");
+//        refsAndCollections.put("ThreePrimeUTR", "gene");
+        refsAndCollections.put("FivePrimeUTR", "mRNAs");
+        refsAndCollections.put("ThreePrimeUTR", "mRNAs");
         refsAndCollections.put("TransposonFragment", "transposableelements");
         refsAndCollections.put("PseudogenicExon","pseudogenictranscripts");
         refsAndCollections.put("PseudogenicTranscript","pseudogene");
