@@ -102,6 +102,18 @@
     <property name="dataSetTitle" value="BAR Expression Data: seed_db"/>
   </source>
 
+  <source name="ecotypes-expressions" type="bar-expressions">
+    <property name="source.db.name" value="bar-ee"/>
+    <property name="dataSourceName" value="arabidopsis_ecotypes"/>
+    <property name="dataSetTitle" value="BAR Expression Data: arabidopsis_ecotypes"/>
+  </source>
+
+  <source name="affy-expressions" type="bar-expressions">
+    <property name="source.db.name" value="bar-ae"/>
+    <property name="dataSourceName" value="affydb"/>
+    <property name="dataSetTitle" value="BAR Expression Data: affydb"/>
+  </source>
+
     <source name="so" type="so">
       <property name="src.data.file" location="../../bio/sources/so/so.obo"/>
     </source>
@@ -139,8 +151,8 @@
       <property name="src.data.dir.includes" value="keywlist.xml"/>
     </source>
     <source name="panther" type="panther">
-	<property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/orthologs/panther"/>
-	<property name="panther.organisms" value="3702 7227 4932 10116 7955 10090 6239 9606"/>
+  <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/orthologs/panther"/>
+  <property name="panther.organisms" value="3702 7227 4932 10116 7955 10090 6239 9606"/>
     </source>
 
     <!-- have to be the last sources run -->

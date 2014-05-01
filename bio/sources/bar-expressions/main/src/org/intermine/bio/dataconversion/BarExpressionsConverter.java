@@ -80,7 +80,8 @@ public class BarExpressionsConverter extends BioDBConverter
                     "arabidopsis_ecotypes",
                     "light_series",
                     "seed_db",
-                    "root");
+                    "root",
+                    "affydb");
 
     //pi, item Id
     private Map<String, String> labIdRefMap = new HashMap<String, String>();
