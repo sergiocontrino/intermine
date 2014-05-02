@@ -41,9 +41,6 @@ public class BarExpressionsConverter extends BioDBConverter
 {
     private static final Logger LOG =
         Logger.getLogger(BarExpressionsConverter.class);
-//  private static final String DATASET_TITLE = "Expressions data set";
-//  private static final String DATA_SOURCE_NAME = "atgenexp_hormone";
-//  private static final String EXPERIMENT_CATEGORY = "hormone";
     // used to correct a data issue in this data set..
     private static final String BAD_BAR = "atgenexp";
     private static final String BAR_URL = "http://bar.utoronto.ca/";
@@ -71,17 +68,6 @@ public class BarExpressionsConverter extends BioDBConverter
                     "growthCondition",
                     "growthStage",
                     "timePoint");
-
-//    private static final List<String> SOURCES_ALT_HEADER =
-//            Arrays.asList(
-//                    "atgenexp",
-//                    "atgenexp_plus",
-//                    "atgenexp_stress",
-//                    "arabidopsis_ecotypes",
-//                    "light_series",
-//                    "seed_db",
-//                    "root",
-//                    "affydb");
 
     private static final List<String> SOURCES_ALT_HEADER =
             Arrays.asList(
@@ -552,7 +538,7 @@ public class BarExpressionsConverter extends BioDBConverter
     	for (String p: PROPERTY_TYPES){
     		String name = PROPERTY_TYPES.get(i);
     		String value = PROPERTY_VALUES.get(i);
-    		if (value == null || value.isEmpty()) {
+    		if (StringUtils.isBlank(value)) {
         		LOG.debug("SAMPLE " + sampleBarId + ": empty prop value for " + p);
         		i++;
     			continue;
@@ -778,7 +764,6 @@ public class BarExpressionsConverter extends BioDBConverter
     		throws SQLException {
     	String query = null;
     	if (SOURCES_ALT_HEADER.contains(source)) {
-    		// restricted version of query
         	query = "SELECT sample_id, sample_stock_code, sample_genetic_var, "
         			+ "sample_tissue, sample_diseased, sample_growth_condition, "
         			+ "sample_growth_stage,sample_time_point "
