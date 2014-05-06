@@ -255,9 +255,7 @@ public class BarExpressionsConverter extends BioDBConverter
      * note that this includes also groups of controls
      * @param connection
      */
-    // TODO possibly better using java, instead of db
-    // try it
-	// TODO don't do average if group of 1
+    // TODO possibly better using java, instead of db, test?
 
     private void createSamplesAverages(Connection connection)
     		throws SQLException, ObjectStoreException {
@@ -269,6 +267,11 @@ public class BarExpressionsConverter extends BioDBConverter
         long bT = System.currentTimeMillis();
 
         for (Set<Integer> replicates: replicatesMap.values()){
+        	// we don't fill the avg map if there is only 1 replicate
+        	// and we will use the sample signal directly
+        	if (replicates.size()==1) {
+        		continue;
+        	}
             //probeset, avgSignal
         	Map<String, Double> thisAveragesMap =
             		new HashMap<String, Double>();
@@ -286,7 +289,6 @@ public class BarExpressionsConverter extends BioDBConverter
         		averagesMap.put(sample, thisAveragesMap);
         	}
         }
-
         LOG.info("AVG TIME: " + (System.currentTimeMillis() - bT) + " ms");
 	}
 
@@ -623,20 +625,19 @@ public class BarExpressionsConverter extends BioDBConverter
     	// check this is a treatment and get the avg map for the control too
     	// NOTES: - rounding for ratio is done after the calculation
     	//        - there are 0 averages in the controls (-> ratio null)
+    	//        - if a single replicate (no avgMap) we use the sample signal directly
     	Map<String, Double> controlAvgMap = new HashMap<String, Double>();
     	String ratio = null;
-    	String avgControl = null;
-//    	String avgSignal = round(avgMap.get(probeSet),"#.##");
-    	String avgSignal = getFormat(avgMap.get(probeSet),"#.##");
-
+    	String displayAvgControl = null;
+    	Double avgSignal = getAvgSignal(signal, avgMap.get(probeSet));
+    	String displayAvgSignal = getFormat(avgSignal, "#.##");
     	if (treatmentControlsMap.containsKey(sampleBarId)) {
     		controlAvgMap=averagesMap.
     				get(treatmentControlsMap.get(sampleBarId).toArray()[0]);
-    		Double realControl = controlAvgMap.get(probeSet);
-    		ratio = getRatio(avgMap.get(probeSet), realControl, "#.##");
-        	avgControl = getFormat(realControl, "#.##");
+    		Double avgControl = controlAvgMap.get(probeSet);
+    		ratio = getRatio(avgSignal, avgControl, "#.##");
+        	displayAvgControl = getFormat(avgControl, "#.##");
     	}
-
 
     	String probeRefId = probeIdRefMap.get(probeSet);
     	if (probeRefId == null) {
@@ -647,20 +648,19 @@ public class BarExpressionsConverter extends BioDBConverter
     		probeIdRefMap.put(probeSet, probeRefId);
     	}
 
-
     	Item sampleData = createItem("Expression");
     	sampleData.setAttribute("signal", signal.toString());
     	if (StringUtils.isNotBlank(call)) {
     		sampleData.setAttribute("call", call);
     	}
     	sampleData.setAttribute("pValue", pValue.toString());
-    	sampleData.setAttribute("averageSignal", avgSignal);
+    	sampleData.setAttribute("averageSignal", displayAvgSignal);
 
     	// if this is a treatment, do the ratio between this value and the one
     	// from the avg of the control sample for the same probe
     	if (ratio != null) {
     		sampleData.setAttribute("averageRatio", ratio);
-    		sampleData.setAttribute("averageControl", avgControl);
+    		sampleData.setAttribute("averageControl", displayAvgControl);
     	}
 
 		sampleData.setReference("sample", sampleIdRef);
@@ -681,6 +681,9 @@ public class BarExpressionsConverter extends BioDBConverter
     private String getRatio(Double signal, Double control, String format)
     {
     	if (control == null) {
+    		return "NaN";
+    	}
+    	if (signal == null){
     		return "NaN";
     	}
     	if (signal.isNaN()){
@@ -715,6 +718,51 @@ public class BarExpressionsConverter extends BioDBConverter
 
 		DecimalFormat df = new DecimalFormat(format);
 		return Double.valueOf(df.format(signal)).toString();
+	}
+
+	/**
+     * Checks if average available and returns it. Otherwise (single replicate) returns the signal
+     *
+     * @param signal Double
+     * @param avgSignal Double
+     */
+	private Double getAvgSignal(Double signal, Double avgSignal)
+	{
+		if (avgSignal == null) {
+			return signal;
+		}
+		// average available
+		return avgSignal;
+	}
+
+    /**
+     * Returns a string representation of the Double rounded and formatted
+     * according to format
+     * If Double is not a number, returns null
+     *
+     * @param signal Double
+     * @param format String
+     */
+	private String getAvgSignal(Double signal, Double avgSignal, String format)
+	{
+		LOG.info("GG " + signal + "|" + avgSignal);
+		DecimalFormat df = new DecimalFormat(format);
+
+		if (avgSignal == null) {
+			// no averages for this signal, use signal
+			if (signal == null) {
+				return "NaN";
+			}
+			if (signal.isNaN()){
+				return "NaN";
+			}
+			return Double.valueOf(df.format(signal)).toString();
+		}
+		// average available
+		if (avgSignal.isNaN()){
+			return "NaN";
+		}
+		return Double.valueOf(df.format(avgSignal)).toString();
 	}
 
     /**
