@@ -35,10 +35,8 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
      */
     public AipGffGFF3RecordHandler (Model model) {
         super(model);
-        refsAndCollections.put("Exon", "transcripts");
         refsAndCollections.put("MRNA", "gene");
-//        refsAndCollections.put("FivePrimeUTR", "gene");
-//        refsAndCollections.put("ThreePrimeUTR", "gene");
+        refsAndCollections.put("Exon", "transcripts");
         refsAndCollections.put("FivePrimeUTR", "mRNAs");
         refsAndCollections.put("ThreePrimeUTR", "mRNAs");
         refsAndCollections.put("TransposonFragment", "transposableelements");
