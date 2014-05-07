@@ -94,7 +94,7 @@ public class BarExpressionsConverter extends BioDBConverter
     //sample id, sample objectId
     private Map<Integer, Integer> sampleMap = new HashMap<Integer, Integer>();
 
-    //sample_repl, list of controls sample_Id
+    //sample_repl, list of replicates sample_Id
     private Map<String, Set<Integer>> replicatesMap = new HashMap<String, Set<Integer>>();
     //sample_id treat, list of controls sample_Id
     private Map<Integer, Set<Integer>> treatmentControlsMap = new HashMap<Integer, Set<Integer>>();
@@ -267,9 +267,12 @@ public class BarExpressionsConverter extends BioDBConverter
         long bT = System.currentTimeMillis();
 
         for (Set<Integer> replicates: replicatesMap.values()){
-        	// we don't fill the avg map if there is only 1 replicate
-        	// and we will use the sample signal directly
-        	if (replicates.size()==1) {
+        	// we don't fill the avg map if there is only 1 replicate treatment
+        	// (we will use the sample signal directly).
+        	// still doing the avg for the control (it is used for the ratio)
+        	// TODO: avoid avg for single replicate controls as well (save map probeset-signal?)
+        	if (replicates.size()==1
+        			&& !treatmentControlsMap.containsValue(replicates)) {
         		continue;
         	}
             //probeset, avgSignal
@@ -607,7 +610,6 @@ public class BarExpressionsConverter extends BioDBConverter
     private String createSampleData(Integer sampleBarId,
     		String probeSet, Double signal, String call, Double pValue)
     				throws ObjectStoreException {
-
     	// needed to compensate for missing experiments for some samples
     	String sampleIdRef = sampleIdRefMap.get(sampleBarId);
 
@@ -626,6 +628,7 @@ public class BarExpressionsConverter extends BioDBConverter
     	// NOTES: - rounding for ratio is done after the calculation
     	//        - there are 0 averages in the controls (-> ratio null)
     	//        - if a single replicate (no avgMap) we use the sample signal directly
+    	//        - if there is a single control replicate, we still do the avg
     	Map<String, Double> controlAvgMap = new HashMap<String, Double>();
     	String ratio = null;
     	String displayAvgControl = null;
@@ -634,6 +637,7 @@ public class BarExpressionsConverter extends BioDBConverter
     	if (treatmentControlsMap.containsKey(sampleBarId)) {
     		controlAvgMap=averagesMap.
     				get(treatmentControlsMap.get(sampleBarId).toArray()[0]);
+
     		Double avgControl = controlAvgMap.get(probeSet);
     		ratio = getRatio(avgSignal, avgControl, "#.##");
         	displayAvgControl = getFormat(avgControl, "#.##");
