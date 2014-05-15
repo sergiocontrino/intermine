@@ -7,7 +7,10 @@
      <attribute name="computationalDescription" type="java.lang.String"/>
      <attribute name="curatorSummary" type="java.lang.String"/>
   </class>
-  <class name="Gene" extends="SequenceFeature" is-interface="true"></class>
+  <class name="Gene" extends="SequenceFeature" is-interface="true">
+     <collection name="UTRs" referenced-type="UTR" reverse-reference="gene" />
+  </class>
+
   <class name="Transcript" extends="SequenceFeature" is-interface="true"></class>
   <class name="MRNA" extends="Transcript" is-interface="true">
      <attribute name="confidenceClass" type="java.lang.String"/>
@@ -28,9 +31,11 @@
      <collection name="transcripts" referenced-type="Transcript" reverse-reference="introns"/>
   </class>
   <class name="FivePrimeUTR" extends="UTR" is-interface="true">
+     <reference name="gene" referenced-type="Gene" reverse-reference="UTRs"/>
      <collection name="mRNAs" referenced-type="MRNA" reverse-reference="fivePrimeUTRs"/>
   </class>
   <class name="ThreePrimeUTR" extends="UTR" is-interface="true">
+     <reference name="gene" referenced-type="Gene" reverse-reference="UTRs"/>
      <collection name="mRNAs" referenced-type="MRNA" reverse-reference="threePrimeUTRs"/>
   </class>
   <class name="Pseudogene" extends="Gene" is-interface="true">

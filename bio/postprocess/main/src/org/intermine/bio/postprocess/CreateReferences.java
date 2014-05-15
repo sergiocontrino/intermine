@@ -81,6 +81,17 @@ public class CreateReferences
         LOG.info("insertReferences stage 4");
         // CDS.gene / Gene.CDSs
         insertReferenceField("Gene", "transcripts", "Transcript", "CDSs", "CDS", "gene");
+
+        // added for thalemine TODO: more testing (webapp)
+        LOG.info("insertReferences stage 5: 5' -> gene");
+        insertReferenceField("Gene", "transcripts", "MRNA", "fivePrimeUTRs", "UTR", "gene");
+        LOG.info("insertReferences stage 6: 3' -> gene");
+        insertReferenceField("Gene", "transcripts", "MRNA", "threePrimeUTRs", "UTR", "gene");
+        // check
+        LOG.info("insertReferences stage 7: gene -> 5's");
+        insertCollectionField("FivePrimeUTR", "mRNAs", "Transcript", "gene", "Gene", "UTRs", false);
+        LOG.info("insertReferences stage 8: gene -> 3's");
+        insertCollectionField("ThreePrimeUTR", "mRNAs", "Transcript", "gene", "Gene", "UTRs", false);
     }
 
     /**
