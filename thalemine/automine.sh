@@ -356,7 +356,8 @@ echo; echo "Quick restart of the build (using current db).."
 || { printf "%b" "\n ThaleMine build (quick restart) FAILED.\n" ; exit 1 ; }
 elif [ $META = "y" ]
 then
-# new build. static, metadata, organism
+# new build, named sources
+
 echo "SOURCES: $SOURCES"
 ../bio/scripts/project_build -a $SOURCES -V $REL $V -b localhost /tmp/mod-meta\
 || { printf "%b" "\n ThaleMine build (only metadata) FAILED.\n" ; exit 1 ; }
