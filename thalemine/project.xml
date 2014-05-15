@@ -130,7 +130,7 @@
 
     <source name="uniprot" type="uniprot">
       <property name="uniprot.organisms" value="3702"/>
-      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
       <property name="createinterpro" value="true"/>
       <property name="creatego" value="true"/>
     </source>
@@ -140,14 +140,14 @@
       <property name="fasta.classAttribute" value="primaryAccession"/>
       <property name="fasta.dataSetTitle" value="UniProt data set"/>
       <property name="fasta.dataSourceName" value="UniProt"/>
-      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
       <property name="fasta.includes" value="uniprot_sprot_varsplic.fasta"/>
       <property name="fasta.sequenceType" value="protein" />
       <property name="fasta.loaderClassName"
                 value="org.intermine.bio.dataconversion.UniProtFastaLoaderTask"/>
     </source>
    <source name="uniprot-keywords" type="uniprot-keywords">
-      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/2013_12"/>
+      <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
       <property name="src.data.dir.includes" value="keywlist.xml"/>
     </source>
     <source name="panther" type="panther">
