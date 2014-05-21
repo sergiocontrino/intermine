@@ -46,8 +46,9 @@
         <arg key="templateBuilder.shortName"/>
       </field>
     </form>
-  </formset>
 
-  <form name="contactForm" />
+    <form name="contactForm" />
+
+  </formset>
 
 </form-validation>
