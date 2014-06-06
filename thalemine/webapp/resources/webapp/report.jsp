@@ -84,23 +84,25 @@
             value="${imf:formatFieldChain(field.pathString, INTERMINE_API, WEBCONFIG)}"/>
           <c:choose>
             <c:when test="${field.valueHasDisplayer}">
-              <td class="label">
+              <!-- Short summary fields with displayer: change field description to bold, text to normal -->
+              <td class="label"><strong>
                   ${fieldDisplayText}&nbsp;
                   <im:typehelp type="${field.pathString}"/>
-              </td>
-              <td><strong>
+              </strong></td>
+              <td style="vertical-align: top">
                 <!-- pass value to displayer -->
                 <c:set var="interMineObject" value="${object.object}" scope="request"/>
                   <tiles:insert page="${field.displayerPage}">
                     <tiles:put name="expr" value="${field.name}" />
                   </tiles:insert>
-              </strong></td>
+              </td>
               <c:set var="tableCount" value="${tableCount+1}" scope="page" />
             </c:when>
             <c:otherwise>
               <c:if test="${!field.doNotTruncate && !empty field.value}">
-                <td class="label">${fieldDisplayText}&nbsp;<im:typehelp type="${field.pathString}"/></td>
-                <td><strong><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></strong></td>
+              <!-- Short summary fields: change field description to bold, text to normal -->
+                <td class="label"><strong>${fieldDisplayText}&nbsp;<im:typehelp type="${field.pathString}"/></strong></td>
+                <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
                 <c:set var="tableCount" value="${tableCount+1}" scope="page" />
               </c:if>
             </c:otherwise>
@@ -114,8 +116,9 @@
         <c:if test="${field.doNotTruncate}">
           <tr>
             <c:if test="${!empty field.value}">
-              <td class="label">${field.name}&nbsp;<im:typehelp type="${field.pathString}"/></td>
-              <td><strong><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></strong></td>
+              <!-- Long summary fields: change field description to bold, text to normal -->
+              <td class="label"><strong>${field.name}&nbsp;<im:typehelp type="${field.pathString}"/></strong></td>
+              <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
             </c:if>
           </tr>
         </c:if>
@@ -261,33 +264,6 @@
   //]]>-->
 </script>
 <script type="text/javascript" src="js/inlinetemplate.js"></script>
-
-<div style="float:right;" class="grid_2 sidebar">
-  <div id="in-lists">
-    <tiles:insert name="reportInList.tile">
-      <tiles:put name="object" beanName="object"/>
-    </tiles:insert>
-  </div>
-
-  <c:set var="object_bk" value="${object}"/>
-  <c:set var="object" value="${reportObject.object}" scope="request"/>
-  <div id="external-links">
-    <tiles:insert name="otherMinesLink.tile" />
-    <tiles:insert name="attributeLinks.tile" >
-        <tiles:put name="reportObject" beanName="object" />
-  </tiles:insert>
-  </div>
-  <c:set var="object" value="${object_bk}"/>
-
-  <%-- shown in a sidebar displayers --%>
-  <div id="displayers" class="table">
-    <tiles:insert page="/reportDisplayers.jsp">
-      <tiles:put name="placement" value="sidebar" />
-      <tiles:put name="reportObject" beanName="object" />
-    </tiles:insert>
-  </div>
-</div>
-
 <div class="grid_10">
 
   <div id="summaryCategory" class="aspectBlock">
@@ -332,6 +308,32 @@
     <tiles:insert page="/reportRefsCols.jsp">
       <tiles:put name="object" beanName="object" />
       <tiles:put name="placement" value="im:aspect:Miscellaneous" />
+    </tiles:insert>
+  </div>
+</div>
+
+<div style="float:right;" class="grid_2 sidebar">
+  <div id="in-lists">
+    <tiles:insert name="reportInList.tile">
+      <tiles:put name="object" beanName="object"/>
+    </tiles:insert>
+  </div>
+
+  <c:set var="object_bk" value="${object}"/>
+  <c:set var="object" value="${reportObject.object}" scope="request"/>
+  <div id="external-links">
+    <tiles:insert name="otherMinesLink.tile" />
+    <tiles:insert name="attributeLinks.tile" >
+        <tiles:put name="reportObject" beanName="object" />
+  </tiles:insert>
+  </div>
+  <c:set var="object" value="${object_bk}"/>
+
+  <%-- shown in a sidebar displayers --%>
+  <div id="displayers" class="table">
+    <tiles:insert page="/reportDisplayers.jsp">
+      <tiles:put name="placement" value="sidebar" />
+      <tiles:put name="reportObject" beanName="object" />
     </tiles:insert>
   </div>
 </div>
