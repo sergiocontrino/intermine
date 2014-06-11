@@ -4,11 +4,11 @@
     <class name="InteractionExperiment" is-interface="true">
         <attribute name="name" type="java.lang.String"/>
         <attribute name="description" type="java.lang.String"/>
-        <attribute name="hostOrganism" type="java.lang.String" />
         <reference name="publication" referenced-type="Publication"/>
         <collection name="interactions" referenced-type="InteractionDetail" reverse-reference="experiment"/>
         <collection name="interactionDetectionMethods" referenced-type="InteractionTerm"/>
     </class>
+    
     <class name="Interaction" is-interface="true">
         <reference name="gene1" referenced-type="Gene" reverse-reference="interactions" />
         <reference name="gene2" referenced-type="Gene" />
@@ -16,9 +16,9 @@
     </class>
 
     <class name="InteractionDetail" is-interface="true">
-        <attribute name="role1" type="java.lang.String"/>
-        <attribute name="role2" type="java.lang.String"/>
         <attribute name="name" type="java.lang.String"/>
+        <attribute name="cv" type="java.lang.Integer"/>
+        <attribute name="pcc" type="java.lang.Double"/>
         <attribute name="type" type="java.lang.String"/>
         <reference name="relationshipType" referenced-type="InteractionTerm"/>
         <reference name="experiment" referenced-type="InteractionExperiment" reverse-reference="interactions"/>

@@ -346,7 +346,7 @@
                       views="primaryIdentifier, symbol, secondaryIdentifier, organism.name, chromosome.primaryIdentifier,
                              chromosomeLocation.start, chromosomeLocation.end, chromosomeLocation.strand"/>
 
-      <!--enrichmentwidgetdisplayer id="publication_enrichment"
+      <enrichmentwidgetdisplayer id="publication_enrichment"
                                  title="Publication Enrichment"
                                  description="Publications enriched for genes in this list."
                                  label="Publication"
@@ -359,7 +359,7 @@
                                  views="secondaryIdentifier, symbol, organism.name,
                                        publications.title, publications.firstAuthor,
                                        publications.journal, publications.year, publications.pubMedId"
-                                 externalLink="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;dopt=Abstract&amp;list_uids="/-->
+                                 externalLink="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;dopt=Abstract&amp;list_uids="/>
 
       <!--enrichmentwidgetdisplayer id="prot_dom_enrichment_for_gene"
                                  title="Protein Domain Enrichment"

@@ -16,14 +16,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.log4j.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.intermine.dataconversion.ItemWriter;
 import org.intermine.metadata.Model;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.sql.Database;
 import org.intermine.xml.full.Item;
+import org.intermine.xml.full.ReferenceList;
 
 /**
  *
@@ -39,9 +42,19 @@ public class BarInteractionsConverter extends BioDBConverter
     private Map<String, String> genes = new HashMap<String, String>();
     private Map<String, String> publications = new HashMap<String, String>();
     private Map<String, String> terms = new HashMap<String, String>();
-    private static final String INTERACTION_TYPE = "physical";
     private static final String PUBMED_PREFIX = "PubMed";
+    private static final String INTERACTION_TYPE_MI = "1110";
+    private static final String INTERACTION_DETECTION_MI = "0063";
+    private static final String INTERACTION_EXPERIMENT = PUBMED_PREFIX + "17675552";
+    private static final Map<String, String> PSI_TERMS = new HashMap<String, String>();
 
+    static {
+    	PSI_TERMS.put("MI:1110", "physical");
+    	PSI_TERMS.put("MI:0915", "physical");
+    	PSI_TERMS.put("MI:0218", "physical");
+    	PSI_TERMS.put("MI:0208", "genetic");
+    }
+    
     /**
      * Construct a new BarInteractionsConverter.
      * @param database the database to read from
@@ -72,34 +85,31 @@ public class BarInteractionsConverter extends BioDBConverter
     private void processQueryResults(Connection connection)
         throws SQLException, ObjectStoreException {
         ResultSet res = runInteractionsQuery(connection);
-	while (res.next()) {
-		String gene1 = res.getString(1).toUpperCase();
-		String gene2 = res.getString(2).toUpperCase();
-		Integer quality = new Integer(res.getInt(3));
-		Integer index = new Integer(res.getInt(4));
-		// is this a confidence score?
+        while (res.next()) {
+            String gene1 = res.getString(1).toUpperCase();
+            String gene2 = res.getString(2).toUpperCase();
+            Integer cv = new Integer(res.getInt(3));
+            Integer index = new Integer(res.getInt(4));
     		Double pcc = new Double(res.getDouble(5));
     		String pubString = res.getString(6);
     		String interactionsDetectionMI = res.getString(7);
-//    		String interactionsDetection = res.getString(8);
-    		String interactionsTypeMI = res.getString(8);
-//    		String interactionsType = res.getString(10);
+    		String interactionsDetection = res.getString(8);
+    		String interactionsTypeMI = res.getString(9);
+    		String interactionsType = res.getString(10);
 
     		// strings that represent the stored gene
     		String geneRefId1 = getGene(gene1);
     		String geneRefId2 = getGene(gene2);
 
-    		String interactionRefId = processInteraction(geneRefId1, geneRefId2, quality, index,
-    				pcc, pubString, interactionsDetectionMI, interactionsTypeMI);
-    		processInteractionDetails(interactionRefId, geneRefId1, geneRefId2, pubString,
-    				interactionsDetectionMI, interactionsTypeMI);
+    		String interactionRefId = processInteraction(geneRefId1, geneRefId2);
+    		processInteractionDetails(interactionRefId, geneRefId1, geneRefId2, cv, pcc,
+                    pubString, interactionsDetectionMI, interactionsTypeMI);
     	}
     	res.close();
     }
 
-    private String processInteraction(String geneRefId1, String geneRefId2,
-    		Integer quality, Integer index, Double pcc, String pubString,
-    		String interactionsDetectionMI, String interactionsTypeMI) throws ObjectStoreException {
+    private String processInteraction(String geneRefId1, String geneRefId2)
+        throws ObjectStoreException {
 
     	Item interaction = createItem("Interaction");
     	interaction.setReference("gene1", geneRefId1);
@@ -108,60 +118,75 @@ public class BarInteractionsConverter extends BioDBConverter
     	return interaction.getIdentifier();
     }
 
-    private String processInteractionDetails(String interactionRefId, String geneRefId1,
-    		String geneRefId2, String pubString, String
+    private void processInteractionDetails(String interactionRefId, String geneRefId1,
+    		String geneRefId2, Integer cv, Double pcc, String pubString, String
     		interactionsDetectionMI, String interactionsTypeMI)
     		throws ObjectStoreException {
-    	Item detail = createItem("InteractionDetail");
-    	detail.setAttribute("type", INTERACTION_TYPE);
-    	if (StringUtils.isNotEmpty(interactionsTypeMI)) {
-    		detail.setReference("relationshipType", getTerm(interactionsTypeMI));
-    	}
-    	detail.addToCollection("dataSets", getDataSourceItem(getDataSetTitle(TAXON_ID)));
-        detail.addToCollection("allInteractors", geneRefId1);
-        detail.addToCollection("allInteractors", geneRefId2);
-        if (StringUtils.isNotEmpty(interactionsDetectionMI + pubString)) {
-        	detail.setReference("experiment", getExperiment(pubString, interactionsDetectionMI));
+        if (StringUtils.isBlank(interactionsTypeMI)) {
+            interactionsTypeMI = INTERACTION_TYPE_MI;
         }
-        detail.setReference("interaction", interactionRefId);
-        store(detail);
-        return detail.getIdentifier();
+        String[] ids = StringUtils.split(interactionsTypeMI, "|");
+        String[] items = getTerms(interactionsTypeMI);
+        for (int i = 0; i < items.length; i++ ) {
+	        Item detail = createItem("InteractionDetail");
+	        detail.setAttribute("cv", cv.toString());
+	        detail.setAttribute("pcc", pcc.toString());
+	        detail.setAttribute("type", PSI_TERMS.get("MI:" + ids[i]));
+	        detail.addToCollection("dataSets", getDataSourceItem(getDataSetTitle(TAXON_ID)));
+	        detail.addToCollection("allInteractors", geneRefId1);
+	        detail.addToCollection("allInteractors", geneRefId2);
+	        detail.setReference("relationshipType", items[i]);
+	        detail.setReference("experiment", getExperiment(pubString, interactionsDetectionMI));
+	        detail.setReference("interaction", interactionRefId);
+	        store(detail);
+        }
     }
 
     private String getExperiment(String pubString, String interactionsDetectionMI)
     		throws ObjectStoreException {
         Item experiment = createItem("InteractionExperiment");
+        if (StringUtils.isBlank(pubString)) {
+            pubString = INTERACTION_EXPERIMENT;
+        }
         // some publications don't start with PubMed, what are those?
-        if (StringUtils.isNotEmpty(pubString) && pubString.startsWith(PUBMED_PREFIX)
-        		&& pubString.length() >  PUBMED_PREFIX.length() + 1) {
-        	String pubRefId = getPublication(pubString);
-        	if (StringUtils.isNotEmpty(pubRefId)) {
-        		experiment.setReference("publication", pubRefId);
-		}
+        if(pubString.contains(PUBMED_PREFIX) && pubString.length() > PUBMED_PREFIX.length() + 1) {
+            String pubRefId = getPublicationFromPMID(pubString);
+            if (StringUtils.isNotEmpty(pubRefId)) {
+                experiment.setReference("publication", pubRefId);
+            }
         }
-        if (StringUtils.isNotEmpty(interactionsDetectionMI)) {
-        	experiment.addToCollection("interactionDetectionMethods",
-        			getTerm(interactionsDetectionMI));
+        experiment.setAttribute("name", StringUtils.replace(pubString, "\n", ", ", -1));
+        if (StringUtils.isBlank(interactionsDetectionMI)) {
+            interactionsDetectionMI = INTERACTION_DETECTION_MI;
         }
-        store(experiment);
+
+        ReferenceList collection = new ReferenceList();
+        collection.setName("interactionDetectionMethods");
+        String[] items = getTerms(interactionsDetectionMI);
+        for(int i = 0; i < items.length; i++) {
+        	collection.addRefId(items[i]);
+        }
+        Integer expId = store(experiment);
+        store(collection, expId);
         return experiment.getIdentifier();
     }
 
-    private String getPublication(String pubString) throws ObjectStoreException {
-        String pubMedId =  pubString.substring(PUBMED_PREFIX.length());
-
-    	// why do some look like this?
-    	// PubMed18849490                  +
-
-        String pubRefId = publications.get(pubMedId);
-        if (pubRefId != null) {
-		return pubRefId;
+    private String getPublicationFromPMID(String pubString) throws ObjectStoreException {
+    	String regexp = "PubMed(\\d+)";
+        Pattern p = Pattern.compile(regexp);
+        Matcher m = p.matcher(pubString);
+        String pubRefId = null;
+        if(m.find()) {
+        	String pubMedId = m.group(1);
+	        pubRefId = publications.get(pubMedId);
+	        if (pubRefId == null) {
+		        Item publication = createItem("Publication");
+		        publication.setAttribute("pubMedId", pubMedId);
+		        store(publication);
+		        pubRefId = publication.getIdentifier();
+		        publications.put(pubMedId, pubRefId);
+	        }
         }
-        Item publication = createItem("Publication");
-        publication.setAttribute("pubMedId", pubMedId);
-        store(publication);
-        pubRefId = publication.getIdentifier();
-        publications.put(pubMedId, pubRefId);
         return pubRefId;
     }
 
@@ -171,7 +196,7 @@ public class BarInteractionsConverter extends BioDBConverter
 
     	// we've already seen this gene, don't store again
     	if (geneRefId != null) {
-		return geneRefId;
+    		return geneRefId;
     	}
 
     	// create new gene
@@ -180,7 +205,7 @@ public class BarInteractionsConverter extends BioDBConverter
     	gene.setAttribute("primaryIdentifier", identifier);
 
     	// put in our map
-	geneRefId=gene.getIdentifier();
+        geneRefId = gene.getIdentifier();
     	genes.put(identifier, geneRefId);
 
     	// store to database
@@ -189,16 +214,21 @@ public class BarInteractionsConverter extends BioDBConverter
     	return gene.getIdentifier();
     }
 
-    private String getTerm(String identifier) throws ObjectStoreException {
-    	String refId = terms.get(identifier);
-    	if (refId != null) {
-    		return refId;
-    	}
-    	Item item = createItem("InteractionTerm");
-    	item.setAttribute("identifier", "MI:" + identifier);
-    	terms.put(identifier, item.getIdentifier());
-   		store(item);
-    	return item.getIdentifier();
+    private String[] getTerms(String identifier) throws ObjectStoreException {
+        String[] ids = StringUtils.split(identifier, "|");
+        String[] items = new String[ids.length];
+        for(int i = 0; i < ids.length; i++) {
+            String refId = terms.get(ids[i]);
+            if (refId == null) {
+                Item item = createItem("InteractionTerm");
+                item.setAttribute("identifier", "MI:" + ids[i]);
+                refId = item.getIdentifier();
+                store(item);
+                terms.put(ids[i], refId);
+            }
+            items[i] = refId;
+        }
+    	return items;
     }
 
     /**
