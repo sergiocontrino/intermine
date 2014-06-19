@@ -29,12 +29,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
-import org.intermine.metadata.StringUtil;
+//import org.intermine.metadata.StringUtil;
 import org.intermine.util.PropertiesUtil;
 import org.intermine.util.ShutdownHook;
 import org.intermine.util.Shutdownable;
 import org.postgresql.util.PSQLException;
-
+import org.intermine.util.StringUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
