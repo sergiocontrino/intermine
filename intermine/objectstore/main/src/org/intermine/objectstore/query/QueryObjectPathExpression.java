@@ -51,8 +51,8 @@ public class QueryObjectPathExpression implements QueryPathExpressionWithSelect,
      * Constructs a QueryObjectPathExpression representing an object reference from the given
      * QueryClass to the given fieldname.
      *
-     * @param qc the QueryClass of the starting class
-     * @param fieldName the name of field in qc we want to perform an outer join on
+     * @param qc the QueryClass
+     * @param fieldName the name of the relevant field
      * @throws IllegalArgumentException if the field is not an object reference
      */
     public QueryObjectPathExpression(QueryClass qc, String fieldName) {
