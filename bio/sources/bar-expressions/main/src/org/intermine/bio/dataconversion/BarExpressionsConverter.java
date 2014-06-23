@@ -44,7 +44,7 @@ public class BarExpressionsConverter extends BioDBConverter
     // used to correct a data issue in this data set..
     private static final String BAD_BAR = "atgenexp";
     private static final String BAR_URL = "http://bar.utoronto.ca/";
-    private static final String DATA_SOURCE_NAME = "The Bio-Analytic Resource for Plant Biology";
+    private static final String DATA_SOURCE_NAME = "BAR";
 
     private static final int TAXON_ID = 3702;
     private static final String SAMPLE_CONTROL = "control";

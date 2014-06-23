@@ -7,17 +7,17 @@
   <sources>
      <source name="aip-gff" type="aip-gff">
       <property name="gff3.taxonId" value="3702"/>
-      <property name="gff3.seqDataSourceName" value="JCVI"/>
-      <property name="gff3.dataSourceName" value="JCVI"/>
+      <property name="gff3.seqDataSourceName" value="TAIR"/>
+      <property name="gff3.dataSourceName" value="TAIR"/>
       <property name="gff3.seqClsName" value="Chromosome"/>
-      <property name="gff3.dataSetTitle" value="Arabidopsis thaliana gff general annotation"/>
+      <property name="gff3.dataSetTitle" value="Genome Annotation (TAIR10)"/>
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/genome/gff/" />
      </source>
 
     <source name="aip-chromosome-fasta" type="fasta">
       <property name="fasta.className" value="org.intermine.model.bio.Chromosome"/>
-      <property name="fasta.dataSourceName" value="JCVI"/>
-      <property name="fasta.dataSetTitle" value="Arabidopsis thaliana chromosome sequence"/>
+      <property name="fasta.dataSourceName" value="TAIR"/>
+      <property name="fasta.dataSetTitle" value="Genome Assembly (TAIR9)"/>
       <property name="fasta.taxonId" value="3702"/>
       <property name="fasta.includes" value="*Chr*"/>
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/genome/fasta/"/>
@@ -30,8 +30,8 @@
       <property name="fasta.className" value="org.intermine.model.bio.CDS"/>
       <property name="fasta.classAttribute" value="primaryIdentifier"/>
       <property name="fasta.includes" value="*cds*"/>
-      <property name="fasta.dataSetTitle" value="CDS fasta data set for Arabidopsis thaliana"/>
-      <property name="fasta.dataSourceName" value="JCVI"/>
+      <property name="fasta.dataSetTitle" value="Coding Sequence (CDS) FASTA (TAIR10)"/>
+      <property name="fasta.dataSourceName" value="TAIR"/>
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/genome/fasta/"/>
     </source>
 
@@ -125,6 +125,7 @@
     <source name="go-annotation" type="go-annotation">
       <property name="ontologyfile" location="/usr/local/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/go_annotation/" />
+      <property name="dataSourceName" value="GO Annotation from TAIR"/>
       <property name="ontologyPrefix" value="GO"/>
     </source>
 
@@ -138,7 +139,7 @@
       <property name="fasta.taxonId" value="3702"/>
       <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
       <property name="fasta.classAttribute" value="primaryAccession"/>
-      <property name="fasta.dataSetTitle" value="UniProt data set"/>
+      <property name="fasta.dataSetTitle" value="UniProt FASTA dataset"/>
       <property name="fasta.dataSourceName" value="UniProt"/>
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
       <property name="fasta.includes" value="uniprot_sprot_varsplic.fasta"/>
@@ -158,6 +159,9 @@
     <!-- have to be the last sources run -->
     <source name="entrez-organism" type="entrez-organism">
       <property name="src.data.file" location="build/organisms.xml"/>
+    </source>
+    <source name="thalemine-static" type="intermine-items-xml-file">
+      <property name="src.data.file" location="datasets.xml"/>
     </source>
    <source name="update-publications" type="update-publications">
       <property name="src.data.file" location="build/publications.xml"/>

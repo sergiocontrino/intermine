@@ -88,7 +88,7 @@
   <tr>
     <td class="leftcol"><h2><p>Publications</p></h2></td>
     <td>Relevant publications are identified by searching databases such as PubMed (full-text is read, relevant information extracted and added to the entry)</td>
-    <td><a href="http://www.uniprot.org/help/publications" target="_blank" class="extlink">Publications</a>(from UniProt Release 2013_12)</td>
+    <td><a href="http://www.uniprot.org/help/publications" target="_blank" class="extlink">Publications</a>(from UniProt Release 2013_12) and NCBI gene2pubmed</td>
     <td>Magrane et al., 2011 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/21447597" target="_blank" class="extlink">PubMed: 21447597</a></td>
 </table>
 

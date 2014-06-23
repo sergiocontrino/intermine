@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<items>
+  <item id="0" class="" implements="Publication">
+        <attribute name="pubMedId" value="11130711"/>
+    </item>
+
+ <item id="1" class="" implements="Publication">
+        <attribute name="pubMedId" value="17142230"/>
+    </item>
+
+ <item id="2" class="" implements="Publication">
+        <attribute name="pubMedId" value="17202162"/>
+    </item>
+
+ <item id="3" class="" implements="Publication">
+        <attribute name="pubMedId" value="23193289"/>
+    </item>
+
+ <item id="4" class="" implements="Publication">
+        <attribute name="pubMedId" value="15173566"/>
+    </item>
+
+ <item id="5" class="" implements="Publication">
+        <attribute name="pubMedId" value="10802651"/>
+    </item>
+
+ <item id="6" class="" implements="Publication">
+        <attribute name="pubMedId" value="14681408"/>
+    </item>
+
+ <item id="7" class="" implements="Publication">
+        <attribute name="pubMedId" value="17202162"/>
+    </item>
+
+ <item id="8" class="" implements="Publication">
+        <attribute name="pubMedId" value="17675552"/>
+    </item>
+
+ <item id="9" class="" implements="Publication">
+        <attribute name="pubMedId" value="17684564"/>
+    </item>
+
+ <item id="10" class="" implements="Publication">
+        <attribute name="pubMedId" value="19401381"/>
+    </item>
+
+ <item id="11" class="" implements="Publication">
+        <attribute name="pubMedId" value="18419781"/>
+    </item>
+
+ <item id="12" class="" implements="Publication">
+        <attribute name="pubMedId" value="21447597"/>
+    </item>
+
+    <item id="14" class="" implements="DataSource">
+        <attribute name="name" value="TAIR"/>
+        <attribute name="description" value="The Arabidopsis Information Resource"/>
+        <attribute name="url" value="http://www.arabidopsis.org"/>
+        <reference name="publication" ref_id="0"/>
+    </item>
+    <item id="13" class="" implements="DataSet">
+        <attribute name="name" value="GO Annotation from TAIR"/>
+        <attribute name="description" value="GO Annotations made by TAIR curators, TIGR Arabidopsis annotation effort"/>
+        <attribute name="url" value="http://www.geneontology.org"/>
+        <reference name="dataSource" ref_id="14"/>
+        <reference name="publication" ref_id="4"/>
+    </item>
+
+   <item id="20" class="" implements="DataSource">
+        <attribute name="name" value="UniProt"/>
+        <attribute name="description" value="Comprehensive, high-quality and freely accessible resource of protein sequence and functional information"/>
+        <attribute name="url" value="http://www.uniprot.org/"/>
+    </item>
+   <item id="15" class="" implements="DataSet">
+        <attribute name="name" value="Swiss-Prot data set"/>
+        <attribute name="description" value="high-quality, manually annotated, non-redundant protein sequence database"/>
+        <attribute name="url" value="http://www.uniprot.org/"/>
+        <reference name="dataSource" ref_id="20"/>
+        <reference name="publication" ref_id="1"/>
+
+    </item>
+    <item id="16" class="" implements="DataSet">
+        <attribute name="name" value="TrEMBL data set"/>
+        <attribute name="description" value="Computationally analysed records, enriched with automatic annotation"/>
+        <attribute name="url" value="http://www.uniprot.org/"/>
+        <reference name="dataSource" ref_id="20"/>
+        <reference name="publication" ref_id="1"/>
+    </item>
+    <item id="17" class="" implements="DataSet">
+        <attribute name="name" value="InterPro domains"/>
+        <attribute name="description" value="Protein family and domain assignments to proteins"/>
+        <attribute name="url" value="http://www.ebi.ac.uk/interpro"/>
+        <reference name="dataSource" ref_id="20"/>
+        <reference name="publication" ref_id="2"/>
+    </item>
+    <item id="18" class="" implements="DataSet">
+        <attribute name="name=" value="GO Annotation from UniProt"/>
+        <reference name="dataSource" ref_id="20"/>
+        <reference name="publication" ref_id="6"/>
+    </item>
+    <item id="19" class="" implements="DataSet">
+        <attribute name="name=" value="GO Annotation from InterPro"/>
+        <reference name="dataSource" ref_id="20"/>
+        <reference name="publication" ref_id="7"/>
+    </item>
+
+    <item id="22" class="" implements="DataSource">
+        <attribute name="name" value="Panther DB"/>
+        <attribute name="description" value="Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree"/>
+        <attribute name="url" value="https://www.pantherdb.org/"/>
+        <reference name="publication" ref_id="3"/>
+    </item>
+    <item id="21" class="" implements="DataSet">
+        <attribute name="name" value="Panther Orthologs & Paralogs"/>
+        <attribute name="description" value="Panther orthologs from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogs from Arabidopsis"/>
+        <attribute name="url" value="https://www.pantherdb.org/"/>
+        <reference name="dataSource" ref_id="22"/>
+    </item>
+
+    <item id="25" class="" implements="DataSource">
+        <attribute name="name" value="BAR"/>
+        <attribute name="description" value="The Bio-Analytic Resource for Plant Biology"/>
+        <attribute name="url" value="http://bar.utoronto.ca"/>
+        <reference name="publication" ref_id="10"/>
+    </item>
+    <item id="23" class="" implements="DataSet">
+        <attribute name="name" value="BAR Interactions"/>
+        <attribute name="description" value="Confirmed Arabidopsis interacting proteins from several source (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR"/>
+        <attribute name="url" value="http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi"/>
+        <reference name="dataSource" ref_id="25"/>
+        <reference name="publication" ref_id="8"/>
+    </item>
+    <item id="24" class="" implements="DataSet">
+        <attribute name="name" value="BAR Annotations Lookup"/>
+        <attribute name="description" value="Lookup relationship between an AGI and Probeset"/>
+        <reference name="dataSource" ref_id="25"/>
+    </item>
+
+    <item id="640" class="" implements="DataSource">
+        <attribute name="name" value="NCBI"/>
+        <attribute name="description" value="National Center for Biotechnology Information"/>
+        <attribute name="url" value="http://www.ncbi.nlm.nih.gov/"/>
+    </item>
+    <item id="641" class="" implements="DataSet">
+        <attribute name="name" value="PubMed to gene mapping"/>
+        <attribute name="url" value="ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/"/>
+        <reference name="dataSource" ref_id="640"/>
+    </item>
+</items>
+
+

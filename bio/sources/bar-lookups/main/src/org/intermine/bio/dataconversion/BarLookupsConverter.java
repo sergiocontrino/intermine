@@ -37,8 +37,8 @@ public class BarLookupsConverter extends BioDBConverter
 {
     private static final Logger LOG =
         Logger.getLogger(BarLookupsConverter.class);
-    private static final String DATASET_TITLE = "BAR Expressions data set";
-    private static final String DATA_SOURCE_NAME = "annotations_lookup";
+    private static final String DATASET_TITLE = "BAR Annotations Lookup";
+    private static final String DATA_SOURCE_NAME = "BAR";
     private static final int TAXON_ID = 3702;
 //    private Map<String, String> genes = new HashMap<String, String>();
 
