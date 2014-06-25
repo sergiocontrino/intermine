@@ -43,7 +43,6 @@ public class BarExpressionsConverter extends BioDBConverter
         Logger.getLogger(BarExpressionsConverter.class);
     // used to correct a data issue in this data set..
     private static final String BAD_BAR = "atgenexp";
-    private static final String BAR_URL = "http://bar.utoronto.ca/";
     private static final String DATA_SOURCE_NAME = "BAR";
 
     private static final int TAXON_ID = 3702;
@@ -151,11 +150,9 @@ public class BarExpressionsConverter extends BioDBConverter
 
     	Item dataSource = createItem("DataSource");
     	dataSource.setAttribute("name", DATA_SOURCE_NAME);
-    	dataSource.setAttribute("url", BAR_URL);
 
     	Item dataSet = createItem("DataSet");
     	dataSet.setAttribute("name", getDataSourceName());
-    	dataSet.setAttribute("url", BAR_URL);
 
     	store(dataSource);
 
