@@ -52,6 +52,10 @@
         <attribute name="pubMedId" value="21447597"/>
     </item>
 
+    <item id="600" class="" implements="Publication">
+        <attribute name="pubMedId" value="17148475"/>
+    </item>
+
     <item id="14" class="" implements="DataSource">
         <attribute name="name" value="TAIR"/>
         <attribute name="description" value="The Arabidopsis Information Resource"/>
@@ -107,7 +111,7 @@
     </item>
 
     <item id="22" class="" implements="DataSource">
-        <attribute name="name" value="Panther DB"/>
+        <attribute name="name" value="Panther"/>
         <attribute name="description" value="Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree"/>
         <attribute name="url" value="https://www.pantherdb.org/"/>
         <collection name="publications">
@@ -115,7 +119,7 @@
         </collection>
     </item>
     <item id="21" class="" implements="DataSet">
-        <attribute name="name" value="Panther Orthologs and Paralogs"/>
+        <attribute name="name" value="Panther data set"/>
         <attribute name="description" value="Panther orthologs from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogs from Arabidopsis"/>
         <attribute name="url" value="https://www.pantherdb.org/"/>
         <reference name="dataSource" ref_id="22"/>
@@ -130,14 +134,14 @@
         </collection>
     </item>
     <item id="23" class="" implements="DataSet">
-        <attribute name="name" value="BAR Interactions"/>
+        <attribute name="name" value="BAR Interactions data set"/>
         <attribute name="description" value="Confirmed Arabidopsis interacting proteins from several source (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR"/>
         <attribute name="url" value="http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi"/>
         <reference name="dataSource" ref_id="25"/>
         <reference name="publication" ref_id="8"/>
     </item>
     <item id="24" class="" implements="DataSet">
-        <attribute name="name" value="BAR Annotations Lookup"/>
+        <attribute name="name" value="BAR Annotations lookup"/>
         <attribute name="description" value="Lookup relationship between an AGI and Probeset"/>
         <reference name="dataSource" ref_id="25"/>
     </item>
@@ -149,7 +153,9 @@
     </item>
     <item id="641" class="" implements="DataSet">
         <attribute name="name" value="PubMed to gene mapping"/>
+        <attribute name="description" value="Curated associations between NCBI Gene and PubMed databases"/>
         <attribute name="url" value="ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/"/>
         <reference name="dataSource" ref_id="640"/>
+        <reference name="publication" ref_id="600"/>
     </item>
 </items>
