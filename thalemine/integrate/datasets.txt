@@ -1,18 +1,3 @@
-Publication	11130711
-Publication	24253303
-Publication	17142230
-Publication	17202162
-Publication	23193289
-Publication	15173566
-Publication	10802651
-Publication	14681408
-Publication	17202162
-Publication	17675552
-Publication	17684564
-Publication	19401381
-Publication	18419781
-Publication	21447597
-Publication	17148475
 DataSource	TAIR	The Arabidopsis Information Resource	http://www.arabidopsis.org	Publication:11130711
 DataSet	GO Annotation from TAIR	GO Annotations made by TAIR curators and TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:TAIR,Publication:15173566
 DataSource	UniProt	Comprehensive, high-quality and freely accessible resouce of protein sequence and functional information	http://www.uniprot.org	Publication:24253303
@@ -25,6 +10,6 @@ DataSource	Panther	Orthologue and paralogue relationships based on the inferred 
 DataSet	Panther data set	Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis	https://www.pantherdb.org	DataSource:Panther
 DataSource	BAR	The Bio-Analaytic Resource for Plant Biology	http://bar.utoronto.ca	Publication:19401381
 DataSet	BAR Interactions data set	Confirmed Arabidopsis interaction proteins from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR	http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi	DataSource:BAR,Publication:17675552
-DataSet	BAR Annotations lookup	Mapping between an AGI and Probeset	http://bar.urotonto.ca	DataSource:BAR
-DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov
+DataSet	BAR Annotations Lookup	Mapping between an AGI and Probeset	http://bar.urotonto.ca	DataSource:BAR
+DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840
 DataSet	PubMed to gene mapping	Curation associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475

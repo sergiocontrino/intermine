@@ -10,7 +10,7 @@ if (@ARGV < 2) {
 }
 
 my ($datasets_file, $model_file) = @ARGV;
-my %datasets = ();
+my %data = ();
 
 my $model = new InterMine::Model(file => $model_file);
 my $doc = new InterMine::Item::Document(model => $model);
@@ -19,37 +19,42 @@ open DATASETS, "<", $datasets_file or die "Error: unable to open file: $!\n";
 while (<DATASETS>) {
     chomp;
     my @line = split /\t/;
-    if ($line[0] eq "Publication") {
-        $datasets{ $line[0] }{ $line[1] } = make_item($line[0] => (pubMedId => $line[1]));
-    }
-    else {
-        $datasets{ $line[0] }{ $line[1] } = make_item(
-            $line[0] => (
-                name        => $line[1],
-                description => $line[2],
-                url         => $line[3],
-            ),
-        );
-        if (defined $line[4]) {
-            my @refs = split /,/, $line[4];
-            foreach my $ref (@refs) {
-                my ($refName, $refValue) = split /:/, $ref;
-                my $lcRefName = lcfirst $refName;
-                if ($line[0] eq "DataSource" and $refName eq "Publication") {
-                    $datasets{ $line[0] }{ $line[1] }
-                      ->set($lcRefName . "s" => [ $datasets{$refName}{$refValue} ]);
-                }
-                else {
-                    $datasets{ $line[0] }{ $line[1] }
-                      ->set($lcRefName => $datasets{$refName}{$refValue});
-                }
-            }
+
+    # process all the publications first
+    my @refs = ();
+    if (defined $line[4]) {
+        @refs = split /,/, $line[4];
+        foreach my $ref (@refs) {
+            my ($refName, $refValue) = split /:/, $ref;
+            next unless ($refName eq "Publication");
+            $data{$refName}{$refValue} = make_item($refName => (pubMedId => $refValue))
+              if (not defined $data{$refName}{$refValue});
         }
+    }
+
+    # process the datasource/set
+    $data{ $line[0] }{ $line[1] } = make_item(
+        $line[0] => (
+            name        => $line[1],
+            description => $line[2],
+            url         => $line[3],
+        ),
+    );
+
+    # set all the references/collections
+    foreach my $ref (@refs) {
+        my ($refName, $refValue) = split /:/, $ref;
+        my ($lcRefName, $refId) = (lcfirst $refName, $data{$refName}{$refValue});
+        if ($line[0] eq "DataSource" and $refName eq "Publication") {
+            $lcRefName .= "s";
+            $refId = [ $refId ];
+        }
+        $data{ $line[0] }{ $line[1] }->set($lcRefName => $refId);
     }
 }
 close DATASETS;
 
-$doc->close();    # writes the xml
+$doc->close();    # write the xml
 exit(0);
 
 ######### helper subroutines:
