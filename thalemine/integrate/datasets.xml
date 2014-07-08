@@ -16,22 +16,22 @@
    <item id="0_4" class="DataSet" implements="">
       <reference name="dataSource" ref_id="0_2" />
       <attribute name="name" value="Genome Annotation (TAIR10)" />
-      <attribute name="description" value="TAIR10 GFF3 file consisting of genes, TE related genes, other non-coding RNA and transposable elements" />
-      <attribute name="url" value="https://www.araport.org/download_file/TAIR10_genome_release/annotation/gff/TAIR10_GFF3_genes_transposons.AIP.gff.gz" />
+      <attribute name="description" value="TAIR10 Genome annotation, consisting of genes, TE related genes, other non-coding RNA and transposable elements" />
+      <attribute name="url" value="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp" />
       <reference name="publication" ref_id="0_3" />
    </item>
    <item id="0_5" class="DataSet" implements="">
       <reference name="dataSource" ref_id="0_2" />
       <attribute name="name" value="Genome Assembly (TAIR9)" />
-      <attribute name="description" value="TAIR9 Genome asssembly in FASTA format, consisting of 5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies" />
-      <attribute name="url" value="https://www.araport.org/download_file/TAIR10_genome_release/assembly/TAIR10_Chr.all.fasta.gz" />
+      <attribute name="description" value="TAIR9 Genome assembly, consisting of 5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies" />
+      <attribute name="url" value="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp" />
       <reference name="publication" ref_id="0_1" />
    </item>
    <item id="0_6" class="DataSet" implements="">
       <reference name="dataSource" ref_id="0_2" />
       <attribute name="name" value="Coding Sequence (CDS) FASTA (TAIR10)" />
-      <attribute name="description" value="TAIR10 Coding sequences in FASTA format, consisting of sequences from all the annotated transcripts" />
-      <attribute name="url" value="https://www.araport.org/download_file//TAIR10_genome_release/annotation/fasta/TAIR10_cds_20101214_updated.fasta.gz" />
+      <attribute name="description" value="TAIR10 Coding sequences, consisting of sequences from all the annotated transcripts" />
+      <attribute name="url" value="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp" />
       <reference name="publication" ref_id="0_3" />
    </item>
    <item id="0_7" class="Publication" implements="">
@@ -40,7 +40,7 @@
    <item id="0_8" class="DataSet" implements="">
       <reference name="dataSource" ref_id="0_2" />
       <attribute name="name" value="GO Annotation from TAIR" />
-      <attribute name="description" value="GO Annotations made by TAIR curators and TIGR Arabidopsis annotation effort" />
+      <attribute name="description" value="GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort" />
       <attribute name="url" value="http://www.geneontology.org" />
       <reference name="publication" ref_id="0_7" />
    </item>
@@ -61,7 +61,7 @@
    <item id="0_12" class="DataSet" implements="">
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="Swiss-Prot data set" />
-      <attribute name="description" value="High-quality,  manually annotated, non-redundant protein sequence database" />
+      <attribute name="description" value="High-quality, manually annotated, non-redundant protein sequence database" />
       <attribute name="url" value="http://web.expasy.org/docs/swiss-prot_guideline.html" />
       <reference name="publication" ref_id="0_11" />
    </item>
@@ -88,7 +88,7 @@
    <item id="0_17" class="DataSet" implements="">
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="GO Annotation from UniProt" />
-      <attribute name="description" value="High quality GO annotations to proteins in UniProtKB" />
+      <attribute name="description" value="High quality GO annotations of proteins in UniProtKB" />
       <attribute name="url" value="http://www.ebi.ac.uk/GOA" />
       <reference name="publication" ref_id="0_16" />
    </item>
@@ -133,14 +133,14 @@
    <item id="0_25" class="DataSet" implements="">
       <reference name="dataSource" ref_id="0_23" />
       <attribute name="name" value="BAR Interactions data set" />
-      <attribute name="description" value="Confirmed Arabidopsis interaction proteins from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR" />
+      <attribute name="description" value="Confirmed Arabidopsis protein interactions from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR" />
       <attribute name="url" value="http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi" />
       <reference name="publication" ref_id="0_24" />
    </item>
    <item id="0_26" class="DataSet" implements="">
       <reference name="dataSource" ref_id="0_23" />
       <attribute name="name" value="BAR Annotations Lookup" />
-      <attribute name="description" value="Mapping between an AGI and Probeset" />
+      <attribute name="description" value="Mapping between an AGI locus and Probeset identifier" />
       <attribute name="url" value="http://bar.urotonto.ca" />
    </item>
    <item id="0_27" class="Publication" implements="">
@@ -160,7 +160,7 @@
    <item id="0_30" class="DataSet" implements="">
       <reference name="dataSource" ref_id="0_28" />
       <attribute name="name" value="PubMed to gene mapping" />
-      <attribute name="description" value="Curation associations between NCBI Gene and PubMed databases" />
+      <attribute name="description" value="Curated associations between NCBI Gene and PubMed databases" />
       <attribute name="url" value="ftp://ftp.ncbi.nlm.nih.gov/gene/DATA" />
       <reference name="publication" ref_id="0_29" />
    </item>
