@@ -15,59 +15,36 @@
   <div class="plainbox">
 
     <div class="column">
-      <html:form action="/loginAction" focus="username" method="post" enctype="multipart/form-data">
-        <h3><fmt:message key="login.haspassword"/></h3>
-        <html:hidden property="returnToString"/>
-        <table>
-          <tr>
-            <td><fmt:message key="login.username"/></td>
-            <td><html:text property="username"/><br/></td>
-          </tr>
-          <tr>
-            <td><fmt:message key="login.password"/></td>
-            <td><html:password property="password"/><br/></td>
-          </tr>
-          <tr>
-            <td colspan="2"><html:submit property="action"><fmt:message key="login.login"/></html:submit></td>
-          </tr>
-        </table>
-      </html:form>
+      <c:if test="${!empty OPENID_PROVIDERS && WEB_PROPERTIES['openid.allowed'] != 'false' && isExternallyAccessible}">
+        <div class="column second">
+          <im:debug message="${OPENID_PROVIDERS}"/>
+          <h3 class="openid"><fmt:message key="login.openid"/></h3>
+          <c:forEach var="provider" items="${OPENID_PROVIDERS}">
+            <a class="<c:out value="${fn:toLowerCase(provider)}"/>"
+            href="/${WEB_PROPERTIES['webapp.path']}/openid?provider=${provider}"></a>
+          </c:forEach>
+        </div>
+      </c:if>
 
-      <script language="javascript">
-        var visibility = 'block';
-        function toggleDiv(){
-          document.getElementById('passwordDiv').style.display=visibility;
-          if(visibility=='block') visibility='none';
-          else visibility='block';
-        }
-      </script>
+      <c:if test="${!empty OAUTH2_PROVIDERS && WEB_PROPERTIES['oauth2.allowed'] != 'false'}">
+        <div class="column second oauth2"><im:debug message="${OAUTH2_PROVIDERS}"/>
+          <h3 class="oauth"><fmt:message key="login.oauth2"/></h3>
+          <c:forEach var="provider" items="${OAUTH2_PROVIDERS}">
+            <a class="oauth2-button"
+               href="/${WEB_PROPERTIES['webapp.path']}/oauth2authenticator.do?provider=${provider}">
+               <i class="fa fa-fw fa-<c:out value="${fn:toLowerCase(provider)}"/>"></i>
+               ${provider}
+            </a>
+          </c:forEach>
+        </div>
+      </c:if>
 
-        <br/>
-      <a href="javascript:toggleDiv();" >Forgot password?</a>
-      <div id="passwordDiv" style="display:none;padding-top:20px">
-        <html:form action="/requestPasswordAction">
-          <fmt:message key="login.needspassword"/><br/><br/>
-          <table>
-            <tr>
-              <td><fmt:message key="login.username"/></td>
-              <td><html:text property="username"/></td>
-              <td><html:submit property="action"><fmt:message key="login.passwordrequest"/></html:submit></td>
-            </tr>
-          </table>
-        </html:form>
+      <div class="clear"></div>
+
+      <div id="passwordDiv" style="padding-top:20px">
+          <html:link styleClass="extlink" target="_blank" href="https://www.araport.org/user/password">Forgot password?</html:link>
         <br/>
       </div>
-    </div>
-
-    <div class="column second">
-      <c:if test="${!empty OPENID_PROVIDERS && WEB_PROPERTIES['openid.allowed'] != 'false' && isExternallyAccessible}">
-        <im:debug message="${OPENID_PROVIDERS}"/>
-        <h3 class="openid"><fmt:message key="login.openid"/></h3>
-        <c:forEach var="provider" items="${OPENID_PROVIDERS}">
-          <a class="<c:out value="${fn:toLowerCase(provider)}"/>"
-          href="/${WEB_PROPERTIES['webapp.path']}/openid?provider=${provider}"></a>
-        </c:forEach>
-      </c:if>
     </div>
 
     <div class="clear"></div>
@@ -84,10 +61,9 @@
       <li>you can share <span class="lists">lists</span> with other users</li>
     </ul>
 
-    <br/>
+    <br />
 
-    <b><i><fmt:message key="createAccount.systemMessage"/></i></b><br /><br />
-    <html:link action="/createAccount.do">Create account now</html:link>
+    <html:link styleClass="extlink" target="_blank" href="https://www.araport.org/user/register">Create <strong>Araport</strong> account now</html:link>
   </div>
 </div>
 

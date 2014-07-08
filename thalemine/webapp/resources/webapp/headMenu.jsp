@@ -130,9 +130,6 @@
    <c:if test="${PROFILE.superuser}">
        <c:set var="itemList" value="${itemList} mymine:mymine.tracks.tab.title:tracks:1 mymine:mymine.users.tab.title:users:1 mymine:mymine.labels.tab.title:labels:0"></c:set>
    </c:if>
-   <c:if test="${PROFILE.local}">
-       <c:set var="itemList" value="${itemList} mymine:mymine.password.tab.title:password:1"/>
-   </c:if>
     <c:set var="itemList" value="${itemList} mymine:mymine.account.tab.title:account:1"/>
   <fmt:message key="${pageName}.tab" var="tab" />
   <c:choose>
