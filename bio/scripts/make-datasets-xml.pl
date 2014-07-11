@@ -15,16 +15,19 @@ this script can be set up as a new `static` DataSource which can
 be used to attach metadata to the different DataSources and
 DataSets defined in your `project.xml`.
 
-The format of the input text file is 5-column, tab-delimited.
+The format of the input text file is 6-column, tab-delimited.
 Below is the format of the table:
 
-       (1)        (2)          (3)          (4)            (5)
-    DataType     Name      Description      URL        Reference(s)
+       (1)        (2)          (3)          (4)            (5)           (6)*
+    DataType     Name      Description      URL        Reference(s)    Version
 
 The 5th column in the table takes a comma-separated list
 of references.  Each reference is a key-value pair separated
 by a colon. The first part (key) corresponds to the Reference
 name and the 2nd part refers to its value.
+
+The 6th column is optional and may be used to specify the version
+or the release date of the DataSet.
 
 For example, a DataSet which has membership in a DataSource
 (DataSource:Panther) or a Publication(s) related to a particular
@@ -32,7 +35,7 @@ DataSet/Source (Publication:23193289).
 
 As an example, if the input was:
     DataSource  Panther            Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree   https://www.pantherdb.org   Publication:23193289
-    DataSet     Panther data set   Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis          https://www.pantherdb.org   DataSource:Panther
+    DataSet     Panther data set   Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis          https://www.pantherdb.org   DataSource:Panther	8.1
 
 The resultant XML produced by this script will be like so:
     <item id="0_1" class="Publication" implements="">
@@ -51,6 +54,7 @@ The resultant XML produced by this script will be like so:
        <attribute name="name" value="Panther data set" />
        <attribute name="description" value="Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis" />
        <attribute name="url" value="https://www.pantherdb.org" />
+       <attribute name="version" value="8.1" />
     </item>
 USAGE
 
@@ -59,9 +63,9 @@ die $usage if (@ARGV < 2);
 
 my ($datasets_file, $model_file) = @ARGV;
 
-my %data = ();
+my %data  = ();
 my $model = new InterMine::Model(file => $model_file);
-my $doc = new InterMine::Item::Document(model => $model);
+my $doc   = new InterMine::Item::Document(model => $model);
 
 open DATASETS, "<", $datasets_file or die "Error: unable to open file: $!\n";
 while (<DATASETS>) {
@@ -95,10 +99,14 @@ while (<DATASETS>) {
         my ($lcRefName, $refId) = (lcfirst $refName, $data{$refName}{$refValue});
         if ($line[0] eq "DataSource" and $refName eq "Publication") {
             $lcRefName .= "s";
-            $refId = [ $refId ];
+            $refId = [$refId];
         }
         $data{ $line[0] }{ $line[1] }->set($lcRefName => $refId);
     }
+
+    # set version number or release data for DataSet, if available
+    $data{ $line[0] }{ $line[1] }->set(version => $line[5])
+      if (defined $line[5] and $line[0] eq "DataSet");
 }
 close DATASETS;
 

@@ -14,22 +14,25 @@
       <attribute name="pubMedId" value="22140109" />
    </item>
    <item id="0_4" class="DataSet" implements="">
+      <attribute name="version" value="TAIR10" />
       <reference name="dataSource" ref_id="0_2" />
-      <attribute name="name" value="Genome Annotation (TAIR10)" />
+      <attribute name="name" value="Genome Annotation" />
       <attribute name="description" value="TAIR10 Genome annotation, consisting of genes, TE related genes, other non-coding RNA and transposable elements" />
       <attribute name="url" value="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp" />
       <reference name="publication" ref_id="0_3" />
    </item>
    <item id="0_5" class="DataSet" implements="">
+      <attribute name="version" value="TAIR9" />
       <reference name="dataSource" ref_id="0_2" />
-      <attribute name="name" value="Genome Assembly (TAIR9)" />
+      <attribute name="name" value="Genome Assembly" />
       <attribute name="description" value="TAIR9 Genome assembly, consisting of 5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies" />
       <attribute name="url" value="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp" />
       <reference name="publication" ref_id="0_1" />
    </item>
    <item id="0_6" class="DataSet" implements="">
+      <attribute name="version" value="TAIR10" />
       <reference name="dataSource" ref_id="0_2" />
-      <attribute name="name" value="Coding Sequence (CDS) FASTA (TAIR10)" />
+      <attribute name="name" value="Coding Sequence FASTA" />
       <attribute name="description" value="TAIR10 Coding sequences, consisting of sequences from all the annotated transcripts" />
       <attribute name="url" value="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp" />
       <reference name="publication" ref_id="0_3" />
@@ -38,6 +41,7 @@
       <attribute name="pubMedId" value="15173566" />
    </item>
    <item id="0_8" class="DataSet" implements="">
+      <attribute name="version" value="12/06/2013" />
       <reference name="dataSource" ref_id="0_2" />
       <attribute name="name" value="GO Annotation from TAIR" />
       <attribute name="description" value="GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort" />
@@ -59,6 +63,7 @@
       <attribute name="pubMedId" value="17142230" />
    </item>
    <item id="0_12" class="DataSet" implements="">
+      <attribute name="version" value="2013_12" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="Swiss-Prot data set" />
       <attribute name="description" value="High-quality, manually annotated, non-redundant protein sequence database" />
@@ -66,6 +71,7 @@
       <reference name="publication" ref_id="0_11" />
    </item>
    <item id="0_13" class="DataSet" implements="">
+      <attribute name="version" value="2013_12" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="TrEMBL data set" />
       <attribute name="description" value="Computationally analysed records, enriched with automatic annotation" />
@@ -76,6 +82,7 @@
       <attribute name="pubMedId" value="17202162" />
    </item>
    <item id="0_15" class="DataSet" implements="">
+      <attribute name="version" value="2013_12" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="InterPro domains" />
       <attribute name="description" value="Protein family and domain assignments to proteins" />
@@ -86,6 +93,7 @@
       <attribute name="pubMedId" value="14681408" />
    </item>
    <item id="0_17" class="DataSet" implements="">
+      <attribute name="version" value="2013_12" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="GO Annotation from UniProt" />
       <attribute name="description" value="High quality GO annotations of proteins in UniProtKB" />
@@ -93,6 +101,7 @@
       <reference name="publication" ref_id="0_16" />
    </item>
    <item id="0_18" class="DataSet" implements="">
+      <attribute name="version" value="2013_12" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="GO Annotation from InterPro" />
       <attribute name="description" value="Mapping between InterPro domains and GO terms" />
@@ -111,6 +120,7 @@
       </collection>
    </item>
    <item id="0_21" class="DataSet" implements="">
+      <attribute name="version" value="8.1" />
       <reference name="dataSource" ref_id="0_20" />
       <attribute name="name" value="Panther data set" />
       <attribute name="description" value="Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis" />
@@ -158,6 +168,7 @@
       <attribute name="pubMedId" value="17148475" />
    </item>
    <item id="0_30" class="DataSet" implements="">
+      <attribute name="version" value="03/21/2013" />
       <reference name="dataSource" ref_id="0_28" />
       <attribute name="name" value="PubMed to gene mapping" />
       <attribute name="description" value="Curated associations between NCBI Gene and PubMed databases" />
