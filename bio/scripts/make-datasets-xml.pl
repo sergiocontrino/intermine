@@ -6,7 +6,7 @@ use InterMine::Item::Document;
 use InterMine::Model;
 
 my $usage = <<USAGE;
-usage: $0 /path/to/datasets.txt /path/to/genomic_model.xml
+usage: $0 /path/to/datasets.txt /path/to/bio/core/core.xml
 
 This script takes an input text file containing metadata about
 DataSources and DataSets and any references to Publications and
@@ -50,12 +50,42 @@ The resultant XML produced by this script will be like so:
        </collection>
     </item>
     <item id="0_3" class="DataSet" implements="">
+       <attribute name="version" value="8.1" />
        <reference name="dataSource" ref_id="0_2" />
        <attribute name="name" value="Panther data set" />
        <attribute name="description" value="Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis" />
        <attribute name="url" value="https://www.pantherdb.org" />
-       <attribute name="version" value="8.1" />
     </item>
+
+Normally, the script is invoked like so from the intermine root directory
+(please replace the string "YOURMINE" with the name of your mine project):
+
+    perl bio/scripts/make-datasets-xml.pl \
+        YOURMINE/integrate/datasets.txt bio/core/core.xml \
+        > YOURMINE/integrate/datasets.xml
+
+Once the `datasets.xml` file has been generated, the following set of files
+are to be configured like so (please replace the string "YOURMINE" with the
+name of your mine project):
+
+(1) Set up a new intermine-items-xml-file data source in YOURMINE/project.xml:
+
+    <source name="YOURMINE-static" type="intermine-items-xml-file">
+      <property name="src.data.file" location="datasets.xml"/>
+    </source>
+
+(2) Set up a YOURMINE/integrate/resources/YOURMINE-static_keys.properties file:
+
+    DataSet.key_title = name
+    DataSource.key_name = name
+
+(3) Update YOURMINE/dbmodel/genomic_priorities.properties to give priority to
+    the metadata from the `datasets.xml` file:
+
+    DataSet.dataSource = YOURMINE-static, *
+    DataSet.description = YOURMINE-static, *
+    DataSet.url = YOURMINE-static, *
+
 USAGE
 
 # print out usage if datasets txt file and/or genomic_model.xml file are not provided
