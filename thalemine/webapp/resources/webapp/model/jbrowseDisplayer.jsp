@@ -6,13 +6,13 @@
 <!-- jbrowseDisplayer.jsp -->
 <div class="basic-table">
 <h3>JBrowse</h3>
-<br />
 
 <c:set var="object" value="${reportObject.object}"/>
 
 <c:choose>
 <c:when test="${((!empty object.chromosomeLocation && !empty object.chromosome)
                 || className == 'Chromosome') && className != 'ChromosomeBand'}">
+<br />
 
 <div id="jbrowse" class="feature basic-table">
   <c:set var="name" value="${object.primaryIdentifier}"/>
@@ -37,13 +37,10 @@
 	</script>
   </c:otherwise>
   </c:choose>
-</div>
 </c:when>
 <c:otherwise>
-<div id="jbrowse" class="feature basic-table warning">
-  <h3><fmt:message key="sequenceFeature.jbrowse.message"/></h3>
-  <p>There was a problem rendering the displayer.</p>
-</div>
+  <p style="font-style:italic;">No JBrowse visualization available</p>
 </c:otherwise>
 </c:choose>
+</div>
 <!-- /jbrowseDisplayer.jsp -->
