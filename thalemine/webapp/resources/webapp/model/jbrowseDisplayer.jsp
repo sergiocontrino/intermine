@@ -23,12 +23,30 @@
 
   <c:choose>
   <c:when test="${WEB_PROPERTIES['jbrowse.database.source'] != null}">
-  <div>
-      <iframe style="border: 1px solid black"
-          src="${WEB_PROPERTIES['jbrowse.prefix']}/?data=${WEB_PROPERTIES['jbrowse.database.source']}&loc=${name}&tracklist=1&nav=0&overview=0&tracks=TAIR10_loci,TAIR10_genes"
-          width="820" height="250">
-      </iframe>
-  </div>
+
+    <c:set var="baseUrl" value="${WEB_PROPERTIES['jbrowse.prefix']}"/>
+    <c:set var="datasource" value="${WEB_PROPERTIES['jbrowse.database.source']}"/>
+    <c:set var="chr" value="${reportObject.object.chromosomeLocation.locatedOn.primaryIdentifier}"/>
+
+    <c:set var="padding" value="${10}"/>
+    <c:set var="offset" value="${fn:substringBefore((reportObject.object.length * 0.1), '.')}"/>
+    <c:set var="start" value="${reportObject.object.chromosomeLocation.start - offset}"/>
+    <c:set var="end" value="${reportObject.object.chromosomeLocation.end + offset}"/>
+
+    <c:set var="tracks" value="TAIR10_loci,TAIR10_genes"/>
+    <c:set var="extraParams" value="tracklist=1&nav=0&overview=0"/>
+
+    <c:set var="jbLink" value="${baseUrl}?data=${datasource}&loc=${chr}:${start}..${end}&tracks=${tracks}&${extraParams}"/>
+
+    <div>
+        <p>Click and drag the browser to move the view. Check to turn on/off the tracks from left menu to see the data in the main panel.</p>
+        <iframe id="jbrowse" name="jbrowse" height="300px" width="98%" style="border: 1px solid #dfdfdf; padding: 1%" src="${jbLink}"></iframe>
+        <p>
+            <a href="${jbLink}" target="jbrowse">Center on ${reportObject.object.symbol}</a>&nbsp;|&nbsp;
+            <a href="javascript:;" onclick="jQuery('iframe').css({height: '600px'});">Expand viewer</a>&nbsp;|&nbsp;
+            Powered by <a href="http://jbrowse.org" target="_blank" class="extlink">JBrowse</a>
+        </p>
+    </div>
   </c:when>
   <c:otherwise>
   <p>There was a problem rendering the displayer, check: <code>${WEB_PROPERTIES['jbrowse.database.source']}</code>.</p>
