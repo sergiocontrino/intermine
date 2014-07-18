@@ -15,17 +15,6 @@
   <div class="plainbox">
 
     <div class="column">
-      <c:if test="${!empty OPENID_PROVIDERS && WEB_PROPERTIES['openid.allowed'] != 'false' && isExternallyAccessible}">
-        <div class="column second">
-          <im:debug message="${OPENID_PROVIDERS}"/>
-          <h3 class="openid"><fmt:message key="login.openid"/></h3>
-          <c:forEach var="provider" items="${OPENID_PROVIDERS}">
-            <a class="<c:out value="${fn:toLowerCase(provider)}"/>"
-            href="/${WEB_PROPERTIES['webapp.path']}/openid?provider=${provider}"></a>
-          </c:forEach>
-        </div>
-      </c:if>
-
       <c:if test="${!empty OAUTH2_PROVIDERS && WEB_PROPERTIES['oauth2.allowed'] != 'false'}">
         <div class="column second oauth2"><im:debug message="${OAUTH2_PROVIDERS}"/>
           <h3 class="oauth"><fmt:message key="login.oauth2"/></h3>
