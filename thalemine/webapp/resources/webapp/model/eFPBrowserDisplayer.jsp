@@ -6,14 +6,13 @@
 <!-- eFPBrowserDisplayer.jsp -->
 <div class="basic-table">
 <h3>eFP Visualization</h3>
-<br />
 
 <c:set var="object" value="${reportObject.object}"/>
 
 <c:choose>
 <c:when test="${((!empty object.chromosomeLocation && !empty object.chromosome)
                 || className == 'Chromosome') && className != 'ChromosomeBand'}">
-
+<br />
 
 <div id="eFPBrowser" class="feature basic-table">
   <c:set var="name" value="${object.primaryIdentifier}"/>
@@ -97,13 +96,10 @@
 	</script>
   </c:otherwise>
   </c:choose>
-</div>
 </c:when>
 <c:otherwise>
-<div id="eFPBrowser" class="feature basic-table warning">
-  <h3><fmt:message key="sequenceFeature.eFPBrowser.message"/></h3>
-  <p>There was a problem rendering the BAR eFP Browser.</p>
-</div>
+  <p style="font-style:italic;">No BAR eFP visualization available</p>
 </c:otherwise>
 </c:choose>
+</div>
 <!-- /eFPBrowserDisplayer.jsp -->
