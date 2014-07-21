@@ -36,7 +36,7 @@
     <c:set var="tracks" value="TAIR10_loci,TAIR10_genes"/>
     <c:set var="extraParams" value="tracklist=1&nav=0&overview=0"/>
 
-    <c:set var="jbLink" value="${baseUrl}?data=${datasource}&loc=${chr}:${start}..${end}&tracks=${tracks}&${extraParams}"/>
+    <c:set var="jbLink" value="${baseUrl}/?data=${datasource}&loc=${chr}:${start}..${end}&tracks=${tracks}&${extraParams}"/>
 
     <div>
         <p>Click and drag the browser to move the view. Check to turn on/off the tracks from left menu to see the data in the main panel.</p>
@@ -55,13 +55,10 @@
 	</script>
   </c:otherwise>
   </c:choose>
-</div>
 </c:when>
 <c:otherwise>
-<div id="jbrowse" class="feature basic-table warning">
-  <h3><fmt:message key="sequenceFeature.jbrowse.message"/></h3>
-  <p>There was a problem rendering the displayer.</p>
-</div>
+    <p style="font-style:italic;">No JBrowse visualization available</p>
 </c:otherwise>
 </c:choose>
+</div>
 <!-- /jbrowseDisplayer.jsp -->
