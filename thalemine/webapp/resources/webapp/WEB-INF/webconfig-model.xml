@@ -68,7 +68,7 @@
       <fieldconfig fieldExpr="chromosome.primaryIdentifier" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.start" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.end" showInInlineCollection="false" showInSummary="false" />
-      <fieldconfig fieldExpr="organism.shortName" />
+      <fieldconfig fieldExpr="organism.shortName" label="Organism" />
     </fields>
   </class>
 
@@ -110,7 +110,7 @@
 
  <class className="org.intermine.model.bio.Location">
     <fields>
-      <fieldconfig fieldExpr="feature.primaryIdentifier"/>
+      <fieldconfig fieldExpr="feature.primaryIdentifier" label="DB Identifier"/>
       <fieldconfig fieldExpr="start"/>
       <fieldconfig fieldExpr="end"/>
       <fieldconfig fieldExpr="strand"/>
@@ -126,9 +126,27 @@
       <fieldconfig fieldExpr="chromosome.primaryIdentifier" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.start" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.end" showInInlineCollection="false" showInSummary="false" />
-      <fieldconfig fieldExpr="organism.name"/>
+      <fieldconfig fieldExpr="organism.name" label="Organism"/>
     </fields>
   </class>
+
+    <class className="org.intermine.model.bio.MRNA" label="mRNA">
+    <fields>
+      <fieldconfig fieldExpr="primaryIdentifier"/>
+      <fieldconfig fieldExpr="name"/>
+      <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
+      <fieldconfig fieldExpr="chromosomeLocation" displayer="/model/chromosomeLocDisplayer.jsp" showInResults="false" />
+      <fieldconfig fieldExpr="chromosome.primaryIdentifier" showInInlineCollection="false" showInSummary="false" />
+      <fieldconfig fieldExpr="chromosomeLocation.start" showInInlineCollection="false" showInSummary="false" />
+      <fieldconfig fieldExpr="chromosomeLocation.end" showInInlineCollection="false" showInSummary="false" />
+      <fieldconfig fieldExpr="confidenceClass" showInInlineCollection="false" showInSummary="false" />
+      <fieldconfig fieldExpr="confidenceRating" showInInlineCollection="false" showInSummary="false" />
+      <fieldconfig fieldExpr="curatorSummary"  showInInlineCollection="false" showInSummary="false" />
+      <fieldconfig fieldExpr="computationalDescription" showInInlineCollection="false" showInSummary="false" />
+      <fieldconfig fieldExpr="organism.shortName" label="Organism"/>
+    </fields>
+  </class>
+
 
   <class className="org.intermine.model.bio.Ontology">
     <fields>
@@ -185,7 +203,7 @@
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
       <fieldconfig fieldExpr="primaryAccession"/>
-      <fieldconfig fieldExpr="organism.name"/>
+      <fieldconfig fieldExpr="organism.name" label="Organism"/>
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
     </fields>
   </class>
@@ -212,8 +230,8 @@
   <class className="org.intermine.model.bio.Homologue">
     <fields>
       <fieldconfig fieldExpr="gene.primaryIdentifier" showInResults="false" showInInlineCollection="false" />
-      <fieldconfig fieldExpr="homologue.primaryIdentifier"/>
-      <fieldconfig fieldExpr="homologue.organism.shortName"/>
+      <fieldconfig fieldExpr="homologue.primaryIdentifier" label="Homologue DB Identifier"/>
+      <fieldconfig fieldExpr="homologue.organism.shortName" label="Homologue organism"/>
       <fieldconfig fieldExpr="type"/>
     </fields>
   </class>
@@ -257,8 +275,8 @@
       <fieldconfig fieldExpr="averageControl"/>
       <fieldconfig fieldExpr="averageRatio"/>
 <!--    <fieldconfig fieldExpr="probe.genes.primaryIdentifier" label="gene"/> -->
-      <fieldconfig fieldExpr="probe.name" label="probe"/>
-      <fieldconfig fieldExpr="sample.name" label="sample"/>
+      <fieldconfig fieldExpr="probe.name" label="Probe"/>
+      <fieldconfig fieldExpr="sample.name" label="Sample"/>
     </fields>
   </class>
 
