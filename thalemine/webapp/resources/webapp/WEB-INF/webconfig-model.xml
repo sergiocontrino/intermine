@@ -72,6 +72,18 @@
     </fields>
   </class>
 
+  <class className="org.intermine.model.bio.GeneFlankingRegion">
+    <fields>
+      <fieldconfig fieldExpr="primaryIdentifier" label="Region Name" />
+      <fieldconfig fieldExpr="distance" label="Flank Size" />
+      <fieldconfig fieldExpr="direction" label="Direction" />
+      <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
+      <fieldconfig fieldExpr="includeGene" label="Gene Included?" />
+      <fieldconfig fieldExpr="chromosomeLocation" displayer="/model/chromosomeLocDisplayer.jsp" showInResults="false" />
+      <fieldconfig fieldExpr="organism.name" label="Organism Name" />
+    </fields>
+  </class>
+
 <class className="org.intermine.model.bio.GOAnnotation">
     <fields>
       <fieldconfig fieldExpr="subject.primaryIdentifier"/>
