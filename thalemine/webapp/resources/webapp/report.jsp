@@ -102,7 +102,19 @@
               <c:if test="${!field.doNotTruncate && !empty field.value}">
               <!-- Short summary fields: change field description to bold, text to normal -->
                 <td class="label"><strong>${fieldDisplayText}&nbsp;<im:typehelp type="${field.pathString}"/></strong></td>
-                <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
+
+<c:choose>
+<c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' }" >
+  <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="TAIR August 2013: ${fn:substringBefore(field.value, '; Has ')}." /></td>
+</c:when>
+<c:when test="${fn:trim(fieldDisplayText) == 'Curator Summary' }" >
+  <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="TAIR August 2013: ${field.value}" /></td>
+</c:when>
+<c:otherwise>
+  <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
+</c:otherwise>
+</c:choose>
+
                 <c:set var="tableCount" value="${tableCount+1}" scope="page" />
               </c:if>
             </c:otherwise>
@@ -271,13 +283,13 @@
       <tiles:put name="placement" value="summary" />
     <tiles:put name="reportObject" beanName="object" />
      </tiles:insert>
-  
+
    <tiles:insert name="templateList.tile">
     <tiles:put name="scope" value="global" />
     <tiles:put name="placement" value="im:aspect:summary" />
     <tiles:put name="reportObject" beanName="object" />
   </tiles:insert>
-  
+
   </div>
 
   <c:forEach items="${categories}" var="aspect" varStatus="status">
