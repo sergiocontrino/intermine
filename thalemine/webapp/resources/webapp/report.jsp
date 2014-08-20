@@ -103,9 +103,13 @@
               <!-- Short summary fields: change field description to bold, text to normal -->
                 <td class="label"><strong>${fieldDisplayText}&nbsp;<im:typehelp type="${field.pathString}"/></strong></td>
 
+
 <c:choose>
-<c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' }" >
+<c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && fn:contains(field.value,'; Has ')}" >
   <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="TAIR August 2013: ${fn:substringBefore(field.value, '; Has ')}." /></td>
+</c:when>
+<c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && !fn:contains(field.value,'; Has ')}" >
+  <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="TAIR August 2013: ${field.value}" /></td>
 </c:when>
 <c:when test="${fn:trim(fieldDisplayText) == 'Curator Summary' }" >
   <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="TAIR August 2013: ${field.value}" /></td>
@@ -114,6 +118,7 @@
   <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
 </c:otherwise>
 </c:choose>
+
 
                 <c:set var="tableCount" value="${tableCount+1}" scope="page" />
               </c:if>
