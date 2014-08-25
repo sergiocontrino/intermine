@@ -10,14 +10,14 @@
       <property name="gff3.seqDataSourceName" value="TAIR"/>
       <property name="gff3.dataSourceName" value="TAIR"/>
       <property name="gff3.seqClsName" value="Chromosome"/>
-      <property name="gff3.dataSetTitle" value="Genome Annotation (TAIR10)"/>
+      <property name="gff3.dataSetTitle" value="Genome Annotation"/>
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/genome/gff/" />
      </source>
 
     <source name="aip-chromosome-fasta" type="fasta">
       <property name="fasta.className" value="org.intermine.model.bio.Chromosome"/>
       <property name="fasta.dataSourceName" value="TAIR"/>
-      <property name="fasta.dataSetTitle" value="Genome Assembly (TAIR9)"/>
+      <property name="fasta.dataSetTitle" value="Genome Assembly"/>
       <property name="fasta.taxonId" value="3702"/>
       <property name="fasta.includes" value="*Chr*"/>
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/genome/fasta/"/>
@@ -30,7 +30,7 @@
       <property name="fasta.className" value="org.intermine.model.bio.CDS"/>
       <property name="fasta.classAttribute" value="primaryIdentifier"/>
       <property name="fasta.includes" value="*cds*"/>
-      <property name="fasta.dataSetTitle" value="Coding Sequence (CDS) FASTA (TAIR10)"/>
+      <property name="fasta.dataSetTitle" value="Coding Sequence FASTA"/>
       <property name="fasta.dataSourceName" value="TAIR"/>
       <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/genome/fasta/"/>
     </source>
