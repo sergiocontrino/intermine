@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -106,15 +107,15 @@
 
 <c:choose>
 <c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && fn:contains(field.value,'; Has ')}" >
-  <td colspan="4" style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${fn:substringBefore(field.value, '; Has ')}.&nbsp; ${WEB_PROPERTIES['tair.attribution']} "/></td>
+  <td colspan="4" style="vertical-align: top">${fn:substringBefore(field.value, '; Has ')}.&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
 </tr><tr>
 </c:when>
 <c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && !fn:contains(field.value,'; Has ')}" >
-  <td colspan="4" style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']} " /></td>
+  <td colspan="4" style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
 </tr><tr>
 </c:when>
 <c:when test="${fn:trim(fieldDisplayText) == 'Curator Summary' }" >
-  <td colspan="4" style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']} " /></td></tr>
+  <td colspan="4" style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</tr>
 </c:when>
 <c:otherwise>
   <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
