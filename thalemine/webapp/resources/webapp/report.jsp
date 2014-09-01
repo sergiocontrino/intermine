@@ -106,13 +106,15 @@
 
 <c:choose>
 <c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && fn:contains(field.value,'; Has ')}" >
-  <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="TAIR: 8/2013. ${fn:substringBefore(field.value, '; Has ')}." /></td>
+  <td colspan="4" style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${fn:substringBefore(field.value, '; Has ')}.&nbsp; ${WEB_PROPERTIES['tair.attribution']} "/></td>
+</tr><tr>
 </c:when>
 <c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && !fn:contains(field.value,'; Has ')}" >
-  <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="TAIR: 8/2013. ${field.value}" /></td>
+  <td colspan="4" style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']} " /></td>
+</tr><tr>
 </c:when>
 <c:when test="${fn:trim(fieldDisplayText) == 'Curator Summary' }" >
-  <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="TAIR: 8/2013. ${field.value}" /></td>
+  <td colspan="4" style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']} " /></td></tr>
 </c:when>
 <c:otherwise>
   <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
