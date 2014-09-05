@@ -60,7 +60,7 @@
     </inlinelist>
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
-      <fieldconfig fieldExpr="secondaryIdentifier"/>
+      <fieldconfig fieldExpr="secondaryIdentifier" showInHeader="false" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="symbol"/>
       <fieldconfig fieldExpr="name"/>
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
@@ -210,15 +210,17 @@
 
   <class className="org.intermine.model.bio.Protein">
     <inlinelist>
-      <table path="synonyms.value" showLinksToObjects="true" />
+      <table path="synonyms.value" showInHeader="true" lineLength="100" />
     </inlinelist>
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
       <fieldconfig fieldExpr="primaryAccession"/>
       <fieldconfig fieldExpr="organism.name" label="Organism"/>
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
+
     </fields>
   </class>
+
 
   <class className="org.intermine.model.bio.Publication">
     <headerconfig>
@@ -308,7 +310,7 @@
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneOntologyDisplayer"
                      jspName="model/geneOntologyDisplayer.jsp"
-                     replacesFields="goAnnotation,ontologyAnnotations"
+                     replacesFields="goAnnotation,ontologyAnnotations,secondaryIdentifier"
                      placement="Function"
                      types="Gene"/>
 
