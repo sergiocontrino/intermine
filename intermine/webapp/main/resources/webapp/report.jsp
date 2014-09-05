@@ -316,29 +316,6 @@
        <tiles:put name="opened" value="${status.index == 0}" />
       </tiles:insert>
 
-       <!-- /ATTED data -->
-
-      <c:if test="${aspect eq 'Expression' && object.type == 'Gene'}">
-
-<script charset="utf-8" type="text/javascript" src="http://atted-displayer.labs.intermine.org/build/atted-displayer-0.0.1.min.js"></script>
-<link rel="stylesheet" type="text/css" href="bootstrap.css">
-
-<c:set var="AGI" value="${fn:substringAfter(stableLink, 'externalids=')}" />
-
-<div id="atted_displayercontainer"></div>
-        <script type="text/javascript">
-var id = "${AGI}".charAt(0).toUpperCase() + "${AGI}".slice(1).toLowerCase();
-//document.write(id);
-            var opts = {
-                target: '#atted_displayercontainer',
-                AGIcode: id
-            }
-            var displayer = new AttedDisplayer(opts);
-</script>
-
-</c:if>
-
-<!-- /ATTED data -->
 
 
 
