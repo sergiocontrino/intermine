@@ -1,4 +1,3 @@
-<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -68,11 +67,6 @@
     <%-- summary short fields --%>
     <table class="fields">
       <c:set var="tableCount" value="0" scope="page" />
-      <c:set var="tableInc" value="1" scope="page" />
-<c:if test="${object.type eq 'Gene' || object.type eq 'MRNA'}" >
-<%-- to have a display in 2 columns (instead of 4) for the 2 types --%>
-      <c:set var="tableInc" value="2" scope="page" />
-</c:if>
 
       <c:forEach var="field" items="${object.objectSummaryFields}">
           <c:if test="${tableCount %2 == 0}">
@@ -90,45 +84,24 @@
             value="${imf:formatFieldChain(field.pathString, INTERMINE_API, WEBCONFIG)}"/>
           <c:choose>
             <c:when test="${field.valueHasDisplayer}">
-              <!-- Short summary fields with displayer: change field description to bold, text to normal -->
-              <td class="label"><strong>
+              <td class="label">
                   ${fieldDisplayText}&nbsp;
                   <im:typehelp type="${field.pathString}"/>
-              </strong></td>
-              <td style="vertical-align: top">
+              </td>
+              <td><strong>
                 <!-- pass value to displayer -->
                 <c:set var="interMineObject" value="${object.object}" scope="request"/>
                   <tiles:insert page="${field.displayerPage}">
                     <tiles:put name="expr" value="${field.name}" />
                   </tiles:insert>
-              </td>
+              </strong></td>
               <c:set var="tableCount" value="${tableCount+1}" scope="page" />
             </c:when>
             <c:otherwise>
               <c:if test="${!field.doNotTruncate && !empty field.value}">
-              <!-- Short summary fields: change field description to bold, text to normal -->
-                <td class="label"><strong>${fieldDisplayText}&nbsp;<im:typehelp type="${field.pathString}"/></strong></td>
-
-
-<c:choose>
-<c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && fn:contains(field.value,'; Has ')}" >
-  <td style="vertical-align: top">${fn:substringBefore(field.value, '; Has ')}.&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
-</tr><tr>
-</c:when>
-<c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && !fn:contains(field.value,'; Has ')}" >
-  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
-</tr><tr>
-</c:when>
-<c:when test="${fn:trim(fieldDisplayText) == 'Curator Summary' }" >
-  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</tr>
-</c:when>
-<c:otherwise>
-  <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
-</c:otherwise>
-</c:choose>
-
-
-                <c:set var="tableCount" value="${tableCount+tableInc}" scope="page" />
+                <td class="label">${fieldDisplayText}&nbsp;<im:typehelp type="${field.pathString}"/></td>
+                <td><strong><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></strong></td>
+                <c:set var="tableCount" value="${tableCount+1}" scope="page" />
               </c:if>
             </c:otherwise>
           </c:choose>
@@ -141,9 +114,8 @@
         <c:if test="${field.doNotTruncate}">
           <tr>
             <c:if test="${!empty field.value}">
-              <!-- Long summary fields: change field description to bold, text to normal -->
-              <td class="label"><strong>${field.name}&nbsp;<im:typehelp type="${field.pathString}"/></strong></td>
-              <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
+              <td class="label">${field.name}&nbsp;<im:typehelp type="${field.pathString}"/></td>
+              <td><strong><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></strong></td>
             </c:if>
           </tr>
         </c:if>
@@ -289,57 +261,6 @@
   //]]>-->
 </script>
 <script type="text/javascript" src="js/inlinetemplate.js"></script>
-<div class="grid_10">
-
-  <div id="summaryCategory" class="aspectBlock">
-   <tiles:insert page="/reportDisplayers.jsp">
-      <tiles:put name="placement" value="summary" />
-    <tiles:put name="reportObject" beanName="object" />
-     </tiles:insert>
-
-   <tiles:insert name="templateList.tile">
-    <tiles:put name="scope" value="global" />
-    <tiles:put name="placement" value="im:aspect:summary" />
-    <tiles:put name="reportObject" beanName="object" />
-  </tiles:insert>
-
-  </div>
-
-  <c:forEach items="${categories}" var="aspect" varStatus="status">
-    <div id="${fn:replace(aspect, " ", "_")}Category" class="aspectBlock">
-      <tiles:insert name="reportAspect.tile">
-        <tiles:put name="mapOfInlineLists" beanName="mapOfInlineLists" />
-        <tiles:put name="placement" value="im:aspect:${aspect}" />
-        <tiles:put name="reportObject" beanName="object" />
-        <tiles:put name="trail" value="${request.trail}" />
-        <tiles:put name="aspectId" value="${templateIdPrefix}${status.index}" />
-       <tiles:put name="opened" value="${status.index == 0}" />
-      </tiles:insert>
-
-
-
-
-  </div>
-  </c:forEach>
-
-  <div id="OtherCategory" class="aspectBlock">
-    <c:if test="${categories != null}">
-      <c:if test="${fn:length(placementRefsAndCollections['im:aspect:Miscellaneous']) > 0 || fn:length(listOfUnplacedInlineLists) > 0}">
-        <div class="clear">&nbsp;</div>
-        <a name="other"><h2>Other</h2></a>
-      </c:if>
-    </c:if>
-
-    <tiles:insert page="/reportUnplacedInlineLists.jsp">
-      <tiles:put name="listOfUnplacedInlineLists" beanName="listOfUnplacedInlineLists" />
-    </tiles:insert>
-
-    <tiles:insert page="/reportRefsCols.jsp">
-      <tiles:put name="object" beanName="object" />
-      <tiles:put name="placement" value="im:aspect:Miscellaneous" />
-    </tiles:insert>
-  </div>
-</div>
 
 <div style="float:right;" class="grid_2 sidebar">
   <div id="in-lists">
@@ -366,6 +287,54 @@
     </tiles:insert>
   </div>
 </div>
+
+<div class="grid_10">
+
+  <div id="summaryCategory" class="aspectBlock">
+   <tiles:insert page="/reportDisplayers.jsp">
+      <tiles:put name="placement" value="summary" />
+    <tiles:put name="reportObject" beanName="object" />
+     </tiles:insert>
+  
+   <tiles:insert name="templateList.tile">
+    <tiles:put name="scope" value="global" />
+    <tiles:put name="placement" value="im:aspect:summary" />
+    <tiles:put name="reportObject" beanName="object" />
+  </tiles:insert>
+  
+  </div>
+
+  <c:forEach items="${categories}" var="aspect" varStatus="status">
+    <div id="${fn:replace(aspect, " ", "_")}Category" class="aspectBlock">
+      <tiles:insert name="reportAspect.tile">
+        <tiles:put name="mapOfInlineLists" beanName="mapOfInlineLists" />
+        <tiles:put name="placement" value="im:aspect:${aspect}" />
+        <tiles:put name="reportObject" beanName="object" />
+        <tiles:put name="trail" value="${request.trail}" />
+        <tiles:put name="aspectId" value="${templateIdPrefix}${status.index}" />
+        <tiles:put name="opened" value="${status.index == 0}" />
+      </tiles:insert>
+  </div>
+  </c:forEach>
+
+  <div id="OtherCategory" class="aspectBlock">
+    <c:if test="${categories != null}">
+      <c:if test="${fn:length(placementRefsAndCollections['im:aspect:Miscellaneous']) > 0 || fn:length(listOfUnplacedInlineLists) > 0}">
+        <div class="clear">&nbsp;</div>
+        <a name="other"><h2>Other</h2></a>
+      </c:if>
+    </c:if>
+
+    <tiles:insert page="/reportUnplacedInlineLists.jsp">
+      <tiles:put name="listOfUnplacedInlineLists" beanName="listOfUnplacedInlineLists" />
+    </tiles:insert>
+
+    <tiles:insert page="/reportRefsCols.jsp">
+      <tiles:put name="object" beanName="object" />
+      <tiles:put name="placement" value="im:aspect:Miscellaneous" />
+    </tiles:insert>
+  </div>
+</div>
 </div>
 </div>
 
@@ -379,9 +348,9 @@
       <h1>Object not found</h1>
       <p>That which you were looking for does not exist. Try...
         <ol>
-          <li>going to the <a href="/thalemine">home page</a></li>
-          <li>using the quicksearch</li>
-          <li>or <a href="#" onclick="showContactForm()">Contact us</a> at support [at] araport@jcvi.org </li>
+          <li>going to the <a href="/">home page</a></li>
+          <li>using the <a href="/keywordSearchResults.do">quicksearch</a></li>
+          <li>or <a onclick="showContactForm()">Contact us</a> at support [at] flymine.org</li>
         </ol>
       </p>
     </div>

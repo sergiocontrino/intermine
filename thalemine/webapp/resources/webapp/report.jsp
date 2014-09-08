@@ -68,6 +68,12 @@
     <%-- summary short fields --%>
     <table class="fields">
       <c:set var="tableCount" value="0" scope="page" />
+      <c:set var="tableInc" value="1" scope="page" />
+<c:if test="${object.type eq 'Gene' || object.type eq 'MRNA'}" >
+<%-- to have a display in 2 columns (instead of 4) for the 2 types --%>
+      <c:set var="tableInc" value="2" scope="page" />
+</c:if>
+
 
       <c:forEach var="field" items="${object.objectSummaryFields}">
           <c:if test="${tableCount %2 == 0}">
@@ -107,15 +113,15 @@
 
 <c:choose>
 <c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && fn:contains(field.value,'; Has ')}" >
-  <td colspan="4" style="vertical-align: top">${fn:substringBefore(field.value, '; Has ')}.&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
+  <td style="vertical-align: top">${fn:substringBefore(field.value, '; Has ')}.&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
 </tr><tr>
 </c:when>
 <c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && !fn:contains(field.value,'; Has ')}" >
-  <td colspan="4" style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
+  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
 </tr><tr>
 </c:when>
 <c:when test="${fn:trim(fieldDisplayText) == 'Curator Summary' }" >
-  <td colspan="4" style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</tr>
+  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</tr>
 </c:when>
 <c:otherwise>
   <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
@@ -123,7 +129,7 @@
 </c:choose>
 
 
-                <c:set var="tableCount" value="${tableCount+1}" scope="page" />
+                <c:set var="tableCount" value="${tableCount+tableInc}" scope="page" />
               </c:if>
             </c:otherwise>
           </c:choose>
@@ -308,8 +314,12 @@
         <tiles:put name="reportObject" beanName="object" />
         <tiles:put name="trail" value="${request.trail}" />
         <tiles:put name="aspectId" value="${templateIdPrefix}${status.index}" />
-        <tiles:put name="opened" value="${status.index == 0}" />
+       <tiles:put name="opened" value="${status.index == 0}" />
       </tiles:insert>
+
+
+
+
   </div>
   </c:forEach>
 
