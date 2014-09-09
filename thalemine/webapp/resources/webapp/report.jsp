@@ -304,6 +304,11 @@
     <tiles:put name="reportObject" beanName="object" />
   </tiles:insert>
 
+    <tiles:insert page="/reportRefsCols.jsp">
+      <tiles:put name="object" beanName="object" />
+      <tiles:put name="placement" value="im:summary" />
+    </tiles:insert>
+
   </div>
 
   <c:forEach items="${categories}" var="aspect" varStatus="status">
@@ -316,6 +321,7 @@
         <tiles:put name="aspectId" value="${templateIdPrefix}${status.index}" />
        <tiles:put name="opened" value="${status.index == 0}" />
       </tiles:insert>
+
 
 
 
