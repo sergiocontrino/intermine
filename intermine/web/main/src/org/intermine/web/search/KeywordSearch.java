@@ -542,11 +542,11 @@ class InterMineObjectFetcher extends Thread
                                 // It is possible that the inner loop iterator "lags behind" the
                                 // current object's id. See:
                                 // https://github.com/intermine/intermine/issues/473
-                                while(resultsContainer.getIterator().hasNext() && 
+                                while(resultsContainer.getIterator().hasNext() &&
                                 		((Integer) next.get(0)).compareTo(object.getId()) == -1) {
                                 	next = resultsContainer.getIterator().next();
                                 }
-                                                                
+
                                 //reference is not for the current object?
                                 if (!next.get(0).equals(object.getId())) {
                                     // go back one step
@@ -689,7 +689,7 @@ class InterMineObjectFetcher extends Thread
         for (ObjectValueContainer attribute : attributes) {
             addToDocument(doc, attribute.getLuceneName(), attribute.getValue(), 1F, false);
 
-            // index all key fields as raw data with a higher boost, favors
+            // index all key fields as raw data with a higher boost, favours
             // "exact matches"
             if (keyFields.contains(attribute.getName())) {
                 addToDocument(doc, attribute.getLuceneName(), attribute.getValue(), 2F, true);
@@ -709,9 +709,10 @@ class InterMineObjectFetcher extends Thread
                     if (fieldsToIgnore != null && fieldsToIgnore.contains(att.getName())) {
                         continue;
                     }
-                    // only index strings and integers
-                    if ("java.lang.String".equals(att.getType())
-                            || "java.lang.Integer".equals(att.getType())) {
+                    // only index strings now, used to do also integers(?!)
+                    if ("java.lang.String".equals(att.getType())) {
+//                        if ("java.lang.String".equals(att.getType())
+//                        		|| "java.lang.Integer".equals(att.getType())) {
                         Object value = obj.getFieldValue(att.getName());
 
                         // ignore null values
@@ -778,8 +779,10 @@ class InterMineObjectFetcher extends Thread
 
             // if we haven't set a boost and this is short field we can switch off norms
             if (boost == 1F && value.indexOf(' ') == -1) {
-                f.setOmitNorms(true);
-                f.setOmitTermFreqAndPositions(true);
+//            if (!f.name().startsWith("computational")) {
+//                f.setOmitNorms(true);
+//                f.setOmitTermFreqAndPositions(true);
+//            }
                 if (!normFields.contains(f.name())) {
                     normFields.add(f.name());
                 }
@@ -924,7 +927,7 @@ public final class KeywordSearch
     private static Vector<KeywordSearchFacetData> facets;
     private static boolean debugOutput;
     private static Map<String, String> attributePrefixes = null;
-    
+
     private KeywordSearch() {
         //don't
     }
@@ -1382,7 +1385,7 @@ public final class KeywordSearch
             if (redirector != null) {
                 linkRedirect = redirector.generateLink(im, o);
             }
-            KeywordSearchResult ksr = new KeywordSearchResult(webconfig, o, classKeys, 
+            KeywordSearchResult ksr = new KeywordSearchResult(webconfig, o, classKeys,
                     classDescriptor, keywordSearchHit.getScore(), null, linkRedirect);
             searchResultsParsed.add(ksr);
         }
@@ -1455,7 +1458,7 @@ public final class KeywordSearch
             Map<String, String> facetValues, List<Integer> ids) {
         return runBrowseSearch(searchString, offset, facetValues, ids, true);
     }
-    
+
     /**
      * perform a keyword search using bobo-browse for faceting and pagination
      * @param searchString string to search for
@@ -1574,18 +1577,39 @@ public final class KeywordSearch
 
     private static String parseQueryString(String qs) {
         String queryString = qs;
-        // keep strings separated by spaces together
+        //check if it is a "termA termB" string, i.e. phrase
+        boolean isPhrase = false;
+        if (queryString.startsWith("\"") && queryString.endsWith("\"")) {
+        	isPhrase = true;
+        	queryString=queryString.replaceFirst("\"", "");
+        	queryString=queryString.substring(0, queryString.lastIndexOf('"'));
+        }
+
+        // keep strings separated by spaces together, i.e. substitute space between words with AND
         queryString = queryString.replaceAll("\\b(\\s+)\\+(\\s+)\\b", "$1AND$2");
-        // i don't know
+        // \b word boundary
+        // \s any whitespace char
+        // http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
         queryString = queryString.replaceAll("(^|\\s+)'(\\b[^']+ [^']+\\b)'(\\s+|$)", "$1\"$2\"$3");
         // escape special characters, see http://lucene.apache.org/java/2_9_0/queryparsersyntax.html
+        // we seems to be at version 3.0.2 but documents are the same
+
+        // final String[] specialCharacters = {"+", "-", "&&", "||", "!", "(", ")", "{", "}", "[",
+        //        "]", "^", "\"", "~", "?", ":", "\\"};
+
+        // now we substitute the special chars with ?, single char placeholder
         final String[] specialCharacters = {"+", "-", "&&", "||", "!", "(", ")", "{", "}", "[",
-            "]", "^", "~", "?", ":", "\\"};
+                "]", "^", "~", ":", "\\"};
         for (String s : specialCharacters) {
             if (queryString.contains(s)) {
-                queryString = queryString.replace(s, "*");
+            	queryString = queryString.replace(s, "?");
             }
         }
+
+        if (isPhrase) {
+        	queryString = "\"" + queryString + "\"";
+        }
+
         return toLowerCase(queryString);
     }
 
