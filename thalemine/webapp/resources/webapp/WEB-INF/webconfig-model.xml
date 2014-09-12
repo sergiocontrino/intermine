@@ -424,7 +424,7 @@
                                               goAnnotation.ontologyTerm.parents.identifier != go:0003674,
                                               goAnnotation.ontologyTerm.parents.identifier != go:0005575"
                                  typeClass="Gene"
-                                 views="secondaryIdentifier,symbol,primaryIdentifier,organism.name,
+                                 views="primaryIdentifier, symbol, organism.name,
                                        goAnnotation.ontologyTerm.identifier, goAnnotation.ontologyTerm.name,
                                        goAnnotation.ontologyTerm.parents.identifier,goAnnotation.ontologyTerm.parents.name"
                                  externalLink="http://amigo.geneontology.org/cgi-bin/amigo/term_details?term="
