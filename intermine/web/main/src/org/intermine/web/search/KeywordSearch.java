@@ -1523,9 +1523,114 @@ public final class KeywordSearch
                 browseRequest.setCount(PER_PAGE);
             } else {
                 // hack when creating lists from results
-                browseRequest.setCount(10000);
+                browseRequest.setCount(100000);
+            }
+            // add faceting selections
+            for (Entry<String, String> facetValue : facetValues.entrySet()) {
+                if (facetValue != null) {
+                    BrowseSelection browseSelection = new BrowseSelection(facetValue.getKey());
+                    browseSelection.addValue(facetValue.getValue());
+                    browseRequest.addSelection(browseSelection);
+                }
             }
 
+            // order faceting results by hits
+            FacetSpec orderByHitsSpec = new FacetSpec();
+            orderByHitsSpec.setOrderBy(FacetSortSpec.OrderHitsDesc);
+            browseRequest.setFacetSpec("Category", orderByHitsSpec);
+            for (KeywordSearchFacetData facet : facets) {
+                browseRequest.setFacetSpec(facet.getField(), orderByHitsSpec);
+            }
+
+            LOG.debug("Prepared browserequest in " + (System.currentTimeMillis() - time) + " ms");
+            time = System.currentTimeMillis();
+
+            // execute query and return result
+            Browsable browser = new BoboBrowser(boboIndexReader);
+            result = browser.browse(browseRequest);
+
+            if (debugOutput) {
+                for (int i = 0; i < result.getHits().length && i < 5; i++) {
+                    Explanation expl = result.getHits()[i].getExplanation();
+                    if (expl != null) {
+                        LOG.debug(result.getHits()[i].getStoredFields().getFieldable("id")
+                                + " - score explanation: " + expl.toString());
+                    }
+                }
+            }
+        } catch (ParseException e) {
+            // just return an empty list
+            LOG.info("Exception caught, returning no results", e);
+        } catch (IOException e) {
+            // just return an empty list
+            LOG.info("Exception caught, returning no results", e);
+        } catch (BrowseException e) {
+            // just return an empty list
+            LOG.info("Exception caught, returning no results", e);
+        }
+
+        LOG.debug("Bobo browse finished in " + (System.currentTimeMillis() - time) + " ms");
+
+        return result;
+    }
+
+    /**
+     * perform a keyword search using bobo-browse for faceting and pagination
+     * @param searchString string to search for
+     * @param offset display offset
+     * @param facetValues map of 'facet field name' to 'value to restrict field to' (optional)
+     * @param ids ids to research the search to (for search in list)
+     * @param pagination if TRUE only return 100
+     * @param listSize the size of the list (needed for second query to build list page)
+     * @return bobo browse result or null if failed
+     */
+    public static BrowseResult runBrowseSearch(String searchString, int offset,
+            Map<String, String> facetValues, List<Integer> ids, boolean pagination, int listSize) {
+        BrowseResult result = null;
+        if (index == null) {
+            return result;
+        }
+        long time = System.currentTimeMillis();
+        String queryString = parseQueryString(searchString);
+
+        try {
+            Analyzer analyzer = new WhitespaceAnalyzer();
+
+            // pass entire list of field names to the multi-field parser
+            // => search through all fields
+            String[] fieldNamesArray = new String[index.getFieldNames().size()];
+
+            index.getFieldNames().toArray(fieldNamesArray);
+            QueryParser queryParser =
+                    new MultiFieldQueryParser(Version.LUCENE_30, fieldNamesArray, analyzer);
+            queryParser.setDefaultOperator(Operator.AND);
+            queryParser.setAllowLeadingWildcard(true);
+            org.apache.lucene.search.Query query = queryParser.parse(queryString);
+
+            // required to expand search terms
+            query = query.rewrite(reader);
+
+            if (debugOutput) {
+                LOG.debug("Rewritten query: " + query);
+            }
+
+            // initialize request
+            BrowseRequest browseRequest = new BrowseRequest();
+            if (debugOutput) {
+                browseRequest.setShowExplanation(true);
+            }
+            browseRequest.setQuery(query);
+            browseRequest.setFetchStoredFields(true);
+
+            // pagination
+            browseRequest.setOffset(offset);
+            if (pagination) {
+                // used on keywordsearch results page
+                browseRequest.setCount(PER_PAGE);
+            } else {
+                // hack when creating lists from results
+                browseRequest.setCount(listSize);
+            }
             // add faceting selections
             for (Entry<String, String> facetValue : facetValues.entrySet()) {
                 if (facetValue != null) {

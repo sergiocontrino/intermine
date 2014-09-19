@@ -65,20 +65,22 @@ public class SaveFromIdsToBagAction extends InterMineAction
         try {
             String type = (String) request.getParameter("type");
             String allChecked = (String) request.getParameter("allChecked");
+            String totalHits = (String) request.getParameter("totalHits");
+            int listSize = Integer.parseInt(totalHits);
 
             if ("true".equals(allChecked)) {
                 // TODO do something more clever than running the search again
                 String searchTerm = (String) request.getParameter("searchTerm");
-                JSONObject jsonRequest = new JSONObject(request.getParameter("jsonFacets"));                
+                JSONObject jsonRequest = new JSONObject(request.getParameter("jsonFacets"));
                 Map<String, String> facetMap = jsonToJava(jsonRequest);
                 int offset = 0;
                 boolean pagination = false;
-                BrowseResult result = KeywordSearch.runBrowseSearch(searchTerm, offset, facetMap, 
-                        new ArrayList<Integer>(), pagination);
-                
+                BrowseResult result = KeywordSearch.runBrowseSearch(searchTerm, offset, facetMap,
+                        new ArrayList<Integer>(), pagination, listSize);
+
                 if (result != null) {
                     LOG.error("processing result! " + result.getNumHits());
-                    BrowseHit[] browseHits = result.getHits();    
+                    BrowseHit[] browseHits = result.getHits();
                     LOG.error("browseHits " + browseHits.length);
                     idSet = KeywordSearch.getObjectIds(browseHits);
                     LOG.error("number of IDs " + idSet.size());
@@ -127,7 +129,7 @@ public class SaveFromIdsToBagAction extends InterMineAction
             }
         }
     }
-    
+
     private Map<String, String> jsonToJava(JSONObject json) throws JSONException {
         JSONArray ja = json.getJSONArray("facets");
         Map<String, String> facets = new HashMap<String, String>();
