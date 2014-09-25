@@ -335,7 +335,7 @@ public class IntronUtil
                 location.setEnd(new Integer(newLocEnd));
                 location.setStrand(tranLoc.getStrand());
                 location.setFeature(intron);
-                location.setLocatedOn(transcript);
+                location.setLocatedOn(chr);
                 location.addDataSets(dataSet);
 
                 intron.setChromosomeLocation(location);
