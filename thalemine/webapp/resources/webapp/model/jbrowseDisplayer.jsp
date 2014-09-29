@@ -30,13 +30,16 @@
 
     <c:set var="padding" value="${10}"/>
     <c:set var="offset" value="${fn:substringBefore((reportObject.object.length * 0.1), '.')}"/>
-    <c:set var="start" value="${reportObject.object.chromosomeLocation.start - offset}"/>
-    <c:set var="end" value="${reportObject.object.chromosomeLocation.end + offset}"/>
+    <c:set var="start" value="${reportObject.object.chromosomeLocation.start}"/>
+    <c:set var="end" value="${reportObject.object.chromosomeLocation.end}"/>
+    <c:set var="offsetstart" value="${start - offset}"/>
+    <c:set var="offsetend" value="${end + offset}"/>
 
     <c:set var="tracks" value="TAIR10_loci,TAIR10_genes"/>
-    <c:set var="extraParams" value="tracklist=1&nav=0&overview=0"/>
+    <c:set var="extraParams" value="tracklist=1&nav=1&overview=0"/>
+    <c:set var="loc" value="${chr}:${offsetstart}..${offsetend}"/>
 
-    <c:set var="jbLink" value="${baseUrl}/?data=${datasource}&loc=${chr}:${start}..${end}&tracks=${tracks}&${extraParams}"/>
+    <c:set var="jbLink" value="${baseUrl}/?data=${datasource}&loc=${loc}&tracks=${tracks}&${extraParams}"/>
 
     <div>
         <p>Click and drag the browser to move the view. Check to turn on/off the tracks from left menu to see the data in the main panel.</p>

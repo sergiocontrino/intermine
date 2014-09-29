@@ -172,11 +172,11 @@
     <post-process name="create-references" />
     <post-process name="create-chromosome-locations-and-lengths"/>
     <post-process name="create-gene-flanking-features" />
-    <post-process name="transfer-sequences"/>
     <post-process name="do-sources" />
     <post-process name="create-intron-features">
       <property name="organisms" value="3702"/>
     </post-process>
+    <post-process name="transfer-sequences"/>
     <post-process name="create-bioseg-location-index" />
     <post-process name="create-overlap-view" />
     <post-process name="create-attribute-indexes"/>
