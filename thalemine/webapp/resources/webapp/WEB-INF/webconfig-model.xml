@@ -332,7 +332,7 @@
                      jspName="model/jbrowseDisplayer.jsp"
                      replacesFields=""
                      placement="Genomics"
-                     types="Gene,Exon,Intron,MRNA,Exon,Intron,MiRNA,NcRNA,RRNA,SnRNA,SnoRNA,TRNA,Pseudogene,PseudogenicTranscript,TransposableElementGene"/>
+                     types="Gene,Exon,Intron,MRNA,MiRNA,NcRNA,RRNA,SnRNA,SnoRNA,TRNA,Pseudogene,PseudogenicTranscript,TransposableElementGene"/>
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.OverlappingFeaturesDisplayer"
                      jspName="model/overlappingFeaturesDisplayer.jsp"
