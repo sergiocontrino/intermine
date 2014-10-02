@@ -152,9 +152,14 @@
       <property name="src.data.dir.includes" value="keywlist.xml"/>
     </source>
     <source name="panther" type="panther">
-  <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/orthologs/panther"/>
-  <property name="panther.organisms" value="3702 7227 4932 10116 7955 10090 6239 9606"/>
+     <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/orthologs/panther"/>
+     <property name="panther.organisms" value="3702 7227 4932 10116 7955 10090 6239 9606"/>
     </source>
+
+ <source name="interpro" type="interpro">
+   <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/interpro/current"/>
+ </source>
+
 
     <!-- have to be the last sources run -->
     <source name="entrez-organism" type="entrez-organism">
