@@ -47,6 +47,12 @@
     <tabledisplayer src="/model/dataSourceShort.jsp"/>
   </class>
 
+  <class className="org.intermine.model.bio.ECNumber" >
+    <fields>
+      <fieldconfig fieldExpr="identifier"/>
+    </fields>
+  </class>
+
   <class className="org.intermine.model.bio.Exon">
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
