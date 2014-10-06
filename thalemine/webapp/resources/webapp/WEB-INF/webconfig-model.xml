@@ -60,11 +60,11 @@
       <table path="synonyms.value" showInHeader="true" lineLength="100" />
     </inlinelist>
     <fields>
-      <fieldconfig fieldExpr="primaryIdentifier"/>
-      <fieldconfig fieldExpr="secondaryIdentifier" showInHeader="false" showInInlineCollection="false" showInSummary="false" />
+      <fieldconfig fieldExpr="primaryIdentifier" label="ATG id" />
+      <fieldconfig fieldExpr="secondaryIdentifier" label="TAIR accession" showInHeader="false" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="symbol"/>
       <fieldconfig fieldExpr="name"/>
-      <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
+      <fieldconfig fieldExpr="length" label="mRNA length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
       <fieldconfig fieldExpr="chromosomeLocation" displayer="/model/chromosomeLocDisplayer.jsp" showInResults="false" />
       <fieldconfig fieldExpr="chromosome.primaryIdentifier" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.start" showInInlineCollection="false" showInSummary="false" />
