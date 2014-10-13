@@ -66,7 +66,7 @@
       <table path="synonyms.value" showInHeader="true" lineLength="100" />
     </inlinelist>
     <fields>
-      <fieldconfig fieldExpr="primaryIdentifier" label="ATG id" />
+      <fieldconfig fieldExpr="primaryIdentifier" label="AGI ID" />
       <fieldconfig fieldExpr="secondaryIdentifier" label="TAIR accession" showInHeader="false" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="symbol"/>
       <fieldconfig fieldExpr="name"/>
