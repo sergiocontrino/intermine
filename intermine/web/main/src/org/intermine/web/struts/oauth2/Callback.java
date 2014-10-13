@@ -1,11 +1,13 @@
 package org.intermine.web.struts.oauth2;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,7 +63,7 @@ public class Callback extends LoginHandler {
             HttpServletRequest request,
             HttpServletResponse response) {
         Properties webProperties = InterMineContext.getWebProperties();
-        
+
         // Suitable values are: GOOGLE, GITHUB, FACEBOOK, MICROSOFT, etc.
         String providerName = request.getParameter("provider");
 
@@ -113,13 +115,28 @@ public class Callback extends LoginHandler {
             ActionMessages messages = loginUser(request, identity);
 
             saveMessages(request, messages);
-            return mapping.findForward("mymine");
+
+            String returnto = parseReturnto(state);
+            return new ActionForward(returnto);
         } catch (Exception e) {
             LOG.error("Error granting access", e);
             ActionErrors errors = new ActionErrors();
             errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("oauth2.error.granting", e.getLocalizedMessage()));
             saveErrors(request, errors);
             return mapping.findForward("login");
+        }
+    }
+
+    private String parseReturnto(String state) throws IllegalArgumentException {
+        String URL_PATTERN = "returnto=";
+        int URL_PATTERN_LENGTH = URL_PATTERN.length();
+
+        try {
+            String stateDecoded = (String) URLDecoder.decode(state, "UTF-8");
+            int returnto_index = stateDecoded.indexOf(URL_PATTERN) + URL_PATTERN_LENGTH;
+            return stateDecoded.substring(returnto_index);
+        } catch (UnsupportedEncodingException e) {
+            throw new AssertionError("UTF-8 is unknown");
         }
     }
 
@@ -218,7 +235,7 @@ public class Callback extends LoginHandler {
 
     /**
      * Get user info for services which are sane enough to have an identity resource that serves json
-     * with <code>id</code>, <code>email</code> and <code>name</code> keys. 
+     * with <code>id</code>, <code>email</code> and <code>name</code> keys.
      * @param provider Who to ask.
      * @param accessToken An access token.
      * @return The delegated identity.
@@ -251,7 +268,7 @@ public class Callback extends LoginHandler {
         } else {
             throw new OAuthSystemException("Unknown authorisation mechanism: " + authMechanism);
         }
-                
+
         bearerClientRequest.setHeader("Accept", "application/json");
         OAuthClient oauthClient = new OAuthClient(new URLConnectionClient());
         OAuthResourceResponse resourceResponse = oauthClient.resource(bearerClientRequest,

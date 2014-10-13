@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
+import java.net.URLEncoder;
+import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +45,7 @@ public class Authenticator extends InterMineAction {
             HttpServletResponse response) throws Exception {
         OAuthClientRequest authRequest;
         OAuthProviderType provider;
-        
+
         Properties webProperties = InterMineContext.getWebProperties();
 
 
@@ -54,7 +56,10 @@ public class Authenticator extends InterMineAction {
         redirectParts.add(webProperties.getProperty("webapp.baseurl"));
         redirectParts.add(webProperties.getProperty("webapp.path"));
         redirectParts.add("oauth2callback.do?provider=" + providerName);
-        String state = UUID.randomUUID().toString();
+
+        String security_token = UUID.randomUUID().toString();
+        String returnto = URLDecoder.decode(request.getParameter("returnto"), "UTF-8");
+        String state = URLEncoder.encode("security_token=" + security_token + "&returnto=" + returnto, "UTF-8");
         request.getSession().setAttribute("oauth2.state", state);
 
         String authorisationUrl = webProperties.getProperty("oauth2." + providerName + ".url.auth");
