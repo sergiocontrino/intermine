@@ -17,6 +17,9 @@
 <html:xhtml />
 
 <div class="keywordSearch">
+
+<table>
+<tr><td>
     <div class="form">
         <h2>Search <c:if test="${!empty searchBag}">the list "${searchBag}"</c:if><c:if test="${empty searchBag}">our database</c:if> by keyword</h2>
         <form action="<c:url value="/keywordSearchResults.do" />" name="search" method="get">
@@ -37,6 +40,9 @@
             </c:if>
         </form>
     </div>
+
+    </td><td>
+
     <div class="examples">
         <h4>Examples</h4>
         <c:choose>
@@ -47,10 +53,13 @@
                     genes, pathways, authors, ontology terms, etc.  (e.g. <i>FT</i>, <i>stamen</i>, <i>lateral root development</i>, <i>allele</i>)
                 </li>
                 <li>
-                    Use <i>OR</i> to search for either of two terms (e.g. <i>binding OR ligase</i>) or quotation marks to search for phrases  (e.g. <i>"root growth"</i>).
+                    Use <i><strong>OR</strong></i> to search for either of two terms (e.g. <i>binding OR ligase</i>) or <strong>quotation marks</strong> to search for phrases (e.g. <i>"root growth"</i>).
                 </li>
                 <li>
                     <strong>Boolean search syntax</strong> is supported: e.g. <i>arabi*</i> for partial matches or <i>dna AND NOT ligase</i> to exclude a term
+                </li>
+                <li>
+                    Single Word <strong>fuzzy search</strong>: for words of uncertain spelling add a <strong>tilda</strong> at the end of a word, e.g. <i>proten~</i>.
                 </li>
             </ul>
           </c:when>
@@ -61,5 +70,7 @@
     </div>
     <div style="clear:both;"></div>
 </div>
+
+</td></tr></table>
 
 <im:debug message="END keywordSearch.jsp"/>
