@@ -72,6 +72,9 @@ public class Callback extends LoginHandler {
         redirectParts.add(webProperties.getProperty("webapp.path"));
         redirectParts.add("oauth2callback.do?provider=" + providerName);
 
+        String state = (String) request.getSession().getAttribute("oauth2.state");
+        String returnto = parseReturnto(state);
+
         OAuthAuthzResponse oar;
         try {
             oar = OAuthAuthzResponse.oauthCodeAuthzResponse(request);
@@ -79,15 +82,14 @@ public class Callback extends LoginHandler {
             ActionErrors errors = new ActionErrors();
             errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("oauth2.error.getting-code", e.getMessage()));
             saveErrors(request, errors);
-            return mapping.findForward("login");
+            return new ActionForward(returnto);
         }
 
-        String state = (String) request.getSession().getAttribute("oauth2.state");
         if (state == null || !state.equals(oar.getState())) {
             ActionErrors errors = new ActionErrors();
             errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("oauth2.error.illegal-request"));
             saveErrors(request, errors);
-            return mapping.findForward("login");
+            return new ActionForward(returnto);
         }
 
         OAuthProvider provider;
@@ -97,7 +99,7 @@ public class Callback extends LoginHandler {
             ActionErrors errors = new ActionErrors();
             errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("oauth2.error.unknown-provider", providerName));
             saveErrors(request, errors);
-            return mapping.findForward("login");
+            return new ActionForward(returnto);
         }
 
         try {
@@ -116,14 +118,13 @@ public class Callback extends LoginHandler {
 
             saveMessages(request, messages);
 
-            String returnto = parseReturnto(state);
             return new ActionForward(returnto);
         } catch (Exception e) {
             LOG.error("Error granting access", e);
             ActionErrors errors = new ActionErrors();
             errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("oauth2.error.granting", e.getLocalizedMessage()));
             saveErrors(request, errors);
-            return mapping.findForward("login");
+            return new ActionForward(returnto);
         }
     }
 
