@@ -1690,6 +1690,14 @@ public final class KeywordSearch
         	queryString=queryString.substring(0, queryString.lastIndexOf('"'));
         }
 
+
+        // count the spaces (if > 1 -> add a ? at the end (to avoid issues with punctuation)
+        //
+        int noOfSpaces = qs.length() - qs.replaceAll(" ", "").length();
+        if (noOfSpaces > 1) {
+        	queryString=queryString.concat("~");
+        }
+
         // keep strings separated by spaces together, i.e. substitute space between words with AND
         queryString = queryString.replaceAll("\\b(\\s+)\\+(\\s+)\\b", "$1AND$2");
         // \b word boundary
@@ -1703,8 +1711,10 @@ public final class KeywordSearch
         //        "]", "^", "\"", "~", "?", ":", "\\"};
 
         // now we substitute the special chars with ?, single char placeholder
+//        final String[] specialCharacters = {"+", "-", "&&", "||", "!", "(", ")", "{", "}", "[",
+//                "]", "^", "~", ":", "\\"};
         final String[] specialCharacters = {"+", "-", "&&", "||", "!", "(", ")", "{", "}", "[",
-                "]", "^", "~", ":", "\\"};
+                "]", "^", ":", "\\"};
         for (String s : specialCharacters) {
             if (queryString.contains(s)) {
             	queryString = queryString.replace(s, "?");
