@@ -31,6 +31,15 @@
     </fields>
   </class>
 
+  <class className="org.intermine.model.bio.CrossReference">
+    <fields>
+      <fieldconfig fieldExpr="identifier"/>
+      <fieldconfig fieldExpr="source.name" label="Source"/>
+      <fieldconfig fieldExpr="subject.primaryIdentifier" label="DB indentifier"  showInInlineCollection="false"/>
+    </fields>
+  </class>
+
+
   <class className="org.intermine.model.bio.DataSet">
     <fields>
       <fieldconfig fieldExpr="name"/>
