@@ -1713,8 +1713,13 @@ public final class KeywordSearch
         // now we substitute the special chars with ?, single char placeholder
 //        final String[] specialCharacters = {"+", "-", "&&", "||", "!", "(", ")", "{", "}", "[",
 //                "]", "^", "~", ":", "\\"};
-        final String[] specialCharacters = {"+", "-", "&&", "||", "!", "(", ")", "{", "}", "[",
+//        final String[] specialCharacters = {"+", "-", "&&", "||", "!", "(", ")", "{", "}", "[",
+//                "]", "^", ":", "\\"};
+
+        final String[] specialCharacters = {"+", "&&", "||", "!", "(", ")", "{", "}", "[",
                 "]", "^", ":", "\\"};
+
+
         for (String s : specialCharacters) {
             if (queryString.contains(s)) {
             	queryString = queryString.replace(s, "?");
