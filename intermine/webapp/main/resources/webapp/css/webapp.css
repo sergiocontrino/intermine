@@ -1528,6 +1528,10 @@ div.inline-list ul li { display:inline; margin:0; }
 div.inline-list h3 { margin:0; border-top-width:1px; border-top-style:solid; padding:2px 6px; font-size:14px; }
 div.inline-list div.right { display:inline; float:right; font-size:13px; }
 /* collection tables */
+
+/* added to have wrapping in the popup preview */
+.collection-table td .im-cell-preview .im-field-value { white-space: normal; }
+
 div.collection-table { margin-bottom:30px; }
 div.collection-table h3 { margin:0; border-top-width:1px; border-top-style:solid; padding:2px 6px; font-size:14px; }
 div.collection-table div.right { display:inline; float:right; font-size:13px; }
