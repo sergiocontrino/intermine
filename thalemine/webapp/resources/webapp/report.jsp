@@ -336,45 +336,41 @@
 
 </div>
 
-
+<%-- TODO JCVI: Change the link here to your displayer --%>
 <script charset="utf-8" type="text/javascript" src="http://atted-displayer.labs.intermine.org/build/atted-displayer-0.0.1.min.js"></script>
+
+
 <link rel="stylesheet" type="text/css" href="bootstrap.css">
 
 <c:set var="AGI" value="${fn:substringAfter(stableLink, 'externalids=')}" />
 
 <div id="atted_displayercontainer"></div>
-        <script type="text/javascript">
-var id = "${AGI}".charAt(0).toUpperCase() + "${AGI}".slice(1).toLowerCase();
-//document.write(id);
+   <script type="text/javascript">
+      var id = "${AGI}".charAt(0).toUpperCase() + "${AGI}".slice(1).toLowerCase();
+      var attedcallback = function(values) {
+      var webapp_url = "${WEB_PROPERTIES['project.sitePrefix']}/${WEB_PROPERTIES['webapp.path']}";
 
-          var attedcallback = function(values) {
-          var webapp_url = "${WEB_PROPERTIES['project.sitePrefix']}/${WEB_PROPERTIES['webapp.path']}";
-          var options = {
-                type: 'table',
-//                url: 'http://intermine.modencode.org/thalemineval',
-                url: webapp_url,
-                query: {"model":{"name":"genomic"},"select":["Gene.primaryIdentifier","Gene.symbol","Gene.curatorSummary"],"orderBy":[{"Gene.primaryIdentifier":"ASC"}],"where":[{"path":"Gene.primaryIdentifier","op":"ONE OF","code":"A","values":values}]}
-              };
-              jQuery('#query-container').imWidget(options);
+      var options = {
+             type: 'table',
+             url: webapp_url,
+             query: {"model":{"name":"genomic"},"select":["Gene.primaryIdentifier","Gene.symbol","Gene.curatorSummary"],"orderBy":[{"Gene.primaryIdentifier":"ASC"}],"where":[{"path":"Gene.primaryIdentifier","op":"ONE OF","code":"A","values":values}]}
+          };
+          jQuery('#query-container').imWidget(options);
+         }
 
+      var opts = {
+            target: '#atted_displayercontainer',
+            AGIcode: id,
+            method: 'cor',
+            cutoff: 0.7,
+            guarantee: 10
             }
 
-            var opts = {
-                target: '#atted_displayercontainer',
-                AGIcode: id,
-		method: 'cor',
-		cutoff: 0.7,
-		guarantee: 10
-            }
-		var afunc = function(){}
-
-            var displayer = new AttedDisplayer(opts,attedcallback);
+      var afunc = function(){}
+      var displayer = new AttedDisplayer(opts,attedcallback);
 </script>
 
-
-
-
-
+<%-- toggle --%>
 <script type="text/javascript" charset="utf-8">
 
 jQuery(document).ready(function () {
@@ -400,17 +396,17 @@ jQuery(document).ready(function () {
       jQuery(this).toggle("slow");
         return true;
     });
-
-
   });
 
 </script>
+
 
 <html:link linkName="#" styleId="sis" style="cursor:pointer">
     <h3>
         Save / Export
         <img src="images/undisclosed.gif" id="co">
     </h3>
+
 </html:link>
 
 
@@ -428,7 +424,7 @@ jQuery(document).ready(function () {
     })
 </script>
 
-<div id="protocols" style="display: block">
+<div id="protocols" style="display: none">
 <link rel="stylesheet" type="text/css" href="https://cdn.araport.org/js/intermine/im-tables/latest/imtables.css">
 <script charset="UTF-8" type="text/javascript" src="https://cdn.araport.org/js/intermine/im-tables/latest/imtables-bundled.js"></script>
 <!-- A place holder element in your page to hold the table -->
@@ -439,25 +435,14 @@ jQuery(document).ready(function () {
 </div>
 </div>
 
-<%--
-<script type="text/javascript">
-  var options = {
-    type: 'table',
-    url: 'http://intermine.modencode.org/thalemineval',
-    token: 'i1h439A3W8Vcv0McE898',
-    query: {"model":{"name":"genomic"},"select":["Gene.primaryIdentifier","Gene.symbol","Gene.curatorSummary"],"orderBy":[{"Gene.primaryIdentifier":"ASC"}],"where":[{"path":"Gene.primaryIdentifier","op":"=","code":"A","value":"At2g07776"}]}
-  };
-  jQuery('#query-container').imWidget(options);
-</script>
---%>
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
 
 </c:if>
 
 <!-- /ATTED data -->
 
-
-
   </div>
+
   </c:forEach>
 
   <div id="OtherCategory" class="aspectBlock">
