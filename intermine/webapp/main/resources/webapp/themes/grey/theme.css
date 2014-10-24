@@ -60,6 +60,12 @@ div#header p {
   background:#F0F0F0;
   padding:10px;}
 
+.yellbox {
+    border:1px solid #000;
+  background:#FF9;
+  padding:10px;}
+
+
 .gradientbox {
   padding:10px;
   border:1px solid #000;

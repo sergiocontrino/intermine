@@ -10,7 +10,18 @@
 <html:xhtml/>
 
 <div class="body">
-<im:boxarea title="Data" stylename="plainbox"><p>ThaleMine integrates data from a large number of sources into a single data warehouse.  This page lists the data that are included in the current release.  Many more data sets will be added in future releases, please contact us if there are any particular data you would like to see included.</p></im:boxarea>
+
+<%--
+<im:boxarea title="Data" stylename="plainbox">
+<p>ThaleMine integrates data from a large number of sources into a single data warehouse.  This page lists the data that are included in the current release.  Many more data sets will be added in future releases, please contact us if there are any particular data you would like to see included.</p>
+</im:boxarea>
+--%>
+
+<im:boxarea title="Data" stylename="yellbox">
+<p>ThaleMine integrates data from a large number of sources into a single data warehouse.</p>
+<p>This page lists the data that are included in the current release and it is manually curated; its contents are not indexed in our keyword search.</p>
+<p>More data sets will be added in future releases, please <a href="mailto:araport@jcvi.org?Subject=Data request"> contact us </a> if there are any particular data you would like to see included.</p>
+</im:boxarea>
 
 <br/>
 <table cellpadding="0" cellspacing="0" border="0" class="dbsources">
