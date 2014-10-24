@@ -322,7 +322,138 @@
        <tiles:put name="opened" value="${status.index == 0}" />
       </tiles:insert>
 
+<!-- /ATTED data -->
 
+      <c:if test="${aspect eq 'Expression' && object.type == 'Gene'}">
+
+<!-- co-regulation header -->
+<div id="atted-section" class="collection-table column-border" style="margin-bottom: 0px">
+
+    <div class="header">
+      <h3>Co-regulation</h3>
+<!--       <p>Data source: <a href="http://atted.jp/">ATTED-II</a></p> -->
+    </div>
+
+</div>
+
+
+<script charset="utf-8" type="text/javascript" src="http://atted-displayer.labs.intermine.org/build/atted-displayer-0.0.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="bootstrap.css">
+
+<c:set var="AGI" value="${fn:substringAfter(stableLink, 'externalids=')}" />
+
+<div id="atted_displayercontainer"></div>
+        <script type="text/javascript">
+var id = "${AGI}".charAt(0).toUpperCase() + "${AGI}".slice(1).toLowerCase();
+//document.write(id);
+
+          var attedcallback = function(values) {
+          var webapp_url = "${WEB_PROPERTIES['project.sitePrefix']}/${WEB_PROPERTIES['webapp.path']}";
+          var options = {
+                type: 'table',
+//                url: 'http://intermine.modencode.org/thalemineval',
+                url: webapp_url,
+                query: {"model":{"name":"genomic"},"select":["Gene.primaryIdentifier","Gene.symbol","Gene.curatorSummary"],"orderBy":[{"Gene.primaryIdentifier":"ASC"}],"where":[{"path":"Gene.primaryIdentifier","op":"ONE OF","code":"A","values":values}]}
+              };
+              jQuery('#query-container').imWidget(options);
+
+            }
+
+            var opts = {
+                target: '#atted_displayercontainer',
+                AGIcode: id,
+		method: 'cor',
+		cutoff: 0.7,
+		guarantee: 10
+            }
+		var afunc = function(){}
+
+            var displayer = new AttedDisplayer(opts,attedcallback);
+</script>
+
+
+
+
+
+<script type="text/javascript" charset="utf-8">
+
+jQuery(document).ready(function () {
+ jQuery(".tbox").children('doopen').show();
+ jQuery(".tbox").children('doclose').hide();
+
+  jQuery('.tbox').click(function () {
+  var text = jQuery(this).children('doclose');
+
+  if (text.is(':hidden')) {
+       jQuery(this).children('doclose').show("slow");
+     } else {
+         jQuery(this).children('doopen').show("slow");
+      }
+   });
+
+  jQuery("doopen").click(function(){
+     jQuery(this).toggle("slow");
+     return true;
+    });
+
+  jQuery("doclose").click(function(){
+      jQuery(this).toggle("slow");
+        return true;
+    });
+
+
+  });
+
+</script>
+
+<html:link linkName="#" styleId="sis" style="cursor:pointer">
+    <h3>
+        Save / Export
+        <img src="images/undisclosed.gif" id="co">
+    </h3>
+</html:link>
+
+
+
+<script type="text/javascript" charset="utf-8">
+    jQuery(document).ready(function () {
+        jQuery("#sis").click(function () {
+           if(jQuery("#protocols").is(":hidden")) {
+             jQuery("#co").attr("src", "images/disclosed.gif");
+           } else {
+             jQuery("#co").attr("src", "images/undisclosed.gif");
+           }
+           jQuery("#protocols").toggle("slow");
+        });
+    })
+</script>
+
+<div id="protocols" style="display: block">
+<link rel="stylesheet" type="text/css" href="https://cdn.araport.org/js/intermine/im-tables/latest/imtables.css">
+<script charset="UTF-8" type="text/javascript" src="https://cdn.araport.org/js/intermine/im-tables/latest/imtables-bundled.js"></script>
+<!-- A place holder element in your page to hold the table -->
+<div id="query-container">
+ <p class="apology">
+  Please be patient while the results of your query are retrieved.
+ </p>
+</div>
+</div>
+
+<%--
+<script type="text/javascript">
+  var options = {
+    type: 'table',
+    url: 'http://intermine.modencode.org/thalemineval',
+    token: 'i1h439A3W8Vcv0McE898',
+    query: {"model":{"name":"genomic"},"select":["Gene.primaryIdentifier","Gene.symbol","Gene.curatorSummary"],"orderBy":[{"Gene.primaryIdentifier":"ASC"}],"where":[{"path":"Gene.primaryIdentifier","op":"=","code":"A","value":"At2g07776"}]}
+  };
+  jQuery('#query-container').imWidget(options);
+</script>
+--%>
+
+</c:if>
+
+<!-- /ATTED data -->
 
 
 
