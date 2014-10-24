@@ -347,16 +347,17 @@
 <div id="atted_displayercontainer"></div>
    <script type="text/javascript">
       var id = "${AGI}".charAt(0).toUpperCase() + "${AGI}".slice(1).toLowerCase();
-      var attedcallback = function(values) {
       var webapp_url = "${WEB_PROPERTIES['project.sitePrefix']}/${WEB_PROPERTIES['webapp.path']}";
+      var attedcallback = function(values) {
 
       var options = {
              type: 'table',
              url: webapp_url,
+             token: "${USER.dayToken}",
              query: {"model":{"name":"genomic"},"select":["Gene.primaryIdentifier","Gene.symbol","Gene.curatorSummary"],"orderBy":[{"Gene.primaryIdentifier":"ASC"}],"where":[{"path":"Gene.primaryIdentifier","op":"ONE OF","code":"A","values":values}]}
           };
       if (values == null || values.length < 1) {
-    	  jQuery('#query-container').html("No results.");
+    	  jQuery('#query-container').html("");
     	  jQuery('#attedexport').hide();
       } else {
     	  jQuery('#attedexport').show();
@@ -374,7 +375,8 @@
             AGIcode: id,
             method: 'cor',
             cutoff: 0.7,
-            guarantee: 10
+            guarantee: 10,
+            service: webapp_url + "/service"
             }
 
 
@@ -437,7 +439,6 @@ jQuery(document).ready(function () {
 
 <div id="protocols" style="display: none">
 <link rel="stylesheet" type="text/css" href="https://cdn.araport.org/js/intermine/im-tables/latest/imtables.css">
-<script charset="UTF-8" type="text/javascript" src="https://cdn.araport.org/js/intermine/im-tables/latest/imtables-bundled.js"></script>
 <!-- A place holder element in your page to hold the table -->
 <div id="query-container">
  <p class="apology">
