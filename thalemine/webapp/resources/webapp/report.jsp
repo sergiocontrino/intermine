@@ -355,8 +355,19 @@
              url: webapp_url,
              query: {"model":{"name":"genomic"},"select":["Gene.primaryIdentifier","Gene.symbol","Gene.curatorSummary"],"orderBy":[{"Gene.primaryIdentifier":"ASC"}],"where":[{"path":"Gene.primaryIdentifier","op":"ONE OF","code":"A","values":values}]}
           };
-          jQuery('#query-container').imWidget(options);
+      if (values == null || values.length < 1) {
+    	  jQuery('#query-container').html("No results.");
+    	  jQuery('#attedexport').hide();
+      } else {
+    	  jQuery('#attedexport').show();
+    	  jQuery('#query-container').imWidget(options);
+      }
+
          }
+
+      var attedqueryhook = function() {
+    		  jQuery('#query-container').html("Waiting for results...");
+      }
 
       var opts = {
             target: '#atted_displayercontainer',
@@ -366,8 +377,8 @@
             guarantee: 10
             }
 
-      var afunc = function(){}
-      var displayer = new AttedDisplayer(opts,attedcallback);
+
+      var displayer = new AttedDisplayer(opts,attedcallback,attedqueryhook);
 </script>
 
 <%-- toggle --%>
@@ -402,7 +413,7 @@ jQuery(document).ready(function () {
 
 
 <html:link linkName="#" styleId="sis" style="cursor:pointer">
-    <h3>
+    <h3 id="attedexport">
         Save / Export
         <img src="images/undisclosed.gif" id="co">
     </h3>
