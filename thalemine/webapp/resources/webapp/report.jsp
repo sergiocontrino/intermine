@@ -337,8 +337,7 @@
 </div>
 
 <%-- TODO JCVI: Change the link here to your displayer --%>
-<script charset="utf-8" type="text/javascript" src="http://atted-displayer.labs.intermine.org/build/atted-displayer-0.0.1.min.js"></script>
-
+<script charset="utf-8" type="text/javascript" src="https://cdn.araport.org/js/atted-displayer/build/atted-displayer-1.0.0.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="bootstrap.css">
 
