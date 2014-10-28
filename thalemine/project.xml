@@ -182,6 +182,7 @@
       <property name="organisms" value="3702"/>
     </post-process>
     <post-process name="transfer-sequences"/>
+    <post-process name="populate-child-features"/>
     <post-process name="create-bioseg-location-index" />
     <post-process name="create-overlap-view" />
     <post-process name="create-attribute-indexes"/>
