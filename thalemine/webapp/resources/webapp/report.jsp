@@ -339,14 +339,15 @@
 <%-- TODO JCVI: Change the link here to your displayer --%>
 <script charset="utf-8" type="text/javascript" src="https://cdn.araport.org/js/atted-displayer/build/atted-displayer-1.0.0.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="bootstrap.css">
+<%-- Comment this out because it changes the formatting of the whole report page relative to the rest of the site --%>
+<%--<link rel="stylesheet" type="text/css" href="https://cdn.araport.org/css/bootstrap/2.3.2/css/bootstrap.min.css">--%>
 
 <c:set var="AGI" value="${fn:substringAfter(stableLink, 'externalids=')}" />
 
 <div id="atted_displayercontainer"></div>
    <script type="text/javascript">
       var id = "${AGI}".charAt(0).toUpperCase() + "${AGI}".slice(1).toLowerCase();
-      var webapp_url = "${WEB_PROPERTIES['project.sitePrefix']}/${WEB_PROPERTIES['webapp.path']}";
+      var webapp_url = "${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}";
       var attedcallback = function(values) {
 
       var options = {
