@@ -39,7 +39,7 @@ will be selected.
         </description>
         <param required="true"
             type="XML"
-            default="&lt;query name=&quot;short genes on the X chromosome&quot; model=&quot;genomic&quot; view=&quot;Gene.id Gene.exons.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;X&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
+            default="&lt;query name=&quot;Short genes on Chr1&quot; model=&quot;genomic&quot; view=&quot;Gene.id Gene.exons.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;X&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
             schema="/schema/query.xsd"
             description="A definition of the query to execute in Path-Query XML format">query</param>
         <param type="String[]" required="false"
@@ -195,7 +195,7 @@ will be selected.
         </description>
         <param required="true"
             type="XML"
-            default="&lt;query name=&quot;short genes on the X chromosome&quot; model=&quot;genomic&quot; view=&quot;Gene.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;X&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
+            default="&lt;query name=&quot;Short genes on Chr1&quot; model=&quot;genomic&quot; view=&quot;Gene.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;X&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
             schema="/schema/query.xsd"
             description="A definition of the query to execute in Path-Query XML format">query</param>
         <param type="String[]" required="false"
@@ -240,7 +240,7 @@ will be selected.
         </description>
         <param required="true"
             type="XML"
-            default="&lt;query name=&quot;short genes on the X chromosome&quot; model=&quot;genomic&quot; view=&quot;Gene.id Gene.exons.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;X&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
+            default="&lt;query name=&quot;Short genes on Chr1&quot; model=&quot;genomic&quot; view=&quot;Gene.id Gene.exons.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;X&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
             schema="/schema/query.xsd"
             description="A definition of the query to execute in Path-Query XML format">query</param>
     </method>
@@ -312,17 +312,17 @@ following [json-schema](http://json-schema.org/) schema:
               required="false"
               type="boolean"
               default="false">replaceExisting</param>
-          <param 
+          <param
               description="The region search input"
               default="
 {&#10;
     &quot;regions&quot;: [&#10;
-    &quot;2L:14615455..14619002&quot;,&#10;
-    &quot;2R:5866646..5868384&quot;,&#10;
-    &quot;3R:2578486..2580016&quot;&#10;
+    &quot;Chr1:29733..37349&quot;,&#10;
+    &quot;Chr2:393758..394189&quot;,&#10;
+    &quot;Chr4:1495567..1503324&quot;&#10;
     ],&#10;
     &quot;featureTypes&quot;: [&quot;Gene&quot;, &quot;Exon&quot;, &quot;Intron&quot;],&#10;
-    &quot;organism&quot;: &quot;D. melanogaster&quot;&#10;
+    &quot;organism&quot;: &quot;A. thaliana&quot;&#10;
 }&#10;
               "
               required="true" type="JSON">query</param>
@@ -381,12 +381,12 @@ following [json-schema](http://json-schema.org/) schema:
               <content type="application/json" schema="/schema/region-search-request.schema">
                 {
                   "regions": [
-                    "2L:14615455..14619002",
-                    "2R:5866646..5868384",
-                    "3R:2578486..2580016"
+                    "Chr1:29733..37349",
+                    "Chr2:393758..394189",
+                    "Chr4:1495567..1503324"
                   ],
                   "featureTypes": ["Gene", "Exon", "Intron"],
-                  "organism": "D. melanogaster"
+                  "organism": "A. thaliana"
                 }
               </content>
            </body>
@@ -439,17 +439,17 @@ following [json-schema](http://json-schema.org/) schema:
 }
 ```
           </description>
-          <param 
+          <param
               description="The region search input"
               default="
 {&#10;
     &quot;regions&quot;: [&#10;
-    &quot;2L:14615455..14619002&quot;,&#10;
-    &quot;2R:5866646..5868384&quot;,&#10;
-    &quot;3R:2578486..2580016&quot;&#10;
+    &quot;Chr1:29733..37349&quot;,&#10;
+    &quot;Chr2:393758..394189&quot;,&#10;
+    &quot;Chr4:1495567..1503324&quot;&#10;
     ],&#10;
     &quot;featureTypes&quot;: [&quot;Gene&quot;, &quot;Exon&quot;, &quot;Intron&quot;],&#10;
-    &quot;organism&quot;: &quot;D. melanogaster&quot;&#10;
+    &quot;organism&quot;: &quot;A. thaliana&quot;&#10;
 }&#10;
               "
               required="true" type="JSON">query</param>
@@ -492,12 +492,12 @@ following [json-schema](http://json-schema.org/) schema:
               <content type="application/json" schema="/schema/region-search-request.schema">
                 {
                   "regions": [
-                    "2L:14615455..14619002",
-                    "2R:5866646..5868384",
-                    "3R:2578486..2580016"
+                    "Chr1:29733..37349",
+                    "Chr2:393758..394189",
+                    "Chr4:1495567..1503324"
                   ],
                   "featureTypes": ["Gene", "Exon", "Intron"],
-                  "organism": "D. melanogaster"
+                  "organism": "A. thaliana"
                 }
               </content>
            </body>
@@ -525,7 +525,7 @@ following [json-schema](http://json-schema.org/) schema:
           <description format="markdown">
 This service returns information about features found
 overlapping a set of genomic intervals. The results are
-returned in the 
+returned in the
 [FASTA](http://en.wikipedia.org/wiki/FASTA_format) format
 where each record represents a feature, including the sequence
 associated with that feature.
@@ -555,17 +555,17 @@ following [json-schema](http://json-schema.org/) schema:
 }
 ```
           </description>
-          <param 
+          <param
               description="The region search input"
               default="
 {&#10;
     &quot;regions&quot;: [&#10;
-    &quot;2L:14615455..14619002&quot;,&#10;
-    &quot;2R:5866646..5868384&quot;,&#10;
-    &quot;3R:2578486..2580016&quot;&#10;
+    &quot;Chr1:29733..37349&quot;,&#10;
+    &quot;Chr2:393758..394189&quot;,&#10;
+    &quot;Chr4:1495567..1503324&quot;&#10;
     ],&#10;
     &quot;featureTypes&quot;: [&quot;Gene&quot;, &quot;Exon&quot;, &quot;Intron&quot;],&#10;
-    &quot;organism&quot;: &quot;D. melanogaster&quot;&#10;
+    &quot;organism&quot;: &quot;A. thaliana&quot;&#10;
 }&#10;
               "
               required="true" type="JSON">query</param>
@@ -575,7 +575,7 @@ following [json-schema](http://json-schema.org/) schema:
           <description format="markdown">
 This service returns information about features found
 overlapping a set of genomic intervals. The results are
-returned in the 
+returned in the
 [FASTA](http://en.wikipedia.org/wiki/FASTA_format) format
 where each record represents a feature, including the sequence
 associated with that feature.
@@ -609,12 +609,12 @@ following [json-schema](http://json-schema.org/) schema:
               <content type="application/json" schema="/schema/region-search-request.schema">
                 {
                   "regions": [
-                    "2L:14615455..14619002",
-                    "2R:5866646..5868384",
-                    "3R:2578486..2580016"
+                    "Chr1:29733..37349",
+                    "Chr2:393758..394189",
+                    "Chr4:1495567..1503324"
                   ],
                   "featureTypes": ["Gene", "Exon", "Intron"],
-                  "organism": "D. melanogaster"
+                  "organism": "A. thaliana"
                 }
               </content>
            </body>
@@ -670,20 +670,23 @@ following [json-schema](http://json-schema.org/) schema:
 }
 ```
           </description>
-          <param 
+          <param
               description="The region search input"
               default="
 {&#10;
     &quot;regions&quot;: [&#10;
-    &quot;2L:14615455..14619002&quot;,&#10;
-    &quot;2R:5866646..5868384&quot;,&#10;
-    &quot;3R:2578486..2580016&quot;&#10;
+    &quot;Chr1:29733..37349&quot;,&#10;
+    &quot;Chr2:393758..394189&quot;,&#10;
+    &quot;Chr4:1495567..1503324&quot;&#10;
     ],&#10;
     &quot;featureTypes&quot;: [&quot;Gene&quot;, &quot;Exon&quot;, &quot;Intron&quot;],&#10;
-    &quot;organism&quot;: &quot;D. melanogaster&quot;&#10;
+    &quot;organism&quot;: &quot;A. thaliana&quot;&#10;
 }&#10;
               "
               required="true" type="JSON">query</param>
+            <param type="String" required="false"
+                description="Create a UCSC compatible bed file. Allowed values: yes|no"
+                default="yes">ucscCompatible</param>
        </method>
       <method type="POST" authenticationRequired="false">
           <summary>Get Genomic Features overlapping given Regions</summary>
@@ -722,12 +725,12 @@ following [json-schema](http://json-schema.org/) schema:
               <content type="application/json" schema="/schema/region-search-request.schema">
                 {
                   "regions": [
-                    "2L:14615455..14619002",
-                    "2R:5866646..5868384",
-                    "3R:2578486..2580016"
+                    "Chr1:29733..37349",
+                    "Chr2:393758..394189",
+                    "Chr4:1495567..1503324"
                   ],
                   "featureTypes": ["Gene", "Exon", "Intron"],
-                  "organism": "D. melanogaster"
+                  "organism": "A. thaliana",
                 }
               </content>
            </body>
