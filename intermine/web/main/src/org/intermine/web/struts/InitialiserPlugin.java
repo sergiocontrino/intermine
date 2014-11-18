@@ -267,7 +267,7 @@ public class InitialiserPlugin implements PlugIn
         }
         SessionMethods.setInterMineAPI(servletContext, im);
 
-        InterMineContext.initilise(im, webProperties, webConfig);
+        InterMineContext.initilise(im, webProperties, webConfig, servletContext);
         return im;
     }
 
@@ -661,7 +661,7 @@ public class InitialiserPlugin implements PlugIn
     private void loadOAuth2Providers(ServletContext context, Properties webProperties) {
         Set<String> providers = new LinkedHashSet<String>();
 
-        // All all the providers found in oauth2.providers that have at least 
+        // All all the providers found in oauth2.providers that have at least
         // a client-id configured.
         String oauth2Providers = webProperties.getProperty("oauth2.providers", "");
         for (String provider: oauth2Providers.split(",")) {
@@ -995,7 +995,7 @@ public class InitialiserPlugin implements PlugIn
 
     /**
      * Verify if we need to upgrade the list
-     * @throws ServletException 
+     * @throws ServletException
      */
     private void checkSerialNumber(ObjectStore uosw) throws ServletException {
         try {

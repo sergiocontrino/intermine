@@ -137,13 +137,13 @@ public class JWTVerifier
         try {
             signature.update(signed.getBytes());
         } catch (SignatureException e) {
-            throw new VerificationError(e.getMessage());
+            throw new VerificationError("Signature update failed: " + e.getMessage());
         }
 
         try {
             return signature.verify(toVerify);
         } catch (SignatureException e) {
-            throw new VerificationError(e.getMessage());
+            throw new VerificationError("Signature verification failed: " + e.getMessage());
         }
     }
 

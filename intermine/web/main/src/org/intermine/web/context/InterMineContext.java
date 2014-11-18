@@ -17,6 +17,8 @@ import org.intermine.api.InterMineAPI;
 import org.intermine.util.Emailer;
 import org.intermine.web.logic.config.WebConfig;
 
+import javax.servlet.ServletContext;
+
 public class InterMineContext {
 
     public static final int WORKERS = 10;
@@ -25,6 +27,7 @@ public class InterMineContext {
     private static WebConfig webConfig;
     private static boolean isInitialised = false;
     private static Emailer emailer;
+    private static ServletContext context;
     private static final Map<String, Object> attributes = new HashMap<String, Object>();
     private static final ArrayBlockingQueue<MailAction> mailQueue
         = new ArrayBlockingQueue<MailAction>(10000);
@@ -32,9 +35,10 @@ public class InterMineContext {
     private static KeyStore keyStore = null;
 
     public static void initilise(final InterMineAPI imApi, Properties webProps,
-            WebConfig wc) {
+            WebConfig wc, ServletContext scon) {
         isInitialised = true;
         im = imApi;
+        context = scon;
         webProperties = webProps;
         webConfig = wc;
         emailer = EmailerFactory.getEmailer(webProps);
@@ -72,7 +76,7 @@ public class InterMineContext {
         attributes.put(name, value);
     }
 
-    public static boolean queueMessage(MailAction action) { 
+    public static boolean queueMessage(MailAction action) {
         return mailQueue.offer(action);
     }
 
@@ -108,7 +112,12 @@ public class InterMineContext {
             keyStore = KeyStore.getInstance("JKS");
             InputStream is = null;
             try {
-                is = InterMineContext.class.getResourceAsStream("keystore.jks");
+                if (context == null) {
+                    is = InterMineContext.class.getResourceAsStream("keystore.jks");
+                } else {
+                    is = context.getResourceAsStream("/WEB-INF/keystore.jks");
+                }
+
                 // Must call load, even on null values, to initialise the store.
                 keyStore.load(is, getKeyStorePassword());
             } finally {
