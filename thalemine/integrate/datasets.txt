@@ -6,7 +6,7 @@ DataSet	GO Annotation from TAIR	GO Annotations made by TAIR curators and the TIG
 DataSource	UniProt	Comprehensive, high-quality and freely accessible resource of protein sequence and functional information	http://www.uniprot.org	Publication:24253303
 DataSet	Swiss-Prot data set	High-quality, manually annotated, non-redundant protein sequence database	http://web.expasy.org/docs/swiss-prot_guideline.html	DataSource:UniProt,Publication:17142230	2014_11
 DataSet	TrEMBL data set	Computationally analysed records, enriched with automatic annotation	http://www.ebi.ac.uk/uniprot/TrEMBLstats	DataSource:UniProt,Publication:17142230	2014_11
-DataSet	InterPro domains	Protein family and domain assignments to proteins	http://www.ebi.ac.uk/interpro	DataSource:UniProt,Publication:17202162v	v49.0
+DataSet	InterPro domains	Protein family and domain assignments to proteins	http://www.ebi.ac.uk/interpro	DataSource:UniProt,Publication:17202162	v49.0
 DataSet	GO Annotation from UniProt	High quality GO annotations of proteins in UniProtKB	http://www.ebi.ac.uk/GOA	DataSource:UniProt,Publication:14681408	2014_11
 DataSet	GO Annotation from InterPro	Mapping between InterPro domains and GO terms	http://www.ebi.ac.uk/GOA/InterPro2GO	DataSource:UniProt,Publication:17202162	v49.0
 DataSource	Panther	Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree	https://www.pantherdb.org	Publication:23193289
