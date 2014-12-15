@@ -158,17 +158,15 @@
 
  <source name="interpro" type="interpro">
    <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/interpro/current"/>
+   <property name="src.data.dir.includes" value="interpro.xml"/>
  </source>
 
-<!--
  <source name="protein2ipr" type="protein2ipr">
-   <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/interpro/currente"/>
+   <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/interpro/current"/>
    <property name="src.data.dir.includes" value="protein2ipr.dat"/>
    <property name="organisms" value="3702"/>
    <property name="osAlias" value="os.production"/>
  </source>
--->
-
 
     <!-- have to be the last sources run -->
     <source name="entrez-organism" type="entrez-organism">
