@@ -330,7 +330,7 @@
 <div id="atted-section" class="collection-table column-border" style="margin-bottom: 0px">
 
     <div class="header">
-      <h3>Co-regulation</h3>
+      <h3>Co-expression</h3>
 <!--       <p>Data source: <a href="http://atted.jp/">ATTED-II</a></p> -->
     </div>
 
