@@ -835,18 +835,51 @@ public final class KeywordSearch
 
     private static String parseQueryString(String qs) {
         String queryString = qs;
-        // keep strings separated by spaces together
+        //check if it is a "termA termB" string, i.e. phrase
+        boolean isPhrase = false;
+        if (queryString.startsWith("\"") && queryString.endsWith("\"")) {
+            isPhrase = true;
+            queryString=queryString.replaceFirst("\"", "");
+            queryString=queryString.substring(0, queryString.lastIndexOf('"'));
+        }
+
+
+        // count the spaces (if > 1 -> add a ? at the end (to avoid issues with punctuation)
+        //
+        int noOfSpaces = qs.length() - qs.replaceAll(" ", "").length();
+        if (noOfSpaces > 1) {
+            queryString=queryString.concat("~");
+        }
+
+        // keep strings separated by spaces together, i.e. substitute space between words with AND
         queryString = queryString.replaceAll("\\b(\\s+)\\+(\\s+)\\b", "$1AND$2");
-        // i don't know
+        // \b word boundary
+        // \s any whitespace char
+        // http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
         queryString = queryString.replaceAll("(^|\\s+)'(\\b[^']+ [^']+\\b)'(\\s+|$)", "$1\"$2\"$3");
         // escape special characters, see http://lucene.apache.org/java/2_9_0/queryparsersyntax.html
-        final String[] specialCharacters = {"+", "-", "&&", "||", "!", "(", ")", "{", "}", "[",
-            "]", "^", "~", "?", ":", "\\"};
+        // we seems to be at version 3.0.2 but documents are the same
+
+        // final String[] specialCharacters = {"+", "-", "&&", "||", "!", "(", ")", "{", "}", "[",
+        //        "]", "^", "\"", "~", "?", ":", "\\"};
+
+        // now we substitute the special chars with ?, single char placeholder
+        // ~ (for fuzzy searches) amd - now allowed
+
+        final String[] specialCharacters = {"+", "&&", "||", "!", "(", ")", "{", "}", "[",
+                "]", "^", ":", "\\"};
+
+
         for (String s : specialCharacters) {
             if (queryString.contains(s)) {
-                queryString = queryString.replace(s, "*");
+                queryString = queryString.replace(s, "?");
             }
         }
+
+        if (isPhrase) {
+            queryString = "\"" + queryString + "\"";
+        }
+
         return toLowerCase(queryString);
     }
 
