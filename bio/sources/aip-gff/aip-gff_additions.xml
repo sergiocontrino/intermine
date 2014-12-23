@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!-- This file details any extensions needed to the data model to store data from this source, everything else is automatically generated from the model description so this is all we need to do to add to the model. -->
+
+<classes>
+<!-- add any <class> elements here -->
+  <class name="SequenceFeature" extends="BioEntity" is-interface="true">
+     <attribute name="computationalDescription" type="java.lang.String"/>
+     <attribute name="curatorSummary" type="java.lang.String"/>
+  </class>
+  <class name="Gene" extends="SequenceFeature" is-interface="true">
+     <collection name="UTRs" referenced-type="UTR" reverse-reference="gene" />
+  </class>
+
+  <class name="Transcript" extends="SequenceFeature" is-interface="true"></class>
+  <class name="MRNA" extends="Transcript" is-interface="true">
+     <attribute name="confidenceClass" type="java.lang.String"/>
+     <attribute name="confidenceRating" type="java.lang.String"/>
+     <collection name="fivePrimeUTRs" referenced-type="FivePrimeUTR" reverse-reference="mRNAs" />
+     <collection name="threePrimeUTRs" referenced-type="ThreePrimeUTR" reverse-reference="mRNAs" />
+  </class>
+  <class name="NcRNA" extends="Transcript" is-interface="true"></class>
+  <class name="TRNA" extends="NcRNA" is-interface="true"></class>
+  <class name="MiRNA" extends="NcRNA" is-interface="true"></class>
+  <class name="RRNA" extends="NcRNA" is-interface="true"></class>
+  <class name="SnRNA" extends="NcRNA" is-interface="true"></class>
+  <class name="SnoRNA" extends="NcRNA" is-interface="true"></class>
+  <class name="Exon" extends="SequenceFeature" is-interface="true">
+    <collection name="transcripts" referenced-type="Transcript" reverse-reference="exons"/>
+  </class>
+  <class name="Intron" extends="SequenceFeature" is-interface="true">
+     <collection name="transcripts" referenced-type="Transcript" reverse-reference="introns"/>
+  </class>
+  <class name="FivePrimeUTR" extends="UTR" is-interface="true">
+     <reference name="gene" referenced-type="Gene" reverse-reference="UTRs"/>
+     <collection name="mRNAs" referenced-type="MRNA" reverse-reference="fivePrimeUTRs"/>
+  </class>
+  <class name="ThreePrimeUTR" extends="UTR" is-interface="true">
+     <reference name="gene" referenced-type="Gene" reverse-reference="UTRs"/>
+     <collection name="mRNAs" referenced-type="MRNA" reverse-reference="threePrimeUTRs"/>
+  </class>
+  <class name="Pseudogene" extends="Gene" is-interface="true">
+     <collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogene"/>
+   </class>
+   <class name="PseudogenicTranscript" extends="Transcript" is-interface="true">
+     <reference name="pseudogene" referenced-type="Pseudogene" reverse-reference="pseudogenictranscripts"/>
+     <collection name="pseudogenicexons" referenced-type="PseudogenicExon" reverse-reference="pseudogenictranscripts"/>
+   </class>
+   <class name="PseudogenicExon" extends="Exon" is-interface="true">
+     <collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogenicexons"/>
+   </class>
+   <class name="TransposableElement" extends="SequenceFeature"  is-interface="true">
+     <collection name="transposonfragments" referenced-type="TransposonFragment" reverse-reference="transposableelements"/>
+   </class>
+   <class name="TransposonFragment" extends="SequenceFeature" is-interface="true">
+     <collection name="transposableelements" referenced-type="TransposableElement" reverse-reference="transposonfragments"/>
+   </class>
+   <class name="TransposableElementGene" extends="Gene" is-interface="true"></class>
+</classes>

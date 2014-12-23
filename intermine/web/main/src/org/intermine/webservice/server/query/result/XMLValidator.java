@@ -30,7 +30,7 @@ import org.xml.sax.SAXParseException;
 
 /**
  * XMLValidator is class that validates xml string according an XML Schema at specified url.
- * @author Radek Štěpán after Jakub Kulaviak
+ * @author Radek Stepan after Jakub Kulaviak
  **/
 public class XMLValidator
 {
@@ -51,7 +51,6 @@ public class XMLValidator
     public void validate(String xmlToValidate, String xmlSchemaUrl) {
         String xml = xmlToValidate;
         errorHandler = new XMLValidatorErrorHandler();
-
         try {
             // `query.xsd` had to be edited to allow the `QueryType` to be exported. But this means
             //  that now a `<query>` has to have a namespace associated. Here we do a simply

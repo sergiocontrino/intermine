@@ -131,7 +131,7 @@ if ((typeof intermine != 'undefined') && (intermine.Service != null)) {
         window.widgets = new ListWidgets({ 'root': $SERVICE.root, 'token': $SERVICE.token });
       }
     })();
-    
+
     var ua = jQuery.browser; // kinda evil, but best way to do this for now
     if (ua && ua.msie && parseInt(ua.version, 10) < 9) { // removed in 1.9.1
         new Notification({message: '<fmt:message key="old.browser"/>'}).render();

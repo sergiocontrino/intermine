@@ -280,7 +280,7 @@ public class IdResolver
     }
 
     /**
-     * Return a set of class names the reslover holds
+     * Return a set of class names the resolver holds
      * @return a set of class names
      */
     public Set<String> getClassNames() {

@@ -1,0 +1,4 @@
+<project name="aip-gff-tasks" default="default" basedir=".">
+  <description>build aip-gff tasks</description>
+  <import file="../../../../imbuild/library.xml"/> 
+</project>

@@ -38,6 +38,9 @@ import org.intermine.util.PropertiesUtil;
 import org.intermine.util.ShutdownHook;
 import org.intermine.util.Shutdownable;
 import org.postgresql.util.PSQLException;
+import org.intermine.util.StringUtil;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -121,6 +124,7 @@ public class Database implements Shutdownable
                     + " in default.intermine.properties or minename.properties.");
             configure(props);
         }
+
         try {
             LOG.info("Creating new Database " + getURL() + "(" + toString() + ") with ClassLoader "
                     + getClass().getClassLoader() + " and parallelism " + parallel);

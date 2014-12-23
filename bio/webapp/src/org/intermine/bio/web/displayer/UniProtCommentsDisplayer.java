@@ -59,7 +59,7 @@ public class UniProtCommentsDisplayer extends ReportDisplayer
     // allowed comment types
     private final String[] allowedCommentTypes = new String []{"similarity", "function",
         "tissue specificity", "subcellular location", "catalytic activity", "disease",
-        "developmental stage", "pathway", "pharmaceutical"};
+        "developmental stage", "pathway", "pharmaceutical","cofactor", "miscellaneous"};
 
     @SuppressWarnings("unchecked")
     @Override
@@ -240,8 +240,8 @@ public class UniProtCommentsDisplayer extends ReportDisplayer
                 "Protein.primaryIdentifier");
         query.addOrderBy("Protein.comments.type", OrderDirection.ASC);
         query.addConstraint(Constraints.eq("Protein.id", proteinID));
-        query.addConstraint(Constraints.oneOfValues("Protein.comments.type",
-                Arrays.asList(allowedCommentTypes)));
+       // query.addConstraint(Constraints.oneOfValues("Protein.comments.type",
+       //         Arrays.asList(allowedCommentTypes)));
         return query;
     }
 }

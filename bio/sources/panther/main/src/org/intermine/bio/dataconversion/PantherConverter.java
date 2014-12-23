@@ -316,6 +316,10 @@ public class PantherConverter extends BioFileConverter
     }
 
     private String resolveGene(String taxonId, String identifier) {
+	    if("3702".equals(taxonId)) {
+	        return identifier.toUpperCase();
+	    }
+
         if (rslv == null || !rslv.hasTaxon(taxonId)) {
             // no id resolver available, so return the original identifier
             return identifier;

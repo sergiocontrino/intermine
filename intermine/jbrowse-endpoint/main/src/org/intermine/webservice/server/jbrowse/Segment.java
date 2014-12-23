@@ -95,7 +95,7 @@ public final class Segment
         } else if (start == null || end == null) {
             throw new RuntimeException("Not implemented"); // TODO
         } else {
-            // Convert Interbase -> Base coördinates: start + 1
+            // Convert Interbase -> Base coordinates: start + 1
             return String.format("%s:%d..%d", section, start + 1, end);
         }
     }

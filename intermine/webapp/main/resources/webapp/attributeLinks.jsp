@@ -72,7 +72,7 @@
              <c:if test="${xrefMapItem.key == xref.source.name}">
                <li>
                  <c:set var="url" value="${fn:replace(xrefMapItem.value.url, '<<attributeValue>>', xref.identifier)}" />
-                 <a target="_new" class="ext_link" href="${url}">${xref.source.name}</a>
+                 <a target="_new" class="ext_link" href="${url}">${xref.source.name}: ${xref.identifier}</a>
                </li>
              </c:if>
            </c:forEach>
