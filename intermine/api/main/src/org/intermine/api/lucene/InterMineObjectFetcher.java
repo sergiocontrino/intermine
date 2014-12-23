@@ -448,9 +448,8 @@ public class InterMineObjectFetcher extends Thread
                     if (fieldsToIgnore != null && fieldsToIgnore.contains(att.getName())) {
                         continue;
                     }
-                    // only index strings and integers
-                    if ("java.lang.String".equals(att.getType())
-                            || "java.lang.Integer".equals(att.getType())) {
+                    // only index strings
+                    if ("java.lang.String".equals(att.getType())) {
                         Object value = obj.getFieldValue(att.getName());
 
                         // ignore null values
