@@ -10,13 +10,14 @@ package org.intermine.web.struts.oauth2;
  *
  */
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -86,6 +87,8 @@ public class Callback extends LoginHandler
         // Suitable values are: GOOGLE, GITHUB, FACEBOOK, MICROSOFT, etc.
         String providerName = request.getParameter("provider");
         String redirectUri = getRedirectUri(webProperties, providerName);
+        String state = (String) request.getSession().getAttribute("oauth2.state");
+        String returnto = parseReturnto(state);
 
         try {
             OAuthProvider provider = getOAuthProvider(mapping, request,
@@ -101,20 +104,31 @@ public class Callback extends LoginHandler
             // Step three - huzzah! Inform user of who they are.
             ActionMessages messages = loginUser(request, identity);
             saveMessages(request, messages);
-            return mapping.findForward("mymine");
+            return goTo(returnto, mapping.findForward("mymine"));
+            //return mapping.findForward("mymine");
         } catch (ForseenProblem e) {
             ActionErrors errors = new ActionErrors();
             errors.add(ActionErrors.GLOBAL_MESSAGE, e.getActionMessage());
             saveErrors(request, errors);
-            return mapping.findForward("login");
+            return goTo(returnto, mapping.findForward("login"));
+            //return mapping.findForward("login");
         } catch (Exception e) {
             LOG.error("Error granting access", e);
             ActionErrors errors = new ActionErrors();
             errors.add(ActionErrors.GLOBAL_MESSAGE,
                     new ActionMessage("oauth2.error.granting", e.getLocalizedMessage()));
             saveErrors(request, errors);
-            return mapping.findForward("login");
+            return goTo(returnto, mapping.findForward("login"));
+            //return mapping.findForward("login");
         }
+    }
+
+    private ActionForward goTo(String returnTo, ActionForward orElse) {
+        // use returnto if it is not empty
+        if (StringUtils.isEmpty(returnTo)) {
+            return orElse;
+        }
+        return new ActionForward(returnTo);
     }
 
     private String getRedirectUri(Properties webProperties,
@@ -321,4 +335,20 @@ public class Callback extends LoginHandler
         }
         return new DelegatedIdentity(provider, id, email, name);
     }
+
+
+    private String parseReturnto(String state) throws IllegalArgumentException {
+        String URL_PATTERN = "returnto=";
+        int URL_PATTERN_LENGTH = URL_PATTERN.length();
+
+        try {
+            String stateDecoded = (String) URLDecoder.decode(state, "UTF-8");
+            int returnto_index = stateDecoded.indexOf(URL_PATTERN) + URL_PATTERN_LENGTH;
+            return stateDecoded.substring(returnto_index);
+        } catch (UnsupportedEncodingException e) {
+            throw new AssertionError("UTF-8 is unknown");
+        }
+    }
+
+
 }
