@@ -80,7 +80,6 @@ public final class InterMineContext implements Shutdownable
             doShutdown();
         }
         im = imApi;
-        context = scon;
         webProperties = webProps;
         webConfig = wc;
         opener = resourceOpener;
