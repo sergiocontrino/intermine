@@ -77,7 +77,7 @@ public final class GeneModelCache
         // TODO handle UTRs better
         // TODO look up gene model components from GeneModel.TYPES
         Gene gene = null;
-        if ("Gene".equals(clsName)) {
+        if ("Gene".equals(clsName) || "TransposableElementGene".equals(clsName)) {
             gene = (Gene) object;
         } else if ("Transcript".equals(clsName) || "MRNA".equals(clsName)
                 || "Exon".equals(clsName) || "UTR".equals(clsName) || "FivePrimeUTR".equals(clsName)
