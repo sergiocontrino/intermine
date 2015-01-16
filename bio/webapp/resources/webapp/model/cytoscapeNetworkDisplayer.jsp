@@ -68,6 +68,7 @@
               <input type="radio" name="showInteractions" onclick="vis.filter('edges', function(edge) { return edge.color <= '#FF0000'; });"><label>Genetic Interactions</label>
         </fieldset>
 
+<!-- TEMP REMOVED (broken)
         <fieldset class="alt">
               <label>Export network as:</label>
               <select id="exportoptions">
@@ -80,6 +81,7 @@
               </select>
               <input type="button" id="exportbutton" value="Export">
         </fieldset>
+-->
 
         <fieldset>
           <label class="fakelink" onclick="window.open(project_baseurl+ '/' + project_path + '/saveFromIdsToBag.do?type=Gene&ids=' + fullInteractingGeneSet + '&source=objectDetails&newBagName=interacting_gene_list');">Create a gene list...</label>
