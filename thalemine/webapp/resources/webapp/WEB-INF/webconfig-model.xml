@@ -404,6 +404,12 @@
                      placement="summary"
                      types="BioEntity"/>
 
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.PathwayDescriptionDisplayer"
+                     jspName="model/pathwayDescriptionDisplayer.jsp"
+                     showImmediately="true"
+                     replacesFields="description"
+                     placement="summary"
+                     types="Pathway"/>
 
     <reportdisplayer javaClass="org.thalemine.web.displayer.BarEfpBrowserDisplayer"
                      jspName="model/eFPBrowserDisplayer.jsp"
