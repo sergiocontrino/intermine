@@ -426,20 +426,6 @@
                                        publications.journal, publications.year, publications.pubMedId"
                                  externalLink="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;dopt=Abstract&amp;list_uids="/>
 
-      <!--enrichmentwidgetdisplayer id="prot_dom_enrichment_for_gene"
-                                 title="Protein Domain Enrichment"
-                                 description="Protein Domains enriched for items in this list."
-                                 label="Protein Domain"
-                                 startClass="Gene"
-                                 startClassDisplay="primaryIdentifier"
-                                 enrich="proteins.proteinDomains.name"
-                                 enrichIdentifier="proteins.proteinDomains.primaryIdentifier"
-                                 constraints="organism.name=[list]"
-                                 typeClass="Gene"
-                                 views="secondaryIdentifier,symbol,primaryIdentifier,organism.name,
-                                       proteins.proteinDomains.primaryIdentifier,proteins.proteinDomains.name"
-                                 externalLink="http://www.ebi.ac.uk/interpro/IEntry?ac="/-->
-
       <enrichmentwidgetdisplayer id="go_enrichment_for_gene"
                                  title="Gene Ontology Enrichment"
                                  description="GO terms enriched for items in this list."
@@ -487,6 +473,20 @@
                                  typeClass="Protein"
                                  views="primaryIdentifier, primaryAccession, organism.name,
                                        keywords.name, keywords.description"/>
+
+      <enrichmentwidgetdisplayer id="prot_dom_enrichment_for_gene"
+                                 title="Protein Domain Enrichment"
+                                 description="Protein Domains enriched for items in this list."
+                                 label="Protein Domain"
+                                 startClass="Gene"
+                                 startClassDisplay="primaryIdentifier"
+                                 enrich="proteins.proteinDomains.name"
+                                 enrichIdentifier="proteins.proteinDomains.primaryIdentifier"
+                                 constraints="organism.name=[list]"
+                                 typeClass="Gene"
+                                 views="secondaryIdentifier,symbol,primaryIdentifier,organism.name,
+                                       proteins.proteinDomains.primaryIdentifier,proteins.proteinDomains.name"
+                                 externalLink="http://www.ebi.ac.uk/interpro/IEntry?ac="/>
 
       <enrichmentwidgetdisplayer id="prot_dom_enrichment_for_protein"
                                  title="Protein Domain Enrichment"
