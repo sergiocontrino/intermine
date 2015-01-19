@@ -390,6 +390,21 @@
                      placement="summary"
                      types="Protein"/>
 
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.PublicationAnnotationsDisplayer"
+                     jspName="model/publicationAnnotationsDisplayer.jsp"
+                     replacesFields=""
+                     placement="summary"
+                     parameters="Gene,Protein,InteractionDetail.experiment,GOAnnotation.evidence"
+                     types="Publication"/>
+
+    <!-- works with classes with publications collection -->
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.PublicationCountsDisplayer"
+                     jspName="model/publicationCountsDisplayer.jsp"
+                     replacesFields="publications"
+                     placement="summary"
+                     types="BioEntity"/>
+
+
     <reportdisplayer javaClass="org.thalemine.web.displayer.BarEfpBrowserDisplayer"
                      jspName="model/eFPBrowserDisplayer.jsp"
                      replacesFields=""
