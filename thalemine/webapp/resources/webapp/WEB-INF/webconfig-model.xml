@@ -417,6 +417,14 @@
                      placement="Expression"
                      types="Gene"/>
 
+    <!--  this takes rather long to load, commented for now
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.MinePathwaysDisplayer"
+                     jspName="model/minePathwaysDisplayer.jsp"
+                     replacesFields="pathways"
+                     placement="summary"
+                     types="Gene"/>
+   -->
+
   </reportdisplayers>
 
 <!-- widgets -->
