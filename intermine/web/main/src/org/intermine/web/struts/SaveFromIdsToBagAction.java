@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,12 +26,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.intermine.api.InterMineAPI;
+import org.intermine.api.lucene.KeywordSearch;
 import org.intermine.api.profile.InterMineBag;
 import org.intermine.api.profile.Profile;
 import org.intermine.api.util.NameUtil;
-import org.intermine.objectstore.query.Results;
 import org.intermine.web.logic.session.SessionMethods;
-import org.intermine.web.search.KeywordSearch;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -89,7 +87,8 @@ public class SaveFromIdsToBagAction extends InterMineAction
                     LOG.error("NO RESULT");
                 }
             } else {
-                String[] idArray = request.getParameter("ids").split(","); // ids are comma delimited
+                // ids are comma delimited
+                String[] idArray = request.getParameter("ids").split(",");
                 for (String id : idArray) {
                     idSet.add(Integer.valueOf(id.trim()));
                 }

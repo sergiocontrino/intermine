@@ -36,7 +36,10 @@ import org.intermine.metadata.ClassDescriptor;
 import org.intermine.metadata.CollectionDescriptor;
 import org.intermine.metadata.FieldDescriptor;
 import org.intermine.metadata.ReferenceDescriptor;
+import org.intermine.metadata.TypeUtil;
+import org.intermine.metadata.Util;
 import org.intermine.model.InterMineObject;
+import org.intermine.model.StringConstructor;
 import org.intermine.objectstore.DataChangedException;
 import org.intermine.objectstore.ObjectStore;
 import org.intermine.objectstore.ObjectStoreException;
@@ -65,9 +68,6 @@ import org.intermine.sql.writebatch.BatchWriterPostgresCopyImpl;
 import org.intermine.util.DynamicUtil;
 import org.intermine.util.PropertiesUtil;
 import org.intermine.util.ShutdownHook;
-import org.intermine.util.Shutdownable;
-import org.intermine.util.StringConstructor;
-import org.intermine.util.TypeUtil;
 
 /**
  * An SQL-backed implementation of the ObjectStoreWriter interface, backed by
@@ -77,7 +77,7 @@ import org.intermine.util.TypeUtil;
  * @author Andrew Varley
  */
 public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
-    implements ObjectStoreWriter, Shutdownable
+    implements ObjectStoreWriter
 {
     private static final Logger LOG = Logger.getLogger(ObjectStoreWriterInterMineImpl.class);
     private static final String[] CLOB_COLUMNS = new String[] {CLOBID_COLUMN, CLOBPAGE_COLUMN,
@@ -231,7 +231,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
      * @return the log
      */
     @Override
-    public Writer getLog() {
+    public synchronized Writer getLog() {
         return os.getLog();
     }
 
@@ -241,7 +241,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
      * @param log ignored
      */
     @Override
-    public void setLog(Writer log) {
+    public synchronized void setLog(Writer log) {
         throw new UnsupportedOperationException("Cannot change the log on a writer");
     }
 
@@ -251,7 +251,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
      * @param tableName ignored
      */
     @Override
-    public void setLogTableName(String tableName) {
+    public synchronized void setLogTableName(String tableName) {
         throw new UnsupportedOperationException("Cannot change the log table name on a writer");
     }
 
@@ -259,8 +259,8 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
      * {@inheritDoc}
      */
     @Override
-    protected void dbLog(long optimise, long estimated, long execute, long permitted, long convert,
-            Query q, String sql) {
+    protected synchronized void dbLog(long optimise, long estimated, long execute,
+            long permitted, long convert, Query q, String sql) {
         os.dbLog(optimise, estimated, execute, permitted, convert, q, sql);
     }
 
@@ -424,7 +424,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
         // NOTE this has a timeout of 30 seconds. Should this check happens during builds
         // (robustConnection=true, mis-configuration) it would increase significantly building time.
 
-        if (robustConnection.equals("true") && !conn.isValid(30)) {
+        if ("true".equals(robustConnection) && !conn.isValid(30)) {
             LOG.info("ObjectStoreWriter connection was closed, fetching new connection");
             conn = this.os.getConnection();
         }
@@ -432,9 +432,9 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
         getConnectionCalls++;
 
         if (end > start) {
-            cumulativeWait=cumulativeWait + (end - start);
-            LOG.debug("Spent " + (end - start) + " ms checking connections, for a total of " +
-            cumulativeWait + " ms after " + getConnectionCalls + " getConnection calls");
+            cumulativeWait = cumulativeWait + (end - start);
+            LOG.debug("Spent " + (end - start) + " ms checking connections, for a total of "
+                    + cumulativeWait + " ms after " + getConnectionCalls + " getConnection calls");
         }
         connInUse = true;
 
@@ -558,7 +558,6 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
             connInUse = true;
             // remove reference to this writer from the parent ObjectStore
             this.os.writers.remove(this);
-
             notifyAll();
         }
     }
@@ -566,6 +565,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public ObjectStore getObjectStore() {
         return os;
     }
@@ -573,6 +573,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void store(Object o) throws ObjectStoreException {
         Connection c = null;
         try {
@@ -645,7 +646,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
                     if (schema.isFlatMode(cld.getType()) && (!schema.isTruncated(schema
                                     .getTableMaster(cld)))
                             && (!(cld.getType().equals(o.getClass())))) {
-                        Set<Class<?>> decomposed = DynamicUtil.decomposeClass(o.getClass());
+                        Set<Class<?>> decomposed = Util.decomposeClass(o.getClass());
                         if (!((decomposed.size() == 1) && cld.getType().equals(decomposed.iterator()
                                         .next()))) {
                             throw new ObjectStoreException("Non-flat model heirarchy used in flat "
@@ -662,7 +663,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
                             if (objectClass == null) {
                                 StringBuffer sb = new StringBuffer();
                                 boolean needComma = false;
-                                for (Class<?> objectClazz : DynamicUtil.decomposeClass(o
+                                for (Class<?> objectClazz : Util.decomposeClass(o
                                         .getClass())) {
                                     if (needComma) {
                                         sb.append(" ");
@@ -728,7 +729,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
                     if (schema.isFlatMode(cld.getType())) {
                         for (String validFieldName : validFieldNames) {
                             if (!fieldNamesWritten.contains(validFieldName)) {
-                                Set<Class<?>> decomposed = DynamicUtil.decomposeClass(o.getClass());
+                                Set<Class<?>> decomposed = Util.decomposeClass(o.getClass());
                                 throw new ObjectStoreException("Cannot store object " + decomposed
                                         + " - no column for field " + validFieldName + " in table "
                                         + tableInfo.tableName);
@@ -744,7 +745,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
                 writeCollections(c, o, collections);
             }
             if (tablesWritten < 1) {
-                throw new ObjectStoreException("Object " + DynamicUtil.decomposeClass(o.getClass())
+                throw new ObjectStoreException("Object " + Util.decomposeClass(o.getClass())
                         + " does not map onto any database table.");
             }
             if (o instanceof InterMineObject) {
@@ -836,6 +837,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addToCollection(Integer hasId, Class<?> clazz, String fieldName, Integer hadId)
         throws ObjectStoreException {
         Connection c = null;
@@ -1009,12 +1011,17 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
                     obj.setId(getSerialWithConnection(c));
                 }
             } else if (Collection.class.isAssignableFrom(fieldInfo.getType())) {
-                @SuppressWarnings("unchecked") Collection<InterMineObject> coll
-                    = (Collection<InterMineObject>) o.getFieldValue(fieldInfo.getName());
+                @SuppressWarnings("unchecked") Collection<Object> coll
+                    = (Collection<Object>) o.getFieldValue(fieldInfo.getName());
+
                 if (!(coll instanceof Lazy)) {
-                    for (InterMineObject obj : coll) {
-                        if (obj.getId() == null) {
-                            obj.setId(getSerialWithConnection(c));
+                    for (Object obj : coll) {
+                        // the collection may contain simple objects which don't have ids
+                        if (obj instanceof InterMineObject) {
+                            InterMineObject imo = (InterMineObject) obj;
+                            if (imo.getId() == null) {
+                                imo.setId(getSerialWithConnection(c));
+                            }
                         }
                     }
                 }
@@ -1046,7 +1053,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
                     Clob clob = new Clob(getSerialWithConnection(c));
                     replaceClobWithConnection(c, clob, ((PendingClob) ca)
                             .toString());
-                    TypeUtil.setFieldValue(o, fieldInfo.getName(), new ClobAccess(this, clob));
+                    DynamicUtil.setFieldValue(o, fieldInfo.getName(), new ClobAccess(this, clob));
                 }
             }
         }
@@ -1055,6 +1062,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addToBag(ObjectStoreBag osb, Integer element) throws ObjectStoreException {
         addAllToBag(osb, Collections.singleton(element));
     }
@@ -1062,6 +1070,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addAllToBag(ObjectStoreBag osb,
             Collection<Integer> coll) throws ObjectStoreException {
         try {
@@ -1116,6 +1125,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeFromBag(ObjectStoreBag osb, Integer element) throws ObjectStoreException {
         removeAllFromBag(osb, Collections.singleton(element));
     }
@@ -1123,6 +1133,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeAllFromBag(ObjectStoreBag osb,
             Collection<Integer> coll) throws ObjectStoreException {
         try {
@@ -1177,6 +1188,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addToBagFromQuery(ObjectStoreBag osb, Query query) throws ObjectStoreException {
         List<QuerySelectable> select = query.getSelect();
         if (select.size() != 1) {
@@ -1283,6 +1295,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void replaceClob(Clob clob, String text) throws ObjectStoreException {
         try {
             Connection c = null;
@@ -1340,6 +1353,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(InterMineObject o) throws ObjectStoreException {
         Connection c = null;
         try {
@@ -1399,6 +1413,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(QueryClass qc, Constraint c) throws ObjectStoreException {
         Connection con = null;
         try {
@@ -1459,6 +1474,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isInTransaction() throws ObjectStoreException {
         Connection c = null;
         try {
@@ -1489,6 +1505,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void beginTransaction() throws ObjectStoreException {
         Connection c = null;
         try {
@@ -1522,6 +1539,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void commitTransaction() throws ObjectStoreException {
         Connection c = null;
         try {
@@ -1558,6 +1576,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void abortTransaction() throws ObjectStoreException {
         Connection c = null;
         try {
@@ -1594,6 +1613,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void batchCommitTransaction() throws ObjectStoreException {
         Connection c = null;
         try {
@@ -1628,7 +1648,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
      * This method should never be called on an ObjectStoreWriter.
      */
     @Override
-    public void databaseAltered(Set<Object> tablesAltered) {
+    public void databaseAltered(Set<Object> tablesChanged) {
         throw new IllegalArgumentException("databaseAltered should never be called on an "
                 + "ObjectStoreWriter");
     }
@@ -1638,7 +1658,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
      * Delegate to the parent ObjectStore.
      */
     @Override
-    public Map<Object, Integer> getSequence(Set<Object> tables) {
+    public synchronized Map<Object, Integer> getSequence(Set<Object> tables) {
         return os.getSequence(tables);
     }
 
@@ -1647,7 +1667,7 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
      * Delegate to the parent ObjectStore.
      */
     @Override
-    public void checkSequence(Map<Object, Integer> sequence, Query q,
+    public synchronized void checkSequence(Map<Object, Integer> sequence, Query q,
             String message) throws DataChangedException {
         //if ((!tablesAltered.isEmpty()) && (!sequence.isEmpty())) {
         //    throw new DataChangedException("Cannot query a writer with uncommitted changes");

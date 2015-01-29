@@ -63,12 +63,13 @@ public class MyMineController extends TilesAction
      * Set up attributes for the myMine page.
      * {@inheritDoc}
      */
+    @SuppressWarnings("deprecation")
     @Override
-    public ActionForward execute(@SuppressWarnings("unused") ComponentContext context,
-                                 @SuppressWarnings("unused") ActionMapping mapping,
-                                 @SuppressWarnings("unused") ActionForm form,
+    public ActionForward execute(ComponentContext context,
+                                 ActionMapping mapping,
+                                 ActionForm form,
                                  HttpServletRequest request,
-                                 @SuppressWarnings("unused") HttpServletResponse response)
+                                 HttpServletResponse response)
         throws Exception {
         HttpSession session = request.getSession();
         final InterMineAPI im = SessionMethods.getInterMineAPI(session);
@@ -174,7 +175,8 @@ public class MyMineController extends TilesAction
         if (inQuestion == null) {
             return (subTab == null && wsst == null);
         }
-        return (subTab != null && inQuestion.equals(subTab)) || (wsst != null && inQuestion.equals(wsst));
+        return (subTab != null && inQuestion.equals(subTab))
+                || (wsst != null && inQuestion.equals(wsst));
     }
 
     /**

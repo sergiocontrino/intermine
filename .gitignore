@@ -198,6 +198,12 @@ malariamine/
 nbproject/
 nb-build.xml
 .idea/
+
+apache-tomcat*
+prefixed
+failures.list
+*.jks
+
 # Created by http://www.gitignore.io
 
 ### vim ###
@@ -243,3 +249,4 @@ tramp
 ### misc ###
 *.err
 *.err.*
+

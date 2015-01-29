@@ -10,8 +10,7 @@ package org.intermine.objectstore.intermine;
  *
  */
 
-import org.apache.tools.ant.Task;
-import org.apache.tools.ant.BuildException;
+import static org.intermine.objectstore.intermine.TorqueModelOutput.FORMAT_VERSION;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,10 +18,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
 import org.intermine.metadata.ClassDescriptor;
 import org.intermine.metadata.Model;
 import org.intermine.objectstore.ObjectStoreException;
-import static org.intermine.objectstore.intermine.TorqueModelOutput.FORMAT_VERSION;
 import org.intermine.util.PropertiesUtil;
 
 /**
@@ -93,7 +93,7 @@ public class TorqueModelOutputTask extends Task
             }
 
             schema = new DatabaseSchema(osModel, truncatedClasses, noNotXml, missingTables,
-                    FORMAT_VERSION, false);
+                    FORMAT_VERSION, false, false);
         } catch (ClassCastException e) {
             throw new BuildException("Objectstore " + osName
                     + " is not an ObjectStoreInterMineImpl", e);

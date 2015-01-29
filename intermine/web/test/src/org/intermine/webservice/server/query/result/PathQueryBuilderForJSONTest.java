@@ -7,19 +7,20 @@ package org.intermine.webservice.server.query.result;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
 
 import org.intermine.api.profile.InterMineBag;
 import org.intermine.metadata.Model;
 import org.intermine.pathquery.Path;
 import org.intermine.pathquery.PathQuery;
 import org.intermine.webservice.server.core.Producer;
-
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
 
 /**
  * @author Alexis Kalderimis
@@ -30,29 +31,29 @@ public class PathQueryBuilderForJSONTest extends TestCase {
     private final Model model = Model.getInstanceByName("testmodel");
 
     PathQueryBuilderForJSONObj builder;
+    String schemaUrl;
+    Map<String, InterMineBag> savedBags;
+
+    Producer<Map<String, InterMineBag>> noBags = new BagProducer();
+
     protected void setUp() {
         builder = new PathQueryBuilderForJSONObj();
+        savedBags = new HashMap<String, InterMineBag>();
+        schemaUrl = getClass().getClassLoader().getResource("webservice/query.xsd").toString();
     }
 
     public void testPublicConstructor() {
-        System.out.println("classpath=" + System.getProperty("java.class.path"));
         String xml = "<query model=\"testmodel\" name=\"test-query\" view=\"Manager.department.name\"></query>";
-        String schemaUrl = this.getClass().getClassLoader().getResource("webservice/query.xsd").toString();
-        Map<String, InterMineBag> savedBags = new HashMap<String, InterMineBag>();
 
-        PathQueryBuilderForJSONObj publicBuilder = new PathQueryBuilderForJSONObj(
-                xml, schemaUrl, constantly(savedBags));
+        PathQueryBuilderForJSONObj publicBuilder
+            = new PathQueryBuilderForJSONObj(xml, schemaUrl, new BagProducer(savedBags));
         assertTrue(publicBuilder != null);
-
     }
 
     public void testPublicGetQuery() {
         String xml = "<query model=\"testmodel\" name=\"test-query\" view=\"Manager.department.name\"></query>";
-        String schemaUrl = this.getClass().getClassLoader().getResource("webservice/query.xsd").toString();
-        Map<String, InterMineBag> savedBags = new HashMap<String, InterMineBag>();
 
-        PathQueryBuilderForJSONObj publicBuilder = new PathQueryBuilderForJSONObj(
-                xml, schemaUrl, constantly(savedBags));
+        PathQueryBuilderForJSONObj publicBuilder = new PathQueryBuilderForJSONObj(xml, schemaUrl, noBags);
         PathQuery pq = publicBuilder.getQuery();
         List<String> expectedViews = Arrays.asList("Manager.id", "Manager.department.name");
         assertEquals(expectedViews, pq.getView());
@@ -103,7 +104,7 @@ public class PathQueryBuilderForJSONTest extends TestCase {
 
         for (PathQuery pq : pathQueries) {
             List<String> oldViews = pq.getView();
-            List<String> newViews = builder.getAlteredViews(pq);
+            List<String> newViews = PathQueryBuilderForJSONObj.getAlteredViews(pq);
             assertEquals(oldViews, newViews);
         }
     }
@@ -162,7 +163,7 @@ public class PathQueryBuilderForJSONTest extends TestCase {
 
         for (int index = 0; index < expectedViews.size(); index++) {
             List<String> expected = expectedViews.get(index);
-            List<String> newViews = builder.getAlteredViews(pathQueries.get(index));
+            List<String> newViews = PathQueryBuilderForJSONObj.getAlteredViews(pathQueries.get(index));
             assertEquals(expected, newViews);
         }
     }
@@ -213,7 +214,7 @@ public class PathQueryBuilderForJSONTest extends TestCase {
 
         for (int index = 0; index < expectedViews.size(); index++) {
             List<String> expected = expectedViews.get(index);
-            List<String> newViews = builder.getAlteredViews(pathQueries.get(index));
+            List<String> newViews = PathQueryBuilderForJSONObj.getAlteredViews(pathQueries.get(index));
             assertEquals(expected, newViews);
         }
     }
@@ -235,7 +236,7 @@ public class PathQueryBuilderForJSONTest extends TestCase {
         for (int index = 0; index < expectedErrors.size(); index++) {
             String expected = expectedErrors.get(index);
             try {
-                List<String> newViews = builder.getAlteredViews(pathQueries.get(index));
+                List<String> newViews = PathQueryBuilderForJSONObj.getAlteredViews(pathQueries.get(index));
                 fail("No exception was thrown when processing the bad view list " +
                         pathQueries.get(index).getView() + " - got: " + newViews);
             } catch (AssertionFailedError e) {
@@ -253,7 +254,7 @@ public class PathQueryBuilderForJSONTest extends TestCase {
     public void testCantCreateAttributeNode() {
         try {
             Path cantAddToThis = new Path(model, "Manager.name");
-            String newNode = builder.getNewAttributeNode(new HashSet(), cantAddToThis);
+            String newNode = PathQueryBuilderForJSONObj.getNewAttributeNode(new HashSet<Path>(), cantAddToThis);
             fail("No exception thrown when trying to handle bad path Manager.name - got: " + newNode);
         } catch (AssertionFailedError e) {
             // rethrow the fail from within the try
@@ -265,21 +266,22 @@ public class PathQueryBuilderForJSONTest extends TestCase {
         }
     }
 
-    private static <T> Producer<T> constantly(T thing) {
-        return new ConstantProducer<T>(thing);
-    }
+    // Java's type system prevents us from genericising this more elegantly.
+    private static class BagProducer implements Producer<Map<String, InterMineBag>> {
 
-    private static class ConstantProducer<T> implements Producer<T> {
+        private final Map<String, InterMineBag> bags;
 
-        private final T thing;
+        BagProducer() {
+            this.bags = Collections.emptyMap();
+        }
 
-        ConstantProducer(T thing) {
-            this.thing = thing;
+        BagProducer(Map<String, InterMineBag> bags) {
+            this.bags = bags;
         }
 
         @Override
-        public T produce() {
-            return thing;
+        public Map<String, InterMineBag> produce() {
+            return bags;
         }
         
     }

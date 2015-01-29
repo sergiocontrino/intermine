@@ -53,13 +53,13 @@ public class BarInteractionsConverterTest extends ItemsTestCase
             super(database, tgtModel, writer);
         }
         @Override
-        protected ResultSet runInteractionsQuery(@SuppressWarnings("unused") Connection connection) {
+        protected ResultSet runInteractionsQuery(Connection connection) {
             Object[][] resObjects = new Object[][] {
                 {
                     "At2g41090", "At4g23810", 84,1,0.415,"PubMed17360592","0063","1110"
                 },
                 {
-                	"At4g23810", "At2g41090", 84,1,0.415,"PubMed17360592","0063","1110"
+                    "At4g23810", "At2g41090", 84,1,0.415,"PubMed17360592","0063","1110"
                 }
             };
             MockMultiRowResultSet res = new MockMultiRowResultSet();

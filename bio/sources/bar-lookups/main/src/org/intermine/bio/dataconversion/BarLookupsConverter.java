@@ -23,9 +23,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.intermine.dataconversion.ItemWriter;
 import org.intermine.metadata.Model;
+import org.intermine.metadata.Util;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.sql.Database;
-import org.intermine.util.Util;
 import org.intermine.xml.full.Item;
 import org.intermine.xml.full.ReferenceList;
 
@@ -71,13 +71,13 @@ public class BarLookupsConverter extends BioDBConverter
      */
     public void process() throws Exception {
 
-    	Connection connection = null;
+        Connection connection = null;
 
         if (getDatabase() == null) {
             // no Database when testing and no connection needed
             connection = null;
         } else {
-        	// a database has been initialised from properties starting with db.bar-expressions
+            // a database has been initialised from properties starting with db.bar-expressions
             connection = getDatabase().getConnection();
         }
 
@@ -88,51 +88,51 @@ public class BarLookupsConverter extends BioDBConverter
     private void processProbes121(Connection connection)
             throws SQLException, ObjectStoreException {
             ResultSet res = getProbes(connection);
-        	while (res.next()) {
-        		String probe = res.getString(1);
-        		String gene = res.getString(2).toUpperCase();
+            while (res.next()) {
+                String probe = res.getString(1);
+                String gene = res.getString(2).toUpperCase();
 //        		LOG.info("GP: " + probe + "|"+ gene);
 
-        		if (!gene.startsWith("AT")) {
-        			// not a gene id!
-        			LOG.warn("NOT A GENE: " + gene);
-        			continue;
-        		}
+                if (!gene.startsWith("AT")) {
+                    // not a gene id!
+                    LOG.warn("NOT A GENE: " + gene);
+                    continue;
+                }
 
-        		// if probe exist, check gene (could be many to many??)
-        		if (probeGeneMap.containsKey(probe)) {
-        			LOG.warn("probeset " + probe
-        					+ " seems to be connected to multiple genes: "
-        					+ probeGeneMap.get(probe) + ", " + gene);
-        			continue;
-        		}
-        		if (probeGeneMap.containsValue(gene)) {
-        			//addref
-        			LOG.warn("MULTIPLE GENE: " + gene);
-        			continue;
-        		}
-        		String geneRefId = createGene(gene);
-        		probeGeneMap.put(probe, gene);
+                // if probe exist, check gene (could be many to many??)
+                if (probeGeneMap.containsKey(probe)) {
+                    LOG.warn("probeset " + probe
+                            + " seems to be connected to multiple genes: "
+                            + probeGeneMap.get(probe) + ", " + gene);
+                    continue;
+                }
+                if (probeGeneMap.containsValue(gene)) {
+                    //addref
+                    LOG.warn("MULTIPLE GENE: " + gene);
+                    continue;
+                }
+                String geneRefId = createGene(gene);
+                probeGeneMap.put(probe, gene);
 
-        		String probeRefId = createProbe(probe,geneRefId);
-        	}
-        	res.close();
+                String probeRefId = createProbe(probe,geneRefId);
+            }
+            res.close();
     }
 
 
     private void processProbes(Connection connection)
             throws SQLException, ObjectStoreException {
             ResultSet res = getProbes(connection);
-        	while (res.next()) {
-        		String probe = res.getString(1);
-        		String gene = res.getString(2).toUpperCase();
+            while (res.next()) {
+                String probe = res.getString(1);
+                String gene = res.getString(2).toUpperCase();
 //        		LOG.info("GP: " + probe + "|"+ gene);
 
-        		if (!gene.startsWith("AT")) {
-        			// not a gene id!
-        			LOG.warn("NOT A GENE: " + gene);
-        			continue;
-        		}
+                if (!gene.startsWith("AT")) {
+                    // not a gene id!
+                    LOG.warn("NOT A GENE: " + gene);
+                    continue;
+                }
 
 //        		// to rm
 //        		if (probeGeneMap.containsKey(probe)) {
@@ -145,30 +145,30 @@ public class BarLookupsConverter extends BioDBConverter
 //        		}
 //        		probeGeneMap.put(probe, gene);
 
-        		Util.addToSetMap(probeGenesMap, probe, gene);
-        		genes.add(gene);
-        	}
-           	res.close();
+                Util.addToSetMap(probeGenesMap, probe, gene);
+                genes.add(gene);
+            }
+               res.close();
 
-           	// create genes
-        	for(String gene: genes){
-        		String geneRefId = createGene(gene);
-        		geneIdRefMap.put(gene, geneRefId);
-        	}
+               // create genes
+            for(String gene: genes){
+                String geneRefId = createGene(gene);
+                geneIdRefMap.put(gene, geneRefId);
+            }
 
-        	// create probes
-        	for(Entry<String, Set<String>> pg: probeGenesMap.entrySet()) {
-        		Set<String> genes = pg.getValue();
-        		String probe = pg.getKey();
-        		ReferenceList collection = new ReferenceList();
+            // create probes
+            for(Entry<String, Set<String>> pg: probeGenesMap.entrySet()) {
+                Set<String> genes = pg.getValue();
+                String probe = pg.getKey();
+                ReferenceList collection = new ReferenceList();
                 collection.setName("genes");
                 for (String gene: genes){
-                	String geneRefId = geneIdRefMap.get(gene);
+                    String geneRefId = geneIdRefMap.get(gene);
                     collection.addRefId(geneRefId);
                 }
 
-            	String probeRefId = createProbe(probe, collection);
-        	}
+                String probeRefId = createProbe(probe, collection);
+            }
 
 //        		// if probe exist, check gene (could be many to many??)
 //        		if (probeGeneMap.containsKey(probe)) {
@@ -186,33 +186,33 @@ public class BarLookupsConverter extends BioDBConverter
 //        		probeGeneMap.put(probe, gene);
 //
 //        		String probeRefId = createProbe(probe,geneRefId);
-        	}
+            }
 
 
     private String createGene(String geneId)
-    		throws ObjectStoreException {
-    	Item gene = createItem("Gene");
-    	gene.setAttribute("primaryIdentifier", geneId);
-    	store(gene);
-    	return gene.getIdentifier();
+            throws ObjectStoreException {
+        Item gene = createItem("Gene");
+        gene.setAttribute("primaryIdentifier", geneId);
+        store(gene);
+        return gene.getIdentifier();
     }
 
     private String createProbe(String probeId, String geneRefId)
-    		throws ObjectStoreException {
-    	Item probe = createItem("Probe");
-    	probe.setAttribute("name", probeId);
-    	probe.setReference("gene", geneRefId);
-    	store(probe);
-    	return probe.getIdentifier();
+            throws ObjectStoreException {
+        Item probe = createItem("Probe");
+        probe.setAttribute("name", probeId);
+        probe.setReference("gene", geneRefId);
+        store(probe);
+        return probe.getIdentifier();
     }
 
     private String createProbe(String probeId, ReferenceList geneRefs)
-    		throws ObjectStoreException {
-    	Item probe = createItem("Probe");
-    	probe.setAttribute("name", probeId);
-    	probe.addCollection(geneRefs);;
-    	store(probe);
-    	return probe.getIdentifier();
+            throws ObjectStoreException {
+        Item probe = createItem("Probe");
+        probe.setAttribute("name", probeId);
+        probe.addCollection(geneRefs);;
+        store(probe);
+        return probe.getIdentifier();
     }
 
     /**
@@ -223,10 +223,10 @@ public class BarLookupsConverter extends BioDBConverter
      * @return the samples
      */
     protected ResultSet getProbes(Connection connection) throws SQLException {
-    	String query =
-    			// data contains duplications by date (?)
-    			"SELECT distinct probeset, agi "
-    			+ "FROM at_agi_lookup;";
+        String query =
+                // data contains duplications by date (?)
+                "SELECT distinct probeset, agi "
+                + "FROM at_agi_lookup;";
         return doQuery(connection, query, "getProbes");
     }
 
@@ -252,7 +252,7 @@ public class BarLookupsConverter extends BioDBConverter
     private ResultSet doQuery(Connection connection, String query, String comment)
         throws SQLException {
         // see ModEncodeMetaDataProcessor
-    	LOG.info("executing: " + query);
+        LOG.info("executing: " + query);
         long bT = System.currentTimeMillis();
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(query);

@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 import org.intermine.bio.io.gff3.GFF3Record;
 import org.intermine.metadata.Model;
-import org.intermine.util.StringUtil;
+import org.intermine.metadata.StringUtil;
 import org.intermine.xml.full.Item;
 
 /**

@@ -1,13 +1,23 @@
 package org.intermine.web.struts.oauth2;
 
-import java.io.*;
+/*
+ * Copyright (C) 2002-2014 FlyMine
+ *
+ * This code may be freely distributed and modified under the
+ * terms of the GNU Lesser General Public Licence.  This should
+ * be distributed with the code.  See the LICENSE file for more
+ * information or http://www.gnu.org/copyleft/lesser.html.
+ *
+ */
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +53,18 @@ import org.intermine.web.logic.session.SessionMethods;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Callback extends LoginHandler {
+/**
+ * The controller that handles the requests made after the user has visited their
+ * authorisation provider to log-in. That provider will then send them off here with
+ * a code that we need to use to access their user details via a two-step process
+ * (get an authorisation token, and then get user details). If all is well, this
+ * controller will log the user in, and forward the request on to the mymine page.
+ *
+ * @author Alex Kalderimis
+ *
+ */
+public class Callback extends LoginHandler
+{
 
     private static final Logger LOG = Logger.getLogger(Callback.class);
 
@@ -55,7 +76,6 @@ public class Callback extends LoginHandler {
      * @param request The HTTP request we are processing
      * @param response The HTTP response we are creating
      * @return an ActionForward object defining where control goes next
-     * @exception Exception if the application business logic throws an exception
      */
     @Override public ActionForward execute(
             ActionMapping mapping,
@@ -66,145 +86,154 @@ public class Callback extends LoginHandler {
 
         // Suitable values are: GOOGLE, GITHUB, FACEBOOK, MICROSOFT, etc.
         String providerName = request.getParameter("provider");
+        String redirectUri = getRedirectUri(webProperties, providerName);
+        String state = (String) request.getSession().getAttribute("oauth2.state");
+        String returnto = parseReturnto(state);
 
+        try {
+            OAuthProvider provider = getOAuthProvider(mapping, request,
+                    webProperties, providerName);
+            OAuthAuthzResponse oar = getAuthResponse(mapping, request);
+            checkOauthState(mapping, request, oar);
+
+            // Step one - get token
+            String accessToken = getAccessToken(redirectUri, oar, provider);
+            // Step two - exchange token for identity
+            DelegatedIdentity identity = getDelegatedIdentity(providerName, accessToken);
+
+            // Step three - huzzah! Inform user of who they are.
+            ActionMessages messages = loginUser(request, identity);
+            saveMessages(request, messages);
+            return goTo(returnto, mapping.findForward("mymine"));
+            //return mapping.findForward("mymine");
+        } catch (ForseenProblem e) {
+            ActionErrors errors = new ActionErrors();
+            errors.add(ActionErrors.GLOBAL_MESSAGE, e.getActionMessage());
+            saveErrors(request, errors);
+            return goTo(returnto, mapping.findForward("login"));
+            //return mapping.findForward("login");
+        } catch (Exception e) {
+            LOG.error("Error granting access", e);
+            ActionErrors errors = new ActionErrors();
+            errors.add(ActionErrors.GLOBAL_MESSAGE,
+                    new ActionMessage("oauth2.error.granting", e.getLocalizedMessage()));
+            saveErrors(request, errors);
+            return goTo(returnto, mapping.findForward("login"));
+            //return mapping.findForward("login");
+        }
+    }
+
+    private ActionForward goTo(String returnTo, ActionForward orElse) {
+        // use returnto if it is not empty
+        if (StringUtils.isEmpty(returnTo)) {
+            return orElse;
+        }
+        return new ActionForward(returnTo);
+    }
+
+    private String getRedirectUri(Properties webProperties,
+            String providerName) {
         List<String> redirectParts = new ArrayList<String>();
         redirectParts.add(webProperties.getProperty("webapp.baseurl"));
         redirectParts.add(webProperties.getProperty("webapp.path"));
         redirectParts.add("oauth2callback.do?provider=" + providerName);
+        return StringUtils.join(redirectParts, "/");
+    }
 
-        String state = (String) request.getSession().getAttribute("oauth2.state");
-        String returnto = parseReturnto(state);
-
+    private OAuthAuthzResponse getAuthResponse(ActionMapping mapping,
+            HttpServletRequest request) throws ForseenProblem {
         OAuthAuthzResponse oar;
         try {
             oar = OAuthAuthzResponse.oauthCodeAuthzResponse(request);
         } catch (OAuthProblemException e) {
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("oauth2.error.getting-code", e.getMessage()));
-            saveErrors(request, errors);
-            return new ActionForward(returnto);
+            throw new ForseenProblem("oauth2.error.getting-code", e.getMessage());
         }
+        return oar;
+    }
 
+    private void checkOauthState(ActionMapping mapping,
+            HttpServletRequest request, OAuthAuthzResponse oar) throws ForseenProblem {
+        String state = (String) request.getSession().getAttribute("oauth2.state");
         if (state == null || !state.equals(oar.getState())) {
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("oauth2.error.illegal-request"));
-            saveErrors(request, errors);
-            return new ActionForward(returnto);
+            throw new ForseenProblem("oauth2.error.illegal-request");
         }
+    }
 
+    private OAuthProvider getOAuthProvider(
+            ActionMapping mapping,
+            HttpServletRequest request,
+            Properties webProperties,
+            String providerName) throws ForseenProblem {
         OAuthProvider provider;
         try {
             provider = getProvider(webProperties, providerName);
         } catch (IllegalArgumentException e) {
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("oauth2.error.unknown-provider", providerName));
-            saveErrors(request, errors);
-            return new ActionForward(returnto);
+            throw new ForseenProblem("oauth2.error.unknown-provider", providerName);
         }
-
-        try {
-            String accessToken = getAccessToken(webProperties, providerName, StringUtils.join(redirectParts, "/"), oar, provider);
-            /*long expiresIn = oauthResponse.getExpiresIn();
-            if (expiresIn > 0 && expiresIn < System.currentTimeMillis()) {
-                ActionErrors errors = new ActionErrors();
-                errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("oauth2.error.expired"));
-                saveErrors(request, errors);
-                return mapping.findForward("login");
-            }*/
-
-            DelegatedIdentity identity = getDelegatedIdentity(providerName, accessToken);
-
-            ActionMessages messages = loginUser(request, identity);
-
-            saveMessages(request, messages);
-
-            return new ActionForward(returnto);
-        } catch (Exception e) {
-            LOG.error("Error granting access", e);
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("oauth2.error.granting", e.getLocalizedMessage()));
-            saveErrors(request, errors);
-            return new ActionForward(returnto);
-        }
+        return provider;
     }
 
-    private String parseReturnto(String state) throws IllegalArgumentException {
-        String URL_PATTERN = "returnto=";
-        int URL_PATTERN_LENGTH = URL_PATTERN.length();
-
-        try {
-            String stateDecoded = (String) URLDecoder.decode(state, "UTF-8");
-            int returnto_index = stateDecoded.indexOf(URL_PATTERN) + URL_PATTERN_LENGTH;
-            return stateDecoded.substring(returnto_index);
-        } catch (UnsupportedEncodingException e) {
-            throw new AssertionError("UTF-8 is unknown");
-        }
-    }
-
-    private String getAccessToken(Properties webProperties,
-            String providerName, String redirectUri,
-            OAuthAuthzResponse oar, OAuthProvider provider)
-            throws OAuthSystemException, OAuthProblemException {
+    private String getAccessToken(String redirect, OAuthAuthzResponse oar, OAuthProvider provider)
+        throws OAuthSystemException, OAuthProblemException {
         OAuthClient oauthClient = new OAuthClient(new URLConnectionClient());
-        // TODO: deal with different response types...
         OAuthAccessTokenResponse oauthResponse;
         OAuthClientRequest clientReq;
         TokenRequestBuilder requestBuilder = OAuthClientRequest
                 .tokenLocation(provider.getTokenUrl())
                 .setGrantType(GrantType.AUTHORIZATION_CODE)
-                .setClientId(webProperties.getProperty("oauth2." + providerName + ".client-id"))
-                .setClientSecret(webProperties.getProperty("oauth2." + providerName + ".client-secret"))
-                .setRedirectURI(redirectUri)
+                .setClientId(provider.getClientId())
+                .setClientSecret(provider.getClientSecret())
+                .setRedirectURI(redirect)
                 .setCode(oar.getCode());
         switch (provider.getMessageFormat()) {
-        case BODY:
-            clientReq = requestBuilder.buildBodyMessage();
-            break;
-        case QUERY:
-            clientReq = requestBuilder.buildQueryMessage();
-            break;
-        default:
-            throw new RuntimeException("Unknown message format");
+            case BODY:
+                clientReq = requestBuilder.buildBodyMessage();
+                break;
+            case QUERY:
+                clientReq = requestBuilder.buildQueryMessage();
+                break;
+            default:
+                throw new RuntimeException("Unknown message format");
         }
         LOG.debug("Sending token request: " + clientReq.getLocationUri());
 
         switch (provider.getResponseType()) {
-        case FORM:
-            oauthResponse = oauthClient.accessToken(clientReq, GitHubTokenResponse.class);
-            break;
-        case JSON:
-            oauthResponse = oauthClient.accessToken(clientReq);
-            break;
-        default:
-            throw new RuntimeException("Unknown response type");
+            case FORM:
+                oauthResponse = oauthClient.accessToken(clientReq, GitHubTokenResponse.class);
+                break;
+            case JSON:
+                oauthResponse = oauthClient.accessToken(clientReq);
+                break;
+            default:
+                throw new RuntimeException("Unknown response type");
         }
         String accessToken = oauthResponse.getAccessToken();
         return accessToken;
     }
 
-    private OAuthProvider getProvider(Properties properties, String providerName) throws IllegalArgumentException {
+    private OAuthProvider getProvider(Properties properties, String providerName) {
         if (properties.containsKey("oauth2." + providerName + ".url.token")) {
             // Presence of this key implies all other options.
             return new CustomOAuthProvider(properties, providerName);
         } else {
-            return new DefaultOAuthProvider(OAuthProviderType.valueOf(providerName));
+            return new DefaultOAuthProvider(properties, OAuthProviderType.valueOf(providerName));
         }
     }
 
     private ActionMessages loginUser(HttpServletRequest request, DelegatedIdentity identity) {
-        LOG.info("Logging in " + identity);
+        LOG.debug("Logging in " + identity);
         Profile currentProfile = SessionMethods.getProfile(request.getSession());
         InterMineAPI api = SessionMethods.getInterMineAPI(request.getSession());
         Profile profile = api.getProfileManager()
-                             .grantPermission(identity.getProvider(), identity.getId(), api.getClassKeys())
-                             .getProfile();
+                 .grantPermission(identity.getProvider(), identity.getId(), api.getClassKeys())
+                 .getProfile();
         profile.getPreferences().put(UserPreferences.EMAIL, identity.getEmail());
         profile.getPreferences().put(UserPreferences.AKA, identity.getName());
 
         ActionMessages messages = new ActionMessages();
         setUpProfile(request.getSession(), profile);
-        messages.add(ActionMessages.GLOBAL_MESSAGE,
-                new ActionMessage("login.oauth2.successful", identity.getProvider(), profile.getName()));
+        messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+                "login.oauth2.successful", identity.getProvider(), profile.getName()));
         Map<String, String> renamedBags = new HashMap<String, String>();
 
         if (currentProfile != null && StringUtils.isEmpty(currentProfile.getUsername())) {
@@ -222,7 +251,7 @@ public class Callback extends LoginHandler {
     }
 
     private DelegatedIdentity getDelegatedIdentity(String providerName, String accessToken)
-            throws OAuthSystemException, OAuthProblemException, JSONException {
+        throws OAuthSystemException, OAuthProblemException, JSONException {
         if (providerIsSane(providerName)) {
             return getSaneProviderUserInfo(providerName, accessToken);
         }
@@ -235,7 +264,8 @@ public class Callback extends LoginHandler {
     }
 
     /**
-     * Get user info for services which are sane enough to have an identity resource that serves json
+     * Get user info for services which are sane enough to have an identity resource
+     * that serves json
      * with <code>id</code>, <code>email</code> and <code>name</code> keys.
      * @param provider Who to ask.
      * @param accessToken An access token.
@@ -245,16 +275,16 @@ public class Callback extends LoginHandler {
      * @throws JSONException If things aren't so sane after all.
      */
     private DelegatedIdentity getSaneProviderUserInfo(String provider, String accessToken)
-            throws OAuthSystemException, OAuthProblemException, JSONException {
-        Properties webProperties = InterMineContext.getWebProperties();
+        throws OAuthSystemException, OAuthProblemException, JSONException {
+        Properties props = InterMineContext.getWebProperties();
         String prefix = "oauth2." + provider;
 
-        String identityEndpoint = webProperties.getProperty(prefix + ".identity-resource");
-        String envelopeKey = webProperties.getProperty(prefix + ".identity-envelope");
-        String idKey = webProperties.getProperty(prefix + ".id-key", "id");
-        String nameKey = webProperties.getProperty(prefix + ".name-key", "name");
-        String emailKey = webProperties.getProperty(prefix + ".email-key", "email");
-        String authMechanism = webProperties.getProperty(prefix + ".resource-auth-mechanism", "queryparam");
+        String identityEndpoint = props.getProperty(prefix + ".identity-resource");
+        String envelopeKey = props.getProperty(prefix + ".identity-envelope");
+        String idKey = props.getProperty(prefix + ".id-key", "id");
+        String nameKey = props.getProperty(prefix + ".name-key", "name");
+        String emailKey = props.getProperty(prefix + ".email-key", "email");
+        String authMechanism = props.getProperty(prefix + ".resource-auth-mechanism", "queryparam");
 
         OAuthBearerClientRequest requestBuilder =
                 new OAuthBearerClientRequest(identityEndpoint).setAccessToken(accessToken);
@@ -272,10 +302,16 @@ public class Callback extends LoginHandler {
 
         bearerClientRequest.setHeader("Accept", "application/json");
         OAuthClient oauthClient = new OAuthClient(new URLConnectionClient());
-        OAuthResourceResponse resourceResponse = oauthClient.resource(bearerClientRequest,
+        OAuthResourceResponse resp = oauthClient.resource(bearerClientRequest,
                 OAuth.HttpMethod.GET, OAuthResourceResponse.class);
 
-        JSONObject result = new JSONObject(resourceResponse.getBody());
+        return parseIdentity(provider, envelopeKey, idKey, nameKey, emailKey, resp.getBody());
+    }
+
+    private DelegatedIdentity parseIdentity(String provider,
+            String envelopeKey, String idKey, String nameKey, String emailKey,
+            String body) throws JSONException {
+        JSONObject result = new JSONObject(body);
         if (StringUtils.isNotBlank(envelopeKey)) {
             result = result.getJSONObject(envelopeKey);
         }
@@ -293,8 +329,26 @@ public class Callback extends LoginHandler {
             email = result.optString(emailKey);
         } else {
             email = emails.optString("preferred");
-            if (email == null) email = emails.optString("account");
+            if (email == null) {
+                email = emails.optString("account");
+            }
         }
         return new DelegatedIdentity(provider, id, email, name);
     }
+
+
+    private String parseReturnto(String state) throws IllegalArgumentException {
+        String URL_PATTERN = "returnto=";
+        int URL_PATTERN_LENGTH = URL_PATTERN.length();
+
+        try {
+            String stateDecoded = (String) URLDecoder.decode(state, "UTF-8");
+            int returnto_index = stateDecoded.indexOf(URL_PATTERN) + URL_PATTERN_LENGTH;
+            return stateDecoded.substring(returnto_index);
+        } catch (UnsupportedEncodingException e) {
+            throw new AssertionError("UTF-8 is unknown");
+        }
+    }
+
+
 }
