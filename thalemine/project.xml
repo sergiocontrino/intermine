@@ -169,7 +169,7 @@
  </source>
 
  <source name="kegg-pathway" type="kegg-pathway">
-   <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/kegg/ath"/>
+   <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/kegg/current"/>
    <property name="kegg.organisms" value="3702"/>
  </source>
 
