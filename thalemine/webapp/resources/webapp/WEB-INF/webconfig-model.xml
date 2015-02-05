@@ -85,6 +85,7 @@
       <fieldconfig fieldExpr="chromosomeLocation.start" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.end" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="organism.shortName" showInInlineCollection="false" label="Organism" />
+      <fieldconfig fieldExpr="geneRifs" label="Gene RIFs" />
     </fields>
   </class>
 
@@ -99,6 +100,17 @@
       <fieldconfig fieldExpr="organism.name" showInInlineCollection="false" label="Organism Name" />
     </fields>
   </class>
+
+  <class className="org.intermine.model.bio.Generif" label="GeneRIF" >
+    <fields>
+      <fieldconfig fieldExpr="annotation" />
+      <fieldconfig fieldExpr="timeStamp" label="last updated" showInSummary="false" showInInlineCollection="false" />
+      <fieldconfig fieldExpr="organism.shortName" label="Organism" showInInlineCollection="false" />
+      <fieldconfig fieldExpr="gene.symbol" label="Gene" showInInlineCollection="false" />
+      <fieldconfig fieldExpr="publication.pubMedId" label="Publication" />
+    </fields>
+  </class>
+
 
 <class className="org.intermine.model.bio.GOAnnotation">
     <fields>

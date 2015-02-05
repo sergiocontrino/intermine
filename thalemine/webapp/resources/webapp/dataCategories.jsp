@@ -35,39 +35,39 @@
   <tr>
     <td class="leftcol"><h2><p>Genes</p></h2></td>
     <td>TAIR10 Genome release builds upon gene structures of previous TAIR9 release using RNA-seq and proteomics datasets as well as manual updates, informed by cross species alignments, peptides and community input regarding missing and incorrectly annotated genes.</td>
-    <td><a href="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/genome_annotation.jsp" target="_blank" class="extlink">TAIR</a>- Release TAIR10</td>
+    <td><a href="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/genome_annotation.jsp" target="_blank" class="extlink">TAIR</a>- Release TAIR10 (12/31/13)</td>
     <td>Arabidopsis Genome Initiative - <a href="http://www.ncbi.nlm.nih.gov/pubmed/11130711" target="_blank" class="extlink">PubMed: 11130711</a>
   </tr>
 
   <tr>
     <td rowspan="2" class="leftcol"><h2><p>Proteins</p></h2></td>
     <td>Proteins from UniProt (trEMBL and SwissProt)</td>
-    <td><a href="http://www.ebi.uniprot.org/index.shtml" target="_blank" class="extlink">UniProt</a>- Release 2013_12</td>
+    <td><a href="http://www.ebi.uniprot.org/index.shtml" target="_blank" class="extlink">UniProt</a>- Release 2014_11</td>
     <td>UniProt Consortium - <a href="http://www.ncbi.nlm.nih.gov/pubmed/17142230" target="_blank" class="extlink">PubMed: 17142230</a></td>
   </tr>
   <tr>
     <td>Protein family and domain assignments to proteins</td>
-    <td><a href="http://www.ebi.ac.uk/interpro" target="_blank" class="extlink">InterPro</a>(from UniProt Release 2013_12)</td>
+    <td><a href="http://www.ebi.ac.uk/interpro" target="_blank" class="extlink">InterPro</a>(v49.0)</td>
     <td>Mulder et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/17202162" target="_blank" class="extlink">PubMed: 17202162</a></td>
   </tr>
 
   <tr>
     <td class="leftcol"><h2><p>Homology</p></h2></td>
     <td>Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree.</td>
-    <td><a href="http://www.pantherdb.org" target="_blank" class="extlink">Panther</a>- Release 9.0, 24 Jan 2014</td>
+    <td><a href="http://www.pantherdb.org" target="_blank" class="extlink">Panther</a>- Release 9.0, 9 Jun 2014</td>
     <td>Mi et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/23193289 " target="_blank" class="extlink">PubMed: 23193289</a></td>
   </tr>
 
   <tr>
     <td rowspan="3" class="leftcol"><h2><p>Gene Ontology</p></h2></td>
     <td>GO annotations made by TAIR curators, TIGR Arabidopsis annotation effort</td>
-    <td><a href="http://www.geneontology.org" target="_blank" class="extlink">Gene Ontology Site</a>- 06 Dec 2013</td>
+    <td><a href="http://www.geneontology.org" target="_blank" class="extlink">Gene Ontology Site</a>- 10 Nov 2014</td>
     <td>Berardini et al., 2004 - <a href="http://www.ncbi.nlm.nih.gov" target="_blank" class="extlink">PubMed: 15173566</a><br />
         Gene Ontology Consortium - <a href="http://www.ncbi.nlm.nih.gov/pubmed/10802651" target="_blank" class="extlink">PubMed:10802651</a></td>
   </tr>
   <tr>
     <td>Several electronic and manual GO annotation methods utilized by UniProt</td>
-    <td><a href="http://www.ebi.ac.uk/GOA/arbidopsis_release" target="_blank" class="extlink">UniProt GOA</a>- 06 Dec 2013</td>
+    <td><a href="http://www.ebi.ac.uk/GOA/arbidopsis_release" target="_blank" class="extlink">UniProt GOA</a>- Release 2014_11</td>
     <td>Camon et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/14681408" target="_blank" class="extlink">PubMed: 14681408</a></td>
   </tr>
   <tr>
@@ -99,7 +99,7 @@
   <tr>
     <td class="leftcol"><h2><p>Publications</p></h2></td>
     <td>Relevant publications are identified by searching databases such as PubMed (full-text is read, relevant information extracted and added to the entry)</td>
-    <td><a href="http://www.uniprot.org/help/publications" target="_blank" class="extlink">Publications</a>(from UniProt Release 2013_12) and NCBI gene2pubmed</td>
+    <td><a href="http://www.uniprot.org/help/publications" target="_blank" class="extlink">Publications</a>from UniProt (Release 2014_11) and NCBI gene2pubmed (12/10/14)</td>
     <td>Magrane et al., 2011 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/21447597" target="_blank" class="extlink">PubMed: 21447597</a></td>
 </table>
 

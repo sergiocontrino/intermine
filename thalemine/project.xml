@@ -169,7 +169,7 @@
  </source>
 
  <source name="kegg-pathway" type="kegg-pathway">
-   <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/kegg/ath"/>
+   <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/kegg/current"/>
    <property name="kegg.organisms" value="3702"/>
  </source>
 
@@ -181,7 +181,13 @@
    <property name="biopax.curated" value="false"/>
  </source>
 
+ <source name="generif" type="generif">
+   <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/generif/current"/>
+   <property name="generif.organisms" value="3702"/>
+   <property name="generif.datasourcename" value="GeneRIF"/>
+   <property name="generif.datasetname" value="GeneRIF data set"/>
 
+ </source>
 
     <!-- have to be the last sources run -->
     <source name="entrez-organism" type="entrez-organism">
