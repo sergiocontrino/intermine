@@ -8,6 +8,20 @@
  *
  */
 
+1.4.2
+
+#938 - Add HumanMine to list of mines in global properties.
+#927 - Reactome - assigning too many pathways
+#913 - Biogrid throws a NullPointerException when organism (Genus,Species) is unknown
+#901 - OBO file contains different ontologies
+#869 - ERROR: function bioseg_create(integer, integer) does not exist
+#706 - Transfer sequences shouldn't query for SNPs
+#187 - Format decimal places better
+
+1.4.1
+
+#922 - List upload: exception thrown when it can't find default organism
+
 1.4 (Xmas 2014)
 
 #878 - summarise-objectstore is taking a very long time
@@ -26,6 +40,7 @@
 #824 - Duplicate human genes in data file
 #811 - "No simple name for class" error
 #827 - Hikari docs
+#811 - "No simple name for class" error
 #809 - BioGRID: append MGI prefix
 #782 - Entrez gene resolver changed MGI ID format, ID resolver failing
 #781 - publications: no author when author is a consortium
