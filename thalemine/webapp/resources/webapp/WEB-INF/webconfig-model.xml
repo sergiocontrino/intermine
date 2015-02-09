@@ -84,7 +84,7 @@
       <fieldconfig fieldExpr="chromosome.primaryIdentifier" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.start" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.end" showInInlineCollection="false" showInSummary="false" />
-      <fieldconfig fieldExpr="organism.shortName" label="Organism" />
+      <fieldconfig fieldExpr="organism.shortName" showInInlineCollection="false" label="Organism" />
       <fieldconfig fieldExpr="geneRifs" label="Gene RIFs" />
     </fields>
   </class>
@@ -97,7 +97,7 @@
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
       <fieldconfig fieldExpr="includeGene" label="Gene Included?" />
       <fieldconfig fieldExpr="chromosomeLocation" displayer="/model/chromosomeLocDisplayer.jsp" showInResults="false" />
-      <fieldconfig fieldExpr="organism.name" label="Organism Name" />
+      <fieldconfig fieldExpr="organism.name" showInInlineCollection="false" label="Organism Name" />
     </fields>
   </class>
 
@@ -166,7 +166,7 @@
       <fieldconfig fieldExpr="chromosome.primaryIdentifier" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.start" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.end" showInInlineCollection="false" showInSummary="false" />
-      <fieldconfig fieldExpr="organism.name" label="Organism"/>
+      <fieldconfig fieldExpr="organism.name" showInInlineCollection="false" label="Organism"/>
     </fields>
   </class>
 
@@ -183,7 +183,7 @@
       <fieldconfig fieldExpr="confidenceRating" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="curatorSummary"  showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="computationalDescription" showInInlineCollection="false" showInSummary="false" />
-      <fieldconfig fieldExpr="organism.shortName" label="Organism"/>
+      <fieldconfig fieldExpr="organism.shortName" showInInlineCollection="false" label="Organism"/>
     </fields>
   </class>
 
@@ -363,7 +363,7 @@
                      jspName="model/geneStructureDisplayer.jsp"
                      replacesFields="transcripts,exons,CDSs,introns,UTRs,fivePrimeUTR,threePrimeUTR,childFeatures"
                      placement="Genomics"
-                     types="Gene,Transcript,Exon,Intron,UTR,CDS"/>
+                     types="Gene,Transcript,Exon,Intron,UTR,CDS,TransposableElementGene"/>
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.HomologueDisplayer"
                      jspName="model/homologueDisplayer.jsp"
@@ -396,11 +396,46 @@
                      placement="Proteins"
                      types="Genomics,Protein"/>
 
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.ProteinSequenceDisplayer"
+                     jspName="model/proteinSequenceDisplayer.jsp"
+                     replacesFields="sequence"
+                     placement="summary"
+                     types="Protein"/>
+
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.PublicationAnnotationsDisplayer"
+                     jspName="model/publicationAnnotationsDisplayer.jsp"
+                     replacesFields=""
+                     placement="summary"
+                     parameters="Gene,Protein,InteractionDetail.experiment,GOAnnotation.evidence"
+                     types="Publication"/>
+
+    <!-- works with classes with publications collection -->
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.PublicationCountsDisplayer"
+                     jspName="model/publicationCountsDisplayer.jsp"
+                     replacesFields="publications"
+                     placement="summary"
+                     types="BioEntity"/>
+
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.PathwayDescriptionDisplayer"
+                     jspName="model/pathwayDescriptionDisplayer.jsp"
+                     showImmediately="true"
+                     replacesFields="description"
+                     placement="summary"
+                     types="Pathway"/>
+
     <reportdisplayer javaClass="org.thalemine.web.displayer.BarEfpBrowserDisplayer"
                      jspName="model/eFPBrowserDisplayer.jsp"
                      replacesFields=""
                      placement="Expression"
                      types="Gene"/>
+
+    <!--  this takes rather long to load, commented for now
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.MinePathwaysDisplayer"
+                     jspName="model/minePathwaysDisplayer.jsp"
+                     replacesFields="pathways"
+                     placement="summary"
+                     types="Gene"/>
+   -->
 
   </reportdisplayers>
 
@@ -437,20 +472,6 @@
                                        publications.title, publications.firstAuthor,
                                        publications.journal, publications.year, publications.pubMedId"
                                  externalLink="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;dopt=Abstract&amp;list_uids="/>
-
-      <!--enrichmentwidgetdisplayer id="prot_dom_enrichment_for_gene"
-                                 title="Protein Domain Enrichment"
-                                 description="Protein Domains enriched for items in this list."
-                                 label="Protein Domain"
-                                 startClass="Gene"
-                                 startClassDisplay="primaryIdentifier"
-                                 enrich="proteins.proteinDomains.name"
-                                 enrichIdentifier="proteins.proteinDomains.primaryIdentifier"
-                                 constraints="organism.name=[list]"
-                                 typeClass="Gene"
-                                 views="secondaryIdentifier,symbol,primaryIdentifier,organism.name,
-                                       proteins.proteinDomains.primaryIdentifier,proteins.proteinDomains.name"
-                                 externalLink="http://www.ebi.ac.uk/interpro/IEntry?ac="/-->
 
       <enrichmentwidgetdisplayer id="go_enrichment_for_gene"
                                  title="Gene Ontology Enrichment"
@@ -499,6 +520,20 @@
                                  typeClass="Protein"
                                  views="primaryIdentifier, primaryAccession, organism.name,
                                        keywords.name, keywords.description"/>
+
+      <enrichmentwidgetdisplayer id="prot_dom_enrichment_for_gene"
+                                 title="Protein Domain Enrichment"
+                                 description="Protein Domains enriched for items in this list."
+                                 label="Protein Domain"
+                                 startClass="Gene"
+                                 startClassDisplay="primaryIdentifier"
+                                 enrich="proteins.proteinDomains.name"
+                                 enrichIdentifier="proteins.proteinDomains.primaryIdentifier"
+                                 constraints="organism.name=[list]"
+                                 typeClass="Gene"
+                                 views="secondaryIdentifier,symbol,primaryIdentifier,organism.name,
+                                       proteins.proteinDomains.primaryIdentifier,proteins.proteinDomains.name"
+                                 externalLink="http://www.ebi.ac.uk/interpro/IEntry?ac="/>
 
       <enrichmentwidgetdisplayer id="prot_dom_enrichment_for_protein"
                                  title="Protein Domain Enrichment"

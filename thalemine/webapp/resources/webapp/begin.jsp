@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -101,7 +102,6 @@
                                     <h3><c:out value="${WEB_PROPERTIES['begin.thirdBox.title']}" /></h3>
                                 </c:otherwise>
                             </c:choose>
-                                <br />
                                 <c:choose>
                                     <c:when test="${!isNewUser && !empty (WEB_PROPERTIES['begin.thirdBox.visitedDescription'])}">
                                         <p><c:out value="${WEB_PROPERTIES['begin.thirdBox.visitedDescription']}" escapeXml="false" /></p>
@@ -166,7 +166,7 @@
                         </table>
 
                         <div id="tab-content">
-                                <div id="ribbon"></div>
+                                <!-- <div id="ribbon"></div> -->
                                 <div id="try"></div>
 
                                 <!-- templates content -->
@@ -230,7 +230,7 @@
                                 </c:if>
                         </div>
 
-                        <div id="api">
+                        <div id="api" style="display:none;">
                                 <h4>Perl, Python, Ruby and <span>&nbsp;&amp;&nbsp;</span> Java API</h4>
                                 <img src="images/begin/java-perl-python-ruby-2.png" alt="perl java python ruby" />
                                 <p>

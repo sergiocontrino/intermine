@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -37,7 +38,39 @@
         <fmt:message key="funding" />
     </div>
 
+<div align="center" class="body funding-footer">
+<!-- cam logo and links -->
+<table>
+  <tr><td>
+    <a class="araport-logo" href="https://www.araport.org/" title="Araport - The Arabidopsis Information Portal" target="_blank">
+        <img src="images/icons/araport-footer-logo.png" alt="Araport logo">
+    </a>
+    </td><td>
+     <a class="jcvi-logo" href="http://www.jcvi.org/" title="J. Craig Venter Institute" target="_blank">
+        <img src="images/icons/jcvi-footer-logo.png" alt="JCVI logo">
+    </a>
+    </td><td>
+     <a class="tacc-logo" href="https://www.tacc.utexas.edu/" title="Texas Advanced Computing Center" target="_blank">
+        <img src="images/icons/tacc-footer-logo.png" alt="TACC logo">
+    </a>
+    </td><td>
+    <a class="cambridge-logo" href="http://www.cam.ac.uk/" title="University of Cambridge" target="_blank">
+        <img src="images/icons/cambridge-footer-logo.png" alt="University of Cambridge logo">
+    </a>
+  </td></tr>
+</table>
+
+
+
+
+<!--
+    <a class="tacc-logo" href="http://www.cam.ac.uk/" title="University of Cambridge" target="_blank">
+        <img src="model/images/tacc-footer-logo.png" alt="University of Cambridge logo">
+    </a>
+-->
+</div>
     <ul class="footer-links">
+
         <!-- contact us form link -->
         <li><a href="#" onclick="showContactForm();return false;">Contact Us</a></li>
         <c:set value="${WEB_PROPERTIES['header.links']}" var="headerLinks"/>
