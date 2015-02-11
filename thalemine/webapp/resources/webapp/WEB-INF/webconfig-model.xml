@@ -251,7 +251,7 @@
       <fieldconfig fieldExpr="taxonId" />
     </fields>
   </class>
-
+<!--
   <class className="org.intermine.model.bio.Protein">
     <inlinelist>
       <table path="synonyms.value" showInHeader="true" lineLength="100" />
@@ -263,6 +263,21 @@
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
     </fields>
   </class>
+-->
+
+  <class className="org.intermine.model.bio.Protein">
+    <inlinelist>
+      <table path="synonyms.value" showInHeader="true" lineLength="100" />
+    </inlinelist>
+    <fields>
+      <fieldconfig fieldExpr="genes.primaryIdentifier" label="Gene"/>
+      <fieldconfig fieldExpr="genes.symbol" label="Gene symbol"/>
+      <fieldconfig fieldExpr="primaryIdentifier"/>
+      <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
+      <fieldconfig fieldExpr="molecularWeight"/>
+    </fields>
+  </class>
+
 
  <class className="org.intermine.model.bio.ProteinDomain">
     <fields>
