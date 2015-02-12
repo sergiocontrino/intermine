@@ -270,8 +270,8 @@
       <table path="synonyms.value" showInHeader="true" lineLength="100" />
     </inlinelist>
     <fields>
-      <fieldconfig fieldExpr="genes.primaryIdentifier" label="Gene"/>
-      <fieldconfig fieldExpr="genes.symbol" label="Gene symbol"/>
+      <fieldconfig fieldExpr="genes.primaryIdentifier" label="Gene" showInInlineCollection="false"/>
+      <fieldconfig fieldExpr="genes.symbol" label="Gene symbol" showInInlineCollection="false"/>
       <fieldconfig fieldExpr="primaryIdentifier"/>
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
       <fieldconfig fieldExpr="molecularWeight"/>
