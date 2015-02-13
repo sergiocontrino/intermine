@@ -251,18 +251,21 @@
       <fieldconfig fieldExpr="taxonId" />
     </fields>
   </class>
-<!--
+
+<!-- NOTE: you cannot add collections (e.g. genes), breaks summary in report page
+
   <class className="org.intermine.model.bio.Protein">
     <inlinelist>
       <table path="synonyms.value" showInHeader="true" lineLength="100" />
     </inlinelist>
     <fields>
-      <fieldconfig fieldExpr="primaryIdentifier"/>
       <fieldconfig fieldExpr="primaryAccession"/>
       <fieldconfig fieldExpr="organism.name" label="Organism"/>
-      <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
+      <fieldconfig fieldExpr="genes.primaryIdentifier" label="Gene" showInInlineCollection="false"/>
+      <fieldconfig fieldExpr="genes.symbol" label="Gene symbol" showInInlineCollection="false" showInSummary="false" />
     </fields>
   </class>
+
 -->
 
   <class className="org.intermine.model.bio.Protein">
@@ -270,8 +273,6 @@
       <table path="synonyms.value" showInHeader="true" lineLength="100" />
     </inlinelist>
     <fields>
-      <fieldconfig fieldExpr="genes.primaryIdentifier" label="Gene" showInInlineCollection="false"/>
-      <fieldconfig fieldExpr="genes.symbol" label="Gene symbol" showInInlineCollection="false"/>
       <fieldconfig fieldExpr="primaryIdentifier"/>
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
       <fieldconfig fieldExpr="molecularWeight"/>
