@@ -353,21 +353,21 @@
       var options = {
              type: 'table',
              url: webapp_url,
-             token: "${USER.dayToken}",
+             token: $SERVICE.token,
              query: {"model":{"name":"genomic"},"select":["Gene.primaryIdentifier","Gene.symbol","Gene.curatorSummary"],"orderBy":[{"Gene.primaryIdentifier":"ASC"}],"where":[{"path":"Gene.primaryIdentifier","op":"ONE OF","code":"A","values":values}]}
           };
       if (values == null || values.length < 1) {
-    	  jQuery('#query-container').html("");
-    	  jQuery('#attedexport').hide();
+        jQuery('#query-container').html("");
+        jQuery('#attedexport').hide();
       } else {
-    	  jQuery('#attedexport').show();
-    	  jQuery('#query-container').imWidget(options);
+        jQuery('#attedexport').show();
+        jQuery('#query-container').imWidget(options);
       }
 
          }
 
       var attedqueryhook = function() {
-    		  jQuery('#query-container').html("Waiting for results...");
+          jQuery('#query-container').html("Waiting for results...");
       }
 
       var opts = {
