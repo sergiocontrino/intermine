@@ -32,6 +32,7 @@ import org.intermine.objectstore.ObjectStore;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.pathquery.Constraints;
 import org.intermine.pathquery.OrderDirection;
+import org.intermine.pathquery.OuterJoinStatus;
 import org.intermine.pathquery.PathQuery;
 import org.intermine.web.displayer.ReportDisplayer;
 import org.intermine.web.logic.config.ReportDisplayerConfig;
@@ -154,6 +155,8 @@ public class CytoscapeNetworkDisplayer extends ReportDisplayer
                 "Gene.interactions.details.experiment.publication.title",
                 "Gene.interactions.details.experiment.publication.pubMedId");
 
+        q.setOuterJoinStatus("Gene.interactions.details.experiment.publication",
+                OuterJoinStatus.OUTER);
         q.addOrderBy("Gene.symbol", OrderDirection.ASC);
         q.addConstraint(Constraints.inIds("Gene", fullInteractingGeneSet), "B");
         q.addConstraint(Constraints.inIds("Gene.interactions.gene2",
