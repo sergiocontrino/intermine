@@ -192,7 +192,7 @@
       <attribute name="version" value="01/30/2015" />
       <reference name="dataSource" ref_id="0_29" />
       <attribute name="name" value="GeneRIF" />
-      <attribute name="description" value="Simple mechanism to allow scientists to add to the functional annotation of genes described in NCBI Gene" />
+      <attribute name="description" value="Functional annotation added by scientists to genes described in NCBI Gene" />
       <attribute name="url" value="http://www.ncbi.nlm.nih.gov/gene/about-generif" />
       <reference name="publication" ref_id="0_30" />
    </item>
@@ -235,6 +235,6 @@
       <attribute name="name" value="Reactome data set" />
       <attribute name="description" value="Non-curated Reactome Linked Dataset that captures the Reactome pathways in BioPAX format" />
       <attribute name="url" value="http://www.ebi.ac.uk/rdf/services/reactome" />
-      <reference name="publication" ref_id="0_35" />
+      <reference name="publication" ref_id="0_37" />
    </item>
 </items>

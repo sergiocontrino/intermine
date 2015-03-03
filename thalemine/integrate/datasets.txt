@@ -18,8 +18,8 @@ DataSet	BAR Interactions data set	Confirmed Arabidopsis protein interactions fro
 DataSet	BAR Annotations Lookup	Mapping between an AGI locus and Probeset identifier	http://bar.urotonto.ca	DataSource:BAR
 DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840
 DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	12/10/2014
-DataSet	GeneRIF	Simple mechanism to allow scientists to add to the functional annotation of genes described in NCBI Gene	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	01/30/2015
+DataSet	GeneRIF	Functional annotation added by scientists to genes described in NCBI Gene	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	01/30/2015
 DataSource	GenomeNet	Japanese network of database and computational services for genome research	http://www.genome.jp	Publication:9397687
 DataSet	KEGG pathways data set	Wiring diagrams of molecular interactions, reactions, and relations	http://www.kegg.jp/kegg/pathway.html	DataSource:GenomeNet,Publication:24214961	72.0
 DataSource	Reactome	Free, open-source, curated and peer reviewed pathway database	http://www.reactome.org	Publication:24243840
-DataSet	Reactome data set	Non-curated Reactome Linked Dataset that captures the Reactome pathways in BioPAX format	http://www.ebi.ac.uk/rdf/services/reactome	DataSource:Reactome,Publication:24214961	49
+DataSet	Reactome data set	Non-curated Reactome Linked Dataset that captures the Reactome pathways in BioPAX format	http://www.ebi.ac.uk/rdf/services/reactome	DataSource:Reactome,Publication:24243840	49

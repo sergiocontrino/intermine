@@ -33,10 +33,16 @@
   </tr>
 
   <tr>
-    <td class="leftcol"><h2><p>Genes</p></h2></td>
+    <td rowspan="2" class="leftcol"><h2><p>Genes</p></h2></td>
     <td>TAIR10 Genome release builds upon gene structures of previous TAIR9 release using RNA-seq and proteomics datasets as well as manual updates, informed by cross species alignments, peptides and community input regarding missing and incorrectly annotated genes.</td>
     <td><a href="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/genome_annotation.jsp" target="_blank" class="extlink">TAIR</a>- Release TAIR10 (12/31/13)</td>
     <td>Arabidopsis Genome Initiative - <a href="http://www.ncbi.nlm.nih.gov/pubmed/11130711" target="_blank" class="extlink">PubMed: 11130711</a>
+  </tr>
+
+  <tr>
+    <td>GeneRIF - Functional annotation added by scientists to genes described in NCBI Gene</td>
+    <td><a href="http://www.ncbi.nlm.nih.gov/gene/about-generif" target="_blank" class="extlink">GeneRIF</a>(01/30/2015)</td>
+    <td>Maglott et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/17148475" target="_blank" class="extlink">PubMed: 17148475</a></td>
   </tr>
 
   <tr>
@@ -101,6 +107,20 @@
     <td>Relevant publications are identified by searching databases such as PubMed (full-text is read, relevant information extracted and added to the entry)</td>
     <td><a href="http://www.uniprot.org/help/publications" target="_blank" class="extlink">Publications</a>from UniProt (Release 2014_11) and NCBI gene2pubmed (12/10/14)</td>
     <td>Magrane et al., 2011 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/21447597" target="_blank" class="extlink">PubMed: 21447597</a></td>
+  </tr>
+
+  <tr>
+    <td rowspan="2" class="leftcol"><h2><p>Pathways</p></h2></td>
+    <td>KEGG pathways - Wiring diagrams of molecular interactions, reactions, and relations</td>
+    <td><a href="http://www.kegg.jp/kegg/pathway.html" target="_blank" class="extlink">KEGG</a>Release 72.0</td>
+    <td>Kanehisa et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/24214961" target="_blank" class="extlink">PubMed: 24214961</a></td>
+  </tr>
+  <tr>
+    <td>Non-curated Reactome Linked Dataset that captures the Reactome pathways in BioPAX format</td>
+    <td><a href="http://www.ebi.ac.uk/rdf/services/reactome" target="_blank" class="extlink">Reactome</a>(v49)</td>
+    <td>Croft et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/24243840" target="_blank" class="extlink">PubMed: 24243840</a></td>
+  </tr>
+
 </table>
 
 </div>
