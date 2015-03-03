@@ -84,9 +84,19 @@
   <collection name="samples" referenced-type="Sample" reverse-reference="properties" />
 </class>
 
+ <class name="ProteinFamily" extends="BioEntity" is-interface="true">
+<reference name="consensus" referenced-type="Sequence" />
+<attribute name="methodId" type="java.lang.Integer" />
+<collection name="proteinFamilyMembers" referenced-type="ProteinFamilyMember" reverse-reference="proteinFamily" />
+<attribute name="msa" type="java.lang.String" />
+</class>
 
-
-
+ <class name="ProteinFamilyMember" extends="BioEntity" is-interface="true">
+<attribute name="rank" type="java.lang.Integer" />
+<reference name="protein" referenced-type="Protein" />
+<reference name="alignment" referenced-type="Sequence" />
+<reference name="proteinFamily" referenced-type="ProteinFamily" reverse-reference="proteinFamilyMembers" />
+</class>
 
 <!-- OTHER modENCODE classes -->
 

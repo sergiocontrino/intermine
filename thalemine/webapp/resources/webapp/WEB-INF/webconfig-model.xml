@@ -397,11 +397,32 @@
                      placement="Genomics"
                      types="Gene,Transcript,Exon,Intron,UTR,CDS,TransposableElementGene"/>
 
+
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.HomologueDisplayer"
                      jspName="model/homologueDisplayer.jsp"
                      replacesFields="homologues"
                      placement="Homology"
                      parameters="{'dataSets': ['Panther data set']}"
+                     types="Gene"/>
+
+
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneHomologDisplayer"
+                     jspName="model/geneHomologDisplayer.jsp"
+                     replacesFields=""
+                     placement="Homology"
+                     parameters="{'dataSets': ['Phytozome Homologs']}"
+                     types="Gene"/>
+
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.PhytomineOrthologDisplayer"
+                     jspName="model/phytomineOrthologDisplayer.jsp"
+                     replacesFields=""
+                     placement="Homology"
+                     types="Gene"/>
+
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.ProteinDisplayer"
+                     jspName="model/proteinDisplayer.jsp"
+                     replacesFields="Protein"
+                     placement="Proteins"
                      types="Gene"/>
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.JBrowseDisplayer"
@@ -526,6 +547,7 @@
                                        goAnnotation.ontologyTerm.parents.identifier,goAnnotation.ontologyTerm.parents.name"
                                  externalLink="http://amigo.geneontology.org/cgi-bin/amigo/term_details?term="
                                  correctionCoefficient="org.intermine.bio.web.widget.GeneLenghtCorrectionCoefficient"/>
+      
 
       <enrichmentwidgetdisplayer id="protein_features"
                                  title="UniProt Features"
@@ -553,6 +575,7 @@
                                  views="primaryIdentifier, primaryAccession, organism.name,
                                        keywords.name, keywords.description"/>
 
+
       <enrichmentwidgetdisplayer id="prot_dom_enrichment_for_gene"
                                  title="Protein Domain Enrichment"
                                  description="Protein Domains enriched for items in this list."
@@ -567,6 +590,7 @@
                                        proteins.proteinDomains.primaryIdentifier,proteins.proteinDomains.name"
                                  externalLink="http://www.ebi.ac.uk/interpro/IEntry?ac="/>
 
+
       <enrichmentwidgetdisplayer id="prot_dom_enrichment_for_protein"
                                  title="Protein Domain Enrichment"
                                  description="Protein Domains enriched for items in this list."
@@ -580,6 +604,7 @@
                                  views="primaryIdentifier,organism.name,proteinDomains.primaryIdentifier,
                                        proteinDomains.name"
                                  externalLink="http://www.ebi.ac.uk/interpro/entry/"/>
+      
 
        <bagtabledisplayer id="orthologues" title="Orthologues" pathStrings="Gene.homologues.homologue.organism"
                          description="Counts of genes in list with orthologues."
@@ -592,6 +617,7 @@
                                 homologues.homologue.symbol,
                                 homologues.homologue.organism.shortName,
                                 homologues.type"/>
+       -->
 
 </widgets>
 </webconfig>

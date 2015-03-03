@@ -33,6 +33,7 @@ public class UniprotConfig
     private List<String> xrefs = new ArrayList<String>();
     private Map<String, ConfigEntry> entries = new HashMap<String, ConfigEntry>();
     private String geneDesignation = "gene designation";
+    private String mrnaDesignation = "mrna designation";
     private Map<String, String> strains = new HashMap<String, String>();
 
     /**
@@ -115,8 +116,10 @@ public class UniprotConfig
 
             if ("uniqueField".equals(attributes[1])) {
                 configEntry.setUniqueIdentifier(value);
-            } else if ("gene-designation".equals(attributes[1])) {
+	    } else if ("gene-designation".equals(attributes[1])) {
                 geneDesignation = value;
+	    } else if ("mrna-designation".equals(attributes[1])) {
+                mrnaDesignation = value;
             } else if ("strain".equals(attributes[1])) {
                 configEntry.setStrain(value);
                 strains.put(value, taxonId);
@@ -185,6 +188,10 @@ public class UniprotConfig
         this.geneDesignation = geneDesignation;
     }
 
+    public void setMRNADesignation(String mrnaDesignation) {
+        this.mrnaDesignation = mrnaDesignation;
+    }
+
     /**
      * Get the gene designation for this gene.  Default value is "gene designation".  Worm uses
      * "gene ID".
@@ -193,6 +200,10 @@ public class UniprotConfig
      */
     public String getGeneDesignation() {
         return geneDesignation;
+    }
+
+    public String getMRNADesignation() {
+        return mrnaDesignation;
     }
 
     /**
@@ -213,6 +224,7 @@ public class UniprotConfig
         protected String getUniqueIdentifier() {
             return uniqueIdentifier;
         }
+
         /**
          * @param uniqueIdentifier the uniqueIdentifier to set
          */
