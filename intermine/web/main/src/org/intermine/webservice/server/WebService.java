@@ -518,9 +518,12 @@ public abstract class WebService
         if (StringUtils.isEmpty(authToken) && StringUtils.isEmpty(authString)) {
             return; // Not Authenticated.
         }
-        // Accept tokens passed in the Authorization header.
+        // Accept tokens passed in the Assertion or Authorization header.
         if (StringUtils.isEmpty(authToken)) {
-            if (StringUtils.startsWith(authString, "Token ")) {
+            String identityAssertion = getIdentityAssertion();
+            if (StringUtils.isNotBlank(identityAssertion)) {
+                identity = getIdentityFromBearerToken(identityAssertion);
+            } else if (StringUtils.startsWith(authString, "Token ")) {
                 authToken = StringUtils.removeStart(authString, "Token ");
                 try { // Allow bearer tokens to be passed in as normal tokens.
                     identity = getIdentityFromBearerToken(authToken);
@@ -530,11 +533,6 @@ public abstract class WebService
             } else if (StringUtils.startsWith(authString, "Bearer ")) {
                 identity = getIdentityFromBearerToken(
                     StringUtils.removeStart(authString, "Bearer "));
-            } else {
-                String identityAssertion = getIdentityAssertion();
-                if (StringUtils.isNotBlank(identityAssertion)) {
-                    identity = getIdentityFromBearerToken(identityAssertion);
-                }
             }
         }
 
