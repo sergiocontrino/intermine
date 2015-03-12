@@ -5,8 +5,8 @@
 
 <!-- phytomineOrthologDisplayer.jsp -->
 <div class="basic-table">
-<h3>Phytozome InParanoid Homologs</h3>
-
+<h3>InParanoid Homologs</h3>
+<p>Data Source: <a href="${WEB_PROPERTIES['phytomine_url']}">Phytomine</a></p>
 <c:set var="object" value="${reportObject.object}"/>
 
 <c:choose>
@@ -20,7 +20,12 @@
   <c:choose>
   <c:when test="${WEB_PROPERTIES['phytomine.homolog.prefix'] != null}">
 <link rel="stylesheet" type="text/css" href="https://cdn.araport.org/js/intermine/im-tables/latest/imtables.css">
- <div id="phytomine-container">
+ <div id="phytomine-paralog-container">
+ <p class="apology">
+  Please be patient while the results of your query are retrieved.
+ </p>
+</div>
+ <div id="phytomine-ortholog-container">
  <p class="apology">
   Please be patient while the results of your query are retrieved.
  </p>
@@ -31,13 +36,20 @@
   var geneId = "${name}";
   var webapp_root_url = "${WEB_PROPERTIES['phytomine.homolog.prefix']}";
 
-  var options = {
+  var optionsP = {
     type: 'table',
     url: webapp_root_url,
-    token: 'd6506952eec1ebcb6305000dbc7c02df',
-    query: {"model":{"name":"genomic"},"select":["Homolog.groupName","Homolog.gene1.name","Homolog.organism1.shortName","Homolog.gene2.name","Homolog.organism2.shortName","Homolog.relationship"],"constraintLogic":"A and B","orderBy":[{"Homolog.relationship":"ASC"}],"where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]}
+    query: {"model":{"name":"genomic"},"select":["Homolog.groupName","Homolog.gene2.name","Homolog.organism2.shortName","Homolog.relationship"],"constraintLogic":"A and B","orderBy":[{"Homolog.relationship":"ASC"}],"where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.organism2.taxonId","op":"=","code":"C","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]}
   };
-	jQuery('#phytomine-container').imWidget(options);
+
+  var optionsO = {
+    type: 'table',
+    url: webapp_root_url,
+    query: {"model":{"name":"genomic"},"select":["Homolog.groupName","Homolog.gene2.name","Homolog.organism2.shortName","Homolog.relationship"],"constraintLogic":"A and B","orderBy":[{"Homolog.relationship":"ASC"}],"where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.organism2.taxonId","op":"!=","code":"C","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]}
+  };
+
+	jQuery('#phytomine-paralog-container').imWidget(optionsP);
+	jQuery('#phytomine-ortholog-container').imWidget(optionsO);
 
   </script>
 

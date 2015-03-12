@@ -9,8 +9,8 @@
 
 <div id="gene_homolog_displayer" class="collection-table">
 
-<h3>Phytozome Inparanoid Homologs</h3>
-
+<h3>Inparanoid Homologs</h3>
+<p>Data Source: <a href="${WEB_PROPERTIES['phytomine_url']}">Phytomine</a></p>
 <c:choose>
   <c:when test="${!empty list}">
     <div>

@@ -13,6 +13,7 @@
   <c:when test="${!empty list}">
     <div>
     <h3>${fn:length(list)} Proteins</h3>
+    <p>Data Source: <a href="${WEB_PROPERTIES['Uniprot_url']}">UniProt</a></p>
     <c:set var="geneList" value="${geneName}" />
     <table>
       <thead>
