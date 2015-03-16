@@ -1342,6 +1342,37 @@ public class ProfileManager
     }
 
     /**
+     * Grant permission to the given identity, creating a profile for this
+     * identity if it is not already available.
+     *
+     * By this point in the process, the code calling this method is required to have
+     * validated the identity claims of the issuer.
+     *
+     * @param issuer The client claiming this identity for a user.
+     * @param identity The identity of the user.
+     * @param email The email address of the user.
+     * @param classKeys The class keys for this service.
+     *
+     * @return permission to use this service.
+     */
+    public ApiPermission grantPermission(String issuer, String identity, String email,
+            Map<String, List<FieldDescriptor>> classKeys) {
+
+        String username = identity.replace("/", ":");
+        Profile profile = getProfile(username, classKeys);
+
+        if (profile == null) {
+            profile = createNewProfile(username, null);
+        }
+
+        if (!profile.prefers(UserPreferences.EMAIL)) {
+            profile.getPreferences().put(UserPreferences.EMAIL, email);
+        }
+
+        return new ApiPermission(profile, ApiPermission.Level.RW);
+    }
+
+    /**
      * Get the level of permission granted by an access token.
      * @param token The token supposedly associated with a user.
      * @param classKeys The class keys for this user.

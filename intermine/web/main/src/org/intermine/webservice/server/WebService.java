@@ -542,6 +542,7 @@ public abstract class WebService
                 permission = pm.grantPermission(
                      identity.getIssuer(),
                      identity.getIdentity(),
+                     identity.getEmail(),
                      im.getClassKeys());
             } else if (StringUtils.isNotEmpty(authToken)) {
                 permission = pm.getPermission(authToken, im.getClassKeys());
