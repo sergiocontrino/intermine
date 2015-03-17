@@ -344,9 +344,8 @@ attribute when using this service.
             default="{name}">name</param>
         <body description="Identifiers for objects to add to the list, tab, comma or newline separated.">
           <content type="text/plain">
-            "even skipped"
-            zen, bib
-            hairless
+            FT, TSF
+            FWA
           </content>
         </body>
         <returns>
@@ -625,9 +624,8 @@ attribute when using this service.
                 description="A disambiguating value (such as organism name)">extraValue</param>
           <body description="Identifiers for objects to add to the list, tab, comma or newline separated.">
              <content type="text/plain">
-              "even skipped"
-              zen, bib
-              hairless
+              FT, TSF
+              FWA
              </content>
             </body>
           <returns>
@@ -733,7 +731,7 @@ given, and may be anything the user requires.
 
 To run a template, for example which has the following editable constraints:
 ```
-&lt;constraint path="Gene.symbol" op="=" value="eve" editable="true"/&gt;
+&lt;constraint path="Gene.symbol" op="=" value="FT" editable="true"/&gt;
 &lt;constraint path="Gene.length" op="&amp;gt;" value="1000" editable="true"/&gt;
 ```
 
@@ -743,7 +741,7 @@ Then the user should supply the following parameters to run it with the above va
 |---------------------|------------------|
 | constraint1         | Gene.symbol      |
 | op1                 | eq               |
-| value1              | eve              |
+| value1              | FT               |
 | constraint2         | Gene.length      |
 | op2                 | gt               |
 | value2              | 1000             |
@@ -836,7 +834,7 @@ given, and may be anything the user requires.
 
 To run a template, for example which has the following editable constraints:
 ```
-&lt;constraint path="Gene.symbol" op="=" value="eve" editable="true"/&gt;
+&lt;constraint path="Gene.symbol" op="=" value="FT" editable="true"/&gt;
 &lt;constraint path="Gene.length" op="&amp;gt;" value="1000" editable="true"/&gt;
 ```
 
@@ -846,7 +844,7 @@ Then the user should supply the following parameters to run it with the above va
 |---------------------|------------------|
 | constraint1         | Gene.symbol      |
 | op1                 | eq               |
-| value1              | eve              |
+| value1              | FT               |
 | constraint2         | Gene.length      |
 | op2                 | gt               |
 | value2              | 1000             |
@@ -942,7 +940,7 @@ given, and may be anything the user requires.
 
 To run a template, for example which has the following editable constraints:
 ```
-&lt;constraint path="Gene.symbol" op="=" value="eve" editable="true"/&gt;
+&lt;constraint path="Gene.symbol" op="=" value="FT" editable="true"/&gt;
 &lt;constraint path="Gene.length" op="&amp;gt;" value="1000" editable="true"/&gt;
 ```
 
@@ -952,7 +950,7 @@ Then the user should supply the following parameters to run it with the above va
 |---------------------|------------------|
 | constraint1         | Gene.symbol      |
 | op1                 | eq               |
-| value1              | eve              |
+| value1              | FT               |
 | constraint2         | Gene.length      |
 | op2                 | gt               |
 | value2              | 1000             |
@@ -1054,7 +1052,7 @@ to will also be returned.
              <content type="application/xml">
                 &lt;template name="my-new-template"&gt;
                     &lt;query model="genomic" view="Gene.symbol Gene.proteins.proteinDomains.name"&gt;
-                        &lt;constraint editable="true" path="Gene" op="LOOKUP" value="eve"/&gt;
+                        &lt;constraint editable="true" path="Gene" op="LOOKUP" value="FT"/&gt;
                     &lt;/query&gt;
                 &lt;/template&gt;
              </content>
@@ -1575,7 +1573,7 @@ to will also be returned.
                 options="/lists|lists{status=CURRENT}"
                 default="{name}"
                 required="false" description="A list to search within.">list</param>
-            <param type="String[]" required="false" description="A facet parameter, eg facet_Organism=D.melanogaster">facet_?</param>
+            <param type="String[]" required="false" description="A facet parameter, eg facet_Organism=A.thaliana">facet_?</param>
             <returns>
               <format key="results">json</format>
             </returns>
@@ -1763,11 +1761,11 @@ following [json-schema](http://json-schema.org/) schema:
             description="A representation of the job. This must include a list of identifiers to resolve, and the type of object these ids are meant to resolve to">
               <content type="application/json" schema="/schema/job.schema">
                 {
-                  "identifiers": ["eve", "zen", "bib"],
+                  "identifiers": ["FT", "TSF", "FWA"],
                   "type": "Gene",
                   "caseSensitive": true,
                   "wildCards": true,
-                  "extra": "D. melanogaster"
+                  "extra": "A. thaliana"
                 }
               </content>
            </body>
@@ -2086,12 +2084,12 @@ fetch an indexed sub-sequence of it.
 
 This service expects a query with a single output column that resolves
 to a sub-sequenceable object. For example to get a sub-sequence
-of the genomic sequence of the fly X chromosome in a genomic mine, the following
+of the genomic sequence of the Arabidopsis chromosome 1 in a genomic mine, the following
 query could be used:
 
 ```
 &lt;query model="genomic" view="Chromosome.sequence.residues"&gt;
-    &lt;constraint path="Chromosome" op="LOOKUP" value="X" extraValue="D. melanogaster"/&gt;
+    &lt;constraint path="Chromosome" op="LOOKUP" value="Chr1" extraValue="A. thaliana"/&gt;
 &lt;/query&gt;
 ```
             </description>
@@ -2100,7 +2098,7 @@ query could be used:
             <param type="XML"
                 default="
 &lt;query model=&quot;genomic&quot; view=&quot;Chromosome.sequence.residues&quot;&gt;
-    &lt;constraint path=&quot;Chromosome&quot; op=&quot;LOOKUP&quot; value=&quot;X&quot; extraValue=&quot;D. melanogaster&quot;/&gt;
+    &lt;constraint path=&quot;Chromosome&quot; op=&quot;LOOKUP&quot; value=&quot;Chr1&quot; extraValue=&quot;A. thaliana&quot;/&gt;
 &lt;/query&gt;"
                 required="true" description="The xml of the query to run.">query</param>
             <returns>
@@ -2332,7 +2330,7 @@ query could be used:
             <param
                 required="true"
                 type="String"
-                default="eve"
+                default="FT"
                 description="The search prefix string to look for">startswith</param>
             <param
                 required="true"
@@ -2356,7 +2354,7 @@ query could be used:
             <param
                 required="true"
                 type="String"
-                default="eve"
+                default="FT"
                 description="The name of the item.">equals</param>
             <param
                 required="true"
@@ -2696,7 +2694,7 @@ The different token types are:
             <body description="The queries to upload. If using body content.">
              <content type="application/xml">
                 &lt;query model="genomic" view="Gene.symbol Gene.proteins.proteinDomains.name"&gt;
-                    &lt;constraint path="Gene" op="LOOKUP" value="eve"/&gt;
+                    &lt;constraint path="Gene" op="LOOKUP" value="FT"/&gt;
                 &lt;/query&gt;
              </content>
              <content type="none"/>
@@ -2722,7 +2720,7 @@ The different token types are:
             <body description="The queries to upload. If using body content.">
              <content type="application/xml">
                 &lt;query model="genomic" view="Gene.symbol Gene.proteins.proteinDomains.name"&gt;
-                    &lt;constraint path="Gene" op="LOOKUP" value="eve"/&gt;
+                    &lt;constraint path="Gene" op="LOOKUP" value="FT"/&gt;
                 &lt;/query&gt;
              </content>
              <content type="none"/>
