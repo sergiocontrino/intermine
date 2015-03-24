@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -20,7 +21,12 @@
     </div>
   </c:when>
   <c:otherwise>
-    <p>Total number of publications:  ${totalNumberOfPubs}</p>
+    <p>Total number of publications:  ${totalNumberOfPubs}
+    <c:if test="${type=='Gene'}">Source: NCBI</c:if>
+    <c:if test="${type=='Protein'}">Source: UniProt</c:if>
+
+    </p>
+
     </div>
 
     <table>
