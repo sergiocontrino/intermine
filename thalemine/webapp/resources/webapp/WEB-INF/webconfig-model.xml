@@ -123,7 +123,7 @@
       <fieldconfig fieldExpr="timeStamp" label="last updated" showInSummary="false" showInInlineCollection="false" />
       <fieldconfig fieldExpr="organism.shortName" label="Organism" showInInlineCollection="false" />
       <fieldconfig fieldExpr="gene.symbol" label="Gene" showInInlineCollection="false" />
-      <fieldconfig fieldExpr="publication.pubMedId" label="Publication" />
+      <fieldconfig fieldExpr="publication.pubMedId" label="PubMed Id" />
     </fields>
   </class>
 
@@ -220,6 +220,7 @@
       <fieldconfig fieldExpr="identifier"/>
       <fieldconfig fieldExpr="name"/>
       <fieldconfig fieldExpr="description" doNotTruncate="true" />
+      <fieldconfig fieldExpr="ontology.name" label="Source"/>
     </fields>
   </class>
 
@@ -547,7 +548,7 @@
                                        goAnnotation.ontologyTerm.parents.identifier,goAnnotation.ontologyTerm.parents.name"
                                  externalLink="http://amigo.geneontology.org/cgi-bin/amigo/term_details?term="
                                  correctionCoefficient="org.intermine.bio.web.widget.GeneLenghtCorrectionCoefficient"/>
-      
+
 
       <enrichmentwidgetdisplayer id="protein_features"
                                  title="UniProt Features"
@@ -604,7 +605,7 @@
                                  views="primaryIdentifier,organism.name,proteinDomains.primaryIdentifier,
                                        proteinDomains.name"
                                  externalLink="http://www.ebi.ac.uk/interpro/entry/"/>
-      
+
 
        <bagtabledisplayer id="orthologues" title="Orthologues" pathStrings="Gene.homologues.homologue.organism"
                          description="Counts of genes in list with orthologues."
