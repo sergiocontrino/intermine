@@ -1,3 +1,4 @@
+<!doctype htnl>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -12,6 +13,7 @@
       <c:set var="href" value="${confMapEntry.value.url}" />
       <c:set var="imageName" value="${confMapEntry.value.imageName}" />
       <c:set var="text" value="${confMapEntry.value.text}" />
+      <c:set var="title" value="${confMapEntry.value.title}" />
       <c:set var="parameters" value="${confMapEntry.value.parameters}" />
       <c:set var="usePost" value="${confMapEntry.value.usePost}" />
       <c:set var="useCheckbox" value="${confMapEntry.value.useCheckbox}" />
@@ -24,7 +26,7 @@
           <%-- GET form --%>
           <c:when test="${empty usePost || usePost == 'false'}">
             <c:if test="${!empty text}">
-              <a href="${href}" class="ext_link" target="_new">${text}</a>
+              <a href="${href}" class="ext_link" target="_new" title="${title}">${text}</a>
             </c:if>
           </c:when>
 

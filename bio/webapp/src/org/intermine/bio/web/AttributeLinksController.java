@@ -128,7 +128,7 @@ public class AttributeLinksController extends TilesAction
             (Properties) servletContext.getAttribute(Constants.WEB_PROPERTIES);
         final String regexp = "attributelink\\.([^.]+)\\." + geneOrgKey
             + "\\.([^.]+)(\\.list)?\\"
-            + ".(url|text|imageName|usePost|delimiter|enctype|dataset|useCheckbox)";
+            + ".(url|text|imageName|title|usePost|delimiter|enctype|dataset|useCheckbox)";
         Pattern p = Pattern.compile(regexp);
         String className = null;
         String taxId = null;
@@ -230,6 +230,8 @@ public class AttributeLinksController extends TilesAction
                             .replaceFirst("attributeValue", ""));
                     String text = value.replaceAll(ATTR_MARKER_RE, String.valueOf(attrValue));
                     config.put("text", text);
+                } else if ("title".equals(propType)) {
+                    config.put("title", value);
                 }
             }
         }
