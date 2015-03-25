@@ -11,7 +11,8 @@
   <div class="header">
       <h3>Overlapping Features</h3>
       <p>
-        <img class="tinyQuestionMark" src="images/icons/information-small-blue.png" alt="?">
+<!--    <img class="tinyQuestionMark" src="images/icons/information-small-blue.png" alt="?">
+-->
         Genome features that overlap coordinates of this ${reportObject.type}
       </p>
 

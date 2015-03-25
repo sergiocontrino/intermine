@@ -25,7 +25,6 @@
   </c:choose>
 
   <p>
-    <img class="tinyQuestionMark" src="images/icons/information-small-blue.png" alt="?">
     Gene models
   </p>
 
