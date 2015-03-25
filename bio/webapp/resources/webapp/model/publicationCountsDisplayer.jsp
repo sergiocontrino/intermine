@@ -22,8 +22,8 @@
   </c:when>
   <c:otherwise>
     <p>Total number of publications:  ${totalNumberOfPubs}
-    <c:if test="${type=='Gene'}">Source: NCBI</c:if>
-    <c:if test="${type=='Protein'}">Source: UniProt</c:if>
+    <c:if test="${type=='Gene'}"> <br>Source: NCBI</c:if>
+    <c:if test="${type=='Protein'}"> <br>Source: UniProt</c:if>
 
     </p>
 
