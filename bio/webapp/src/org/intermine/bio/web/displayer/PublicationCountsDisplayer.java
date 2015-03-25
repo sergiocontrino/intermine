@@ -128,7 +128,8 @@ public class PublicationCountsDisplayer extends ReportDisplayer
         q.addToGroupBy(qfDate);
 
         q.addToSelect(qfDate);
-        q.addToOrderBy(qf);
+        // removed to order by date instead
+        //  q.addToOrderBy(qf);
         q.addToOrderBy(qfDate, "desc");
         return q;
     }
