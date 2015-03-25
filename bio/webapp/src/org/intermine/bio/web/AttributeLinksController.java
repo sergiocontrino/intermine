@@ -226,8 +226,8 @@ public class AttributeLinksController extends TilesAction
                 } else if ("useCheckbox".equals(propType)) {
                     config.put("useCheckbox", value);
                 } else if ("text".equals(propType)) {
-                    config.put("title", value.replaceAll("[^A-Za-z0-9 ]", "")
-                            .replaceFirst("attributeValue", ""));
+                    //config.put("title", value.replaceAll("[^A-Za-z0-9 ]", "")
+                    //        .replaceFirst("attributeValue", ""));
                     String text = value.replaceAll(ATTR_MARKER_RE, String.valueOf(attrValue));
                     config.put("text", text);
                 } else if ("title".equals(propType)) {
