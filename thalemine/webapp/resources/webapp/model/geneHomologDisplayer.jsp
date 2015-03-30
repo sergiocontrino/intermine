@@ -10,7 +10,7 @@
 <div id="gene_homolog_displayer" class="collection-table">
 
 <h3>Inparanoid Homologs</h3>
-<p>Data Source: <a href="${WEB_PROPERTIES['phytomine_url']}">Phytomine</a></p>
+<p>Data Source: <a href="${WEB_PROPERTIES['intermines.phytomine.url']}">Phytomine</a></p>
 <c:choose>
   <c:when test="${!empty list}">
     <div>
@@ -33,7 +33,7 @@
            <td> <a href="report.do?id=${row.id}">${row.groupName}</a> </td>
            <td> ${row.type} </td>
            <td> ${row.score} </td>
-           <td> <a href="${WEB_PROPERTIES['phytomine_url']}/portal.do?external_ids=${row.geneName}">${row.geneName}</a> </td>
+           <td> <a href="${WEB_PROPERTIES['intermines.phytomine.url']}/portal.do?externalids=${row.geneName}">${row.geneName}</a> </td>
            <td> ${row.organism} </td>
            <td> ${row.relationship} </td>
          <c:set var="geneList" value="${geneList} ${row.geneName}" />
