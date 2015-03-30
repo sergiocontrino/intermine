@@ -270,14 +270,17 @@
 -->
 
   <class className="org.intermine.model.bio.Protein">
-    <inlinelist>
-      <table path="synonyms.value" showInHeader="true" lineLength="100" />
-    </inlinelist>
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
       <fieldconfig fieldExpr="molecularWeight"/>
     </fields>
+    <inlinelist>
+      <table path="synonyms.value" showInHeader="true" lineLength="100" />
+    </inlinelist>
+    <inlinelist>
+     <table path="keywords.name" showLinksToObjects="true" showInHeader="true" />
+    </inlinelist>
   </class>
 
 
