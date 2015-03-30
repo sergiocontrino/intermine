@@ -329,12 +329,13 @@ function showContactForm() {
   document.getElementById('contactFormDivButton').style.display='none';
   window.scrollTo(0, 99999);
   document.getElementById("fbname").focus();
-  var subject = document.getElementById("errorSubject").innerHTML;
-  if (subject) {
-      document.getElementById("fbsubject").value=subject;
+  var subjectElement = document.getElementById("errorSubject");
+  if (typeof(subjectElement) != 'undefined' && subjectElement != null) {
+      document.getElementById("fbsubject").value=subjectElement.innerHTML;
   }
-  var msg = document.getElementById("errorMsg").innerHTML;
-  if (msg) {
+  var msgElement = document.getElementById("errorMsg");
+  if (typeof(msgElement) != 'undefined' && msgElement != null) {
+      var msg = msgElement.innerHTML;
       var currentText = document.getElementById("fbcomment").value;
       var newText = currentText + "\n\n" + msg;
       document.getElementById("fbcomment").value=newText;
