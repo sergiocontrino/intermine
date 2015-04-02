@@ -33,7 +33,17 @@
            <td> <a href="report.do?id=${row.id}">${row.groupName}</a> </td>
            <td> ${row.type} </td>
            <td> ${row.score} </td>
-           <td> <a href="${WEB_PROPERTIES['intermines.phytomine.url']}/portal.do?externalids=${row.geneName}">${row.geneName}</a> </td>
+           <td>
+             <c:set var="geneName">${row.geneName}</c:set>
+             <c:choose>
+               <c:when test="${geneName.matches('^AT[1-5MC]G[0-9]+')}">
+                 <a href="report.do?id=${row.geneId}">${row.geneName}</a>
+               </c:when>
+               <c:otherwise>
+                 <a href="${WEB_PROPERTIES['intermines.phytomine.url']}/portal.do?class=Gene&externalids=${row.geneName}">${row.geneName}</a>
+               </c:otherwise>
+             </c:choose>
+           </td>
            <td> ${row.organism} </td>
            <td> ${row.relationship} </td>
          <c:set var="geneList" value="${geneList} ${row.geneName}" />
