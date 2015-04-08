@@ -39,7 +39,7 @@ will be selected.
         </description>
         <param required="true"
             type="XML"
-            default="&lt;query name=&quot;Short genes on Chr1&quot; model=&quot;genomic&quot; view=&quot;Gene.id Gene.exons.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;X&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
+            default="&lt;query name=&quot;Short genes on Chr1&quot; model=&quot;genomic&quot; view=&quot;Gene.id Gene.exons.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;Chr1&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
             schema="/schema/query.xsd"
             description="A definition of the query to execute in Path-Query XML format">query</param>
         <param type="String[]" required="false"
@@ -85,7 +85,7 @@ will be selected.
         </description>
         <param required="true"
             type="XML"
-            default="&lt;query name=&quot;short genes on the X chromosome&quot; model=&quot;genomic&quot; view=&quot;Gene.id Gene.exons.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;X&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
+            default="&lt;query name=&quot;short genes on Chr1&quot; model=&quot;genomic&quot; view=&quot;Gene.id Gene.exons.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;Chr1&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
             schema="/schema/query.xsd"
             description="A definition of the query to execute in Path-Query XML format">query</param>
         <param type="String[]" required="false"
@@ -195,7 +195,7 @@ will be selected.
         </description>
         <param required="true"
             type="XML"
-            default="&lt;query name=&quot;Short genes on Chr1&quot; model=&quot;genomic&quot; view=&quot;Gene.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;X&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
+            default="&lt;query name=&quot;Short genes on Chr1&quot; model=&quot;genomic&quot; view=&quot;Gene.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;Chr1&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
             schema="/schema/query.xsd"
             description="A definition of the query to execute in Path-Query XML format">query</param>
         <param type="String[]" required="false"
@@ -240,7 +240,7 @@ will be selected.
         </description>
         <param required="true"
             type="XML"
-            default="&lt;query name=&quot;Short genes on Chr1&quot; model=&quot;genomic&quot; view=&quot;Gene.id Gene.exons.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;X&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
+            default="&lt;query name=&quot;Short genes on Chr1&quot; model=&quot;genomic&quot; view=&quot;Gene.id Gene.exons.id&quot;&gt;&#10;    &lt;constraint path=&quot;Gene.chromosome.primaryIdentifier&quot; op=&quot;=&quot; value=&quot;Chr1&quot;/&gt;&#10;    &lt;constraint path=&quot;Gene.length&quot; op=&quot;&amp;lt;&quot; value=&quot;1000&quot;/&gt;&#10;&lt;/query&gt;"
             schema="/schema/query.xsd"
             description="A definition of the query to execute in Path-Query XML format">query</param>
     </method>
