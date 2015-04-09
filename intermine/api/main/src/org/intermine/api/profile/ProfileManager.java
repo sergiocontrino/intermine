@@ -1358,15 +1358,25 @@ public class ProfileManager
     public ApiPermission grantPermission(String issuer, String identity, String email,
             Map<String, List<FieldDescriptor>> classKeys) {
 
-        String username = identity.replace("/", ":");
+        String name = identity.split("@")[0];
+        String[] parts = name.split("/", 2);
+        String username;
+        if (parts.length > 1) {
+            username = parts[0].toUpperCase() + ":" + parts[1];
+        } else {
+            username = parts[0];
+        }
+
         Profile profile = getProfile(username, classKeys);
 
         if (profile == null) {
             profile = createNewProfile(username, null);
         }
 
-        if (!profile.prefers(UserPreferences.EMAIL)) {
-            profile.getPreferences().put(UserPreferences.EMAIL, email);
+        if (email != null && !email.equals("")) {
+            if (!profile.prefers(UserPreferences.EMAIL)) {
+                profile.getPreferences().put(UserPreferences.EMAIL, email);
+            }
         }
 
         return new ApiPermission(profile, ApiPermission.Level.RW);
