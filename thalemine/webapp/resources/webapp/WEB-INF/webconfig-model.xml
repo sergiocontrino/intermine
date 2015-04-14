@@ -96,7 +96,7 @@
       <table path="synonyms.value" showInHeader="true" lineLength="100" />
     </inlinelist>
     <fields>
-      <fieldconfig fieldExpr="primaryIdentifier" label="AGI ID" />
+      <fieldconfig fieldExpr="primaryIdentifier" label="Gene ID" />
       <fieldconfig fieldExpr="symbol"/>
       <fieldconfig fieldExpr="name"/>
       <fieldconfig fieldExpr="briefDescription"/>
