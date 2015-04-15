@@ -4,8 +4,12 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 
 <!-- eFPBrowserDisplayer.jsp -->
-<div class="basic-table">
+<div id="efp_browser_displayer" class="collection-table">
+
+<div class="header">
 <h3>eFP Visualization</h3>
+<p id="eFP_dataSource"></p>
+</div>
 
 <c:set var="object" value="${reportObject.object}"/>
 
@@ -87,6 +91,25 @@
             });
         jQuery('#datasource').trigger('change');
     });
+
+
+var root = window.location.protocol + "//" + window.location.host + "/thalemine";
+var efp_Service = new intermine.Service({ root: root});
+var query = {
+    from: 'DataSource',
+    select: ["name", "url"],
+    where: {
+        name: 'BAR'
+    }};
+
+    efp_Service.rows(query).then(function (rows) {
+        rows.forEach(function printRow(row) {
+	    link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
+	    jQuery('#eFP_dataSource').html(link);
+        });
+    });
+
+
   </script>
   </c:when>
   <c:otherwise>

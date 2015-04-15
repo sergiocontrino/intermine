@@ -9,8 +9,11 @@
 
 <div id="gene_homolog_displayer" class="collection-table">
 
+<div class="header">
 <h3>Inparanoid Homologs</h3>
-<p>Data Source: <a href="${WEB_PROPERTIES['intermines.phytomine.url']}">Phytomine</a></p>
+<p id="geneHomolog_dataSource"></p>
+</div>
+
 <c:choose>
   <c:when test="${!empty list}">
     <div>
@@ -58,7 +61,6 @@
       <input type="submit" value="Create a list of ortholog/paralog genes" />
     </form>
     </div>
-
     </div>
    </div>
   </c:when>
@@ -67,11 +69,26 @@
   </c:otherwise>
 </c:choose>
 
-
-<script type="text/javascript">
+<script type="text/javascript">    
         numberOfTableRowsToShow=100000
         trimTable('#gene_homolog_displayer');
-</script>
 
+var root = window.location.protocol + "//" + window.location.host + "/thalemine";
+var geneHomolog_Service = new intermine.Service({ root: root});
+var query = {
+from: 'DataSource',
+select: ["name", "url"],
+where: {
+name: 'Phytozome'
+}};
+
+geneHomolog_Service.rows(query).then(function (rows) {
+rows.forEach(function printRow(row) {
+link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
+jQuery('#geneHomolog_dataSource').html(link);
+});
+});
+    
+</script>
 
 </div>

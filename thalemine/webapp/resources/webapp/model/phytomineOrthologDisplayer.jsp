@@ -4,9 +4,12 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 
 <!-- phytomineOrthologDisplayer.jsp -->
-<div class="basic-table">
+<div id="phytomineOrtholog_displayer" class="collection-table">
+<div class="header">
 <h3>InParanoid Homologs</h3>
-<p>Data Source: <a href="${WEB_PROPERTIES['phytomine_url']}">Phytomine</a></p>
+<p id="phytomineOrtholog_dataSource"></p>
+</div>
+
 <c:set var="object" value="${reportObject.object}"/>
 
 <c:choose>
@@ -50,6 +53,27 @@
 
 	jQuery('#phytomine-paralog-container').imWidget(optionsP);
 	jQuery('#phytomine-ortholog-container').imWidget(optionsO);
+
+  </script>
+
+  <script>
+var root = window.location.protocol + "//" + window.location.host + "/thalemine";
+var intermine = new intermine.Service({
+    root: 'https://apps.araport.org/thalemine'
+});
+var query = {
+    from: 'DataSource',
+    select: ["name", "url"],
+    where: {
+        name: 'Phytozome'
+    }};
+
+    intermine.rows(query).then(function (rows) {
+        rows.forEach(function printRow(row) {
+	    link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
+	    jQuery('#eFPBrowser_dataSource').html(link);
+        });
+    });
 
   </script>
 
