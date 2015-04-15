@@ -621,7 +621,6 @@
                                 homologues.homologue.symbol,
                                 homologues.homologue.organism.shortName,
                                 homologues.type"/>
-       -->
 
 </widgets>
 </webconfig>

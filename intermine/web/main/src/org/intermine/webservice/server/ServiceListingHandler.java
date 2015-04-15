@@ -64,13 +64,13 @@ public class ServiceListingHandler extends DefaultHandler
         tokenHeader.put("type", "token");
         tokenHeader.put("mechanism", "header");
         tokenHeader.put("key", "Authorization");
-        tokenHeader.put("prefix", "Token ");
+        tokenHeader.put("prefix", "Bearer ");
         final Map<String, Object> basicAuth = new HashMap<String, Object>();
         basicAuth.put("name", "Username and Password");
         basicAuth.put("type", "password");
         basicAuth.put("mechanism", "basic"); // Special shortcut definiton.
-        auth.add(tokenAuth);
         auth.add(tokenHeader);
+        auth.add(tokenAuth);
         auth.add(basicAuth);
         result.put("endpoints", endpoints);
     }
