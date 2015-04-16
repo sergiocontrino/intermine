@@ -117,7 +117,7 @@
     </fields>
   </class>
 
-  <class className="org.intermine.model.bio.Generif" label="GeneRIF" >
+  <class className="org.intermine.model.bio.Generif" label="GeneRIF (Gene Reference into Function)" >
     <fields>
       <fieldconfig fieldExpr="annotation" />
       <fieldconfig fieldExpr="timeStamp" label="last updated" showInSummary="false" showInInlineCollection="false" />
