@@ -32,9 +32,13 @@
     <c:set var="pathString" value="${object.classDescriptor.unqualifiedName}.${fieldName}"/>
     <c:set var="fieldDisplayName"
         value="${imf:formatFieldStr(pathString, INTERMINE_API, WEBCONFIG)}"/>
+        <!-- quick fix for MINE-756 -->
+        <c:if test="${fn:startsWith(fieldDisplayName,'Gene Rifs')}">
+          <c:set var="fieldDisplayName" value="Gene RIFs (Gene into Function - source: NCBI)"/>
+        </c:if>
 
     <c:set var="placementAndField" value="${aspectPlacement}_${fieldName}" />
-    <c:set var="divName" value="${fn:replace(aspectPlacement, ':', '_')}${fieldName}_table" /> 
+    <c:set var="divName" value="${fn:replace(aspectPlacement, ':', '_')}${fieldName}_table" />
 
         <div id="${fn:replace(aspectPlacement, ":", "_")}${fieldName}_table" class="collection-table">
         <a name="${fieldName}" class="anchor"></a>
@@ -57,23 +61,23 @@
          <c:when test="${collection.size > 0}">
           <div id="coll_${fn:replace(aspectPlacement, ":", "_")}${fieldName}">
           <div id="coll_${fn:replace(aspectPlacement, ":", "_")}${fieldName}_inner" style="overflow-x:hidden;">
-          <c:set var="innerDivName" value="coll_${fn:replace(aspectPlacement, ':', '_')}${fieldName}" /> 
+          <c:set var="innerDivName" value="coll_${fn:replace(aspectPlacement, ':', '_')}${fieldName}" />
           <c:set var="inlineResultsTable" value="${collection.table}"/>
           <c:set var="useTableWidget" value="${WEB_PROPERTIES['inline.collections.in.tables']=='true'}" />
           <c:set var="useLocalStorage" value="${WEB_PROPERTIES['use.localstorage']=='true'}" />
           <c:set var="expandOnLoad" value="${WEB_PROPERTIES['web.collections.expandonload']=='true'}"/>
           <c:choose>
             <c:when test="${useTableWidget}">
-              <tiles:insert page="/collectionToTable.do?field=${fieldName}&id=${object.id}&trail=${param.trail}&pathString=${object.classDescriptor.unqualifiedName}.${fieldName}"> 
+              <tiles:insert page="/collectionToTable.do?field=${fieldName}&id=${object.id}&trail=${param.trail}&pathString=${object.classDescriptor.unqualifiedName}.${fieldName}">
               </tiles:insert>
             </c:when>
             <c:otherwise>
-             <tiles:insert page="/reportCollectionTable.jsp"> 
+             <tiles:insert page="/reportCollectionTable.jsp">
               <tiles:put name="inlineResultsTable" beanName="inlineResultsTable" />
               <tiles:put name="object" beanName="object" />
               <tiles:put name="fieldName" value="${fieldName}" />
              </tiles:insert>
-            </c:otherwise> 
+            </c:otherwise>
           </c:choose>
           <script type="text/javascript">
             trimTable('#coll_${fn:replace(aspectPlacement, ":", "_")}${fieldName}_inner');
@@ -115,7 +119,7 @@
               <html:link action="/collectionDetails?id=${object.id}&amp;field=${fieldName}&amp;trail=${param.trail}">
                 Show all in a table
               </html:link>
-              </div> 
+              </div>
             </c:when>
           </c:choose>
           </div>
