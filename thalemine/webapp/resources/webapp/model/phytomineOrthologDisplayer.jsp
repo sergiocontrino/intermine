@@ -23,12 +23,7 @@
   <c:choose>
   <c:when test="${WEB_PROPERTIES['phytomine.homolog.prefix'] != null}">
 <link rel="stylesheet" type="text/css" href="https://cdn.araport.org/js/intermine/im-tables/latest/imtables.css">
- <div id="phytomine-paralog-container">
- <p class="apology">
-  Please be patient while the results of your query are retrieved.
- </p>
-</div>
- <div id="phytomine-ortholog-container">
+ <div id="phytomine-homolog-container">
  <p class="apology">
   Please be patient while the results of your query are retrieved.
  </p>
@@ -39,27 +34,19 @@
   var geneId = "${name}";
   var webapp_root_url = "${WEB_PROPERTIES['phytomine.homolog.prefix']}";
 
-  var optionsP = {
+  var options = {
     type: 'table',
     url: webapp_root_url,
-    query: {"model":{"name":"genomic"},"select":["Homolog.groupName","Homolog.gene2.name","Homolog.organism2.shortName","Homolog.relationship"],"constraintLogic":"A and B","orderBy":[{"Homolog.relationship":"ASC"}],"where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.organism2.taxonId","op":"=","code":"C","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]}
+    query: {"model":{"name":"genomic"},"select":["Homolog.groupName","Homolog.gene2.name","Homolog.organism2.shortName","Homolog.relationship"],"constraintLogic":"A and B","orderBy":[{"Homolog.relationship":"ASC"}],"where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]}
   };
-
-  var optionsO = {
-    type: 'table',
-    url: webapp_root_url,
-    query: {"model":{"name":"genomic"},"select":["Homolog.groupName","Homolog.gene2.name","Homolog.organism2.shortName","Homolog.relationship"],"constraintLogic":"A and B","orderBy":[{"Homolog.relationship":"ASC"}],"where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.organism2.taxonId","op":"!=","code":"C","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]}
-  };
-
-	jQuery('#phytomine-paralog-container').imWidget(optionsP);
-	jQuery('#phytomine-ortholog-container').imWidget(optionsO);
+	jQuery('#phytomine-homolog-container').imWidget(options);
 
   </script>
 
   <script>
 var root = window.location.protocol + "//" + window.location.host + "/thalemine";
-var intermine = new intermine.Service({
-    root: 'https://apps.araport.org/thalemine'
+var phytomineOrtholog_Service = new intermine.Service({
+    root: root
 });
 var query = {
     from: 'DataSource',
@@ -68,10 +55,10 @@ var query = {
         name: 'Phytozome'
     }};
 
-    intermine.rows(query).then(function (rows) {
+    phytomineOrtholog_Service.rows(query).then(function (rows) {
         rows.forEach(function printRow(row) {
 	    link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
-	    jQuery('#eFPBrowser_dataSource').html(link);
+	    jQuery('#phytomineOrtholog_dataSource').html(link);
         });
     });
 
