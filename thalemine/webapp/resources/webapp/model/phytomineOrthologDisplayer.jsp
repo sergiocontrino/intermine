@@ -7,7 +7,7 @@
 <div id="phytomineOrtholog_displayer" class="collection-table">
 <div class="header">
 <h3>InParanoid Homologs</h3>
-<p id="phytomineOrtholog_dataSource"></p>
+<p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=Phytozome+Homologs">Phytozome</a></p>
 </div>
 
 <c:set var="object" value="${reportObject.object}"/>
@@ -40,27 +40,6 @@
     query: {"model":{"name":"genomic"},"select":["Homolog.groupName","Homolog.gene2.name","Homolog.organism2.shortName","Homolog.relationship"],"constraintLogic":"A and B","orderBy":[{"Homolog.relationship":"ASC"}],"where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]}
   };
 	jQuery('#phytomine-homolog-container').imWidget(options);
-
-  </script>
-
-  <script>
-var root = window.location.protocol + "//" + window.location.host + "/thalemine";
-var phytomineOrtholog_Service = new intermine.Service({
-    root: root
-});
-var query = {
-    from: 'DataSource',
-    select: ["name", "url"],
-    where: {
-        name: 'Phytozome'
-    }};
-
-    phytomineOrtholog_Service.rows(query).then(function (rows) {
-        rows.forEach(function printRow(row) {
-	    link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
-	    jQuery('#phytomineOrtholog_dataSource').html(link);
-        });
-    });
 
   </script>
 

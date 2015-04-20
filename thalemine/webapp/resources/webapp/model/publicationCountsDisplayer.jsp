@@ -21,7 +21,7 @@
     </div>
   </c:when>
 <c:otherwise>
-      <p id="publicationCounts_dataSource"></p>
+  	<p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=PubMed+to+gene+mapping">NCBI</a></p>
     <p>Total number of publications:  ${totalNumberOfPubs}
     </div>
 
@@ -95,46 +95,7 @@
           });
         }
     })();
-    </script>
-    
-    <script>
-      var root = window.location.protocol + "//" + window.location.host + "/thalemine";
-      var pubCount_Service = new intermine.Service({
-      root: root
-      });
-
-      <c:if test="${type=='Gene'}">
-	var query = {
-	from: 'DataSource',
-	select: ["name", "url"],
-	where: {
-        name: 'NCBI'
-	}};
-
-	pubCount_Service.rows(query).then(function (rows) {
-        rows.forEach(function printRow(row) {
-	link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
-	jQuery('#publicationCounts_dataSource').html(link);
-        });
-	});
-      </c:if>
-      <c:if test="${type=='Protein'}">
-	var query = {
-	from: 'DataSource',
-	select: ["name", "url"],
-	where: {
-        name: 'UniProt'
-	}};
-
-	intermine.rows(query).then(function (rows) {
-        rows.forEach(function printRow(row) {
-	link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
-	jQuery('#publicationCounts_dataSource').html(link);
-        });
-	});
-      </c:if>
-    </script>
-    
+    </script>    
   </c:otherwise>
 </c:choose>
 </div>

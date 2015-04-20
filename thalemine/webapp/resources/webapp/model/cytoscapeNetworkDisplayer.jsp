@@ -51,7 +51,7 @@
 <div id="cytoscapeNetwork_browser_displayer" class="collection-table">
 <div class="header">
     <h3>Interaction Network</h3>
-    <p id="cytoscapeNetwork_dataSource"></p>
+    <p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=BAR+Interactions+data+set">BAR</a></p>
 </div>
 </div>
 
@@ -362,23 +362,6 @@
     });
 
 })();
-
-var root = window.location.protocol + "//" + window.location.host + "/thalemine";
-var cytoscapeNetwork_Service = new intermine.Service({ root: root});
-var query = {
-    from: 'DataSource',
-    select: ["name", "url"],
-    where: {
-        name: 'BAR'
-    }};
-
-    cytoscapeNetwork_Service.rows(query).then(function (rows) {
-        rows.forEach(function printRow(row) {
-	    link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
-	    jQuery('#cytoscapeNetwork_dataSource').html(link);
-        });
-    });
-
 </script>
 
 <!-- /cytoscapeNetworkDisplayer.jsp -->

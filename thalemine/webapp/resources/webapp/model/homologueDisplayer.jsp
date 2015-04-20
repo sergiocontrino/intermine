@@ -8,7 +8,7 @@
 
 <div class="header">
 <h3>Panther Homologs</h3>
-<p id="homologue_dataSource"></p>
+    <p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=Panther+data+set">Panther</a></p>
 </div>
 
 <c:choose>
@@ -41,23 +41,6 @@
     </tr>
   </tbody>
 </table>
-<script>
-var root = window.location.protocol + "//" + window.location.host + "/thalemine";
-var homologue_Service = new intermine.Service({ root: root});
-var query = {
-    from: 'DataSource',
-    select: ["name", "url"],
-    where: {
-        name: 'Panther'
-    }};
-
-    homologue_Service.rows(query).then(function (rows) {
-        rows.forEach(function printRow(row) {
-	    link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
-	    jQuery('#homologue_dataSource').html(link);
-        });
-    });
-    </script>
 </c:when>
 
 <c:when test="${homologues != null && empty homologues}">
