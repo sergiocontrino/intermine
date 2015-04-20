@@ -191,6 +191,7 @@
         </source>
 
         <source name="generif" type="generif">
+            <!-- source last updated: 2015-04-20 13:30:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/generif/current"/>
             <property name="generif.organisms" value="3702"/>
             <property name="generif.datasourcename" value="GeneRIF"/>
