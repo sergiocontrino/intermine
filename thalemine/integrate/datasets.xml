@@ -181,7 +181,7 @@
       <attribute name="pubMedId" value="17148475" />
    </item>
    <item id="0_31" class="DataSet" implements="">
-      <attribute name="version" value="12/10/2014" />
+      <attribute name="version" value="04/20/2015" />
       <reference name="dataSource" ref_id="0_29" />
       <attribute name="name" value="PubMed to gene mapping" />
       <attribute name="description" value="Curated associations between NCBI Gene and PubMed databases" />
@@ -189,7 +189,7 @@
       <reference name="publication" ref_id="0_30" />
    </item>
    <item id="0_32" class="DataSet" implements="">
-      <attribute name="version" value="01/30/2015" />
+      <attribute name="version" value="04/20/2015" />
       <reference name="dataSource" ref_id="0_29" />
       <attribute name="name" value="GeneRIF" />
       <attribute name="description" value="Functional annotation added by scientists to genes described in NCBI Gene" />

@@ -45,6 +45,7 @@
         </source>
 
         <source name="pubmed-gene" type="pubmed-gene" >
+            <!-- source last updated: 2015-04-20 14:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/pubmed"/>
             <property name="pubmed.organisms" value="3702"/>
             <property name="src.data.dir.includes" value="gene2pubmed"/>
@@ -191,6 +192,7 @@
         </source>
 
         <source name="generif" type="generif">
+            <!-- source last updated: 2015-04-20 13:30:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/generif/current"/>
             <property name="generif.organisms" value="3702"/>
             <property name="generif.datasourcename" value="GeneRIF"/>
