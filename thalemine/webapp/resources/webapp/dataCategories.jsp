@@ -35,7 +35,7 @@
   <tr>
     <td rowspan="2" class="leftcol"><h2><p>Genes</p></h2></td>
     <td>TAIR10 Genome release builds upon gene structures of previous TAIR9 release using RNA-seq and proteomics datasets as well as manual updates, informed by cross species alignments, peptides and community input regarding missing and incorrectly annotated genes.</td>
-    <td><a href="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/genome_annotation.jsp" target="_blank" class="extlink">TAIR</a>- Release TAIR10 (12/31/13)</td>
+    <td><a href="http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/genome_annotation.jsp" target="_blank" class="extlink">TAIR</a>- Release TAIR10 (03/31/14)</td>
     <td>Arabidopsis Genome Initiative - <a href="http://www.ncbi.nlm.nih.gov/pubmed/11130711" target="_blank" class="extlink">PubMed: 11130711</a>
   </tr>
 
@@ -72,7 +72,7 @@
   <tr>
     <td rowspan="3" class="leftcol"><h2><p>Gene Ontology</p></h2></td>
     <td>GO annotations made by TAIR curators, TIGR Arabidopsis annotation effort</td>
-    <td><a href="http://www.geneontology.org" target="_blank" class="extlink">Gene Ontology Site</a>- 10 Nov 2014</td>
+    <td><a href="http://www.geneontology.org" target="_blank" class="extlink">Gene Ontology Site</a>- 31 Mar 2015</td>
     <td>Berardini et al., 2004 - <a href="http://www.ncbi.nlm.nih.gov" target="_blank" class="extlink">PubMed: 15173566</a><br />
         Gene Ontology Consortium - <a href="http://www.ncbi.nlm.nih.gov/pubmed/10802651" target="_blank" class="extlink">PubMed:10802651</a></td>
   </tr>
