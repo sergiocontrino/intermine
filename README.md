@@ -1,3 +1,8 @@
+This is the code base for **Thalemine**, a data warehouse system based on **InterMine** and used in **Araport**, the Arabidopsis Information Portal.
+
+ThaleMine enables you to analyze gene and protein data from TAIR, expression and interaction data from BAR, ortholog data from Panther, and more. 
+Use plain text or structured queries to obtain interactive gene and protein reports.
+
 InterMine
 ============
 
