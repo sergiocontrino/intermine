@@ -6,7 +6,7 @@
     <property name="default.intermine.properties.file" location="../default.intermine.integrate.properties"/>
     <sources>
         <source name="aip-gff" type="aip-gff">
-            <!-- source last updated: 2015-03-25 19:00:00 -->
+            <!-- source last updated: 2015-04-20 15:30:00 -->
             <property name="gff3.taxonId" value="3702"/>
             <property name="gff3.seqDataSourceName" value="TAIR"/>
             <property name="gff3.dataSourceName" value="TAIR"/>
@@ -45,6 +45,7 @@
         </source>
 
         <source name="pubmed-gene" type="pubmed-gene" >
+            <!-- source last updated: 2015-04-20 14:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/pubmed"/>
             <property name="pubmed.organisms" value="3702"/>
             <property name="src.data.dir.includes" value="gene2pubmed"/>
@@ -125,6 +126,7 @@
         </source>
 
         <source name="go-annotation" type="go-annotation">
+            <!-- source last updated: 2015-04-20 15:30:00 -->
             <property name="ontologyfile" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/go_annotation/" />
             <property name="dataSourceName" value="GO Annotation from TAIR"/>
@@ -191,6 +193,7 @@
         </source>
 
         <source name="generif" type="generif">
+            <!-- source last updated: 2015-04-20 13:30:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/generif/current"/>
             <property name="generif.organisms" value="3702"/>
             <property name="generif.datasourcename" value="GeneRIF"/>

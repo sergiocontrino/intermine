@@ -11,7 +11,7 @@
 
 <div class="header">
 <h3>Inparanoid Homologs</h3>
-<p id="geneHomolog_dataSource"></p>
+<p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=Phytozome+Homologs">Phytozome</a></p>
 </div>
 
 <c:choose>
@@ -71,24 +71,7 @@
 
 <script type="text/javascript">    
         numberOfTableRowsToShow=100000
-        trimTable('#gene_homolog_displayer');
-
-var root = window.location.protocol + "//" + window.location.host + "/thalemine";
-var geneHomolog_Service = new intermine.Service({ root: root});
-var query = {
-from: 'DataSource',
-select: ["name", "url"],
-where: {
-name: 'Phytozome'
-}};
-
-geneHomolog_Service.rows(query).then(function (rows) {
-rows.forEach(function printRow(row) {
-link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
-jQuery('#geneHomolog_dataSource').html(link);
-});
-});
-    
+        trimTable('#gene_homolog_displayer');    
 </script>
 
 </div>

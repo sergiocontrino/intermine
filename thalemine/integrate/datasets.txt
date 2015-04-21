@@ -1,8 +1,8 @@
 DataSource	TAIR	The Arabidopsis Information Resource	http://www.arabidopsis.org	Publication:11130711
-DataSet	Genome Annotation	TAIR10 Genome annotation, consisting of genes, TE related genes, other non-coding RNA and transposable elements	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10
+DataSet	Genome Annotation	TAIR10 Genome annotation, consisting of genes, TE related genes, other non-coding RNA and transposable elements	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10 (Mar 31, 2014)
 DataSet	Genome Assembly	TAIR9 Genome assembly, consisting of 5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	DataSource:TAIR,Publication:11130711	TAIR9
 DataSet	Coding Sequence FASTA	TAIR10 Coding sequences, consisting of sequences from all the annotated transcripts	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10
-DataSet	GO Annotation from TAIR	GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:TAIR,Publication:15173566	12/06/2013
+DataSet	GO Annotation from TAIR	GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:TAIR,Publication:15173566	03/31/2015
 DataSource	UniProt	Comprehensive, high-quality and freely accessible resource of protein sequence and functional information	http://www.uniprot.org	Publication:24253303
 DataSet	Swiss-Prot data set	High-quality, manually annotated, non-redundant protein sequence database	http://web.expasy.org/docs/swiss-prot_guideline.html	DataSource:UniProt,Publication:24253303	2014_11
 DataSet	TrEMBL data set	Computationally analysed records, enriched with automatic annotation	http://www.ebi.ac.uk/uniprot/TrEMBLstats	DataSource:UniProt,Publication:24253303	2014_11
@@ -17,8 +17,8 @@ DataSource	BAR	The Bio-Analaytic Resource for Plant Biology	http://bar.utoronto.
 DataSet	BAR Interactions data set	Confirmed Arabidopsis protein interactions from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR	http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi	DataSource:BAR,Publication:17675552
 DataSet	BAR Annotations Lookup	Mapping between an AGI locus and Probeset identifier	http://bar.urotonto.ca	DataSource:BAR
 DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840
-DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	12/10/2014
-DataSet	GeneRIF	Functional annotation added by scientists to genes described in NCBI Gene	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	01/30/2015
+DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	04/20/2015
+DataSet	GeneRIF	Functional annotation added by scientists to genes described in NCBI Gene	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	04/20/2015
 DataSource	GenomeNet	Japanese network of database and computational services for genome research	http://www.genome.jp	Publication:9397687
 DataSet	KEGG pathways data set	Wiring diagrams of molecular interactions, reactions, and relations	http://www.kegg.jp/kegg/pathway.html	DataSource:GenomeNet,Publication:24214961	72.0
 DataSource	Reactome	Free, open-source, curated and peer reviewed pathway database	http://www.reactome.org	Publication:24243840

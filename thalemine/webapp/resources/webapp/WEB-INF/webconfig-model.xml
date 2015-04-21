@@ -409,19 +409,19 @@
                      parameters="{'dataSets': ['Panther data set']}"
                      types="Gene"/>
 
-
-    <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneHomologDisplayer"
+    
+    <!--<reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneHomologDisplayer"
                      jspName="model/geneHomologDisplayer.jsp"
                      replacesFields=""
                      placement="Homology"
                      parameters="{'dataSets': ['Phytozome Homologs']}"
-                     types="Gene"/>
+                     types="Gene"/>-->
 
-   <!-- <reportdisplayer javaClass="org.intermine.bio.web.displayer.PhytomineOrthologDisplayer"
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.PhytomineOrthologDisplayer"
                      jspName="model/phytomineOrthologDisplayer.jsp"
                      replacesFields=""
                      placement="Homology"
-                     types="Gene"/>-->
+                     types="Gene"/>
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.ProteinDisplayer"
                      jspName="model/proteinDisplayer.jsp"

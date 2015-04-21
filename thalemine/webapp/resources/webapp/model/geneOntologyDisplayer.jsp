@@ -12,7 +12,7 @@
 <div id="geneOntology_displayer" class="collection-table">
 <div class="header">
 <h3>Gene Ontology</h3>
-<p id="geneOntology_dataSource"></p>
+<p>Data Source: <a target="_blank" href="${WEB_PROPERTIES['GO_url']}">GOA</a>, <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=InterPro+GO+Annotation+data+set">InterPro</a>, <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=GO+Annotation+from+TAIR">TAIR</a></p>
 </div>
 
 <c:choose>
@@ -62,24 +62,6 @@
 		        </tbody>
 		    </c:forEach>
 		    </table>
-		    <script>
-		    var root = window.location.protocol + "//" + window.location.host + "/thalemine";
-		    var geneOntology_Service = new intermine.Service({ root: root});
-		    var query = {
-		    from: 'DataSource',
-		    select: ["name", "url"],
-		    where: {
-		    name: 'UniProt'
-		    }};
-
-		    geneOntology_Service.rows(query).then(function (rows) {
-		    rows.forEach(function printRow(row) {
-		    link = 'Data Source: <a target="_blank" href="'+row[1]+'">'+row[0]+'</a>';
-		    jQuery('#geneOntology_dataSource').html(link);
-		    });
-		    });
-
-</script>
 		</c:when>
 		<c:otherwise>
 			<p style="font-style:italic;">No results</p>
