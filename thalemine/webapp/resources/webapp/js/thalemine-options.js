@@ -15,11 +15,11 @@
 	}
     };
     
-    var formatGeneLink = function(id){
-	
-	var thalemine_url = 'https://apps.araport.org/thalemine/portal.do?class=Gene&externalids='+id;
-	var phytomine_url = 'http://phytozome.jgi.doe.gov/phytomine/portal.do?class=Gene&externalids='+id;
+    var formatGeneLink = function(id){	
 
+	var thalemine_url = intermine.options.thalemine_url + '/portal.do?class=Gene&externalids=' + id;
+	var phytomine_url = intermine.options.phytomine_url + '/portal.do?class=Gene&externalids=' + id;
+	
 	if(id.match(/^AT/)){
 	    url = thalemine_url;
 	    return formatLink(url, wrapSpan(id), "_blank", 'internal');
