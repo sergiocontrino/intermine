@@ -29,7 +29,7 @@
   <c:if test="${type=='Protein'}">
   	<p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=Swiss-Prot+data+set">Swiss-Prot</a>, <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=UniProt+FASTA+dataset">UniProt</a></p>
   </c:if>
-    <p>Total number of publications:  ${totalNumberOfPubs}
+    <p>${totalNumberOfPubs} Publications</p>
     </div>
 
     <table>
