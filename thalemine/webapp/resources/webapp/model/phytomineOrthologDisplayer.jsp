@@ -31,14 +31,47 @@
 
   <script type="text/javascript">
   
-  var geneId = "${name}";
-  var webapp_root_url = "${WEB_PROPERTIES['phytomine.homolog.prefix']}";
+   var geneId = "${name}";
+   var webapp_root_url = "${WEB_PROPERTIES['phytomine.homolog.prefix']}";
+ 
+   var options = {
+     type: 'table',
+     url: webapp_root_url,
+     query: {"model":{"name":"genomic"},"select":["Homolog.groupName","Homolog.gene2.name","Homolog.organism2.shortName","Homolog.relationship"],"constraintLogic":"A and B","orderBy":[{"Homolog.relationship":"ASC"}],"where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]},
+     properties: { pageSize: 10 }
+    };
+    
+    var wrapSpan = function(text){
+	return '<span>'+text+'</span>';
+    };
+    
+    var formatLink = function(url, text, target, cls){
+	target = target || "_self";
+	text = text || url;
 
-  var options = {
-    type: 'table',
-    url: webapp_root_url,
-    query: {"model":{"name":"genomic"},"select":["Homolog.groupName","Homolog.gene2.name","Homolog.organism2.shortName","Homolog.relationship"],"constraintLogic":"A and B","orderBy":[{"Homolog.relationship":"ASC"}],"where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]}
-  };
+	if(cls == 'extlink') {
+	    return '<a class="'+cls+'" href="'+url+'" target="'+target+'">'+text+'</a>';
+	}else{
+	    return '<a href="'+url+'" target="'+target+'">'+text+'</a>';
+	}
+    };
+    
+    var formatGeneLink = function(id){
+	var thalemine_url =  '/${WEB_PROPERTIES['webapp.path']}' + '/portal.do?class=Gene&externalids=' + id;
+	var phytomine_url =  '${WEB_PROPERTIES['intermines.phytomine.url']}' + '/portal.do?class=Gene&externalids=' + id;
+	var re = new RegExp("^AT");
+	if(re.test(id)){
+	    url = thalemine_url;
+	    return formatLink(url, wrapSpan(id), "_blank", 'internal');
+	}else{
+	    url = phytomine_url;
+	    return formatLink(url, wrapSpan(id), "_blank", 'extlink');
+	}
+    };
+
+    var phytomineGeneFormatter = function(o){return formatGeneLink(o.get('name'));}
+
+	intermine.scope('intermine.results.formatsets.genomic', {'Gene.name': phytomineGeneFormatter});
 	jQuery('#phytomine-homolog-container').imWidget(options);
 
   </script>
