@@ -1,66 +1,103 @@
 <?xml version="1.0"?>
 <classes>
-  <class name="Allele" extends="SequenceCollection" is-interface="true">
-    <collection name="stocks" referenced-type="Stock" reverse-reference="alleles"/>
-  </class>
-  <class name="Stock" extends="BioEntity" is-interface="true">
-    <attribute name="type" type="java.lang.String"/>
-    <attribute name="stock_class" type="java.lang.String"/>
-     <collection name="stockcenters" referenced-type="StockCenter" reverse-reference="stocks"/>
-    <attribute name="germplasm_name" type="java.lang.String"/>
-    <attribute name="stock_name" type="java.lang.String"/>
-    <reference name="strain" referenced-type="Strain" reverse-reference="stocks"/>
-    <collection name="alleles" referenced-type="Allele" reverse-reference="stocks"/>
-  </class>
-   <class name="Strain" extends="BioEntity" is-interface="true">
-     <attribute name="type" type="java.lang.String"/>
-     <attribute name="abbreviationName" type="java.lang.String"/>
-     <attribute name="infraspecificName" type="java.lang.String"/>
-     <attribute name="description" type="java.lang.String"/>
-     <collection name="stocks" referenced-type="Stock" reverse-reference="strain"/>
-     <reference name="geoLocation" referenced-type="GeoLocation" reverse-reference="strain"/>
-  </class>
-  
-  <class name="Organism" is-interface="true">
-  	<collection name="stocks" referenced-type="Stock"/>
-  	<collection name="strains" referenced-type="Strain"/>
-  </class>
-  
-  <class name="GeoLocation" extends="DataEntity" is-interface="true">
-  	 <attribute name="primaryIdentifier" type="java.lang.String"/>
-     <attribute name="locationDescription" type="java.lang.String"/>
-     <attribute name="country" type="java.lang.String"/>
-     <attribute name="region" type="java.lang.String"/>
-     <attribute name="geodetic_datum" type="java.lang.String"/>
-     <attribute name="latitude" type="java.lang.Float"/>
-     <attribute name="longitude" type="java.lang.Float"/>
-     <attribute name="longitude" type="java.lang.Float"/>
-     <reference name="strain" referenced-type="Strain" reverse-reference="geoLocation"/>
-  </class>
-  
-   <class name="Contact" extends="DataEntity" is-interface="true">
-  	 <attribute name="type" type="java.lang.String"/>
-     <attribute name="name" type="java.lang.String"/>
-     <attribute name="desciption" type="java.lang.String"/>
-     <attribute name="email" type="java.lang.String"/>
-     <attribute name="url" type="java.lang.String"/>
-     <attribute name="phoneNumber" type="java.lang.String"/>
-   </class>
-   
-   <class name="Affiliate" extends="Contact" is-interface="true">
-   	 <attribute name="title" type="java.lang.String"/>
-   </class>
-   
-   <class name="Member" extends="Affiliate" is-interface="true">
-   	 <reference name="organization" referenced-type="Organization" reverse-reference="members"/>
-   </class>
-   
-   <class name="Organization" extends="Contact" is-interface="true">
-  	 <collection name="members" referenced-type="Member" reverse-reference="organization"/>
-   </class>
-   
-   <class name="StockCenter" extends="Organization" is-interface="true">
-   		<collection name="stocks" referenced-type="Stock" reverse-reference="stockcenters"/>
-   </class>
-   
+	<class name="Allele" extends="SequenceCollection" is-interface="true">
+		<collection name="stocks" referenced-type="Stock"
+			reverse-reference="alleles" />
+	<reference name="mutagen" referenced-type="Mutagen"
+			reverse-reference="alleles" />
+	</class>
+	<class name="Stock" extends="AttributtableBioEntity"
+		is-interface="true">
+		<attribute name="type" type="java.lang.String" />
+		<attribute name="stockClass" type="java.lang.String" />
+		<attribute name="germplasmName" type="java.lang.String" />
+		<attribute name="stockName" type="java.lang.String" />
+		<reference name="strain" referenced-type="Strain"
+			reverse-reference="stocks" />
+		<reference name="stockCenterComment" referenced-type="Comment" />
+		<reference name="mutagen" referenced-type="Mutagen" />
+		<reference name="stockAnnotation" referenced-type="StockAnnotation"
+			reverse-reference="stock" />
+		<collection name="stockcenters" referenced-type="StockCenter"
+			reverse-reference="stocks" />
+		<collection name="alleles" referenced-type="Allele"
+			reverse-reference="stocks" />
+	</class>
+	<class name="Strain" extends="AttributtableBioEntity" is-interface="true">
+		<attribute name="type" type="java.lang.String" />
+		<attribute name="abbreviationName" type="java.lang.String" />
+		<attribute name="infraspecificName" type="java.lang.String" />
+		<attribute name="description" type="java.lang.String" />
+		<attribute name="accessionNumber" type="java.lang.String" />
+		<attribute name="habitat" type="java.lang.String" />
+		<collection name="stocks" referenced-type="Stock"
+			reverse-reference="strain" />
+		<reference name="geoLocation" referenced-type="GeoLocation"
+			reverse-reference="strains" />
+	</class>
+
+	<class name="Organism" is-interface="true">
+		<collection name="stocks" referenced-type="Stock" />
+		<collection name="strains" referenced-type="Strain" />
+	</class>
+
+	<class name="Mutagen" extends="DataEntity" is-interface="true">
+		<attribute name="name" type="java.lang.String" />
+		<attribute name="uniquename" type="java.lang.String" />
+		<attribute name="description" type="java.lang.String" />
+		<collection name="stocks" referenced-type="Stock"
+			reverse-reference="mutagen" />
+		<collection name="alleles" referenced-type="Allele"
+			reverse-reference="mutagen" />
+	</class>
+
+	<class name="StockAnnotation" is-interface="true">
+		<attribute name="transgene" type="java.lang.String" />
+		<attribute name="mutant" type="java.lang.String" />
+		<attribute name="naturalVariant" type="java.lang.String" />
+		<reference name="stock" referenced-type="Stock"
+			reverse-reference="stockAnnotation" />
+		<reference name="chromosomalConstitution" referenced-type="ChromosomalConstitutionAnnotation"
+			reverse-reference="stockAnnotation" />
+		<reference name="growthCondition" referenced-type="GrowthConditionAnnotation"
+			reverse-reference="stockAnnotation" />
+	</class>
+
+	<class name="ChromosomalConstitutionAnnotation" is-interface="true">
+		<attribute name="aneploidChromosome" type="java.lang.String" />
+		<attribute name="ploidy" type="java.lang.Integer" />
+		<reference name="stockAnnotation" referenced-type="StockAnnotation"
+			reverse-reference="chromosomalConstitution" />
+	</class>
+
+	<class name="GrowthConditionAnnotation" is-interface="true">
+		<attribute name="specialGrowthConditions" type="java.lang.String" />
+		<attribute name="growthTemperature" type="java.lang.String" />
+		<attribute name="durationOfGrowth" type="java.lang.String" />
+		<reference name="stockAnnotation" referenced-type="StockAnnotation"
+			reverse-reference="growthCondition" />
+	</class>
+
+	<class name="GeoLocation" extends="DataEntity" is-interface="true">
+		<attribute name="location" type="java.lang.String" />
+		<attribute name="country" type="java.lang.String" />
+		<attribute name="region" type="java.lang.String" />
+		<attribute name="geodeticDatum" type="java.lang.String" />
+		<attribute name="latitude" type="java.lang.Float" />
+		<attribute name="longitude" type="java.lang.Float" />
+		<attribute name="longitude" type="java.lang.Float" />
+		<collection name="strains" referenced-type="Strain"
+			reverse-reference="geoLocation" />
+	</class>
+
+	<class name="Organization" extends="Contact" is-interface="true">
+		<reference name="primaryContact" referenced-type="Affiliate"/>
+		<collection name="affiliations" referenced-type="Affiliate"/>
+	</class>
+
+	<class name="StockCenter" extends="Organization" is-interface="true">
+		<collection name="stocks" referenced-type="Stock"
+			reverse-reference="stockcenters" />
+	</class>
+
 </classes>
