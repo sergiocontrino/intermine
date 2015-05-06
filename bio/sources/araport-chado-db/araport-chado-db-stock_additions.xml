@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <classes>
 	<class name="Allele" extends="SequenceCollection" is-interface="true">
-		<collection name="stocks" referenced-type="Stock"
-			reverse-reference="alleles" />
-	<reference name="mutagen" referenced-type="Mutagen"
+		<collection name="stockAlleleInteractions" referenced-type="StockAlleleInteraction"
+			reverse-reference="allele" />
+		<reference name="mutagen" referenced-type="Mutagen"
 			reverse-reference="alleles" />
 	</class>
 	<class name="Stock" extends="AttributtableBioEntity"
@@ -12,6 +12,7 @@
 		<attribute name="stockClass" type="java.lang.String" />
 		<attribute name="germplasmName" type="java.lang.String" />
 		<attribute name="stockName" type="java.lang.String" />
+		<attribute name="displayName" type="java.lang.String" />
 		<reference name="strain" referenced-type="Strain"
 			reverse-reference="stocks" />
 		<reference name="stockCenterComment" referenced-type="Comment" />
@@ -20,10 +21,11 @@
 			reverse-reference="stock" />
 		<collection name="stockcenters" referenced-type="StockCenter"
 			reverse-reference="stocks" />
-		<collection name="alleles" referenced-type="Allele"
-			reverse-reference="stocks" />
+		<collection name="stockAlleleInteractions" referenced-type="StockAlleleInteraction"
+			reverse-reference="stock" />
 	</class>
-	<class name="Strain" extends="AttributtableBioEntity" is-interface="true">
+	<class name="Strain" extends="AttributtableBioEntity"
+		is-interface="true">
 		<attribute name="type" type="java.lang.String" />
 		<attribute name="abbreviationName" type="java.lang.String" />
 		<attribute name="infraspecificName" type="java.lang.String" />
@@ -91,13 +93,23 @@
 	</class>
 
 	<class name="Organization" extends="Contact" is-interface="true">
-		<reference name="primaryContact" referenced-type="Affiliate"/>
-		<collection name="affiliations" referenced-type="Affiliate"/>
+		<reference name="primaryContact" referenced-type="Affiliate" />
+		<collection name="affiliations" referenced-type="Affiliate" />
 	</class>
 
 	<class name="StockCenter" extends="Organization" is-interface="true">
 		<collection name="stocks" referenced-type="Stock"
 			reverse-reference="stockcenters" />
 	</class>
+
+	<class name="StockAlleleInteraction" is-interface="true">
+		<reference name="stock" referenced-type="Stock"
+			reverse-reference="stockAlleleInteractions" />
+		<reference name="allele" referenced-type="Allele"
+			reverse-reference="stockAlleleInteractions" />
+		<attribute name="zygosity" type="java.lang.String" />
+		<attribute name="segregationRatio" type="java.lang.String" />
+	</class>
+
 
 </classes>

@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<classes>
+	<class name="BioEntity" is-interface="true">
+		<collection name="phenotypesObserved" referenced-type="Phenotype"
+			reverse-reference="observedIn" />
+	</class>
+
+	<class name="AlleleClass" extends="DataEntity" is-interface="true">
+		<attribute name="name" type="java.lang.String" />
+		<attribute name="description" type="java.lang.String" />
+		<collection name="alleles" referenced-type="Allele"
+			reverse-reference="alleleClass" />
+	</class>
+
+	<class name="Phenotype" extends="AttributtableBioEntity"
+		is-interface="true">
+		<attribute name="description" type="java.lang.String" />
+		<collection name="observedIn" referenced-type="BioEntity"
+			reverse-reference="phenotypesObserved" />
+		<reference name="anatomyTerm" referenced-type="AnatomyTerm"/>
+		<reference name="developmentTerm" referenced-type="DevelopmentTerm"/>
+	</class>
+
+	<class name="AnatomyTerm" extends="OntologyTerm" is-interface="true">
+	</class>
+	
+	<class name="DevelopmentTerm" extends="OntologyTerm"
+		is-interface="true">
+	</class>
+	
+	<class name="Allele" extends="AttributtableBioEntity"
+		is-interface="true">
+		<attribute name="displayName" type="java.lang.String" />
+		<attribute name="description" type="java.lang.String" />
+		<reference name="sequenceAlterationType" referenced-type="SequenceAlteration"
+			reverse-reference="alleles" />
+		<reference name="inheritanceMode" referenced-type="InheritanceMode"
+			reverse-reference="alleles" />
+		<reference name="alleleClass" referenced-type="AlleleClass"
+			reverse-reference="alleles" />
+		<reference name="gene" referenced-type="Gene"
+			reverse-reference="alleles" />
+		<collection name="genotypes" referenced-type="Genotype"
+			reverse-reference="alleles" />
+
+	</class>
+	<class name="Stock" is-interface="true">
+		<collection name="genotypes" referenced-type="Genotype"
+			reverse-reference="stocks" />
+	</class>
+	<class name="Gene" is-interface="true">
+		<collection name="alleles" referenced-type="Allele"
+			reverse-reference="gene" />
+	</class>
+	<class name="Genotype" extends="AttributtableBioEntity"
+		is-interface="true">
+		<attribute name="displayName" type="java.lang.String" />
+		<collection name="stocks" referenced-type="Stock"
+			reverse-reference="genotypes" />
+		<collection name="alleles" referenced-type="Allele"
+			reverse-reference="genotypes" />
+		<collection name="stockAlleleInteractions" referenced-type="StockAlleleInteraction" />
+	</class>
+
+	<class name="SequenceAlteration" is-interface="true">
+		<attribute name="primaryIdentifier" type="java.lang.String" />
+		<attribute name="name" type="java.lang.String" />
+		<attribute name="description" type="java.lang.String" />
+		<collection name="alleles" referenced-type="Allele"
+			reverse-reference="sequenceAlterationType" />
+	</class>
+
+	<class name="InheritanceMode" is-interface="true">
+		<attribute name="primaryIdentifier" type="java.lang.String" />
+		<attribute name="name" type="java.lang.String" />
+		<attribute name="description" type="java.lang.String" />
+		<collection name="alleles" referenced-type="Allele"
+			reverse-reference="inheritanceMode" />
+	</class>
+
+</classes>
