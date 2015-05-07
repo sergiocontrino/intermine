@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<classes>
+		
+	<class name="ControlledVocabulary" extends="Ontology" is-interface="true">
+		<attribute name="uniqueName" type="java.lang.String" />
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+		<collection name="cvTerms" referenced-type="CVTerm"
+			reverse-reference="controlledVocabulary" />
+	</class>
+	
+	<class name="CVTerm" extends="OntologyTerm" is-interface="true">
+		<attribute name="uniqueName" type="java.lang.String" />
+		<reference name="controlledVocabulary" referenced-type="ControlledVocabulary" reverse-reference="cvTerms"/>
+	</class>
+	
+	<class name="AlleleClassCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+		
+	<class name="InheritanceModeCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="MutationSiteCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="SequenceAlterationCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="MutagenCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="StockClassCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="StockTypeCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="StrainTypeCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="ZygosityTypeCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="CountryCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="RegionCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="GeodeticDatumCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="ContactTypeCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<class name="AttributionTypeCV" extends="ControlledVocabulary" is-interface="true">
+		<reference name="datasetReference" referenced-type="DataSetReference" />
+	</class>
+	
+	<!-- CV Terms -->
+	
+	<class name="StockType" extends="CVTerm" is-interface="true">
+	</class>
+	
+	<class name="StockClass" extends="CVTerm" is-interface="true">
+	</class>
+	
+	<class name="StrainType" extends="CVTerm"  is-interface="true">
+	</class>
+	
+	<class name="AlleleClass" extends="CVTerm" is-interface="true">
+	</class>
+	
+	<class name="Mutagen" extends="CVTerm" is-interface="true">
+	</class>
+	
+	<class name="MutationSite" extends="CVTerm" is-interface="true">
+	</class>
+	
+	<class name="InheritanceMode" extends="CVTerm" is-interface="true">
+	</class>
+	
+	<class name="ZygosityType" extends="CVTerm" is-interface="true">
+	</class>
+	
+	<class name="SequenceAlterationType" extends="CVTerm" is-interface="true">
+	</class>
+	
+	<class name="ContactType" extends="CVTerm" is-interface="true">
+	</class>
+   
+   	<class name="AttributionType" extends="CVTerm" is-interface="true">
+	</class>
+		
+	<class name="GeodeticDatumType" extends="CVTerm" is-interface="true">
+	</class>
+	
+	<class name="Country" extends="CVTerm" is-interface="true">
+	</class>
+	
+	<class name="Region" extends="CVTerm" is-interface="true">
+	</class>
+	
+</classes>

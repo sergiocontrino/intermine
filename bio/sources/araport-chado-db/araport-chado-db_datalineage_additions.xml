@@ -15,31 +15,23 @@
 		<attribute name="version" type="java.lang.String" />
 		<reference name="datasetReference" referenced-type="DataSetReference"
 			reverse-reference="datasetCrossReferences" />
-		<reference name="metadata" referenced-type="Metadata"
-			reverse-reference="datasetCrossReference" />
 	</class>
 
 	<class name="Metadata" is-interface="true">
-		<attribute name="primaryIdentifier" type="java.lang.String" />
-		<attribute name="createdTime" type="java.util.Date" />
-		<attribute name="lastTimeUpdated" type="java.util.Date" />
-		<attribute name="lastTimeModified" type="java.util.Date" />
-		<attribute name="sourceOfOriginCreatedTime" type="java.util.Date" />
-		<attribute name="sourceOfOriginLastModifiedTime" type="java.util.Date" />
-		<attribute name="sourceOfOriginDateReleased" type="java.util.Date" />
-		<reference name="datasetCrossReference" referenced-type="DataSetCrossReference"
-			reverse-reference="metadata" />
-		<reference name="sourceloadedFrom" referenced-type="Source"
-			reverse-reference="metadataReferences" />
+		<attribute name="di_createdTime" type="java.util.Date" />
+		<attribute name="di_lastTimeUpdated" type="java.util.Date" />
+		<reference name="dataLineage" referenced-type="DataLineage"/>
+		<reference name="di_sourceloadedFrom" referenced-type="SourceRecord"
+			reverse-reference="di_metadataReferences" />
 	</class>
 
 
-	<class name="Source" is-interface="true">
+	<class name="SourceRecord" is-interface="true">
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="type" type="java.lang.String" />
 		<attribute name="sourceUri" type="java.lang.String" />
-		<collection name="metadataReferences" referenced-type="Metadata"
-			reverse-reference="sourceloadedFrom" />
+		<collection name="di_metadataReferences" referenced-type="Metadata"
+			reverse-reference="di_sourceloadedFrom" />
 	</class>
 
 	<class name="BioEntity" is-interface="true">
@@ -47,9 +39,11 @@
 			reverse-reference="subject" />
 	</class>
 
-	<class name="DataEntity" is-interface="true">
+	<class name="DataLineage" is-interface="true">
 		<attribute name="primaryIdentifier" type="java.lang.String" />
+		<attribute name="md5checksum" type="java.lang.String" />
 		<reference name="datasetCrossReference" referenced-type="DataSetCrossReference" />
+		<reference name="metadata" referenced-type="Metadata"/>
 	</class>
-
+		
 </classes>
