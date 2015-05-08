@@ -18,11 +18,11 @@
 	</class>
 
 	<class name="Metadata" is-interface="true">
-		<attribute name="di_createdTime" type="java.util.Date" />
-		<attribute name="di_lastTimeUpdated" type="java.util.Date" />
+		<attribute name="createdTime" type="java.util.Date" />
+		<attribute name="lastTimeUpdated" type="java.util.Date" />
 		<reference name="dataLineage" referenced-type="DataLineage"/>
-		<reference name="di_sourceloadedFrom" referenced-type="SourceRecord"
-			reverse-reference="di_metadataReferences" />
+		<reference name="sourceloadedFrom" referenced-type="SourceRecord"
+			reverse-reference="metadataReferences" />
 	</class>
 
 
@@ -30,8 +30,8 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="type" type="java.lang.String" />
 		<attribute name="sourceUri" type="java.lang.String" />
-		<collection name="di_metadataReferences" referenced-type="Metadata"
-			reverse-reference="di_sourceloadedFrom" />
+		<collection name="metadataReferences" referenced-type="Metadata"
+			reverse-reference="sourceloadedFrom" />
 	</class>
 
 	<class name="BioEntity" is-interface="true">

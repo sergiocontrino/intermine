@@ -6,7 +6,7 @@
 		<reference name="mutagen" referenced-type="Mutagen"
 			reverse-reference="alleles" />
 	</class>
-	<class name="Stock" extends="ExternalBioEntity"
+	<class name="Stock" extends="BioEntity"
 		is-interface="true">
 		<attribute name="germplasmName" type="java.lang.String" />
 		<attribute name="stockName" type="java.lang.String" />
@@ -37,7 +37,7 @@
 			reverse-reference="stockClass" />
 	</class>
 	
-	<class name="Strain" extends="ExternalBioEntity"
+	<class name="Strain" extends="BioEntity"
 		is-interface="true">
 		<attribute name="abbreviationName" type="java.lang.String" />
 		<attribute name="infraspecificName" type="java.lang.String" />
@@ -71,9 +71,9 @@
 	</class>
 
 	<class name="StockAnnotation" is-interface="true">
-		<attribute name="IsTransgene" type="java.lang.Boolean" />
-		<attribute name="IsMutant" type="java.lang.Boolean" />
-		<attribute name="IsNaturalVariant" type="java.lang.Boolean" />
+		<attribute name="transgene" type="java.lang.String" />
+		<attribute name="mutant" type="java.lang.String" />
+		<attribute name="naturalVariant" type="java.lang.String" />
 		<reference name="stock" referenced-type="Stock"
 			reverse-reference="stockAnnotation" />
 		<reference name="chromosomalConstitution" referenced-type="ChromosomalConstitutionAnnotation"
@@ -83,7 +83,7 @@
 	</class>
 
 	<class name="ChromosomalConstitutionAnnotation" is-interface="true">
-		<attribute name="IsAneploidChromosome" type="java.lang.Boolean" />
+		<attribute name="IsAneploidChromosome" type="java.lang.String" />
 		<attribute name="ploidy" type="java.lang.Integer" />
 		<reference name="stockAnnotation" referenced-type="StockAnnotation"
 			reverse-reference="chromosomalConstitution" />

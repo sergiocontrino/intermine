@@ -5,7 +5,7 @@
 			reverse-reference="observedIn" />
 	</class>
 
-	<class name="Phenotype" extends="ExternalBioEntity"
+	<class name="Phenotype" extends="BioEntity"
 		is-interface="true">
 		<attribute name="description" type="java.lang.String" />
 		<collection name="observedIn" referenced-type="BioEntity"
@@ -21,11 +21,11 @@
 		is-interface="true">
 	</class>
 
-	<class name="Allele" extends="ExternalBioEntity"
+	<class name="Allele" extends="SequenceCollection"
 		is-interface="true">
 		<attribute name="displayName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="isWildType" type="java.lang.Boolean" />
+		<attribute name="wildType" type="java.lang.String" />
 		<reference name="sequenceAlterationType" referenced-type="SequenceAlteration"
 			reverse-reference="alleles" />
 		<reference name="inheritanceMode" referenced-type="InheritanceMode"
@@ -101,7 +101,7 @@
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="genes" />
 	</class>
-	<class name="Genotype" extends="ExternalBioEntity"
+	<class name="Genotype" extends="BioEntity"
 		is-interface="true">
 		<attribute name="displayName" type="java.lang.String" />
 		<collection name="stocks" referenced-type="Stock"

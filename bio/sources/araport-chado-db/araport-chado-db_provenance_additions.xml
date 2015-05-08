@@ -22,13 +22,13 @@
 	</class>
 
 	<class name="AttributionReference" extends="DataLineage" is-interface="true">
-		<reference name="subject" referenced-type="ExternalBioEntity"
+		<reference name="subject" referenced-type="BioEntity"
 			reverse-reference="attributionReferences" />
 		<reference name="attribution" referenced-type="AttributionAnnotation" />
 	</class>
 
 	
-	<class name="ExternalBioEntity" extends="BioEntity" is-interface="true">
+	<class name="BioEntity" is-interface="true">
 		<collection name="attributionReferences" referenced-type="AttributionReference"
 			reverse-reference="subject" />
 	</class>
