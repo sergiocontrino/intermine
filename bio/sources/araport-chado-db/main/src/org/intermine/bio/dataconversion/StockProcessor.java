@@ -14,11 +14,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
+import org.intermine.bio.datalineage.DataFlowStep;
+import org.intermine.bio.datalineage.DataFlowStepType;
+import org.intermine.bio.datalineage.DataSetStats;
+import org.intermine.bio.datalineage.SourceDataFlow;
+import org.intermine.bio.dataloader.DataService;
+import org.intermine.bio.dataprocessor.SQLTaskProcessor;
 import org.intermine.bio.util.OrganismData;
+import org.intermine.bio.utils.sql.FileUtils;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
 import org.intermine.xml.full.ReferenceList;
+import org.postgresql.jdbc4.Jdbc4ResultSet;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -27,14 +37,22 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.StopWatch;
 
 /**
- * A ChadoProcessor for the chado stock module.
- * @author Kim Rutherford
+ * A Stock Processor DataSet Processor for the chado stock module.
+ * @author Irina Belyaeva
  */
 public class StockProcessor extends ChadoProcessor
 {
-    private static final Logger LOG = Logger.getLogger(SequenceProcessor.class);
+    private static final Logger log = Logger.getLogger(StockProcessor.class);
+    private final static StopWatch timer = new StopWatch();
+    
+	private static final String STOCK_DS_SQL_PATH = "/sql/stock_dataset.sql";
+	private static final String STOCK_DS_SQL = FileUtils
+			.getSqlFileContents(STOCK_DS_SQL_PATH);
+    
+    
     private Map<String, Item> stockItems = new HashMap<String, Item>();
 
     /**
@@ -50,53 +68,88 @@ public class StockProcessor extends ChadoProcessor
      */
     @Override
     public void process(Connection connection) throws Exception {
-        processSocks(connection);
+        processStocks(connection);
     }
 
     /**
      * Process the stocks and genotypes tables in a chado database
      * @param connection
+     * @throws ExecutionException 
+     * @throws InterruptedException 
      */
-    private void processSocks(Connection connection)
+    private void processStocks(Connection connection)
         throws SQLException, ObjectStoreException {
-        Map<Integer, FeatureData> features = getFeatures();
-
-        ResultSet res = getStocksResultSet(connection);
+       
+    	timer.reset();
+		timer.start();
+		
+		DataFlowStep step1 = new DataFlowStep(DataFlowStepType.MUTAGEN_CV, "Load Mutagen CV");
+		DataFlowStep step2 = new DataFlowStep(DataFlowStepType.STOCK_TYPE_CV, "Load Stock Type CV");
+		DataFlowStep step3 = new DataFlowStep(DataFlowStepType.STOCK_CLASS_CV, "Load Stock Class CV");
+		
+		SourceDataFlow dataFlow = new SourceDataFlow("Stock");
+		
+		dataFlow.addStep(step1);
+		dataFlow.addStep(step2);
+		dataFlow.addStep(step3);
+		
+		
+		SQLTaskProcessor taskProcessor = new SQLTaskProcessor(STOCK_DS_SQL, step1.getName(), connection, step1);
+		
+		final Future<DataFlowStep> sqlStep = DataService
+				.getDataServicePool().submit( taskProcessor);
+				
+		step1 = taskProcessor.getResult(sqlStep);
+		 
+		log.info("RESULT COUNT :" + step1.getSourceRecordCount().getValue());
+		log.info("Stock SQL :" + STOCK_DS_SQL);
+		log.info("Executing Data Flow: " + dataFlow);
+		
+        ResultSet res = step1.getResultSet();
+     
         int count = 0;
+        
         Integer lastFeatureId = null;
         List<Item> stocks = new ArrayList<Item>();
         while (res.next()) {
-            Integer featureId = new Integer(res.getInt("feature_id"));
+            Integer featureId = new Integer(res.getInt("stock_id"));
             if (lastFeatureId != null && !featureId.equals(lastFeatureId)) {
-                storeStocks(features, lastFeatureId, stocks);
+                //storeStocks(features, lastFeatureId, stocks);
                 stocks = new ArrayList<Item>();
             }
-            if (!features.containsKey(featureId)) {
-                // probably an allele of an unlocated genes
-                continue;
-            }
+           // if (!features.containsKey(featureId)) {
+            //    // probably an allele of an unlocated genes
+             //   continue;
+            //}
 
+            String stockName = res.getString("stock_name");
             String stockUniqueName = res.getString("stock_uniquename");
             String stockDescription = res.getString("stock_description");
-            String stockCenterUniquename = res.getString("stock_center_uniquename");
+            String stockCenterUniquename = "none";
             String stockType = res.getString("stock_type_name");
             Integer organismId = new Integer(res.getInt("stock_organism_id"));
-            OrganismData organismData =
-                getChadoDBConverter().getChadoIdToOrgDataMap().get(organismId);
-            if (organismData == null) {
-                throw new RuntimeException("can't get OrganismData for: " + organismId);
-            }
-            Item organismItem = getChadoDBConverter().getOrganismItem(organismData.getTaxonId());
-            Item stock = makeStock(stockUniqueName, stockDescription, stockType,
+           // OrganismData organismData =
+           //     getChadoDBConverter().getChadoIdToOrgDataMap().get(organismId);
+         //   if (organismData == null) {
+           //     throw new RuntimeException("can't get OrganismData for: " + organismId);
+            //}
+         //   Item organismItem = getChadoDBConverter().getOrganismItem(organismData.getTaxonId());
+            Item organismItem = null;
+            Item stock = makeStock(stockName, stockUniqueName, stockDescription, stockType,
                     stockCenterUniquename, organismItem);
             stocks.add(stock);
             lastFeatureId = featureId;
         }
         if (lastFeatureId != null) {
-            storeStocks(features, lastFeatureId, stocks);
+           // storeStocks(features, lastFeatureId, stocks);
         }
-        LOG.info("created " + count + " stocks");
+        log.info("created " + count + " stocks");
         res.close();
+        
+        timer.stop();
+		
+		log.info("Stock Task has been completed. Task Id " + 
+				 "; Total time taken. " + timer.toString() + " Task Status:");
     }
 
     private Map<Integer, FeatureData> getFeatures() {
@@ -108,19 +161,20 @@ public class StockProcessor extends ChadoProcessor
         return features;
     }
 
-    private Item makeStock(String uniqueName, String description, String stockType,
+    private Item makeStock(String name, String uniqueName, String description, String stockType,
             String stockCenterUniqueName, Item organismItem) throws ObjectStoreException {
         if (stockItems.containsKey(uniqueName)) {
             return stockItems.get(uniqueName);
         }
         Item stock = getChadoDBConverter().createItem("Stock");
         stock.setAttribute("primaryIdentifier", uniqueName);
-        stock.setAttribute("secondaryIdentifier", description);
-        stock.setAttribute("type", stockType);
-        stock.setAttribute("stockCenter", stockCenterUniqueName);
+        stock.setAttribute("secondaryIdentifier", name);
+        stock.setAttribute("name", name);
+        //stock.setAttribute("type", stockType);
+        //stock.setAttribute("stockCenter", stockCenterUniqueName);
         stock.setReference("organism", organismItem);
         stockItems.put(uniqueName, stock);
-        getChadoDBConverter().store(stock);
+       // getChadoDBConverter().store(stock);
         return stock;
     }
 
@@ -139,45 +193,7 @@ public class StockProcessor extends ChadoProcessor
         getChadoDBConverter().store(referenceList, intermineObjectId);
     }
 
-    /**
-     * Return the interesting rows from the features table.
-     * This is a protected method so that it can be overriden for testing
-     * @param connection the db connection
-     * @return the SQL result set
-     * @throws SQLException if a database problem occurs
-     */
-    protected ResultSet getStocksResultSet(Connection connection)
-        throws SQLException {
-        String organismConstraint = getOrganismConstraint();
-        String orgConstraintForQuery = "";
-        if (!StringUtils.isEmpty(organismConstraint)) {
-            orgConstraintForQuery = " AND " + organismConstraint;
-        }
-
-        String query =
-             "SELECT feature.feature_id, stock.uniquename AS stock_uniquename, "
-            + "      stock.description AS stock_description, type_cvterm.name AS stock_type_name, "
-            + "      stock.organism_id AS stock_organism_id, "
-            + "      (SELECT stockcollection.uniquename "
-            + "         FROM stockcollection, stockcollection_stock join_table "
-            + "        WHERE stockcollection.stockcollection_id = join_table.stockcollection_id "
-            + "          AND join_table.stock_id = stock.stock_id) "
-            + "       AS stock_center_uniquename "
-            + " FROM stock_genotype, feature, stock, feature_genotype, cvterm type_cvterm "
-            + "WHERE stock.stock_id = stock_genotype.stock_id "
-            + "AND feature_genotype.feature_id = feature.feature_id "
-            + "AND feature_genotype.genotype_id = stock_genotype.genotype_id "
-            + "AND feature.uniquename LIKE 'FBal%' "
-            + "AND stock.type_id = type_cvterm.cvterm_id "
-            + orgConstraintForQuery + " "
-            + "AND stock.organism_id = feature.organism_id "
-            + "ORDER BY feature.feature_id";
-        LOG.info("executing: " + query);
-        Statement stmt = connection.createStatement();
-        ResultSet res = stmt.executeQuery(query);
-        return res;
-    }
-
+   
     /**
      * Return a comma separated string containing the organism_ids that with with to query from
      * chado.
@@ -197,5 +213,18 @@ public class StockProcessor extends ChadoProcessor
             return "";
         }
         return "feature.organism_id IN (" + organismIdsString + ")";
+    }
+    
+    public static int getResultSetRowCount(ResultSet resultSet) {
+        int size = 0;
+        try {
+            resultSet.last();
+            size = resultSet.getRow();
+            resultSet.beforeFirst();
+        }
+        catch(Exception ex) {
+            return 0;
+        }
+        return size;
     }
 }

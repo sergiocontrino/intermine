@@ -133,8 +133,10 @@ public class ChadoDBConverter extends BioDBConverter
             throw new IllegalArgumentException("processors not set in ChadoDBConverter");
         }
 
-        Map<OrganismData, Integer> tempChadoOrgMap = getChadoOrganismIds(getConnection());
-
+      //  Map<OrganismData, Integer> tempChadoOrgMap = getChadoOrganismIds(getConnection());
+ 
+        
+      /**
         for (OrganismData od: organismsToProcess) {
             Integer chadoId = tempChadoOrgMap.get(od);
             if (chadoId == null) {
@@ -148,6 +150,7 @@ public class ChadoDBConverter extends BioDBConverter
             throw new RuntimeException("can't find any known organisms in the organism table");
         }
 
+     */
         String[] bits = processors.trim().split("[ \\t]+");
         for (int i = 0; i < bits.length; i++) {
             String className = bits[i];
