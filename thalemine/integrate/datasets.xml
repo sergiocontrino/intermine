@@ -60,7 +60,7 @@
       </collection>
    </item>
    <item id="0_11" class="DataSet" implements="">
-      <attribute name="version" value="2014_11" />
+      <attribute name="version" value="2015_05" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="Swiss-Prot data set" />
       <attribute name="description" value="High-quality, manually annotated, non-redundant protein sequence database" />
@@ -68,7 +68,7 @@
       <reference name="publication" ref_id="0_9" />
    </item>
    <item id="0_12" class="DataSet" implements="">
-      <attribute name="version" value="2014_11" />
+      <attribute name="version" value="2015_05" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="TrEMBL data set" />
       <attribute name="description" value="Computationally analysed records, enriched with automatic annotation" />
@@ -76,7 +76,7 @@
       <reference name="publication" ref_id="0_9" />
    </item>
    <item id="0_13" class="DataSet" implements="">
-      <attribute name="version" value="2014_11" />
+      <attribute name="version" value="2015_05" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="UniProt FASTA dataset" />
       <attribute name="description" value="Protein sequences and alternative splice forms generated using VARSPLIC" />
@@ -84,7 +84,7 @@
       <reference name="publication" ref_id="0_9" />
    </item>
    <item id="0_14" class="DataSet" implements="">
-      <attribute name="version" value="2014_11" />
+      <attribute name="version" value="2015_05" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="UniProt keywords data set" />
       <attribute name="description" value="Keywords and categories used in UniProtKB" />
@@ -103,7 +103,7 @@
       </collection>
    </item>
    <item id="0_17" class="DataSet" implements="">
-      <attribute name="version" value="v49.0" />
+      <attribute name="version" value="v51.0" />
       <reference name="dataSource" ref_id="0_16" />
       <attribute name="name" value="InterPro data set" />
       <attribute name="description" value="Protein family and domain assignments to proteins" />
@@ -114,7 +114,7 @@
       <attribute name="pubMedId" value="17202162" />
    </item>
    <item id="0_19" class="DataSet" implements="">
-      <attribute name="version" value="v49.0" />
+      <attribute name="version" value="v51.0" />
       <reference name="dataSource" ref_id="0_16" />
       <attribute name="name" value="InterPro GO Annotation data set" />
       <attribute name="description" value="Mapping between InterPro domains and GO terms" />

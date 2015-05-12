@@ -48,12 +48,12 @@
   <tr>
     <td rowspan="2" class="leftcol"><h2><p>Proteins</p></h2></td>
     <td>Proteins from UniProt (trEMBL and SwissProt)</td>
-    <td><a href="http://www.ebi.uniprot.org/index.shtml" target="_blank" class="extlink">UniProt</a>- Release 2014_11</td>
+    <td><a href="http://www.ebi.uniprot.org/index.shtml" target="_blank" class="extlink">UniProt</a>- Release 2015_05</td>
     <td>UniProt Consortium - <a href="http://www.ncbi.nlm.nih.gov/pubmed/17142230" target="_blank" class="extlink">PubMed: 17142230</a></td>
   </tr>
   <tr>
     <td>Protein family and domain assignments to proteins</td>
-    <td><a href="http://www.ebi.ac.uk/interpro" target="_blank" class="extlink">InterPro</a>(v49.0)</td>
+    <td><a href="http://www.ebi.ac.uk/interpro" target="_blank" class="extlink">InterPro</a>(v51.0)</td>
     <td>Mulder et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/17202162" target="_blank" class="extlink">PubMed: 17202162</a></td>
   </tr>
 
@@ -78,7 +78,7 @@
   </tr>
   <tr>
     <td>Several electronic and manual GO annotation methods utilized by UniProt</td>
-    <td><a href="http://www.ebi.ac.uk/GOA/arbidopsis_release" target="_blank" class="extlink">UniProt GOA</a>- Release 2014_11</td>
+    <td><a href="http://www.ebi.ac.uk/GOA/arabidopsis_release" target="_blank" class="extlink">UniProt GOA</a>- Release 2015_05</td>
     <td>Camon et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/14681408" target="_blank" class="extlink">PubMed: 14681408</a></td>
   </tr>
   <tr>
@@ -110,7 +110,7 @@
   <tr>
     <td class="leftcol"><h2><p>Publications</p></h2></td>
     <td>Relevant publications are identified by searching databases such as PubMed (full-text is read, relevant information extracted and added to the entry)</td>
-    <td><a href="http://www.uniprot.org/help/publications" target="_blank" class="extlink">Publications</a>from UniProt (Release 2014_11) and NCBI gene2pubmed (04/20/15)</td>
+    <td><a href="http://www.uniprot.org/help/publications" target="_blank" class="extlink">Publications</a>from UniProt (Release 2015_05) and NCBI gene2pubmed (04/20/15)</td>
     <td>Magrane et al., 2011 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/21447597" target="_blank" class="extlink">PubMed: 21447597</a></td>
   </tr>
 

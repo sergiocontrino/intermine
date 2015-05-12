@@ -34,7 +34,7 @@
         value="${imf:formatFieldStr(pathString, INTERMINE_API, WEBCONFIG)}"/>
         <!-- quick fix for MINE-756 -->
         <c:if test="${fn:startsWith(fieldDisplayName,'Gene Rifs')}">
-          <c:set var="fieldDisplayName" value="Gene RIFs (Gene into Function)<br /><p style='font-weight:normal;font-size:12px'>Data Source: <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=GeneRIF'>NCBI</a></p>" />	  
+          <c:set var="fieldDisplayName" value="GeneRIFs (Gene References Into Functions)<br /><p style='font-weight:normal;font-size:12px'>Data Source: <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=GeneRIF'>NCBI</a></p>" />	  
         </c:if>
         <!-- quick fix for MINE-769 -->
         <c:if test="${fn:startsWith(fieldDisplayName,'Pathways')}">
