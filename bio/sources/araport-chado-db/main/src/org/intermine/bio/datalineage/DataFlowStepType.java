@@ -4,20 +4,21 @@ public enum DataFlowStepType {
 	
 	ORGANISM(0,"Organism"),
 	STOCK_TYPE_CV(1, "Stock Type"),
-	STOCK_CLASS_CV(2, "Stock Class"),
+	STOCK_CATEGORY_CV(2, "Stock Category"),
 	MUTAGEN_CV(3, "Mutagen"),
 	ALLELE_CLASS_CV (4, "Allele Class"),
 	INHERITANCEMODE_CV (5, "Inheritance Mode"),
 	MUTATION_SITE_CV (6, "Mutation Site"),
-	ZYGOCITY_TYPE_CV (7, "Zygosity Type"),
+	ZYGOSITY_TYPE_CV (7, "Zygosity Type"),
 	CONTACT_TYPE_CV (8, "Contact Type"),
 	ATTRIBUTIONTYPE_CV (9, "Attribution Type"),
 	SEQUENCE_ALTERATION_TYPE_CV(10, "Sequence Alteration Type"),
 	STRAIN_TYPE_CV (11, "Strain Type"),
-	STOCK (12, "Stock"),
-	ALLELE(14, "Allele"),
-	GENOTYPE(15, "Genotype"),
-	PUBLICATION(16, "Publication"),
+	STOCK_CENTER(12, "Stock Center"),
+	STOCK (14, "Stock"),
+	ALLELE(15, "Allele"),
+	GENOTYPE(16, "Genotype"),
+	PUBLICATION(17, "Publication"),
 	ALL (20, "All");
 	
 	private int priority;

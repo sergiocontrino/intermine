@@ -85,7 +85,7 @@ public class StockProcessor extends ChadoProcessor
 		
 		DataFlowStep step1 = new DataFlowStep(DataFlowStepType.MUTAGEN_CV, "Load Mutagen CV");
 		DataFlowStep step2 = new DataFlowStep(DataFlowStepType.STOCK_TYPE_CV, "Load Stock Type CV");
-		DataFlowStep step3 = new DataFlowStep(DataFlowStepType.STOCK_CLASS_CV, "Load Stock Class CV");
+		DataFlowStep step3 = new DataFlowStep(DataFlowStepType.STOCK_CATEGORY_CV, "Load Stock Class CV");
 		
 		SourceDataFlow dataFlow = new SourceDataFlow("Stock");
 		
