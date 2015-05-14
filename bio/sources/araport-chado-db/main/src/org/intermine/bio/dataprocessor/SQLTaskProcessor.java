@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -23,16 +25,19 @@ public class SQLTaskProcessor implements Callable<DataFlowStep>{
 	private PreparedStatement prepStmt;
 	private Connection dataSource;
 	private DataFlowStep step;
+	private Map<Integer,Object> stmtParam = new HashMap<Integer, Object>();
 		
 	
-	public SQLTaskProcessor(String sqlStmt, String taskId, Connection datasource, DataFlowStep step) throws SQLException{
+	public SQLTaskProcessor(String sqlStmt, String taskId, Connection datasource, DataFlowStep step, Map<Integer,Object> param) throws SQLException{
 		this.sqlStmt = sqlStmt;
 		this.taskId = taskId;
 		this.dataSource = datasource;
 		this.step = step;
+		this.stmtParam = new HashMap<Integer, Object>();
+		this.stmtParam = param;
 	}
 	
-	public SQLTaskProcessor(String sqlStmt, String taskId, Connection datasource, int pageSize){
+	public SQLTaskProcessor(String sqlStmt, String taskId, Connection datasource, DataFlowStep step, int pageSize){
 		this.sqlStmt = sqlStmt;
 		this.taskId = taskId;
 		this.pageSize = pageSize;
@@ -43,20 +48,14 @@ public class SQLTaskProcessor implements Callable<DataFlowStep>{
 	public DataFlowStep call() throws Exception {
 			
 		PreparedStatement prepStmt = createPreparedStatement(this.sqlStmt);
+		
+	//	setPreparedStatement(this.sqlStmt);
 		log.info("SQL STATEMENT:" + sqlStmt);
 		
-		//PreparedStatement prepStmt = getDataSource().prepareStatement(sqlStmt);
-		
-		//setStepStats(prepStmt);
-		
-		//SQLTask sqlTask = new SQLTask(prepStmt);
-		
-		//final Future<ResultSet> futureSqlTask = DataService
-		//		.getDataServicePool().submit(sqlTask);
-		
-		//ResultSet resultSet = sqlTask.getResultSet(futureSqlTask, this.taskId);
+		setParameters(prepStmt);
 		
 		ResultSet resultSet = prepStmt.executeQuery();
+				
 		int rowCount = getResultSetRowCount(resultSet);
 		this.step.setResultSet(resultSet);
 		this.step.sourceRecordCount.setValue(rowCount);
@@ -66,16 +65,48 @@ public class SQLTaskProcessor implements Callable<DataFlowStep>{
 		return this.step;
 	}
 
+	private void setParameters(PreparedStatement prepStmt) throws SQLException{
+		
+		if(this.stmtParam != null && this.stmtParam.size() > 0){
+           		
+			log.info("Setting query parameters." );
+            for(Integer key : this.stmtParam.keySet()){
+            	
+            	log.info("Setting query parameters: "  + "index: " + key + ";" + "value: " + this.stmtParam.get(key));
+            	prepStmt.setObject(key, this.stmtParam.get(key));
+            }
+        } else{
+        	log.info("No Query Parameters have been set." );
+        }
+
+	}
 	
 	
-	
-	private PreparedStatement createPreparedStatement(final String sqlStmt) throws SQLException{
+	private void setPreparedStatement(final String sqlStmt) throws SQLException{
+		
 		PreparedStatement prepStmt = this.dataSource.prepareStatement(sqlStmt, ResultSet.TYPE_SCROLL_INSENSITIVE,
         		ResultSet.CONCUR_READ_ONLY);
 		
-		return prepStmt;
+		this.prepStmt = prepStmt;
+		this.prepStmt.closeOnCompletion();
+		
 		
 	}
+	
+	private PreparedStatement createPreparedStatement(final String sqlStmt) throws SQLException{
+		
+		PreparedStatement prepStmt = this.dataSource.prepareStatement(sqlStmt, ResultSet.TYPE_SCROLL_INSENSITIVE,
+        		ResultSet.CONCUR_READ_ONLY);
+		
+		//prepStmt.closeOnCompletion();
+		return prepStmt;
+	
+	}
+	
+	public PreparedStatement getStatement(){
+		return this.prepStmt;
+	}
+	
 	
 	private int getResultSetRowCount(ResultSet resultSet) throws SQLException{
 		
@@ -94,15 +125,7 @@ public class SQLTaskProcessor implements Callable<DataFlowStep>{
 		
 	}
 
-	/*
-	private void setStepStats(PreparedStatement prepStmt) throws SQLException{
 		
-		//this.step.sourceRecordCount.setValue(prepStmt.getUpdateCount());
-		
-	}	
-		
-  */
-	
 public DataFlowStep getResult(Future<DataFlowStep> sqlTask){
 		
 	

@@ -19,6 +19,7 @@ public enum DataFlowStepType {
 	ALLELE(15, "Allele"),
 	GENOTYPE(16, "Genotype"),
 	PUBLICATION(17, "Publication"),
+	STRAIN(18, "Strain"),
 	ALL (20, "All");
 	
 	private int priority;

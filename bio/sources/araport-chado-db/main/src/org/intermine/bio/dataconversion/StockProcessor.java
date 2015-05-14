@@ -48,7 +48,7 @@ public class StockProcessor extends ChadoProcessor
     private static final Logger log = Logger.getLogger(StockProcessor.class);
     private final static StopWatch timer = new StopWatch();
     
-	private static final String STOCK_DS_SQL_PATH = "/sql/stock_dataset.sql";
+	private static final String STOCK_DS_SQL_PATH = "/sql/cvterm.sql";
 	private static final String STOCK_DS_SQL = FileUtils
 			.getSqlFileContents(STOCK_DS_SQL_PATH);
     
@@ -93,8 +93,9 @@ public class StockProcessor extends ChadoProcessor
 		dataFlow.addStep(step2);
 		dataFlow.addStep(step3);
 		
-		
-		SQLTaskProcessor taskProcessor = new SQLTaskProcessor(STOCK_DS_SQL, step1.getName(), connection, step1);
+		Map<Integer,Object> param = new HashMap<Integer, Object>();
+		param.put(1, "germplasm_type");
+		SQLTaskProcessor taskProcessor = new SQLTaskProcessor(STOCK_DS_SQL, step1.getName(), connection, step1, param);
 		
 		final Future<DataFlowStep> sqlStep = DataService
 				.getDataServicePool().submit( taskProcessor);

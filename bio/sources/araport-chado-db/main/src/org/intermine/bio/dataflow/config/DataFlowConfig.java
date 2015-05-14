@@ -1,33 +1,40 @@
 package org.intermine.bio.dataflow.config;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
 import java.util.TreeMap;
 
+import org.intermine.bio.datalineage.CompletionStatus;
 import org.intermine.bio.datalineage.DataFlowStep;
+import org.intermine.bio.datalineage.DataFlowStepSQL;
 import org.intermine.bio.datalineage.DataFlowStepType;
+import org.intermine.bio.datalineage.ExecutionStatus;
+import org.intermine.bio.datalineage.PriorityComparator;
 import org.intermine.bio.datalineage.SourceCVComparator;
+import org.intermine.bio.datalineage.StepAction;
 import org.intermine.bio.datalineage.StepComparator;
 
 public class DataFlowConfig {
 
-	private static Map<SourceCV, DataFlowStepSQL> dataFlowCVConfig = new TreeMap<SourceCV, DataFlowStepSQL>(
-			new SourceCVComparator());
-	private static Map<DataFlowStepType, DataFlowStepSQL> dataFlowConfig = new TreeMap<DataFlowStepType, DataFlowStepSQL>(
-			new StepComparator());
-
+	private static Map<Integer, DataFlowStep> dataFlowCVConfig = new TreeMap<Integer, DataFlowStep>();
+	
+	private static PriorityQueue<DataFlowStep> dataFlowTaskQueue = 
+            new PriorityQueue<DataFlowStep>(20, new PriorityComparator());
+	
 	private DataFlowConfig() {
 
 	}
 
-	private static class SourceDataFlowCVConfigHolder {
+	private static class DataFlowCVConfigHolder {
 
 		public static final DataFlowConfig INSTANCE = new DataFlowConfig();
 	}
 
 	public static DataFlowConfig getInstance() {
 
-		return SourceDataFlowCVConfigHolder.INSTANCE;
+		return DataFlowCVConfigHolder.INSTANCE;
 	}
 
 	static {
@@ -43,92 +50,238 @@ public class DataFlowConfig {
 
 	public static void initCVConfig() {
 		if (dataFlowCVConfig == null) {
-			dataFlowCVConfig = new TreeMap<SourceCV, DataFlowStepSQL>();
+			dataFlowCVConfig = new TreeMap<Integer, DataFlowStep>();
 		}
+
+		Map<Integer,StepAction> stepAction = new HashMap<Integer, StepAction>();
+		stepAction.put(1, StepAction.CREATE_CV);
 		
-		DataFlowStepSQL stepStockTypeCV = new DataFlowStepSQL(DataFlowStepType.STOCK_TYPE_CV, 
+		// Stock Type CV	
+		DataFlowStepSQL stepStockTypeCVSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.STOCK_TYPE_CV_SQL);
 		
-		DataFlowStepSQL stepStockCategoryCV = new DataFlowStepSQL(DataFlowStepType.STOCK_CATEGORY_CV, 
+		DataFlowStep stepStockTypeCV = new DataFlowStep(DataFlowStepType.STOCK_TYPE_CV, "Stock Type CV");
+		stepStockTypeCV.setStepSQL(stepStockTypeCVSQL);
+		stepStockTypeCV.setStepAction(stepAction);
+		stepStockTypeCV.setPriority(1);
+		
+		// Stock Category CV
+		DataFlowStepSQL stepStockCategoryCVSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.STOCK_CATEGORY_CV_SQL);
 		
-		DataFlowStepSQL stepMutagenCV = new DataFlowStepSQL(DataFlowStepType.MUTAGEN_CV, 
+		DataFlowStep stepStockCategoryCV = new DataFlowStep(DataFlowStepType.STOCK_CATEGORY_CV, "Stock Category CV");
+		stepStockCategoryCV.setStepSQL(stepStockCategoryCVSQL);
+		stepStockCategoryCV.setStepAction(stepAction);
+		stepStockCategoryCV.setPriority(2);
+		
+		//Mutagen CV
+		DataFlowStepSQL stepMutagenCVSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.MUTAGEN_CV_SQL);
-			
-		DataFlowStepSQL stepInheritanceModeCV = new DataFlowStepSQL(DataFlowStepType.INHERITANCEMODE_CV, 
+		DataFlowStep stepMutagenCV = new DataFlowStep(DataFlowStepType.MUTAGEN_CV, "Mutagen CV");
+		stepMutagenCV.setStepSQL(stepMutagenCVSQL);
+		stepMutagenCV.setStepAction(stepAction);
+		stepMutagenCV.setPriority(3);
+
+		//Inheritance Mode CV
+		DataFlowStepSQL stepInheritanceModeCVSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.INHERITANCEMODE_CV_SQL);
 		
-		DataFlowStepSQL stepMutationSiteCV = new DataFlowStepSQL(DataFlowStepType.MUTATION_SITE_CV, 
+		DataFlowStep stepInheritanceCV = new DataFlowStep(DataFlowStepType.INHERITANCEMODE_CV, "Inheritance CV");
+		stepInheritanceCV.setStepSQL(stepInheritanceModeCVSQL);
+		stepInheritanceCV.setStepAction(stepAction);
+		stepInheritanceCV.setPriority(4);
+		
+		// Mutation Site
+
+		DataFlowStepSQL stepMutationSiteCVSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.MUTATION_SITE_CV_SQL);
+
+		DataFlowStep stepMutationSiteCV = new DataFlowStep(DataFlowStepType.MUTATION_SITE_CV, "Mutation Site CV");
+		stepMutationSiteCV.setStepSQL(stepMutationSiteCVSQL);
+		stepMutationSiteCV.setStepAction(stepAction);
+		stepMutationSiteCV.setPriority(5);
 		
-		DataFlowStepSQL stepZygosityTypeCV = new DataFlowStepSQL(DataFlowStepType.ZYGOSITY_TYPE_CV, 
+		// Zygosity Type
+		DataFlowStepSQL stepZygosityTypeCVSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.ZYGOSITY_TYPE_CV_SQL);
+
+		DataFlowStep stepZygosityCV = new DataFlowStep(DataFlowStepType.ZYGOSITY_TYPE_CV, "Zygosity Type CV");
+		stepZygosityCV.setStepSQL(stepZygosityTypeCVSQL);
+		stepZygosityCV.setStepAction(stepAction);
+		stepZygosityCV.setPriority(6);
 		
-		DataFlowStepSQL stepContactTypeCV = new DataFlowStepSQL(DataFlowStepType.CONTACT_TYPE_CV, 
+		//Contact Type
+		DataFlowStepSQL stepContactTypeCVSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.CONTACT_TYPE_CV_SQL);
 		
-		DataFlowStepSQL stepAttributionTypeCV = new DataFlowStepSQL(DataFlowStepType.ATTRIBUTIONTYPE_CV, 
+		DataFlowStep stepContactCV = new DataFlowStep(DataFlowStepType.CONTACT_TYPE_CV, "Contact Type CV");
+		stepStockTypeCV.setStepSQL(stepContactTypeCVSQL);
+		stepStockTypeCV.setStepAction(stepAction);
+		stepStockTypeCV.setPriority(7);
+		
+		// Attribution Type
+		DataFlowStepSQL stepAttributionTypeCVSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.ATTRIBUTIONTYPE_CV_SQL);
 		
-		DataFlowStepSQL stepSequenceAlterationTypeCV = new DataFlowStepSQL(DataFlowStepType.SEQUENCE_ALTERATION_TYPE_CV, 
+		DataFlowStep stepAttributionCV = new DataFlowStep(DataFlowStepType.ATTRIBUTIONTYPE_CV, "Attribution Type CV");
+		stepAttributionCV.setStepSQL(stepAttributionTypeCVSQL);
+		stepAttributionCV.setStepAction(stepAction);
+		stepAttributionCV.setPriority(8);
+
+		//Sequence Alteration Type
+		DataFlowStepSQL stepSequenceAlterationTypeCVSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.SEQUENCE_ALTERATION_TYPE_CV_SQL);
 		
-		DataFlowStepSQL stepStrainTypeCV = new DataFlowStepSQL(DataFlowStepType.STRAIN_TYPE_CV, 
+		DataFlowStep stepSequenceAlterationTypeCV = new DataFlowStep(DataFlowStepType.SEQUENCE_ALTERATION_TYPE_CV, "Sequence Alteration Type CV");
+		stepSequenceAlterationTypeCV.setStepSQL(stepSequenceAlterationTypeCVSQL);
+		stepSequenceAlterationTypeCV.setStepAction(stepAction);
+		stepSequenceAlterationTypeCV.setPriority(9);
+		
+
+		// Strain Type CV
+		DataFlowStepSQL stepStrainTypeCVSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.STRAIN_TYPE_CV_SQL);
 		
-		dataFlowCVConfig.put(SourceCV.STOCK_TYPE_CV, stepStockTypeCV);
-		dataFlowCVConfig.put(SourceCV.STOCK_CATEGORY_CV, stepStockCategoryCV);
-		dataFlowCVConfig.put(SourceCV.MUTAGEN_CV, stepMutagenCV);
+		DataFlowStep stepStrainTypeCV = new DataFlowStep(DataFlowStepType.STRAIN_TYPE_CV, "Strain Type CV");
+		stepSequenceAlterationTypeCV.setStepSQL(stepStrainTypeCVSQL);
+		stepSequenceAlterationTypeCV.setStepAction(stepAction);
+		stepSequenceAlterationTypeCV.setPriority(10);
 		
-		dataFlowCVConfig.put(SourceCV.ALLELE_CLASS_CV, stepMutagenCV);
 		
-		dataFlowCVConfig.put(SourceCV.INHERITANCEMODE_CV, stepInheritanceModeCV);
-		dataFlowCVConfig.put(SourceCV.MUTATION_SITE_CV, stepMutationSiteCV);
-		dataFlowCVConfig.put(SourceCV.ZYGOSITY_TYPE_CV, stepZygosityTypeCV);
-		dataFlowCVConfig.put(SourceCV.CONTACT_TYPE_CV, stepContactTypeCV);
-		dataFlowCVConfig.put(SourceCV.ATTRIBUTIONTYPE_CV, stepAttributionTypeCV);
-		dataFlowCVConfig.put(SourceCV.SEQUENCE_ALTERATION_TYPE_CV, stepSequenceAlterationTypeCV);
-		dataFlowCVConfig.put(SourceCV.STRAIN_TYPE_CV, stepStrainTypeCV);
+		dataFlowCVConfig.put(stepStockTypeCV.getPriority(), stepStockTypeCV);
+		dataFlowCVConfig.put(stepStockCategoryCV.getPriority(), stepStockCategoryCV);
+		
+		dataFlowCVConfig.put(stepMutagenCV.getPriority(), stepMutagenCV);
+		dataFlowCVConfig.put(stepInheritanceCV.getPriority(), stepInheritanceCV);
+		
+		dataFlowCVConfig.put(stepMutationSiteCV.getPriority(), stepMutationSiteCV);
+		
+		dataFlowCVConfig.put(stepZygosityCV.getPriority(), stepZygosityCV);
+		
+		dataFlowCVConfig.put(stepContactCV.getPriority(), stepContactCV);
+		
+		dataFlowCVConfig.put(stepAttributionCV.getPriority(), stepAttributionCV);
+		
+		dataFlowCVConfig.put(stepSequenceAlterationTypeCV.getPriority(), stepSequenceAlterationTypeCV);
+		
+		dataFlowCVConfig.put(stepStrainTypeCV.getPriority(), stepStrainTypeCV);
+		
+		dataFlowCVConfig.put(stepStockCategoryCV.getPriority(), stepStockCategoryCV);
+		
+		dataFlowCVConfig.put(stepStockCategoryCV.getPriority(), stepStockCategoryCV);
 	
-		
+
 	}
 
 	public static void initDataFlowConfig() {
-		if (dataFlowConfig == null) {
-			dataFlowConfig = new TreeMap<DataFlowStepType, DataFlowStepSQL>();
+		if (dataFlowTaskQueue == null) {
+			dataFlowTaskQueue =  new PriorityQueue<DataFlowStep>(20, new PriorityComparator());
+			
+		}
+
+		
+		for (Entry<Integer, DataFlowStep> entry : dataFlowCVConfig.entrySet()) {
+
+			DataFlowStep step = entry.getValue();
+			dataFlowTaskQueue.add(step);
+
 		}
 		
+		// Strain 
+		DataFlowStepSQL stepStrainSQL = new DataFlowStepSQL(SourceDataFlowTaskContainer.STRAIN_TYPE_CV_SQL);
+				
+		DataFlowStep stepStrain = new DataFlowStep(DataFlowStepType.STRAIN, "Strain");
+				
+		Map<Integer,StepAction> strainStepAction = new HashMap<Integer, StepAction>();
+		strainStepAction.put(1, StepAction.CREATE_STRAIN);
+				
+		stepStrain.setStepSQL(stepStrainSQL);
+		stepStrain.setStepAction(strainStepAction);
+		stepStrain.setPriority(11);
+				
+		dataFlowTaskQueue.add(stepStrain);
+				
 		
-		for (Entry<SourceCV, DataFlowStepSQL> entry : dataFlowCVConfig.entrySet()) {
-	        
-			DataFlowStepSQL step = entry.getValue();
-				dataFlowConfig.put(step.getStepType(), step);
-					    
-		   }
+		// Stock 
+		DataFlowStepSQL stepStockSQL = new DataFlowStepSQL(SourceDataFlowTaskContainer.STOCK_SQL);
 		
+		DataFlowStep stepStock = new DataFlowStep(DataFlowStepType.STOCK, "Stock");
 		
-		DataFlowStepSQL stepAllele = new DataFlowStepSQL(DataFlowStepType.ALLELE, 
-				SourceDataFlowTaskContainer.ALLELE_SQL);
+		Map<Integer,StepAction> stockStepAction = new HashMap<Integer, StepAction>();
+		stockStepAction.put(1, StepAction.CREATE_STOCK);
 		
-		DataFlowStepSQL stepGenotype = new DataFlowStepSQL(DataFlowStepType.GENOTYPE, 
+		stepStock.setStepSQL(stepStockSQL);
+		stepStock.setStepAction(stockStepAction);
+		stepStock.setPriority(12);
+		
+		dataFlowTaskQueue.add(stepStock);
+		
+		// Allele
+		DataFlowStepSQL stepAlleleSQL = new DataFlowStepSQL(SourceDataFlowTaskContainer.ALLELE_SQL);
+		
+		DataFlowStep stepAllele = new DataFlowStep(DataFlowStepType.ALLELE, "Allele");
+		
+		Map<Integer,StepAction> alleleStepAction = new HashMap<Integer, StepAction>();
+		alleleStepAction.put(1, StepAction.CREATE_ALLELE);
+		
+		stepAllele.setStepSQL(stepAlleleSQL);
+		stepAllele.setStepAction(alleleStepAction);
+		stepAllele.setPriority(14);
+		
+		dataFlowTaskQueue.add(stepAllele);
+		
+		// Genotype 
+		DataFlowStepSQL stepGenotypeSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.GENOTYPE_SQL);
 		
-		DataFlowStepSQL stepStockCenter = new DataFlowStepSQL(DataFlowStepType.STOCK_CENTER, 
+		DataFlowStep stepGenotype = new DataFlowStep(DataFlowStepType.GENOTYPE, "Genotype");
+		
+		Map<Integer,StepAction> genoTypeStepAction = new HashMap<Integer, StepAction>();
+		genoTypeStepAction.put(1, StepAction.CREATE_GENOTYPE);
+		
+		stepGenotype.setStepSQL(stepGenotypeSQL);
+		stepGenotype.setStepAction(genoTypeStepAction);
+		stepGenotype.setPriority(15);
+		
+		dataFlowTaskQueue.add(stepGenotype);
+		
+        // Stock Center
+		DataFlowStepSQL stepStockCenterSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.STOCK_CENTER_SQL);
-			
-		DataFlowStepSQL stepStock = new DataFlowStepSQL(DataFlowStepType.STOCK, 
-				SourceDataFlowTaskContainer.STOCK_SQL);
+
+		Map<Integer,StepAction> stockCenterAction = new HashMap<Integer, StepAction>();
+		DataFlowStep stepStockCenter = new DataFlowStep(DataFlowStepType.STOCK_CENTER, "Stock Center");
+		stockCenterAction.put(1, StepAction.CREATE_STOCK_CENTER);
 		
-		DataFlowStepSQL stepPublication = new DataFlowStepSQL(DataFlowStepType.PUBLICATION, 
+		stepStockCenter.setStepSQL(stepStockCenterSQL);
+		stepStockCenter.setStepAction(stockCenterAction);
+		stepStockCenter.setPriority(16);
+		
+		dataFlowTaskQueue.add(stepStockCenter);
+		
+		// Publication
+		
+		DataFlowStepSQL stepPublicationSQL = new DataFlowStepSQL(
 				SourceDataFlowTaskContainer.PUBLICATION_SQL);
+
+		Map<Integer,StepAction> publicationAction = new HashMap<Integer, StepAction>();
+		DataFlowStep stepPublication = new DataFlowStep(DataFlowStepType.PUBLICATION, "Publication");
+		publicationAction.put(1, StepAction.CREATE_PUBLICATION);
 		
+		stepPublication.setStepSQL(stepPublicationSQL);
+		stepPublication.setStepAction(publicationAction);
+		stepPublication.setPriority(17);
 		
-		dataFlowConfig.put(DataFlowStepType.ALLELE, stepAllele);
-		dataFlowConfig.put(DataFlowStepType.GENOTYPE, stepGenotype);
-		dataFlowConfig.put(DataFlowStepType.STOCK_CENTER, stepStockCenter);
-		dataFlowConfig.put(DataFlowStepType.STOCK, stepStock);
-		dataFlowConfig.put(DataFlowStepType.PUBLICATION, stepPublication);
+		dataFlowTaskQueue.add(stepPublication);
 		
-						
+		}
+
+	
+	public Map<Integer, DataFlowStep> getDataFlowCVConfig(){
+		return dataFlowCVConfig;
+	}
+	
+	public PriorityQueue<DataFlowStep> getDataFlowTasks(){
+		return dataFlowTaskQueue;
 	}
 }

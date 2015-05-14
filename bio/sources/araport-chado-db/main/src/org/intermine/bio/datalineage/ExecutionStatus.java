@@ -1,16 +1,17 @@
 package org.intermine.bio.datalineage;
 
-public enum ExecutionStatusType {
+public enum ExecutionStatus {
 
-	SUCCESS (0, "Success"),
-	FAILURE (1, "Failure"),
-	IN_PROGRESS (2, "In Progress"),
-	PARTIAL_SUCCESS(3, "Partial Success");
+	SCHEDULED (0, "Scheduled"),
+	SUCCESS (1, "Success"),
+	FAILURE (2, "Failure"),
+	EXECUTING (4, "Executing"),
+	PARTIAL_SUCCESS(4, "Partial Success");
 	
 	private int code;
 	private String name;
 
-	private ExecutionStatusType(int code, String name) {
+	private ExecutionStatus(int code, String name) {
 		this.code = code;
 		this.name = name;
 	}
