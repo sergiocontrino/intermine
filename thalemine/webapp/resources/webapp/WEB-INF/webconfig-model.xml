@@ -269,6 +269,18 @@
 
 -->
 
+  <class className="org.intermine.model.bio.Pathway">
+    <fields>
+      <fieldconfig fieldExpr="identifier"/>
+      <fieldconfig fieldExpr="name"/>
+      <fieldconfig fieldExpr="curated"/>
+    </fields>
+    <inlinelist>
+      <table path="dataSets.name" showInHeader="true" />
+    </inlinelist>
+  </class>
+
+
   <class className="org.intermine.model.bio.Protein">
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
@@ -488,9 +500,9 @@
                      jspName="model/esynDisplayer.jsp"
                      replacesFields=""
                      placement="Interactions"
-                     types="Gene"/> 
+                     types="Gene"/>
 
-    
+
     <!--  this takes rather long to load, commented for now
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.MinePathwaysDisplayer"
                      jspName="model/minePathwaysDisplayer.jsp"
