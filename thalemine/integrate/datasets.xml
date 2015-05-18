@@ -133,7 +133,7 @@
       </collection>
    </item>
    <item id="0_22" class="DataSet" implements="">
-      <attribute name="version" value="9.0" />
+      <attribute name="version" value="10.0" />
       <reference name="dataSource" ref_id="0_21" />
       <attribute name="name" value="Panther data set" />
       <attribute name="description" value="Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis" />
