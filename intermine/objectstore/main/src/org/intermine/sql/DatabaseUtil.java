@@ -599,6 +599,18 @@ public final class DatabaseUtil
     }
 
     /**
+     * Remove the view from the database given.
+     *
+     * @param con the Connection to the database
+     * @param view the view to remove
+     * @throws SQLException if an error occurs in the underlying database
+     */
+    public static void removeView(Connection con, String view) throws SQLException {
+        LOG.info("Dropping view " + view);
+        con.createStatement().execute("DROP VIEW " + view);
+    }
+
+    /**
      * Creates a table name for a class descriptor
      *
      * @param cld ClassDescriptor
