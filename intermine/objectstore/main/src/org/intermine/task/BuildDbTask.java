@@ -45,6 +45,7 @@ public class BuildDbTask extends Task
 {
     private static final Logger LOG = Logger.getLogger(BuildDbTask.class);
     protected static final String SERIAL_SEQUENCE_NAME = "serial";
+    protected static final String OVERLAP_VIEW_NAME = "overlappingfeaturessequencefeature";
     protected File tempDir;
     protected Database database;
     protected String databaseAlias;
@@ -113,6 +114,7 @@ public class BuildDbTask extends Task
             try {
                 c = database.getConnection();
                 c.setAutoCommit(true);
+                DatabaseUtil.removeView(c, OVERLAP_VIEW_NAME);
                 DatabaseUtil.removeAllTables(c);
                 DatabaseUtil.removeSequence(c, SERIAL_SEQUENCE_NAME);
             } catch (SQLException e) {
