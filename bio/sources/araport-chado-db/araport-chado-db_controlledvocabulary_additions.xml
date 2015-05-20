@@ -15,43 +15,66 @@
 	
 	<class name="AlleleClassCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+		<collection name="terms" referenced-type="AlleleClass"
+			reverse-reference="vocabulary" />
 	</class>
 	
 		
 	<class name="InheritanceModeCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+			<collection name="terms" referenced-type="InheritanceMode"
+			reverse-reference="vocabulary" />
 	</class>
 	
 	<class name="MutationSiteCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+			<collection name="terms" referenced-type="MutationSite"
+			reverse-reference="vocabulary" />
 	</class>
 	
 	<class name="SequenceAlterationCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+			<collection name="terms" referenced-type="SequenceAlterationType"
+			reverse-reference="vocabulary" />
 	</class>
 	
 	<class name="MutagenCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+		<collection name="terms" referenced-type="Mutagen"
+			reverse-reference="vocabulary" />
 	</class>
 	
-	<class name="StockClassCV" extends="ControlledVocabulary" is-interface="true">
+	<class name="StockCategoryCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+			<collection name="terms" referenced-type="StockCategory"
+			reverse-reference="vocabulary" />
 	</class>
 	
 	<class name="StockTypeCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+		<collection name="terms" referenced-type="StockType"
+			reverse-reference="vocabulary" />
 	</class>
 	
 	<class name="StrainTypeCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+		
+		<collection name="terms" referenced-type="StrainType"
+			reverse-reference="vocabulary" />
+		
 	</class>
 	
 	<class name="ZygosityTypeCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+		
+		<collection name="terms" referenced-type="ZygosityType"
+			reverse-reference="vocabulary" />
+			
 	</class>
 	
 	<class name="CountryCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+		
 	</class>
 	
 	<class name="RegionCV" extends="ControlledVocabulary" is-interface="true">
@@ -64,45 +87,62 @@
 	
 	<class name="ContactTypeCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+		
+		<collection name="terms" referenced-type="ContactType"
+			reverse-reference="vocabulary" />
+			
 	</class>
 	
 	<class name="AttributionTypeCV" extends="ControlledVocabulary" is-interface="true">
 		<reference name="datasetReference" referenced-type="DataSetReference" />
+		<collection name="terms" referenced-type="AttributionType"
+			reverse-reference="vocabulary" />
 	</class>
 	
 	<!-- CV Terms -->
 	
 	<class name="StockType" extends="CVTerm" is-interface="true">
+		<reference name="vocabulary" referenced-type="StockTypeCV"/>
 	</class>
 	
-	<class name="StockClass" extends="CVTerm" is-interface="true">
+	<class name="StockCategory" extends="CVTerm" is-interface="true">
+		<reference name="vocabulary" referenced-type="StockCategoryCV"/>
 	</class>
 	
 	<class name="StrainType" extends="CVTerm"  is-interface="true">
+		<reference name="vocabulary" referenced-type="StrainTypeCV"/>
 	</class>
 	
 	<class name="AlleleClass" extends="CVTerm" is-interface="true">
+		<reference name="vocabulary" referenced-type="AlleleClassCV"/>
 	</class>
 	
 	<class name="Mutagen" extends="CVTerm" is-interface="true">
+		<reference name="vocabulary" referenced-type="MutagenCV"/>
 	</class>
 	
 	<class name="MutationSite" extends="CVTerm" is-interface="true">
+		<reference name="vocabulary" referenced-type="MutationSiteCV"/>
 	</class>
 	
 	<class name="InheritanceMode" extends="CVTerm" is-interface="true">
+		<reference name="vocabulary" referenced-type="InheritanceModeCV"/>
 	</class>
 	
 	<class name="ZygosityType" extends="CVTerm" is-interface="true">
+		<reference name="vocabulary" referenced-type="ZygosityTypeCV"/>
 	</class>
 	
 	<class name="SequenceAlterationType" extends="CVTerm" is-interface="true">
+		<reference name="vocabulary" referenced-type="SequenceAlterationCV"/>
 	</class>
 	
 	<class name="ContactType" extends="CVTerm" is-interface="true">
+		<reference name="vocabulary" referenced-type="ContactTypeCV"/>
 	</class>
    
    	<class name="AttributionType" extends="CVTerm" is-interface="true">
+   		<reference name="vocabulary" referenced-type="ContactTypeCV"/>
 	</class>
 		
 	<class name="GeodeticDatumType" extends="CVTerm" is-interface="true">

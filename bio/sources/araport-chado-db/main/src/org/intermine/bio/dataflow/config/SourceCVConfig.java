@@ -1,6 +1,6 @@
 package org.intermine.bio.dataflow.config;
 
-public enum SourceCV {
+public enum SourceCVConfig {
 
 	STOCK_TYPE_CV(1, "Stock Type", "germplasm_type"),
 	STOCK_CATEGORY_CV(2, "Stock Category", "stock_category"),
@@ -18,7 +18,7 @@ public enum SourceCV {
 	private String name;
 	private String cvName;
 
-	private SourceCV(int priority, String name, String cv_name) {
+	private SourceCVConfig(int priority, String name, String cv_name) {
 		this.priority = priority;
 		this.name = name;
 		this.cvName = cv_name;

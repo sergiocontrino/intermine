@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-public class DataFlowStep extends DataSetStats implements DataLineage {
+public class DataFlowStep <T> extends DataSetStats implements DataLineage {
 
 	private static final Logger log = Logger.getLogger(DataFlowStep.class);
 	private DataFlowStepType type;

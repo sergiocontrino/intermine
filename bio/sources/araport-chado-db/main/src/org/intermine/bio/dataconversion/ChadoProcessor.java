@@ -25,7 +25,7 @@ import org.intermine.xml.full.Attribute;
  */
 public abstract class ChadoProcessor
 {
-    private final ChadoDBConverter chadoDBConverter;
+    protected final ChadoDBConverter chadoDBConverter;
 
     /**
      * Create a new ChadoModuleProcessor object.

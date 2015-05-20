@@ -13,8 +13,9 @@
 		<attribute name="displayName" type="java.lang.String" />
 		<reference name="type" referenced-type="StockType"
 			reverse-reference="stocks" />
-		<reference name="stockClass" referenced-type="StockClass"
-			reverse-reference="stocks" />
+		<reference name="stockCategory" referenced-type="StockCategory"
+			reverse-reference="stocks" 
+			/>
 		<reference name="strain" referenced-type="Strain"
 			reverse-reference="stocks" />
 		<reference name="stockCenterComment" referenced-type="Comment" />
@@ -32,9 +33,9 @@
 			reverse-reference="type" />
 	</class>
 	
-	<class name="StockClass" is-interface="true">
+	<class name="StockCategory" is-interface="true">
 			<collection name="stocks" referenced-type="Stock"
-			reverse-reference="stockClass" />
+			reverse-reference="stockCategory" />
 	</class>
 	
 	<class name="Strain" extends="BioEntity"

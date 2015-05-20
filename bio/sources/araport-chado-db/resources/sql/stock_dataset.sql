@@ -14,4 +14,4 @@ FROM
 		ON
 		o.organism_id = s.organism_id
 WHERE
-	o.abbreviation = 'A.thaliana' limit 5;
+	o.abbreviation = 'A.thaliana' and s.name = ?;

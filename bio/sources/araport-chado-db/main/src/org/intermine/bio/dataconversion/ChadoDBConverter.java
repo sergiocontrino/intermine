@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.intermine.bio.dataflow.config.AppLauncher;
 import org.intermine.bio.util.OrganismData;
 import org.intermine.bio.util.OrganismRepository;
 import org.intermine.dataconversion.ItemWriter;
@@ -37,8 +38,10 @@ import org.intermine.metadata.StringUtil;
  */
 public class ChadoDBConverter extends BioDBConverter
 {
-    protected static final Logger LOG = Logger.getLogger(ChadoDBConverter.class);
+    protected static final Logger log = Logger.getLogger(ChadoDBConverter.class);
 
+    private static final int TAXON_ID = 3702;
+    
     // a Map from chado organism_id to taxonId
     private final Map<Integer, OrganismData> chadoToOrgData = new HashMap<Integer, OrganismData>();
     private String processors = "";
@@ -118,7 +121,7 @@ public class ChadoDBConverter extends BioDBConverter
      * Get the connection to use when processing.
      * @return the Connection, or null while testing
      */
-    protected Connection getConnection() {
+    public Connection getConnection() {
         return connection;
     }
 
@@ -133,24 +136,6 @@ public class ChadoDBConverter extends BioDBConverter
             throw new IllegalArgumentException("processors not set in ChadoDBConverter");
         }
 
-      //  Map<OrganismData, Integer> tempChadoOrgMap = getChadoOrganismIds(getConnection());
- 
-        
-      /**
-        for (OrganismData od: organismsToProcess) {
-            Integer chadoId = tempChadoOrgMap.get(od);
-            if (chadoId == null) {
-                throw new RuntimeException("Organism " + od
-                                           + " not found in the chado organism table");
-            }
-            chadoToOrgData.put(chadoId, od);
-        }
-
-        if (chadoToOrgData.size() == 0) {
-            throw new RuntimeException("can't find any known organisms in the organism table");
-        }
-
-     */
         String[] bits = processors.trim().split("[ \\t]+");
         for (int i = 0; i < bits.length; i++) {
             String className = bits[i];
@@ -158,8 +143,11 @@ public class ChadoDBConverter extends BioDBConverter
                 Class<?> cls = Class.forName(className);
                 Constructor<?> constructor = cls.getDeclaredConstructor(ChadoDBConverter.class);
                 ChadoProcessor currentProcessor = (ChadoProcessor) constructor.newInstance(this);
-                currentProcessor.process(getConnection());
-                getCompletedProcessors().add(currentProcessor);
+                //currentProcessor.process(getConnection());
+                //getCompletedProcessors().add(currentProcessor);
+                AppLauncher launcher = AppLauncher.getInstance(this);
+                launcher.initialize(this);
+                launcher.run();
             }
         }
     }
@@ -175,7 +163,7 @@ public class ChadoDBConverter extends BioDBConverter
     protected Map<OrganismData, Integer> getChadoOrganismIds(Connection conn)
         throws SQLException {
         String query = "select organism_id, abbreviation, genus, species from organism";
-        LOG.info("executing: " + query);
+        log.info("executing: " + query);
         Statement stmt = conn.createStatement();
         ResultSet res = stmt.executeQuery(query);
 
@@ -202,7 +190,7 @@ public class ChadoDBConverter extends BioDBConverter
             }
 
             if (od == null) {
-                LOG.warn("can't find OrganismData for species: " + species
+                log.warn("can't find OrganismData for species: " + species
                          + " genus: " + genus + " abbreviation: " + abbreviation);
             }
 
@@ -267,4 +255,20 @@ public class ChadoDBConverter extends BioDBConverter
     public List<ChadoProcessor> getCompletedProcessors() {
         return completedProcessors;
     }
+    
+    public static int getTargetOrganismTaxonId(){
+    	return TAXON_ID;
+    }
+    
+    public OrganismData getOrganism(){
+    	
+    	OrganismRepository repository = OrganismRepository.getOrganismRepository();
+    	
+    	OrganismData organism = repository.getOrganismDataByTaxon(new Integer(TAXON_ID));
+    	
+    	log.info("Organism:" + organism);
+    	
+    	return  organism;
+    }
+    
 }

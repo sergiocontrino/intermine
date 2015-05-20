@@ -1,6 +1,8 @@
 package org.intermine.bio.dataconversion;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -17,8 +19,7 @@ public class DataFlowStepProcessor extends ChadoProcessor {
     private final static StopWatch timer = new StopWatch();
     
 	private DataFlowStep step;
-	
-	
+		
 	public DataFlowStepProcessor(ChadoDBConverter chadoDBConverter) {
 		super(chadoDBConverter);
 	}
@@ -41,6 +42,18 @@ public class DataFlowStepProcessor extends ChadoProcessor {
 		timer.reset();
 		timer.start();	
 		
+		log.info("DataFlowStepProcessor: Source Record Count: " + step.getSourceRecordCount().getValue());
+		
+		timer.stop();
+		  
+		log.info("Data Flow Step Completed. Step Name:" + this.getStep().getName()
+					+ "; Total time taken. " + timer.toString());
+		  
+		
+	}
+	
+	private ResultSet retrieveSourceResultSet(Connection connection) throws SQLException{
+		
 		Map<Integer,Object> param = new HashMap<Integer, Object>();
 		param.put(1, "germplasm_type");
 		SQLTaskProcessor taskProcessor = new SQLTaskProcessor(step.getSqlStmt(), step.getName(), connection, step, param);
@@ -49,8 +62,9 @@ public class DataFlowStepProcessor extends ChadoProcessor {
 				.getDataServicePool().submit( taskProcessor);
 		
 		step = taskProcessor.getResult(sqlStep);
-		 
-		log.info("DataFlowStepProcessor:" + step.getSourceRecordCount().getValue());
+		
+		return step.getResultSet();
 		
 	}
+	
 }

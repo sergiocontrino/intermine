@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.intermine.xml.full.Item;
+
 /**
  * Objects of this class represent a controlled vocabulary from chado.
  * @author Kim Rutherford
@@ -23,6 +25,8 @@ public class ChadoCV
 {
     private final String cvName;
     private final Map<Integer, ChadoCVTerm> termMap = new HashMap<Integer, ChadoCVTerm>();
+    private final Map<String, Item> termItemMap = new HashMap<String, Item>();
+    private Map<String, Item> cvItem = new HashMap<String, Item>();
 
     /**
      * Create a new ChadoCV.
@@ -40,6 +44,14 @@ public class ChadoCV
         return cvName;
     }
 
+    
+    public void addByChadoCVName(String name, Item item) {
+        cvItem.put( name, item);
+    }
+    
+    public Item getByCVName(String name) {
+        return cvItem.get(name);
+    }
     /**
      * Add a cvterm and its chado id to this cv.
      * @param cvtermId the chado id = cvterm.cvterm_id
@@ -58,6 +70,15 @@ public class ChadoCV
         return termMap.get(cvtermId);
     }
 
+    
+    public void addByChadoName(String name, Item item) {
+    	termItemMap.put(name, item);
+    }
+    
+    public Item getByCVTermName(String name) {
+        return termItemMap.get(name);
+    }
+    
     /**
      * Return a Set of the root CVTerms in this CV - ie. those with no parents.
      * @return the cvterms
