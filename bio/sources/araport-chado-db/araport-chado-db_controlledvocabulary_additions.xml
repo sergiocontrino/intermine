@@ -13,8 +13,11 @@
 		<reference name="controlledVocabulary" referenced-type="ControlledVocabulary" reverse-reference="cvTerms"/>
 	</class>
 	
-	<class name="AlleleClassCV" extends="ControlledVocabulary" is-interface="true">
-		<reference name="datasetReference" referenced-type="DataSetReference" />
+	<class name="AlleleClassCV" is-interface="true">
+		<attribute name="name" type="java.lang.String" />
+		<attribute name="uniqueName" type="java.lang.String" />
+		<attribute name="description" type="java.lang.String" />
+		<attribute name="url" type="java.lang.String" />
 		<collection name="terms" referenced-type="AlleleClass"
 			reverse-reference="vocabulary" />
 	</class>
@@ -113,7 +116,12 @@
 		<reference name="vocabulary" referenced-type="StrainTypeCV"/>
 	</class>
 	
-	<class name="AlleleClass" extends="CVTerm" is-interface="true">
+	<class name="AlleleClass" is-interface="true">
+		<attribute name="identifier" type="java.lang.String" />
+		<attribute name="name" type="java.lang.String" />
+		<attribute name="uniqueName" type="java.lang.String" />
+		<attribute name="description" type="java.lang.String" />
+		<attribute name="url" type="java.lang.String" />
 		<reference name="vocabulary" referenced-type="AlleleClassCV"/>
 	</class>
 	

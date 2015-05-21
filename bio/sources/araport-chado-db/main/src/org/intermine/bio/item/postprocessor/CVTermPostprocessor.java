@@ -87,6 +87,9 @@ public class CVTermPostprocessor extends AbstractStep {
 					
 					try {
 						storeCollection(collection,itemHolder);
+						
+						log.info("Collection successfully stored." + itemHolder.getItem());
+						
 					} catch (ObjectStoreException e) {
 						log.error("Error storing terms collection.");
 					}
