@@ -65,7 +65,7 @@
   </tr>
   <tr>
     <td>Phytozome Homologs Generated with InParanoid</td>
-    <td><a href="http://phytozome.jgi.doe.gov/phytomine" target="_blank" class="extlink">Phytozome</a>- v10</td>
+    <td><a href="http://phytozome.jgi.doe.gov/phytomine" target="_blank" class="extlink">Phytozome</a>- v10.2.1</td>
     <td>Goodstein et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/22110026" target="_blank" class="extlink">PubMed: 22110026</a></td>
   </tr>
 

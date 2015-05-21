@@ -237,23 +237,4 @@
       <attribute name="url" value="http://www.ebi.ac.uk/rdf/services/reactome" />
       <reference name="publication" ref_id="0_37" />
    </item>
-   <item id="0_40" class="Publication" implements="">
-      <attribute name="pubMedId" value="22110026" />
-   </item>
-   <item id="0_41" class="DataSource" implements="">
-      <attribute name="name" value="Phytozome" />
-      <attribute name="description" value="Comparative platform for green plant genomics" />
-      <attribute name="url" value="http://www.phytozome.net" />
-      <collection name="publications">
-         <reference ref_id="0_40" />
-      </collection>
-   </item>
-   <item id="0_42" class="DataSet" implements="">
-      <attribute name="version" value="v10" />
-      <reference name="dataSource" ref_id="0_41" />
-      <attribute name="name" value="Phytozome Homologs" />
-      <attribute name="description" value="Phytozome Homologs Generated with InParanoid" />
-      <attribute name="url" value="http://phytozome.jgi.doe.gov/phytomine" />
-      <reference name="publication" ref_id="0_40" />
-   </item>
 </items>
