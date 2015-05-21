@@ -23,5 +23,3 @@ DataSource	GenomeNet	Japanese network of database and computational services for
 DataSet	KEGG pathways data set	Wiring diagrams of molecular interactions, reactions, and relations	http://www.kegg.jp/kegg/pathway.html	DataSource:GenomeNet,Publication:24214961	72.0
 DataSource	Reactome	Free, open-source, curated and peer reviewed pathway database	http://www.reactome.org	Publication:24243840
 DataSet	Reactome data set	Non-curated Reactome Linked Dataset that captures the Reactome pathways in BioPAX format	http://www.ebi.ac.uk/rdf/services/reactome	DataSource:Reactome,Publication:24243840	49
-DataSource	Phytozome	Comparative platform for green plant genomics	http://www.phytozome.net	Publication:22110026
-DataSet	Phytozome Homologs	Phytozome Homologs Generated with InParanoid	http://phytozome.jgi.doe.gov/phytomine	DataSource:Phytozome,Publication:22110026	v10
