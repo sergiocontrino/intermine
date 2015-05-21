@@ -117,6 +117,7 @@ public class BuildDbTask extends Task
                 DatabaseUtil.removeView(c, OVERLAP_VIEW_NAME);
                 DatabaseUtil.removeAllTables(c);
                 DatabaseUtil.removeSequence(c, SERIAL_SEQUENCE_NAME);
+                DatabaseUtil.removeSequence(c, ObjectStoreInterMineImpl.UNIQUE_INTEGER_SEQUENCE_NAME);
             } catch (SQLException e) {
                 LOG.warn("Failed to remove all tables from database: " + e);
             } finally {
