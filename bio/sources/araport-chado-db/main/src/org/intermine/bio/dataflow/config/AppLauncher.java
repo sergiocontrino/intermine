@@ -27,6 +27,7 @@ import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
 import org.intermine.bio.item.processor.CVItemProcessor;
 import org.intermine.bio.item.processor.CVTermProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
+import org.intermine.bio.item.util.ItemHolder;
 import org.intermine.bio.reader.CVReader;
 import org.intermine.bio.reader.CVTermReader;
 import org.intermine.bio.reader.StockReader;
@@ -152,14 +153,14 @@ public class AppLauncher {
 		
 		log.info("Loading Job has been completed.");
 		
-		Map<String, Item> items = CVService.getCVItemMap();
+		Map<String, ItemHolder> items = CVService.getCVItemMap();
 		
-		for (Map.Entry<String, Item> item : items.entrySet()){
+		for (Map.Entry<String, ItemHolder> item : items.entrySet()){
 			
 			String cv = item.getKey();
-			String cvItemId = item.getValue().getIdentifier();
+			String cvItemId = item.getValue().getItem().getIdentifier();
 			
-			Item cvItem = item.getValue();
+			Item cvItem = item.getValue().getItem();
 			log.info("CV Key:" + cv + "; cvItemId:" + cvItemId + ";" + "cvItem = " + cvItem + ";" + cvItem.getCollection("terms"));
 			
 		}

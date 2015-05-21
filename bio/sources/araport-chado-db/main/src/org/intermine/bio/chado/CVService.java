@@ -7,16 +7,15 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.commons.collections.map.MultiValueMap;
 import org.intermine.xml.full.Item;
+import org.intermine.bio.item.util.ItemHolder;
 
 public class CVService {
 
-	private static Map<String, Item> cvItemMap = new HashMap<String, Item>();
+	private static Map<String, ItemHolder> cvItemMap = new HashMap<String, ItemHolder>();
 	
 	private static MultiKeyMap cvTermItemMap = new MultiKeyMap();
 	
@@ -37,7 +36,7 @@ public class CVService {
 		return CVServiceHolder.INSTANCE;
 	}
 
-	public static void addCVItem(String name, Item item) {
+	public static void addCVItem(String name, ItemHolder item) {
 
 		cvItemMap.put(name, item);
 
@@ -49,7 +48,7 @@ public class CVService {
 
 	}
 
-	public static Map<String, Item> getCVItemMap() {
+	public static Map<String, ItemHolder> getCVItemMap() {
 
 		return cvItemMap;
 
@@ -61,7 +60,20 @@ public class CVService {
 
 		if (cvItemMap.containsKey(name)) {
 
-			itemId = cvItemMap.get(name).getIdentifier();
+			itemId = cvItemMap.get(name).getItem().getIdentifier();
+		}
+
+		return itemId;
+	}
+	
+	
+	public static int getCVItemInternalId(String name) {
+
+		int itemId =0;
+
+		if (cvItemMap.containsKey(name)) {
+
+			itemId = cvItemMap.get(name).getItemId();
 		}
 
 		return itemId;

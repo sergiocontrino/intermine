@@ -53,7 +53,6 @@ public class CVTermProcessor extends DataSourceProcessor implements ItemProcesso
 
 		Item item = null;
 
-
 		Exception exception = null;
 
 		try {
@@ -72,10 +71,11 @@ public class CVTermProcessor extends DataSourceProcessor implements ItemProcesso
 				item.setAttribute("name",parsedSourceString);
 				item.setAttribute("uniqueName", cv_term_name);
 
-				Item vocabularyRef = CVService.getCVItemMap().get(cv_name);
+				Item vocabularyRef = CVService.getCVItemMap().get(cv_name).getItem();
+				
 				String referenceName = "vocabulary";
 				
-				item.setReference(referenceName, item);
+				item.setReference(referenceName, vocabularyRef);
 				
 				super.getService().store(item);
 

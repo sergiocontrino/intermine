@@ -10,6 +10,7 @@ import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataconversion.DataSourceProcessor;
 import org.intermine.bio.dataflow.config.DataFlowConfig;
 import org.intermine.bio.item.ItemProcessor;
+import org.intermine.bio.item.util.ItemHolder;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
 import org.intermine.bio.domain.source.*;
@@ -59,10 +60,12 @@ public class CVItemProcessor extends DataSourceProcessor implements ItemProcesso
 				item.setAttribute("uniqueName", cv_name);
 				item.setAttribute("url", "https://www.arabidopsis.org/");
 
-				super.getService().store(item);
+				int itemId = super.getService().store(item);
+				
+				ItemHolder itemHolder = new ItemHolder(item, itemId);
 
-				if (item!=null){
-					CVService.addCVItem(cv_name, item);
+				if (itemHolder!=null){
+					CVService.addCVItem(cv_name, itemHolder);
 				}
 
 
