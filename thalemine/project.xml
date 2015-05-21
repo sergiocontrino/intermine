@@ -167,10 +167,6 @@
             <property name="panther.organisms" value="3702 7227 4932 10116 7955 10090 6239 9606"/>
         </source>
 
-        <source name="phytozome-homologs" type="inparanoid-homologs" >
-            <property name="src.data.dir" value="/usr/local/projdata/0611/projects/AIP/ThaleMineData/orthologs/inparanoid-homologs" />
-        </source>
-
         <source name="interpro" type="interpro">
             <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/interpro/current"/>

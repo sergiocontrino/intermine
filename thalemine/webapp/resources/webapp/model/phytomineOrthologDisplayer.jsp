@@ -37,7 +37,7 @@
    var options = {
      type: 'table',
      url: webapp_root_url,
-     query: {"model":{"name":"genomic"},"select":["Homolog.groupName","Homolog.gene2.name","Homolog.organism2.shortName","Homolog.relationship"],"constraintLogic":"A and B","orderBy":[{"Homolog.relationship":"ASC"}],"where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]},
+     query: {"model":{"name":"genomic"},"select":["Homolog.gene2.name","Homolog.organism2.shortName","Homolog.gene2.briefDescription"],"constraintLogic":"A and B","where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]},
      properties: { pageSize: 10 }
     };
     

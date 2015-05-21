@@ -496,11 +496,13 @@
                      replacesFields=""
                      placement="Expression"
                      types="Gene"/>
+    <!-- this feature is not ready for production
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.EsynDisplayer"
                      jspName="model/esynDisplayer.jsp"
                      replacesFields=""
                      placement="Interactions"
                      types="Gene"/>
+    -->
 
 
     <!--  this takes rather long to load, commented for now
