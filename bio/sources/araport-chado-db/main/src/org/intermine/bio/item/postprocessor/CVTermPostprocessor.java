@@ -94,26 +94,6 @@ public class CVTermPostprocessor extends AbstractStep {
 						log.error("Error storing terms collection.");
 					}
 					
-					/**
-					try {
-						service.store(collection);
-						log.info("CV Terms Collection has been successfully stored!");
-					} catch (ObjectStoreException e) {
-						
-						log.error("Error storing terms collection");
-					}
-					
-					**/
-
-					/**
-					try {
-						service.store(cvItem);
-						log.info("CV Item has been successfully stored!");
-					} catch (ObjectStoreException e) {
-						log.error("Error storing CV Item");
-					}
-					
-					**/
 				}
 				
 

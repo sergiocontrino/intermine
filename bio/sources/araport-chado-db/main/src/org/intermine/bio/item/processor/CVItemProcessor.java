@@ -37,8 +37,10 @@ public class CVItemProcessor extends DataSourceProcessor implements ItemProcesso
 		log.info("Creating Item has started. Source Object:" + source);
 
 		String cv_name = source.getName();
-		String item_class_name = DataFlowConfig.getChadoCVMap().get(cv_name);
-
+		String item_class_name = DataFlowConfig.getChadoCVMap().get(cv_name).getTargetClassName();
+		String item_name = DataFlowConfig.getChadoCVMap().get(cv_name).getTargetName();
+		String item_unique_name = DataFlowConfig.getChadoCVMap().get(cv_name).getTargetUniqueName();
+		
 		log.info("Chado CV Name:" + cv_name + ";Target CV Class Name:" + item_class_name);
 
 		Item item = null;
@@ -56,8 +58,8 @@ public class CVItemProcessor extends DataSourceProcessor implements ItemProcesso
 				parsedSourceString = WordUtils.capitalize(parsedSourceString);
 				
 				item = super.getService().createItem(item_class_name);
-				item.setAttribute("name",parsedSourceString);
-				item.setAttribute("uniqueName", cv_name);
+				item.setAttribute("name",item_name);
+				item.setAttribute("uniqueName", item_unique_name);
 				item.setAttribute("url", "https://www.arabidopsis.org/");
 
 				int itemId = super.getService().store(item);

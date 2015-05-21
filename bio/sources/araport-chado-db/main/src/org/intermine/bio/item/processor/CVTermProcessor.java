@@ -42,7 +42,7 @@ public class CVTermProcessor extends DataSourceProcessor implements ItemProcesso
 		log.info("Creating Item has started. Source Object:" + source);
 		
 		String cv_name = source.getCvName();
-		String cv_item_class_name = DataFlowConfig.getChadoCVMap().get(cv_name);
+		String cv_item_class_name = DataFlowConfig.getChadoCVMap().get(cv_name).getTargetClassName();
 
 		log.info("Chado CV Name:" + cv_name + ";Target CV Class Name:" + cv_item_class_name);
 		
