@@ -9,7 +9,15 @@ SELECT
     s.uniquename,
     VS.display_name,
     VS.abrc_stock_name,
-    VC.comment stock_center_comment
+    VC.comment stock_center_comment,
+     coalesce(VMT.is_mutant, 'false') is_mutant,
+    coalesce(VT.is_transgene, 'false') is_transgene,
+    coalesce(VN.is_natural_variant) is_natural_variant,
+    coalesce(VAC.is_aneploid) is_aneploid,
+    coalesce(VAC.ploidy) ploidy,
+    VG.special_growth_conditions,
+	VG.duration_of_growth,
+	VG.growth_temperature
 FROM
     stock s
         JOIN dbxref dbx
@@ -99,5 +107,178 @@ WHERE
 	c.name = 'ABRC_comments')
 	VC
 	on VC.stock_id = s.stock_id
+	left join (
+         SELECT
+    s.stock_id,
+    cv.name term_type,
+    c.name mutant_class,
+    case 
+    	when (not(is_not))
+    		then 'true'
+    	else
+    		'false'
+    end as is_mutant
+   FROM
+    stock_cvterm sv JOIN cvterm c
+        ON
+        c.cvterm_id = sv.cvterm_id JOIN cv
+        ON
+        cv.cv_id = c.cv_id JOIN stock s
+        ON
+        s.stock_id = sv.stock_id
+        where c.name = 'mutant' ) 
+        VMT on 
+        s.stock_id = VMT.stock_id
+         left join
+        (
+          SELECT
+    s.stock_id,
+    cv.name term_type,
+    c.name transgene_class,
+    case 
+    	when (not(is_not))
+    		then 'true'
+    	else
+    		'false'
+    end as is_transgene
+   FROM
+    stock_cvterm sv JOIN cvterm c
+        ON
+        c.cvterm_id = sv.cvterm_id JOIN cv
+        ON
+        cv.cv_id = c.cv_id JOIN stock s
+        ON
+        s.stock_id = sv.stock_id
+        where c.name = 'has_foreign_dna'
+                )
+                VT
+                on VT.stock_id = s.stock_id
+                left join
+                (
+                 SELECT
+    s.stock_id,
+    cv.name term_type,
+    c.name natural_variant_class,
+    case 
+    	when (not(is_not))
+    		then 'true'
+    	else
+    		'false'
+    end as is_natural_variant
+   FROM
+    stock_cvterm sv JOIN cvterm c
+        ON
+        c.cvterm_id = sv.cvterm_id JOIN cv
+        ON
+        cv.cv_id = c.cv_id JOIN stock s
+        ON
+        s.stock_id = sv.stock_id
+        where c.name = 'natural_variant'
+                )
+                VN
+                on VN.stock_id = s.stock_id
+                left join
+                (
+                SELECT
+	s.stock_id,
+	s.name,
+	cv.name term,
+	case when (NOT(	sv.is_not))
+		then 'true' 
+		else 'false' 
+		end as is_aneploid,
+	cp.name ploidy_term,
+	sp.value ploidy
+FROM
+	stock_cvterm sv JOIN cvterm c
+		ON
+		c.cvterm_id = sv.cvterm_id JOIN cv
+		ON
+		cv.cv_id = c.cv_id JOIN stock s
+		ON
+		s.stock_id = sv.stock_id
+		LEFT JOIN
+		stockprop sp
+		ON
+		s.stock_id = sp.stock_id
+		LEFT JOIN
+		cvterm cp
+		ON
+		sp.type_id = cp.cvterm_id
+		LEFT JOIN
+		cv cvp
+		ON
+		cvp.cv_id = cp.cv_id
+WHERE
+	cv.name = 'chromosomal_constitution' AND
+	cp.name = 'ploidy'
+                )
+                VAC 
+                on 
+                VAC.stock_id = s.stock_id
+                left join 
+                (
+                
+                SELECT
+	cv.name vocabulary,
+	s.stock_id,
+	s.name,
+	coalesce(sp.value) special_growth_conditions,
+	coalesce(VD.duration_of_growth) duration_of_growth,
+	coalesce(VG.growth_temperature) growth_temperature
+	
+FROM
+	stock s JOIN stockprop sp
+		ON
+		s.stock_id = sp.stock_id JOIN cvterm c
+		ON
+		sp.type_id = c.cvterm_id JOIN cv
+		ON
+		cv.cv_id = c.cv_id
+	left join (
+	
+	SELECT
+	s.stock_id,
+	s.name,
+	c.name as property_type,
+	sp.value duration_of_growth
+FROM
+	stock s JOIN stockprop sp
+		ON
+		s.stock_id = sp.stock_id JOIN cvterm c
+		ON
+		sp.type_id = c.cvterm_id JOIN cv
+		ON
+		cv.cv_id = c.cv_id
+WHERE
+	c.name = 'duration_of_growth'
+	)
+VD 
+on VD.stock_id = s.stock_id
+left join (
+
+SELECT
+	s.stock_id,
+	s.name,
+	c.name as property_type,
+	sp.value growth_temperature
+FROM
+	stock s JOIN stockprop sp
+		ON
+		s.stock_id = sp.stock_id JOIN cvterm c
+		ON
+		sp.type_id = c.cvterm_id JOIN cv
+		ON
+		cv.cv_id = c.cv_id
+WHERE
+	c.name = 'growth_temperature'
+
+) VG
+on VG.stock_id = s.stock_id
+WHERE
+	c.name = 'special_growth_conditions'
+                
+                ) VG
+                on VG.stock_id = s.stock_id
 	       where s.name in ('CS65790' , 'CS16609', 'CS6131', 'CS934'); 
         

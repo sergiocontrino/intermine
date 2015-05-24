@@ -15,6 +15,16 @@ public class SourceStock {
 	private String mutagen;
 	private String stockCategory;
 	private String stockCenterComment;
+	
+	private String isMutant;
+	private String isTransgene;
+	private String isNaturalVarinat;
+	private String isAneploidChromosome;
+	private String ploidy;
+	private String specialGrowthConditions;
+	private String growthTemperature;
+	private String durationOfGrowth;
+	
 	private int organismId;
 	private int backgroundAccessionId;
 	private int directBackgroundAccessionId;
@@ -172,16 +182,84 @@ public class SourceStock {
 		return displayName;
 	}
 
+	public String getIsMutant() {
+		return isMutant;
+	}
+
+	public void setIsMutant(String isMutant) {
+		this.isMutant = isMutant;
+	}
+
+	public String getIsTransgene() {
+		return isTransgene;
+	}
+
+	public void setIsTransgene(String isTransgene) {
+		this.isTransgene = isTransgene;
+	}
+
+	public String getIsNaturalVarinat() {
+		return isNaturalVarinat;
+	}
+
+	public void setIsNaturalVarinat(String isNaturalVarinat) {
+		this.isNaturalVarinat = isNaturalVarinat;
+	}
+
+	public String getIsAneploidChromosome() {
+		return isAneploidChromosome;
+	}
+
+	public void setIsAneploidChromosome(String isAneploidChromosome) {
+		this.isAneploidChromosome = isAneploidChromosome;
+	}
+
+	public String getPloidy() {
+		return ploidy;
+	}
+
+	public void setPloidy(String ploidy) {
+		this.ploidy = ploidy;
+	}
+
+	public String getSpecialGrowthConditions() {
+		return specialGrowthConditions;
+	}
+
+	public void setSpecialGrowthConditions(String specialGrowthConditions) {
+		this.specialGrowthConditions = specialGrowthConditions;
+	}
+
+	public String getGrowthTemperature() {
+		return growthTemperature;
+	}
+
+	public void setGrowthTemperature(String growthTemperature) {
+		this.growthTemperature = growthTemperature;
+	}
+
+	public String getDurationOfGrowth() {
+		return durationOfGrowth;
+	}
+
+	public void setDurationOfGrowth(String durationOfGrowth) {
+		this.durationOfGrowth = durationOfGrowth;
+	}
+
 	@Override
 	public String toString() {
 		return "SourceStock [stockId=" + stockId + ", name=" + name + ", uniqueName=" + uniqueName + ", displayName="
 				+ displayName + ", stockName=" + stockName + ", description=" + description + ", dbxrefId=" + dbxrefId
-				+ ", stockType=" + stockType + ", germplasm_tair_accession=" + germplasmTairAccession
-				+ ", stock_tair_accession=" + stockTairAccession + ", mutagen=" + mutagen + ", stockCategory="
-				+ stockCategory + ", stockCenterComment=" + stockCenterComment + ", organismId=" + organismId
-				+ ", backgroundAccessionId=" + backgroundAccessionId + ", directBackgroundAccessionId="
-				+ directBackgroundAccessionId + "]";
+				+ ", stockType=" + stockType + ", germplasmTairAccession=" + germplasmTairAccession
+				+ ", stockTairAccession=" + stockTairAccession + ", mutagen=" + mutagen + ", stockCategory="
+				+ stockCategory + ", stockCenterComment=" + stockCenterComment + ", isMutant=" + isMutant
+				+ ", isTransgene=" + isTransgene + ", isNaturalVarinat=" + isNaturalVarinat + ", isAneploidChromosome="
+				+ isAneploidChromosome + ", ploidy=" + ploidy + ", specialGrowthConditions=" + specialGrowthConditions
+				+ ", growthTemperature=" + growthTemperature + ", durationOfGrowth=" + durationOfGrowth
+				+ ", organismId=" + organismId + ", backgroundAccessionId=" + backgroundAccessionId
+				+ ", directBackgroundAccessionId=" + directBackgroundAccessionId + "]";
 	}
+	
 	
 	
 		

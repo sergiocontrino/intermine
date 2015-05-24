@@ -17,6 +17,9 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 	private String targetClassName;
 
 	private static final String ITEM_CLASSNAME = "Stock";
+	private static final String STOCK_ANNOTATION_CLASS_NAME = "StockAnnotation";
+	private static final String CHOROMOSOMAL_CONSTITUTION_ANNOTATION_CLASS_NAME = "ChromosomalConstitutionAnnotation";
+	private static final String GROWTH_CONSTITUTION_ANNOTATION_CLASS_NAME = "GrowthConditionAnnotation";
 
 	public StockItemProcessor(ChadoDBConverter chadoDBConverter) {
 		super(chadoDBConverter);
@@ -99,6 +102,10 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 				item.setReference("organism", organismItem);
 			}
 
+			Item stockAnnotationItem = createStockAnnotation(source, item);
+
+			item.setReference("stockAnnotation", stockAnnotationItem);
+
 			super.getService().store(item);
 
 		} catch (ObjectStoreException e) {
@@ -124,5 +131,157 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 
 	public String getTargetClassName() {
 		return this.targetClassName;
+	}
+
+	private Item createStockAnnotation(SourceStock source, Item stockItem) {
+
+		Item stockAnnotationItem = null;
+		Exception exception = null;
+
+		try {
+			stockAnnotationItem = super.getService().createItem(STOCK_ANNOTATION_CLASS_NAME);
+
+			if (!StringUtils.isBlank(source.getIsMutant())) {
+				if (source.getIsMutant().equals("true")) {
+					stockAnnotationItem.setAttribute("mutant", "Yes");
+				}
+				{
+					stockAnnotationItem.setAttribute("mutant", "No");
+				}
+			}
+
+			if (!StringUtils.isBlank(source.getIsTransgene())) {
+				if (source.getIsTransgene().equals("true")) {
+					stockAnnotationItem.setAttribute("transgene", "Yes");
+				} else {
+					stockAnnotationItem.setAttribute("transgene", "No");
+				}
+			}
+
+			if (!StringUtils.isBlank(source.getIsNaturalVarinat())) {
+				if (source.getIsNaturalVarinat().equals("true")) {
+					stockAnnotationItem.setAttribute("naturalVariant", "Yes");
+				} else {
+					stockAnnotationItem.setAttribute("naturalVariant", "No");
+				}
+			}
+
+			stockAnnotationItem.setReference("stock", stockItem);
+
+			Item chromosomalAnnotation = createChromosomalAnnotation(source, stockAnnotationItem);
+
+			if (chromosomalAnnotation != null) {
+				stockAnnotationItem.setReference("chromosomalConstitution", chromosomalAnnotation);
+			}
+
+			Item growthCondition = createGrowthConditionAnnotation(source, stockAnnotationItem);
+
+			if (growthCondition != null) {
+				stockAnnotationItem.setReference("growthCondition", growthCondition);
+			}
+
+			super.getService().store(stockAnnotationItem);
+
+		} catch (ObjectStoreException e) {
+			exception = e;
+		} catch (Exception e) {
+			exception = e;
+		} finally {
+
+			if (exception != null) {
+				log.error("Error storing stock annotation item for source record:" + source);
+			} else {
+				log.info("Stock Annotation Item has been created. Target Object:" + stockAnnotationItem);
+
+			}
+		}
+
+		return stockAnnotationItem;
+	}
+
+	private Item createChromosomalAnnotation(SourceStock source, Item annotationItem) {
+
+		Item chromosomalAnnotationItem = null;
+		Exception exception = null;
+
+		try {
+			chromosomalAnnotationItem = super.getService().createItem(CHOROMOSOMAL_CONSTITUTION_ANNOTATION_CLASS_NAME);
+
+			if (!StringUtils.isBlank(source.getIsAneploidChromosome())) {
+				if (source.getIsAneploidChromosome().equals("true")) {
+					chromosomalAnnotationItem.setAttribute("aneploidChromosome", "Yes");
+				}
+				{
+					chromosomalAnnotationItem.setAttribute("aneploidChromosome", "No");
+				}
+			}
+
+			if (!StringUtils.isBlank(source.getPloidy())) {
+
+				chromosomalAnnotationItem.setAttribute("ploidy", source.getPloidy());
+
+			}
+
+			chromosomalAnnotationItem.setReference("stockAnnotation", annotationItem);
+
+			super.getService().store(chromosomalAnnotationItem);
+		} catch (ObjectStoreException e) {
+			exception = e;
+		} catch (Exception e) {
+			exception = e;
+		} finally {
+
+			if (exception != null) {
+				log.error("Error storing Chromosomal Annotation item for source record:" + source);
+			} else {
+				log.info("Chromosomal Annotation Item has been created. Target Object:" + chromosomalAnnotationItem);
+
+			}
+		}
+
+		return chromosomalAnnotationItem;
+	}
+
+	private Item createGrowthConditionAnnotation(SourceStock source, Item annotationItem) {
+
+		Item growthAnnotationItem = null;
+		Exception exception = null;
+
+		try {
+			growthAnnotationItem = super.getService().createItem(GROWTH_CONSTITUTION_ANNOTATION_CLASS_NAME);
+
+			if (!StringUtils.isBlank(source.getSpecialGrowthConditions())) {
+				growthAnnotationItem.setAttribute("specialGrowthConditions", source.getSpecialGrowthConditions());
+			}
+
+			if (!StringUtils.isBlank(source.getGrowthTemperature())) {
+
+				growthAnnotationItem.setAttribute("growthTemperature", source.getGrowthTemperature());
+
+			}
+
+			if (!StringUtils.isBlank(source.getDurationOfGrowth())) {
+
+				growthAnnotationItem.setAttribute("durationOfGrowth", source.getDurationOfGrowth());
+
+			}
+
+			growthAnnotationItem.setReference("stockAnnotation", annotationItem);
+			super.getService().store(growthAnnotationItem);
+		} catch (ObjectStoreException e) {
+			exception = e;
+		} catch (Exception e) {
+			exception = e;
+		} finally {
+
+			if (exception != null) {
+				log.error("Error storing Chromosomal Annotation item for source record:" + source);
+			} else {
+				log.info("Growth Condition Annotation Item has been created. Target Object:" + growthAnnotationItem);
+
+			}
+		}
+
+		return growthAnnotationItem;
 	}
 }

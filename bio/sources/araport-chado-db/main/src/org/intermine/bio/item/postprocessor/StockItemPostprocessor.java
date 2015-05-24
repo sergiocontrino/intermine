@@ -63,7 +63,7 @@ public class StockItemPostprocessor extends AbstractStep {
 					String cv = item.getKey();
 
 					Collection<Item> collection = (Collection<Item>) item.getValue();
-
+					
 					List terms = new ArrayList(collection);
 
 					Item cvItem = CVService.getCVItemMap().get(cv).getItem();

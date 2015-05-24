@@ -88,7 +88,7 @@
 
 	<class name="ChromosomalConstitutionAnnotation" is-interface="true">
 		<attribute name="aneploidChromosome" type="java.lang.String" />
-		<attribute name="ploidy" type="java.lang.Integer" />
+		<attribute name="ploidy" type="java.lang.String" />
 		<reference name="stockAnnotation" referenced-type="StockAnnotation"
 			reverse-reference="chromosomalConstitution" />
 	</class>

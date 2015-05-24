@@ -24,7 +24,22 @@ public class StockRowMapper implements RowMapper<SourceStock> {
 	    stock.setStockCategory(rs.getString("stock_category"));
 	    stock.setMutagen(rs.getString("mutagen"));
 	    stock.setStockCenterComment(rs.getString("stock_center_comment"));
+	    
+	    stock.setIsMutant(rs.getString("is_mutant"));
+	    stock.setIsTransgene(rs.getString("is_transgene"));
+	    stock.setIsNaturalVarinat(rs.getString("is_natural_variant"));
+	  
+	    
+	    stock.setIsAneploidChromosome(rs.getString("is_aneploid"));
+	    stock.setPloidy(rs.getString("ploidy"));
+	    
+	    stock.setSpecialGrowthConditions(rs.getString("special_growth_conditions"));
+	    
+		stock.setGrowthTemperature(rs.getString("growth_temperature"));
 		
+		stock.setDurationOfGrowth(rs.getString("duration_of_growth"));
+
+	    
 		return stock;
 	}
 
