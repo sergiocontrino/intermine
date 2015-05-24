@@ -106,6 +106,13 @@ public class CVService {
 		return itemId;
 	}
 	
+	
+	public static Item getCVTermItem(String cvName, String cvTermName) {
+
+		return (Item) cvTermItemMap.get(cvName,cvTermName);
+
+	}
+	
 	public static MultiMap getCVItemSet(){
 		return cvItemSet;
 	}
@@ -113,6 +120,7 @@ public class CVService {
 	 public static Collection getCVTermsbyCVName(String cvName){
 		 return cvItemSet.values();
 	 }
+	 
 	
 
 }

@@ -5,39 +5,20 @@ public class SourceStock {
 	private long stockId;
 	private String name;
 	private String uniqueName;
+	private String displayName;
+	private String stockName;
 	private String description;
-	private boolean isObsolete;
-	private int stockTypeId;
 	private int dbxrefId;
-	private long tairObjectId;
+	private String stockType;
+	private String germplasmTairAccession;
+	private String stockTairAccession;
+	private String mutagen;
+	private String stockCategory;
+	private String stockCenterComment;
 	private int organismId;
 	private int backgroundAccessionId;
 	private int directBackgroundAccessionId;
-	private int computedOrganismId;
-	
-	public int getBackgroundAccessionId() {
-		return backgroundAccessionId;
-	}
 
-	public void setBackgroundAccessionId(int backgroundAccessionId) {
-		this.backgroundAccessionId = backgroundAccessionId;
-	}
-	
-	public int getDirectBackgroundAccessionId() {
-		return directBackgroundAccessionId;
-	}
-
-	public void setDirectBackgroundAccessionId(int directBackgroundAccessionId) {
-		this.directBackgroundAccessionId = directBackgroundAccessionId;
-	}
-
-	public int getComputedOrganismId() {
-		return computedOrganismId;
-	}
-
-	public void setComputedOrganismId(int computedOrganismId) {
-		this.computedOrganismId = computedOrganismId;
-	}
 	
 	public SourceStock() {
 
@@ -72,22 +53,6 @@ public class SourceStock {
 		this.description = description;
 	}
 
-	public boolean isObsolete() {
-		return isObsolete;
-	}
-
-	public void setObsolete(boolean isObsolete) {
-		this.isObsolete = isObsolete;
-	}
-	
-	public int getStockTypeId() {
-		return stockTypeId;
-	}
-
-	public void setStockTypeId(int stockTypeId) {
-		this.stockTypeId = stockTypeId;
-	}
-
 	public int getDbxrefId() {
 		return dbxrefId;
 	}
@@ -97,12 +62,12 @@ public class SourceStock {
 	}
 
 	
-	public long getTairObjectId() {
-		return tairObjectId;
+	public String getTairObjectId() {
+		return germplasmTairAccession;
 	}
 
-	public void setTairObjectId(long tairObjectId) {
-		this.tairObjectId = tairObjectId;
+	public void setTairObjectId(String tairObjectId) {
+		this.germplasmTairAccession = tairObjectId;
 	}
 	
 	public int getOrganismId() {
@@ -113,14 +78,6 @@ public class SourceStock {
 		this.organismId = organismId;
 	}
 
-	@Override
-	public String toString() {
-		return "Stock [stockId=" + stockId + ", name=" + name
-				+ ", description=" + description + ", stockType=" +
-				 ", isObsolete=" + isObsolete + ", stockTypeId=" + stockTypeId
-				+ ", dbxrefId=" + dbxrefId + ", tairObjectId=" + tairObjectId
-				+ ", organismId=" + organismId + "]";
-	}
 
 	public String getUniqueName() {
 		return uniqueName;
@@ -133,5 +90,99 @@ public class SourceStock {
 	public void setStockId(long stockId) {
 		this.stockId = stockId;
 	}
+
+	
+	public int getBackgroundAccessionId() {
+		return backgroundAccessionId;
+	}
+
+	public void setBackgroundAccessionId(int backgroundAccessionId) {
+		this.backgroundAccessionId = backgroundAccessionId;
+	}
+	
+	public int getDirectBackgroundAccessionId() {
+		return directBackgroundAccessionId;
+	}
+
+	public void setDirectBackgroundAccessionId(int directBackgroundAccessionId) {
+		this.directBackgroundAccessionId = directBackgroundAccessionId;
+	}
+	
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public String getStockName() {
+		return stockName;
+	}
+
+	public void setStockName(String stockName) {
+		this.stockName = stockName;
+	}
+
+	public String getStockType() {
+		return stockType;
+	}
+
+	public void setStockType(String stockType) {
+		this.stockType = stockType;
+	}
+
+	public String getGermplasmTairAccession() {
+		return germplasmTairAccession;
+	}
+
+	public void setGermplasmTairAccession(String germplasmTairAccession) {
+		this.germplasmTairAccession = germplasmTairAccession;
+	}
+
+	public String getStockTairAccession() {
+		return stockTairAccession;
+	}
+
+	public void setStockTairAccession(String stockTairAccession) {
+		this.stockTairAccession = stockTairAccession;
+	}
+
+	public String getMutagen() {
+		return mutagen;
+	}
+
+	public void setMutagen(String mutagen) {
+		this.mutagen = mutagen;
+	}
+
+	public String getStockCategory() {
+		return stockCategory;
+	}
+
+	public void setStockCategory(String stockCategory) {
+		this.stockCategory = stockCategory;
+	}
+
+	public String getStockCenterComment() {
+		return stockCenterComment;
+	}
+
+	public void setStockCenterComment(String stockCenterComment) {
+		this.stockCenterComment = stockCenterComment;
+	}
+	
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	@Override
+	public String toString() {
+		return "SourceStock [stockId=" + stockId + ", name=" + name + ", uniqueName=" + uniqueName + ", displayName="
+				+ displayName + ", stockName=" + stockName + ", description=" + description + ", dbxrefId=" + dbxrefId
+				+ ", stockType=" + stockType + ", germplasm_tair_accession=" + germplasmTairAccession
+				+ ", stock_tair_accession=" + stockTairAccession + ", mutagen=" + mutagen + ", stockCategory="
+				+ stockCategory + ", stockCenterComment=" + stockCenterComment + ", organismId=" + organismId
+				+ ", backgroundAccessionId=" + backgroundAccessionId + ", directBackgroundAccessionId="
+				+ directBackgroundAccessionId + "]";
+	}
+	
+	
 		
 }

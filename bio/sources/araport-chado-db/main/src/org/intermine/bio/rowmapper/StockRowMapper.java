@@ -13,10 +13,18 @@ public class StockRowMapper implements RowMapper<SourceStock> {
 		
 		SourceStock stock = new SourceStock();
 		stock.setStockId(rs.getLong("stock_id"));
-		stock.setName(rs.getString("stock_name"));
-		stock.setUniqueName(rs.getString("stock_uniquename"));
-		stock.setDescription(rs.getString("stock_description"));
-				
+		stock.setName(rs.getString("name"));
+		stock.setUniqueName(rs.getString("uniquename"));
+		stock.setDisplayName((rs.getString("display_name")));
+		stock.setStockName(rs.getString("abrc_stock_name"));
+		stock.setDescription(rs.getString("description"));
+		stock.setStockType(rs.getString("stock_type"));
+		stock.setGermplasmTairAccession(rs.getString("germplasm_accession"));
+		stock.setStockTairAccession(rs.getString("stock_accession"));
+	    stock.setStockCategory(rs.getString("stock_category"));
+	    stock.setMutagen(rs.getString("mutagen"));
+	    stock.setStockCenterComment(rs.getString("stock_center_comment"));
+		
 		return stock;
 	}
 

@@ -11,18 +11,21 @@
 		<attribute name="germplasmName" type="java.lang.String" />
 		<attribute name="stockName" type="java.lang.String" />
 		<attribute name="displayName" type="java.lang.String" />
+		<attribute name="description" type="java.lang.String" />
 		<reference name="type" referenced-type="StockType"
 			reverse-reference="stocks" />
 		<reference name="stockCategory" referenced-type="StockCategory"
 			reverse-reference="stocks" 
 			/>
-		<reference name="strain" referenced-type="Strain"
+		<reference name="accession" referenced-type="Strain"
 			reverse-reference="stocks" />
+		<reference name="backgroundAccession" referenced-type="Strain"
+			/>
 		<reference name="stockCenterComment" referenced-type="Comment" />
 		<reference name="mutagen" referenced-type="Mutagen" reverse-reference="stocks" />
 		<reference name="stockAnnotation" referenced-type="StockAnnotation"
 			reverse-reference="stock" />
-		<collection name="stockcenters" referenced-type="StockCenter"
+		<collection name="stockCenters" referenced-type="StockCenter"
 			reverse-reference="stocks" />
 		<collection name="stockAlleleInteractions" referenced-type="StockAlleleInteraction"
 			reverse-reference="stock" />
@@ -48,7 +51,7 @@
 		<reference name="type" referenced-type="StrainType"
 			reverse-reference="strains" />
 		<collection name="stocks" referenced-type="Stock"
-			reverse-reference="strain" />
+			reverse-reference="accession" />
 		<reference name="geoLocation" referenced-type="GeoLocation"
 			reverse-reference="strains" />
 	</class>
@@ -114,7 +117,7 @@
 	
 	<class name="StockCenter" extends="Organization" is-interface="true">
 		<collection name="stocks" referenced-type="Stock"
-			reverse-reference="stockcenters" />
+			reverse-reference="stockCenters" />
 	</class>
 
 	<class name="StockAlleleInteraction" is-interface="true">

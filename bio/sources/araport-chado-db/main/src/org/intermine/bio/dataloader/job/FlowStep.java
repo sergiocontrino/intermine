@@ -68,17 +68,17 @@ public class FlowStep<I,O> extends AbstractStep{
 					}
 					
 				} catch (UnexpectedInputException e1) {
-					log.error("Error" + e1.getCause());
+					log.error("Error: " + e1.getCause());
 					e1.printStackTrace();
 				} catch (ParseException e1) {
 					
-					log.error("Error" + e1.getCause());
+					log.error("Error:  " + e1.getCause());
 					
 				
 					e1.printStackTrace();
 				} catch (Exception e1) {
 					
-					log.error("Error" + e1.getCause());
+					log.error("Error: " + e1.getCause());
 					
 					e1.printStackTrace();
 				}

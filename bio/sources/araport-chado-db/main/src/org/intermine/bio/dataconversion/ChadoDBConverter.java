@@ -25,6 +25,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.dataflow.config.AppLauncher;
+import org.intermine.bio.store.service.StoreService;
 import org.intermine.bio.util.OrganismData;
 import org.intermine.bio.util.OrganismRepository;
 import org.intermine.dataconversion.ItemWriter;
@@ -147,6 +148,8 @@ public class ChadoDBConverter extends BioDBConverter
                 //getCompletedProcessors().add(currentProcessor);
                 AppLauncher launcher = AppLauncher.getInstance(this);
                 launcher.initialize(this);
+                StoreService storeService = StoreService.getInstance(this);
+                storeService.initialize(this);
                 launcher.run();
             }
         }

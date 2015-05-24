@@ -21,14 +21,14 @@ public DatabaseItemReader<SourceStock> getStockReader(Connection con){
 		
 	DatabaseItemReader<SourceStock> reader = new DatabaseItemReader<SourceStock>();
 	
-		reader.setSql(SourceDataFlowTaskContainer.STOCK_TEST_SQL);
+		reader.setSql(SourceDataFlowTaskContainer.STOCK_SQL);
 		reader.setDataSource(con);
 		reader.setRowMapper(getRowMapper());
 		
-		Map<Integer,Object> param = new HashMap<Integer, Object>();
+		// Map<Integer,Object> param = new HashMap<Integer, Object>();
 		//param.put(1, "CS65790");
 		
-		reader.setParameterValues(param);
+		//reader.setParameterValues(param);
 		
 		return reader;
 	}

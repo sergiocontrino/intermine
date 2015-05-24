@@ -19,26 +19,26 @@ import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
 import org.intermine.xml.full.ReferenceList;
 
-public class CVTermPostprocessor extends AbstractStep {
+public class StockItemPostprocessor extends AbstractStep {
 
-	protected static final Logger log = Logger.getLogger(CVTermPostprocessor.class);
+	protected static final Logger log = Logger.getLogger(StockItemPostprocessor.class);
 
 	private static ChadoDBConverter service;
 
 	protected TaskExecutor taskExecutor;
 
-	public CVTermPostprocessor(ChadoDBConverter chadoDBConverter) {
+	public StockItemPostprocessor(ChadoDBConverter chadoDBConverter) {
 		super();
 		service = chadoDBConverter;
 
 	}
 
-	public CVTermPostprocessor getPostProcessor(String name, ChadoDBConverter chadoDBConverter,
+	public StockItemPostprocessor getPostProcessor(String name, ChadoDBConverter chadoDBConverter,
 			TaskExecutor taskExecutor
 
 	) {
 
-		CVTermPostprocessor processor = new CVTermPostprocessor(chadoDBConverter);
+		StockItemPostprocessor processor = new StockItemPostprocessor(chadoDBConverter);
 		processor.setName(name);
 
 		processor.setTaskExecutor(taskExecutor);

@@ -176,8 +176,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+			
 		<reference name="vocabulary" referenced-type="StockTypeCV" />
 	</class>
 
@@ -187,8 +186,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 		<reference name="vocabulary" referenced-type="StockCategoryCV" />
 	</class>
 
@@ -198,8 +196,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 		<reference name="vocabulary" referenced-type="StrainTypeCV" />
 	</class>
 
@@ -209,8 +206,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 		<reference name="vocabulary" referenced-type="AlleleClassCV" />
 	</class>
 
@@ -220,8 +216,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 		<reference name="vocabulary" referenced-type="MutagenCV" />
 	</class>
 
@@ -231,8 +226,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 		<reference name="vocabulary" referenced-type="MutationSiteCV" />
 	</class>
 
@@ -242,8 +236,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 		<reference name="vocabulary" referenced-type="InheritanceModeCV" />
 	</class>
 
@@ -253,8 +246,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 		<reference name="vocabulary" referenced-type="ZygosityTypeCV" />
 	</class>
 
@@ -264,8 +256,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 		<reference name="vocabulary" referenced-type="SequenceAlterationCV" />
 	</class>
 
@@ -275,8 +266,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 		<reference name="vocabulary" referenced-type="ContactTypeCV" />
 	</class>
 
@@ -286,8 +276,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 		<reference name="vocabulary" referenced-type="AttributionTypeCV" />
 	</class>
 
@@ -297,8 +286,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+			
 	</class>
 
 	<class name="Country" is-interface="true">
@@ -307,8 +295,7 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
-		
+				
 	</class>
 
 	<class name="Region" is-interface="true">
@@ -317,7 +304,6 @@
 		<attribute name="name" type="java.lang.String" />
 		<attribute name="uniqueName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
-		<attribute name="url" type="java.lang.String" />
 		
 	</class>
 

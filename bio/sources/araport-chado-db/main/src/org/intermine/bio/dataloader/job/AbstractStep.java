@@ -114,6 +114,8 @@ public abstract class AbstractStep implements Step {
 
 		try {
 			
+			log.info("Step has started " + getName() +".");
+			
 			log.info("Before Opening Reader");
 			
 			open();
@@ -141,6 +143,8 @@ public abstract class AbstractStep implements Step {
 
 			// Need to upgrade here not set, in case the execution was stopped
 			stepExecution.upgradeStatus(BatchStatus.COMPLETED);
+			
+			log.info("Step has completed " + getName() +".");
 			log.debug("Step execution success: id=" + stepExecution.getId());
 		}
 		catch (Throwable e) {
