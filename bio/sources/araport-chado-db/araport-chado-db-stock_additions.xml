@@ -45,15 +45,16 @@
 		is-interface="true">
 		<attribute name="abbreviationName" type="java.lang.String" />
 		<attribute name="infraspecificName" type="java.lang.String" />
-		<attribute name="description" type="java.lang.String" />
 		<attribute name="accessionNumber" type="java.lang.String" />
 		<attribute name="habitat" type="java.lang.String" />
 		<reference name="type" referenced-type="StrainType"
 			reverse-reference="strains" />
 		<collection name="stocks" referenced-type="Stock"
 			reverse-reference="accession" />
+		<attribute name="geoLocation" type="java.lang.String" />
+		<!--	
 		<reference name="geoLocation" referenced-type="GeoLocation"
-			reverse-reference="strains" />
+			reverse-reference="strains" /> -->
 	</class>
 
 
@@ -110,9 +111,9 @@
 		<attribute name="longitude" type="java.lang.Float" />
 		
 		<reference name="geodeticDatum" referenced-type="GeodeticDatumType"/>
-		
+		<!--  
 		<collection name="strains" referenced-type="Strain"
-			reverse-reference="geoLocation" />
+			reverse-reference="geoLocation" /> -->
 	</class>
 	
 	<class name="StockCenter" extends="Organization" is-interface="true">
