@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataconversion.DataSourceProcessor;
+import org.intermine.bio.dataflow.config.ApplicationContext;
 import org.intermine.bio.item.ItemProcessor;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
@@ -76,12 +77,16 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 			item.setReference("type", stockType);
 
 			Item stockCategory = CVService.getCVTermItem("stock_category", source.getStockCategory());
+			
+			if (stockCategory == null){
+				stockCategory = CVService.getCVTermItem("mutagen_type", ApplicationContext.UNKNOWN);
+			}
 			log.info("Referenced Stock Category: " + stockCategory);
 
 			if (stockCategory != null) {
 				item.setReference("stockCategory", stockCategory);
 			}
-
+			
 			if (!StringUtils.isBlank(source.getMutagen())) {
 				Item mutagen = CVService.getCVTermItem("mutagen_type", source.getMutagen());
 				log.info("Referenced Mutagen: " + mutagen);
@@ -89,7 +94,16 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 					item.setReference("mutagen", mutagen);
 				}
 
+			}else{
+				Item mutagen = CVService.getCVTermItem("mutagen_type", ApplicationContext.UNKNOWN);
+				
+				log.info("Referenced Mutagen: " + mutagen);
+				if (mutagen != null) {
+					item.setReference("mutagen", mutagen);
+				}
+				
 			}
+				
 
 			log.info("Stock Center Comment: " + source.getStockCenterComment());
 			if (!StringUtils.isBlank(source.getStockCenterComment())) {
@@ -141,11 +155,22 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		try {
 			stockAnnotationItem = super.getService().createItem(STOCK_ANNOTATION_CLASS_NAME);
 
+			log.info("Stock Mutant: "  + "Stock: " + source.getName() + " ; " + source.getIsMutant());
+			
+			log.info("Stock: " + source.getName() + " ; Mathches: " + source.getIsMutant().matches("true"));
+			
 			if (!StringUtils.isBlank(source.getIsMutant())) {
+				
+				log.info("Mutant: " + source.getName() + " ; " + source.getIsMutant());
+				
+				
 				if (source.getIsMutant().equals("true")) {
+					
+					log.info("Setting Mutant to True");
 					stockAnnotationItem.setAttribute("mutant", "Yes");
-				}
+				}else
 				{
+					log.info("Setting Mutant to False");
 					stockAnnotationItem.setAttribute("mutant", "No");
 				}
 			}

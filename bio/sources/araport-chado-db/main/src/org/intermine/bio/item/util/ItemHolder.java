@@ -9,11 +9,18 @@ public class ItemHolder {
 	
 	private Item item;
 	private int itemId;
+	private String itemClass;
 		
 	public ItemHolder(Item item, int itemId) {
 		this.item = item;
 		this.itemId = itemId;
 	}
+	
+	public ItemHolder(Item item, int itemId, String itemClass) {
+		this(item, itemId);
+		this.itemClass = itemClass;
+	}
+	
 	public Item getItem() {
 		return item;
 	}
@@ -25,6 +32,14 @@ public class ItemHolder {
 	}
 	public void setItemId(int itemId) {
 		this.itemId = itemId;
+	}
+	
+	public String getItemClass() {
+		return itemClass;
+	}
+
+	public void setItemClass(String itemClass) {
+		this.itemClass = itemClass;
 	}
 	
 	@Override

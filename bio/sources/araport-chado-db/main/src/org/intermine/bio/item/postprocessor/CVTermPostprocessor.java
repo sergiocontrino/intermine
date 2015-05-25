@@ -8,6 +8,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
+import org.intermine.bio.dataflow.config.ApplicationContext;
+import org.intermine.bio.dataflow.config.DataFlowConfig;
 import org.intermine.bio.dataloader.job.AbstractStep;
 import org.intermine.bio.dataloader.job.StepExecution;
 import org.intermine.bio.dataloader.job.TaskExecutor;
@@ -62,6 +64,9 @@ public class CVTermPostprocessor extends AbstractStep {
 
 					String cv = item.getKey();
 
+					String cvterm_item_class_name = DataFlowConfig.getChadoCVTermClassMap().get(cv);
+					log.info("CV NAME:" + cv + ":" + "CV Term Class Name: " + cvterm_item_class_name);
+
 					Collection<Item> collection = (Collection<Item>) item.getValue();
 
 					List terms = new ArrayList(collection);
@@ -84,20 +89,38 @@ public class CVTermPostprocessor extends AbstractStep {
 
 					}
 
-					cvItem.setCollection("terms", termRefs);
-					
+					Item unknownTerm = StoreService.getService().createItem(cvterm_item_class_name);
+					String identifier = ApplicationContext.UNKNOWN;
+					unknownTerm.setAttribute("identifier", identifier);
+					unknownTerm.setAttribute("name", ApplicationContext.UNKNOWN);
+					unknownTerm.setAttribute("uniqueName", ApplicationContext.UNKNOWN);
+
+					Item vocabularyRef = CVService.getCVItemMap().get(cv).getItem();
+					String referenceName = "vocabulary";
+					unknownTerm.setReference(referenceName, vocabularyRef);
+
+					if (StoreService.storeItem(unknownTerm)) {
+
+						if (item != null) {
+							CVService.addCVTermItem(cv, ApplicationContext.UNKNOWN, unknownTerm);
+						}
+
+						collection.add(unknownTerm);
+					}
+
+					//cvItem.setCollection("terms", termRefs);
+
 					try {
-						
-						StoreService.storeCollection(collection,itemHolder);
-						
+
+						StoreService.storeCollection(collection, itemHolder);
+
 						log.info("Collection successfully stored." + itemHolder.getItem());
-						
+
 					} catch (ObjectStoreException e) {
 						log.error("Error storing terms collection.");
 					}
-					
+
 				}
-				
 
 				log.info("CV Map Item Size =" + items.size());
 
@@ -119,26 +142,6 @@ public class CVTermPostprocessor extends AbstractStep {
 
 	protected TaskExecutor getTaskExecutor() {
 		return taskExecutor;
-	}
-	
-	private void storeCollection(Collection<Item> collection, ItemHolder itemHolder)
-			throws ObjectStoreException {
-		
-		Integer itemId = itemHolder.getItemId();
-		
-		ReferenceList refs = new ReferenceList();
-		
-		refs.setName("terms");
-		List<Item> terms = new ArrayList<Item>(collection);
-		
-		
-		for (Item term : terms) {
-
-			Item item = (Item) term;
-			refs.addRefId(item.getIdentifier());
-		}
-		
-		service.store(refs,itemId);
 	}
 
 }

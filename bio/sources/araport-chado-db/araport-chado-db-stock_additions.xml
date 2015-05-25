@@ -21,7 +21,7 @@
 			reverse-reference="stocks" />
 		<reference name="backgroundAccession" referenced-type="Strain"
 			/>
-		<reference name="stockCenterComment" referenced-type="Comment" />
+		<attribute name="stockCenterComment" type="java.lang.String" />
 		<reference name="mutagen" referenced-type="Mutagen" reverse-reference="stocks" />
 		<reference name="stockAnnotation" referenced-type="StockAnnotation"
 			reverse-reference="stock" />
