@@ -38,8 +38,9 @@ public class StockRowMapper implements RowMapper<SourceStock> {
 		stock.setGrowthTemperature(rs.getString("growth_temperature"));
 		
 		stock.setDurationOfGrowth(rs.getString("duration_of_growth"));
-
-	    
+		
+		stock.setAcessionName(rs.getString("accession"));
+   
 		return stock;
 	}
 

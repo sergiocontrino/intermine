@@ -4,6 +4,13 @@ SELECT
     'Germplasm:' || dbx.accession germplasm_accession,
     s.description,
     V.stock_accession,
+    case 
+    	when (o.type_id is not null and oc.name='ecotype')
+    		then o.common_name
+    	else
+    		null
+    end as accession,
+    o.type_id,
     'germplasm' as stock_category,
     VM.mutagen,
     s.uniquename,
@@ -31,6 +38,9 @@ FROM
         join 
         cvterm c 
         on c.cvterm_id = s.type_id
+        left join
+        cvterm oc
+        on oc.cvterm_id = o.type_id
         LEFT JOIN
         (
         select s.stock_id, 'Stock:' || dbx.accession stock_accession, dbx.description from 

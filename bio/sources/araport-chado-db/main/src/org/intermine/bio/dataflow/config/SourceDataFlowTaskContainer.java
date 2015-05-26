@@ -87,4 +87,8 @@ public interface SourceDataFlowTaskContainer {
 	
 	static final String CVTERM_SQL = FileUtils.getSqlFileContents(CVTERM_SQL_PATH );
 	
+	static final String STRAIN_SQL_PATH = "/sql/strain.sql";
+
+	static final String STRAIN_SQL = FileUtils.getSqlFileContents(STRAIN_SQL_PATH);
+	
 }

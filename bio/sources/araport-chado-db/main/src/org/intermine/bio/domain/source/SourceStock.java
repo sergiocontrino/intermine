@@ -27,7 +27,7 @@ public class SourceStock {
 	
 	private int organismId;
 	private int backgroundAccessionId;
-	private int directBackgroundAccessionId;
+	private String accessionName;
 
 	
 	public SourceStock() {
@@ -110,12 +110,12 @@ public class SourceStock {
 		this.backgroundAccessionId = backgroundAccessionId;
 	}
 	
-	public int getDirectBackgroundAccessionId() {
-		return directBackgroundAccessionId;
+	public String getAcessionName() {
+		return accessionName;
 	}
 
-	public void setDirectBackgroundAccessionId(int directBackgroundAccessionId) {
-		this.directBackgroundAccessionId = directBackgroundAccessionId;
+	public void setAcessionName(String accessionName) {
+		this.accessionName = accessionName;
 	}
 	
 	public void setDisplayName(String displayName) {
@@ -257,7 +257,7 @@ public class SourceStock {
 				+ isAneploidChromosome + ", ploidy=" + ploidy + ", specialGrowthConditions=" + specialGrowthConditions
 				+ ", growthTemperature=" + growthTemperature + ", durationOfGrowth=" + durationOfGrowth
 				+ ", organismId=" + organismId + ", backgroundAccessionId=" + backgroundAccessionId
-				+ ", directBackgroundAccessionId=" + directBackgroundAccessionId + "]";
+				+ ", directBackgroundAccessionId=" + accessionName + "]";
 	}
 	
 	

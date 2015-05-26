@@ -23,14 +23,17 @@ import org.intermine.bio.dataloader.util.IdGenerator;
 import org.intermine.bio.domain.source.SourceCV;
 import org.intermine.bio.domain.source.SourceCVTerm;
 import org.intermine.bio.domain.source.SourceStock;
+import org.intermine.bio.domain.source.SourceStrain;
 import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
 import org.intermine.bio.item.processor.CVItemProcessor;
 import org.intermine.bio.item.processor.CVTermProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
+import org.intermine.bio.item.processor.StrainItemProcessor;
 import org.intermine.bio.item.util.ItemHolder;
 import org.intermine.bio.reader.CVReader;
 import org.intermine.bio.reader.CVTermReader;
 import org.intermine.bio.reader.StockReader;
+import org.intermine.bio.reader.StrainReader;
 import org.intermine.bio.dataloader.job.Step;
 import org.intermine.item.domain.database.DatabaseItemReader;
 import org.intermine.xml.full.Item;
@@ -97,15 +100,23 @@ public class AppLauncher {
 
 		cvTermStep.setStepPostProcessor(cvTermPostprocessor);
 
-		// Stock Step Config
-		StockItemProcessor processor3 = new StockItemProcessor(service);
-		DatabaseItemReader<SourceStock> reader3 = new StockReader().getStockReader(service.getConnection());
-		String stepName3 = "Stock Loading Step";
-		FlowStep<SourceStock, Item> stockStep = new FlowStepBuilder<SourceStock, Item>().build(stepName3, reader3,
+		//Strain Step Config 
+		StrainItemProcessor processor3 = new StrainItemProcessor(service);
+		DatabaseItemReader<SourceStrain> reader3 = new StrainReader().getReader(service.getConnection());
+		String stepName3 = "Strain Loading Step";
+		FlowStep<SourceStrain, Item> strainStep = new FlowStepBuilder<SourceStrain, Item>().build(stepName3, reader3,
 				processor3, taskExecutor);
+		
+		// Stock Step Config
+		StockItemProcessor processor4 = new StockItemProcessor(service);
+		DatabaseItemReader<SourceStock> reader4 = new StockReader().getStockReader(service.getConnection());
+		String stepName4 = "Stock Loading Step";
+		FlowStep<SourceStock, Item> stockStep = new FlowStepBuilder<SourceStock, Item>().build(stepName4, reader4,
+				processor4, taskExecutor);
 
 		steps.add(cvStep);
 		steps.add(cvTermStep);
+		steps.add(strainStep);
 		steps.add(stockStep);
 	}
 

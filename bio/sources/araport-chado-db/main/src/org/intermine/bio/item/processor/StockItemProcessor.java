@@ -3,6 +3,7 @@ package org.intermine.bio.item.processor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
+import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataconversion.DataSourceProcessor;
 import org.intermine.bio.dataflow.config.ApplicationContext;
@@ -119,7 +120,36 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 			Item stockAnnotationItem = createStockAnnotation(source, item);
 
 			item.setReference("stockAnnotation", stockAnnotationItem);
-
+			
+			Item accessionRef = null;
+			
+			log.info("Strain Accession: " + source.getAcessionName());
+			
+			if (!StringUtils.isBlank(source.getAcessionName())){
+				log.info("Strain Accession Map: " + OrganismService.getStrainMap().get(source.getAcessionName()).getItem());
+			}
+			
+			
+			if (!StringUtils.isBlank(source.getAcessionName())) {
+				
+				accessionRef = OrganismService.getStrainMap().get(source.getAcessionName()).getItem();
+				
+				String referenceName = "accession";
+				
+				log.info("Setting Strain Accession for Stock: " + accessionRef + " ; " + source.getAcessionName() + ";" + source.getName());
+				
+				if (accessionRef!=null){
+					item.setReference(referenceName, accessionRef);
+				}
+				
+				
+				if (item!=null && (accessionRef!=null)){
+					OrganismService.addStockItem(source.getAcessionName(), source.getGermplasmTairAccession(), item);
+				}
+				
+			}
+					
+			
 			super.getService().store(item);
 
 		} catch (ObjectStoreException e) {
