@@ -20,17 +20,21 @@ import org.intermine.bio.dataloader.job.SyncTaskExecutor;
 import org.intermine.bio.dataloader.job.TaskExecutor;
 import org.intermine.bio.dataloader.job.TaskletStep;
 import org.intermine.bio.dataloader.util.IdGenerator;
+import org.intermine.bio.domain.source.SourceBackgroundStrain;
 import org.intermine.bio.domain.source.SourceCV;
 import org.intermine.bio.domain.source.SourceCVTerm;
 import org.intermine.bio.domain.source.SourceStock;
 import org.intermine.bio.domain.source.SourceStrain;
+import org.intermine.bio.item.postprocessor.BackgroundAccessionStockItemPostprocessor;
 import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
 import org.intermine.bio.item.postprocessor.StockItemPostprocessor;
+import org.intermine.bio.item.processor.BackgroundAccessionStockItemProcessor;
 import org.intermine.bio.item.processor.CVItemProcessor;
 import org.intermine.bio.item.processor.CVTermProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
 import org.intermine.bio.item.processor.StrainItemProcessor;
 import org.intermine.bio.item.util.ItemHolder;
+import org.intermine.bio.reader.BackgroundAccessionReader;
 import org.intermine.bio.reader.CVReader;
 import org.intermine.bio.reader.CVTermReader;
 import org.intermine.bio.reader.StockReader;
@@ -119,10 +123,25 @@ public class AppLauncher {
 				processor4, taskExecutor);
 		stockStep.setStepPostProcessor(stockPostprocessor);
 
+		BackgroundAccessionStockItemProcessor processor5 = new BackgroundAccessionStockItemProcessor(service);
+		DatabaseItemReader<SourceBackgroundStrain> reader5 = new BackgroundAccessionReader().getReader(service.getConnection());
+		String stepName5 = "Background Accession Stock Loading Step";
+		
+		Step backgroundAccessionPostProcessor = new BackgroundAccessionStockItemPostprocessor(service)
+				.getPostProcessor("Background Accession Stock PostProcessor", service,
+				taskExecutor);
+		
+		
+		FlowStep<SourceBackgroundStrain, Item> bgAccessionStockStep = new FlowStepBuilder<SourceBackgroundStrain, Item>().build(stepName5, reader5,
+				processor5, taskExecutor);
+		
+		bgAccessionStockStep.setStepPostProcessor(backgroundAccessionPostProcessor);
+		
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
 		steps.add(stockStep);
+		steps.add(bgAccessionStockStep);
 	}
 
 	private static SimpleJob setJob() {

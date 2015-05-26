@@ -91,4 +91,8 @@ public interface SourceDataFlowTaskContainer {
 
 	static final String STRAIN_SQL = FileUtils.getSqlFileContents(STRAIN_SQL_PATH);
 	
+	static final String BG_ACCESSION_SQL_PATH = "/sql/stock_background_accessions.sql";
+
+	static final String BG_ACCESSION_SQL = FileUtils.getSqlFileContents( BG_ACCESSION_SQL_PATH);
+	
 }

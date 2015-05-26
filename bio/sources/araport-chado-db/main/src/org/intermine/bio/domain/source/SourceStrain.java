@@ -1,5 +1,8 @@
 package org.intermine.bio.domain.source;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class SourceStrain {
 
 	private int organismId;
@@ -13,6 +16,8 @@ public class SourceStrain {
 	private String habitat;
 	private String geoLocation;
 	private String accessionRefererence;
+	
+	private Set<SourceStock> backgroundStock = new HashSet<SourceStock>();
 	
 	public SourceStrain(){
 		
@@ -85,6 +90,16 @@ public class SourceStrain {
 		this.accessionRefererence = accessionRefererence;
 	}
 
+	
+	public Set<SourceStock> getBackgroundStock() {
+		return backgroundStock;
+	}
+
+	public void setBackgroundStock(Set<SourceStock> backgroundStock) {
+		this.backgroundStock = backgroundStock;
+	}
+
+	
 	@Override
 	public String toString() {
 		return "SourceStrain [organismId=" + organismId + ", organismScientificName=" + organismScientificName
@@ -95,5 +110,8 @@ public class SourceStrain {
 				+ accessionRefererence + "]";
 	}
 	
+	public void addBackgroundStock(SourceStock stock){
+		this.backgroundStock.add(stock);
+	}
 	
 }

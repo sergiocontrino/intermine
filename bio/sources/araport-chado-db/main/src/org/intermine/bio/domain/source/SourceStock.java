@@ -1,5 +1,8 @@
 package org.intermine.bio.domain.source;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class SourceStock {
 
 	private long stockId;
@@ -27,6 +30,9 @@ public class SourceStock {
 	
 	private int organismId;
 	private int backgroundAccessionId;
+	
+	private Set<SourceStrain> backgroundAccession = new HashSet<SourceStrain>();
+		
 	private String accessionName;
 
 	
@@ -260,7 +266,16 @@ public class SourceStock {
 				+ ", directBackgroundAccessionId=" + accessionName + "]";
 	}
 	
+	public Set<SourceStrain> getBackgroundAccession() {
+		return backgroundAccession;
+	}
+
+	public void setBackgroundAccession(Set<SourceStrain> backgroundAccession) {
+		this.backgroundAccession = backgroundAccession;
+	}
 	
-	
+	public void addBackgroundAccession(SourceStrain accession){
+		this.backgroundAccession.add(accession);
+	}
 		
 }

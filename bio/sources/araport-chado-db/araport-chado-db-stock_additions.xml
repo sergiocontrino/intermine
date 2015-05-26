@@ -19,8 +19,10 @@
 			/>
 		<reference name="accession" referenced-type="Strain"
 			reverse-reference="stocks" />
-		<reference name="backgroundAccession" referenced-type="Strain"
-			/>
+	
+		<collection name="backgroundAccessions" referenced-type="Strain"
+			reverse-reference="backgroundStocks"/>
+			
 		<attribute name="stockCenterComment" type="java.lang.String" />
 		<reference name="mutagen" referenced-type="Mutagen" reverse-reference="stocks" />
 		<reference name="stockAnnotation" referenced-type="StockAnnotation"
@@ -51,6 +53,8 @@
 			reverse-reference="strains" />
 		<collection name="stocks" referenced-type="Stock"
 			reverse-reference="accession" />
+		<collection name="backgroundStocks" referenced-type="Stock"
+			reverse-reference="backgroundAccessions" />
 		<attribute name="geoLocation" type="java.lang.String" />
 		<!--	
 		<reference name="geoLocation" referenced-type="GeoLocation"

@@ -20,7 +20,11 @@ public class OrganismService {
 	
 	private static MultiKeyMap stockStrainItemMap = new MultiKeyMap();
 	
+	private static MultiKeyMap bgStockStrainItemMap = new MultiKeyMap();
+	
 	private static MultiMap strainItemSet = new MultiValueMap();
+	
+	private static MultiMap bgStrainItemSet = new MultiValueMap();
 	
 	private OrganismService() {
 
@@ -84,12 +88,23 @@ public class OrganismService {
 		return stockStrainItemMap; 
 	}
 	
+	public MultiKeyMap getBgStockStrainItemMap (){
+		return bgStockStrainItemMap; 
+	}
 	
 	public static void addStockItem(String strainName, String stockName, Item item) {
 
 		stockStrainItemMap.put(strainName, stockName, item);
 		
 		strainItemSet.put(strainName,item);
+		
+		}
+	
+	public static void addBgStockItem(String strainName, String stockName, Item item) {
+
+		bgStockStrainItemMap.put(strainName, stockName, item);
+		
+		bgStrainItemSet.put(strainName,item);
 		
 		}
 	
@@ -122,6 +137,9 @@ public class OrganismService {
 		 return strainItemSet.values();
 	 }
 	 
+	 public static MultiMap getBgStrainItemSet(){
+		 return bgStrainItemSet;
+	 }
 	
 
 }

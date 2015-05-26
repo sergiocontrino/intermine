@@ -4,10 +4,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
 import org.intermine.bio.chado.OrganismService;
+import org.intermine.bio.chado.StockService;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataconversion.DataSourceProcessor;
 import org.intermine.bio.dataflow.config.ApplicationContext;
 import org.intermine.bio.item.ItemProcessor;
+import org.intermine.bio.item.util.ItemHolder;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
 import org.intermine.bio.domain.source.*;
@@ -39,6 +41,8 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		Exception exception = null;
 
 		Item item = null;
+		
+		int itemId = -1;
 
 		try {
 			log.info("Creating Item has started. Source Object:" + source);
@@ -159,7 +163,7 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 			}
 					
 			
-			super.getService().store(item);
+			itemId = super.getService().store(item);
 
 		} catch (ObjectStoreException e) {
 			exception = e;
@@ -173,6 +177,13 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 				log.info("Target Item has been created. Target Object:" + item);
 
 				getStockItems().put(source.getGermplasmTairAccession(), item);
+				
+				ItemHolder itemHolder = new ItemHolder(item, itemId);
+
+				if (itemHolder!=null && itemId !=1){
+					StockService.addStockItem(source.getGermplasmTairAccession(), itemHolder);
+				}
+				
 			}
 		}
 		return item;
