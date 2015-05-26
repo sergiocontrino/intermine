@@ -63,11 +63,15 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 			log.info("Display Name " + source.getDisplayName());
 			item.setAttribute("displayName", source.getDisplayName());
 
-			log.info("Stock Name " + source.getStockName());
-			item.setAttribute("stockName", source.getStockName());
+			if (!StringUtils.isBlank(source.getStockName())) {
+				log.info("Stock Name " + source.getStockName());
+				item.setAttribute("stockName", source.getStockName());
+			}
 
-			log.info("Stock Description " + source.getDescription());
-			item.setAttribute("description", source.getDescription());
+			if (!StringUtils.isBlank(source.getDescription())) {
+				log.info("Stock Description " + source.getDescription());
+				item.setAttribute("description", source.getDescription());
+			}
 
 			String strStockType = source.getStockType();
 			log.info("String Stock Type: " + strStockType);
@@ -75,8 +79,14 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 			Item stockType = CVService.getCVTermItem("germplasm_type", source.getStockType());
 			log.info("Referenced Stock Type: " + stockType);
 
-			item.setReference("type", stockType);
+			if (stockType == null){
+				stockType = CVService.getCVTermItem("germplasm_type", ApplicationContext.UNKNOWN);
+			}
 
+			if (stockType != null) {
+				item.setReference("type", stockType);
+			}
+			
 			Item stockCategory = CVService.getCVTermItem("stock_category", source.getStockCategory());
 			
 			if (stockCategory == null){
@@ -330,7 +340,7 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing Chromosomal Annotation item for source record:" + source);
+				log.error("Growth Condition Annotation Item item for source record:" + source);
 			} else {
 				log.info("Growth Condition Annotation Item has been created. Target Object:" + growthAnnotationItem);
 
