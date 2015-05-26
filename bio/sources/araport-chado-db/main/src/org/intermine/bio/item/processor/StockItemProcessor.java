@@ -47,12 +47,11 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 
 			log.info("Item place holder has been created: " + item);
 
-			log.info("Germplasm Accession " + source.getGermplasmTairAccession());
-			item.setAttribute("primaryIdentifier", source.getGermplasmTairAccession());
+			log.info("Germplasm Name " + source.getName());
+			item.setAttribute("primaryIdentifier", source.getName());
 
-			log.info("Stock/Germplasm Id " + source.getStockCategory() + " Id:" + source.getStockId());
-			item.setAttribute("secondaryIdentifier", StringUtils.capitalize(source.getStockCategory()) + " Id:"
-					+ source.getStockId());
+			log.info("Germplasm Accession " + source.getGermplasmTairAccession());
+			item.setAttribute("secondaryIdentifier", source.getGermplasmTairAccession());
 
 			log.info("Name   " + source.getName());
 			item.setAttribute("name", source.getName());
