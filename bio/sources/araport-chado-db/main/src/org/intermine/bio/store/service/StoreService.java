@@ -36,13 +36,13 @@ public class StoreService {
 		return service;
 	}
 
-	public static void storeCollection(Collection<Item> collection, ItemHolder itemHolder) throws ObjectStoreException {
+	public static void storeCollection(Collection<Item> collection, ItemHolder itemHolder, final String collectionName) throws ObjectStoreException {
 
 		Integer itemId = itemHolder.getItemId();
 
 		ReferenceList refs = new ReferenceList();
 
-		refs.setName("terms");
+		refs.setName(collectionName);
 		List<Item> terms = new ArrayList<Item>(collection);
 
 		for (Item term : terms) {

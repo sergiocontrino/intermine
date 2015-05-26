@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
+import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataloader.job.AbstractStep;
 import org.intermine.bio.dataloader.job.StepExecution;
@@ -55,53 +56,7 @@ public class StockItemPostprocessor extends AbstractStep {
 		taskExecutor.execute(new Runnable() {
 
 			public void run() {
-
-				Map<String, Item> items = CVService.getCVItemSet();
-
-				for (Map.Entry<String, Item> item : items.entrySet()) {
-
-					String cv = item.getKey();
-
-					Collection<Item> collection = (Collection<Item>) item.getValue();
-					
-					List terms = new ArrayList(collection);
-
-					Item cvItem = CVService.getCVItemMap().get(cv).getItem();
-					ItemHolder itemHolder = CVService.getCVItemMap().get(cv);
-
-					ReferenceList referenceList = new ReferenceList();
-					referenceList.setName("terms");
-
-					List<String> termRefs = new ArrayList<String>();
-					termRefs.clear();
-
-					for (Object term : terms) {
-
-						Item cvTermItem = (Item) term;
-						termRefs.add(cvTermItem.getIdentifier());
-
-						log.info("CV Key:" + cv + " ; cvItem:" + cvTermItem);
-
-					}
-
-					cvItem.setCollection("terms", termRefs);
-					
-					try {
-						
-						StoreService.storeCollection(collection,itemHolder);
-						
-						log.info("Collection successfully stored." + itemHolder.getItem());
-						
-					} catch (ObjectStoreException e) {
-						log.error("Error storing terms collection.");
-					}
-					
-				}
-				
-
-				log.info("CV Map Item Size =" + items.size());
-
-				log.info("Tasklet Task has Completed! " + getName());
+				createStockStrainCollection();
 			}
 		});
 
@@ -121,24 +76,42 @@ public class StockItemPostprocessor extends AbstractStep {
 		return taskExecutor;
 	}
 	
-	private void storeCollection(Collection<Item> collection, ItemHolder itemHolder)
-			throws ObjectStoreException {
-		
-		Integer itemId = itemHolder.getItemId();
-		
-		ReferenceList refs = new ReferenceList();
-		
-		refs.setName("terms");
-		List<Item> terms = new ArrayList<Item>(collection);
-		
-		
-		for (Item term : terms) {
+	private void createStockStrainCollection(){
+		Map<String, Item> items = OrganismService.getStrainItemSet();
 
-			Item item = (Item) term;
-			refs.addRefId(item.getIdentifier());
+		for (Map.Entry<String, Item> item : items.entrySet()) {
+
+			String strain = item.getKey();
+			
+			log.info("Processing Strain: " + strain);
+
+			Collection<Item> collection = (Collection<Item>) item.getValue();
+			
+			List terms = new ArrayList(collection);
+
+			Item strainItem = OrganismService.getStrainMap().get(strain).getItem();
+			ItemHolder itemHolder = OrganismService.getStrainMap().get(strain);
+
+			ReferenceList referenceList = new ReferenceList();
+			referenceList.setName("stocks");
+						
+			try {
+				
+				StoreService.storeCollection(collection,itemHolder, referenceList.getName());
+				
+				log.info("Collection successfully stored." + itemHolder.getItem() + ";" + "Collection size:" + collection.size());
+				
+			} catch (ObjectStoreException e) {
+				log.error("Error storing stocks collection for strain:" + strain);
+			}
+			
 		}
 		
-		service.store(refs,itemId);
+
+		log.info("Strain Map Item Size =" + items.size());
+
+		log.info("Tasklet Task has Completed! " + getName());
+	
 	}
 
 }

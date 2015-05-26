@@ -25,6 +25,7 @@ import org.intermine.bio.domain.source.SourceCVTerm;
 import org.intermine.bio.domain.source.SourceStock;
 import org.intermine.bio.domain.source.SourceStrain;
 import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
+import org.intermine.bio.item.postprocessor.StockItemPostprocessor;
 import org.intermine.bio.item.processor.CVItemProcessor;
 import org.intermine.bio.item.processor.CVTermProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
@@ -111,8 +112,12 @@ public class AppLauncher {
 		StockItemProcessor processor4 = new StockItemProcessor(service);
 		DatabaseItemReader<SourceStock> reader4 = new StockReader().getStockReader(service.getConnection());
 		String stepName4 = "Stock Loading Step";
+		Step stockPostprocessor = new StockItemPostprocessor(service).getPostProcessor("Stock PostProcessor", service,
+				taskExecutor);
+		
 		FlowStep<SourceStock, Item> stockStep = new FlowStepBuilder<SourceStock, Item>().build(stepName4, reader4,
 				processor4, taskExecutor);
+		stockStep.setStepPostProcessor(stockPostprocessor);
 
 		steps.add(cvStep);
 		steps.add(cvTermStep);

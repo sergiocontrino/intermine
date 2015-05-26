@@ -112,7 +112,7 @@ public class CVTermPostprocessor extends AbstractStep {
 
 					try {
 
-						StoreService.storeCollection(collection, itemHolder);
+						StoreService.storeCollection(collection, itemHolder, referenceList.getName());
 
 						log.info("Collection successfully stored." + itemHolder.getItem());
 
