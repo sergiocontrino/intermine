@@ -23,7 +23,6 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 	private String targetClassName;
 
 	private static final String ITEM_CLASSNAME = "Allele";
-	private static final String GENOTYPE_CLASS_NAME = "Genotype";
 	private static final String SEQUENCE_ALTERATION_CLASS_NAME = "SequenceAlterationType";
 
 	public AlleleItemProcessor(ChadoDBConverter chadoDBConverter) {
@@ -44,8 +43,6 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 		Item item = null;
 
 		int itemId = -1;
-
-		Item genotypeItem = null;
 
 		try {
 			log.info("Creating Item has started. Source Object:" + source);
@@ -163,8 +160,7 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 			}
 
 			itemId = super.getService().store(item);
-			genotypeItem = createGenotype(source);
-
+		
 		} catch (ObjectStoreException e) {
 			exception = e;
 		} catch (Exception e) {
@@ -178,21 +174,10 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 
 				ItemHolder itemHolder = new ItemHolder(item, itemId);
 
-				if (itemHolder != null && itemId != 1) {
+				if (itemHolder != null && itemId != -1) {
 					AlleleService.addAleleItem(source.getAlleleUniqueAccession(), itemHolder);
 				}
 				
-				genotypeItem = GenotypeService.getGenotypeItem(source.getGenotypeName()).getItem();
-				
-				if (genotypeItem == null){
-					genotypeItem = createGenotype(source);
-				}
-				
-				if (genotypeItem != null) {
-					AlleleService.addGenotypeItem(source.getAlleleUniqueAccession(), source.getGenotypeName(),
-							genotypeItem);
-				}
-
 			}
 		}
 		return item;
@@ -206,60 +191,5 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 		return this.targetClassName;
 	}
 
-	private Item createGenotype(SourceAllele source) {
-
-		Item genotypeItem = null;
-		Exception exception = null;
-
-		if (StringUtils.isBlank(source.getGenotypeName())) {
-			return genotypeItem;
-		}
-
-		if (GenotypeService.getGenotypeItem(source.getGenotypeName()) == null) {
-		try {
-
-			if (GenotypeService.getGenotypeItem(source.getGenotypeName()) == null) {
-				log.info("Creating Genotype Item: " + source.getGenotypeUniqueName());
-				genotypeItem = super.getService().createItem(GENOTYPE_CLASS_NAME);
-			}
-
-			Item organismItem = super.getService().getOrganismItem(super.getService().getOrganism().getTaxonId());
-
-			if (organismItem != null) {
-				genotypeItem.setReference("organism", organismItem);
-			}
-
-			if (!StringUtils.isBlank(source.getGenotypeUniqueName())) {
-				log.info("Secondary Identifier: " + source.getGenotypeUniqueName());
-				genotypeItem.setAttribute("secondaryIdentifier", source.getGenotypeUniqueName());
-			}
-
-			log.info("Genotype Name " + source.getGenotypeName());
-			genotypeItem.setAttribute("primaryIdentifier", source.getGenotypeName());
-
-			int itemId = super.getService().store(genotypeItem);
-
-			ItemHolder itemHolder = new ItemHolder(genotypeItem, itemId);
-
-			if (itemHolder != null) {
-				GenotypeService.addGenotypeItem(source.getGenotypeName(), itemHolder);
-			}
-		} catch (ObjectStoreException e) {
-			exception = e;
-		} catch (Exception e) {
-			exception = e;
-		} finally {
-
-			if (exception != null) {
-				log.error("Error storing genotype item for source record:" + source);
-			} else {
-				log.info("Genotype Item has been created. Target Object:" + genotypeItem);
 	
-			}
-		}
-		
-		}
-
-		return genotypeItem;
-	}
 }

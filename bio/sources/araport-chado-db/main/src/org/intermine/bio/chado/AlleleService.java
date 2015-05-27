@@ -42,10 +42,18 @@ public class AlleleService {
 			
 	}
 
-	public static void getAleleItem(String name) {
+	public static ItemHolder getAlleleItem(String name) {
 
-		alleleMap.get(name);
-
+		
+		ItemHolder itemHolder = null;
+		
+		if (alleleMap.containsKey(name)){
+			itemHolder = alleleMap.get(name);
+		}
+		
+		return itemHolder;
+		
+		
 	}
 		
 	public static Map<String, ItemHolder> getAlleleMap() {
@@ -54,10 +62,10 @@ public class AlleleService {
 
 	}
 	
-	public static void addGenotypeItem(String stockName, String genotypeName, Item item){
+	public static void addGenotypeItem(String alleleName, String genotypeName, Item item){
 		
-		genotypeAlleleItemMap.put(stockName, genotypeName, item);
-		alleleItemSet.put(stockName,item);
+		genotypeAlleleItemMap.put(alleleName, genotypeName, item);
+		alleleItemSet.put(alleleName,item);
 	}
 	
 	 

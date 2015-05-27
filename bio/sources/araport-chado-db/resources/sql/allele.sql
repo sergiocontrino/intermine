@@ -3,7 +3,7 @@ SELECT
 	f.uniquename allele_unique_name,
 	f.name alllele_name,
 	c.name feature_type,
-	'TAIR:Polymorphism:' || dbx.accession allele_unique_accession,
+	'Polyallele:' || dbx.accession allele_unique_accession,
 	g.name genotype_name,
 	g.uniquename genotype_unique_name,
 	g.description,

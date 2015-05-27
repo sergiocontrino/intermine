@@ -24,6 +24,8 @@ import org.intermine.bio.domain.source.SourceAllele;
 import org.intermine.bio.domain.source.SourceBackgroundStrain;
 import org.intermine.bio.domain.source.SourceCV;
 import org.intermine.bio.domain.source.SourceCVTerm;
+import org.intermine.bio.domain.source.SourceFeatureGenotype;
+import org.intermine.bio.domain.source.SourceGenotype;
 import org.intermine.bio.domain.source.SourceStock;
 import org.intermine.bio.domain.source.SourceStrain;
 import org.intermine.bio.item.postprocessor.AlleleItemPostprocessor;
@@ -34,6 +36,8 @@ import org.intermine.bio.item.processor.AlleleItemProcessor;
 import org.intermine.bio.item.processor.BackgroundAccessionStockItemProcessor;
 import org.intermine.bio.item.processor.CVItemProcessor;
 import org.intermine.bio.item.processor.CVTermProcessor;
+import org.intermine.bio.item.processor.GenotypeAlleleItemProcessor;
+import org.intermine.bio.item.processor.GenotypeItemProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
 import org.intermine.bio.item.processor.StrainItemProcessor;
 import org.intermine.bio.item.util.ItemHolder;
@@ -41,6 +45,8 @@ import org.intermine.bio.reader.AlleleReader;
 import org.intermine.bio.reader.BackgroundAccessionReader;
 import org.intermine.bio.reader.CVReader;
 import org.intermine.bio.reader.CVTermReader;
+import org.intermine.bio.reader.GenotypeAlleleReader;
+import org.intermine.bio.reader.GenotypeReader;
 import org.intermine.bio.reader.StockReader;
 import org.intermine.bio.reader.StrainReader;
 import org.intermine.bio.dataloader.job.Step;
@@ -109,59 +115,77 @@ public class AppLauncher {
 
 		cvTermStep.setStepPostProcessor(cvTermPostprocessor);
 
-		//Strain Step Config 
+		// Strain Step Config
 		StrainItemProcessor processor3 = new StrainItemProcessor(service);
 		DatabaseItemReader<SourceStrain> reader3 = new StrainReader().getReader(service.getConnection());
 		String stepName3 = "Strain Loading Step";
 		FlowStep<SourceStrain, Item> strainStep = new FlowStepBuilder<SourceStrain, Item>().build(stepName3, reader3,
 				processor3, taskExecutor);
-		
+
 		// Stock Step Config
 		StockItemProcessor processor4 = new StockItemProcessor(service);
 		DatabaseItemReader<SourceStock> reader4 = new StockReader().getStockReader(service.getConnection());
 		String stepName4 = "Stock Loading Step";
 		Step stockPostprocessor = new StockItemPostprocessor(service).getPostProcessor("Stock PostProcessor", service,
 				taskExecutor);
-		
+
 		FlowStep<SourceStock, Item> stockStep = new FlowStepBuilder<SourceStock, Item>().build(stepName4, reader4,
 				processor4, taskExecutor);
 		stockStep.setStepPostProcessor(stockPostprocessor);
 
 		BackgroundAccessionStockItemProcessor processor5 = new BackgroundAccessionStockItemProcessor(service);
-		DatabaseItemReader<SourceBackgroundStrain> reader5 = new BackgroundAccessionReader().getReader(service.getConnection());
+		DatabaseItemReader<SourceBackgroundStrain> reader5 = new BackgroundAccessionReader().getReader(service
+				.getConnection());
 		String stepName5 = "Background Accession Stock Loading Step";
-		
+
 		Step backgroundAccessionPostProcessor = new BackgroundAccessionStockItemPostprocessor(service)
-				.getPostProcessor("Background Accession Stock PostProcessor", service,
-				taskExecutor);
-		
-		
-		FlowStep<SourceBackgroundStrain, Item> bgAccessionStockStep = new FlowStepBuilder<SourceBackgroundStrain, Item>().build(stepName5, reader5,
-				processor5, taskExecutor);
-		
+				.getPostProcessor("Background Accession Stock PostProcessor", service, taskExecutor);
+
+		FlowStep<SourceBackgroundStrain, Item> bgAccessionStockStep = new FlowStepBuilder<SourceBackgroundStrain, Item>()
+				.build(stepName5, reader5, processor5, taskExecutor);
+
 		bgAccessionStockStep.setStepPostProcessor(backgroundAccessionPostProcessor);
-		
+
 		// Allele Step
-		
-				
+
 		AlleleItemProcessor processor6 = new AlleleItemProcessor(service);
 		DatabaseItemReader<SourceAllele> reader6 = new AlleleReader().getReader(service.getConnection());
 		String stepName6 = "Allele Loading Step";
-		
-		Step allelePostProcessor = new AlleleItemPostprocessor(service)
-				.getPostProcessor("Allele PostProcessor", service,
-				taskExecutor);
-		
+
+	
 		FlowStep<SourceAllele, Item> alleleStep = new FlowStepBuilder<SourceAllele, Item>().build(stepName6, reader6,
 				processor6, taskExecutor);
-		alleleStep.setStepPostProcessor(allelePostProcessor);
-				
+		// alleleStep.setStepPostProcessor(allelePostProcessor);
+
+		// Genotype
+		GenotypeItemProcessor processor7 = new GenotypeItemProcessor(service);
+		DatabaseItemReader<SourceGenotype> reader7 = new GenotypeReader().getReader(service.getConnection());
+		String stepName7 = "Genotype Loading Step";
+
+		FlowStep<SourceGenotype, Item> genotypeStep = new FlowStepBuilder<SourceGenotype, Item>().build(stepName7,
+				reader7, processor7, taskExecutor);
+
+		// Genotype/Allele Collection
+		GenotypeAlleleItemProcessor processor8 = new GenotypeAlleleItemProcessor(service);
+		DatabaseItemReader<SourceFeatureGenotype> reader8 = new GenotypeAlleleReader().getReader(service.getConnection());
+		String stepName8 = "Genotype/Allele Collection Loading Step";
+
+		FlowStep<SourceFeatureGenotype, Item> genotypeAlleleCollectionStep =
+				new FlowStepBuilder<SourceFeatureGenotype, Item>()
+				.build(stepName8, reader8, processor8, taskExecutor);
+		
+		Step alleleGenotypePostProcessor = new AlleleItemPostprocessor(service).getPostProcessor("Allele PostProcessor",
+				service, taskExecutor);
+		genotypeAlleleCollectionStep.setStepPostProcessor(alleleGenotypePostProcessor);
+
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
 		steps.add(stockStep);
 		steps.add(bgAccessionStockStep);
 		steps.add(alleleStep);
+		steps.add(genotypeStep);
+		steps.add(genotypeAlleleCollectionStep);
 	}
 
 	private static SimpleJob setJob() {
