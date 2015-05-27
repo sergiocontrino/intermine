@@ -51,7 +51,7 @@ public interface SourceDataFlowTaskContainer {
 
 	static final String ATTRIBUTIONTYPE_CV_SQL = FileUtils.getSqlFileContents(ZYGOSITY_TYPE_CV_SQL_PATH);
 
-	static final String ALLELE_SQL_PATH = "/sql/stock_dataset.sql";
+	static final String ALLELE_SQL_PATH = "/sql/allele.sql";
 
 	static final String ALLELE_SQL = FileUtils.getSqlFileContents(ALLELE_SQL_PATH);
 
@@ -94,5 +94,6 @@ public interface SourceDataFlowTaskContainer {
 	static final String BG_ACCESSION_SQL_PATH = "/sql/stock_background_accessions.sql";
 
 	static final String BG_ACCESSION_SQL = FileUtils.getSqlFileContents( BG_ACCESSION_SQL_PATH);
+
 	
 }

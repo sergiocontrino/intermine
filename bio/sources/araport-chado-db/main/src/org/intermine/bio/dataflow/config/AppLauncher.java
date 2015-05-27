@@ -20,20 +20,24 @@ import org.intermine.bio.dataloader.job.SyncTaskExecutor;
 import org.intermine.bio.dataloader.job.TaskExecutor;
 import org.intermine.bio.dataloader.job.TaskletStep;
 import org.intermine.bio.dataloader.util.IdGenerator;
+import org.intermine.bio.domain.source.SourceAllele;
 import org.intermine.bio.domain.source.SourceBackgroundStrain;
 import org.intermine.bio.domain.source.SourceCV;
 import org.intermine.bio.domain.source.SourceCVTerm;
 import org.intermine.bio.domain.source.SourceStock;
 import org.intermine.bio.domain.source.SourceStrain;
+import org.intermine.bio.item.postprocessor.AlleleItemPostprocessor;
 import org.intermine.bio.item.postprocessor.BackgroundAccessionStockItemPostprocessor;
 import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
 import org.intermine.bio.item.postprocessor.StockItemPostprocessor;
+import org.intermine.bio.item.processor.AlleleItemProcessor;
 import org.intermine.bio.item.processor.BackgroundAccessionStockItemProcessor;
 import org.intermine.bio.item.processor.CVItemProcessor;
 import org.intermine.bio.item.processor.CVTermProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
 import org.intermine.bio.item.processor.StrainItemProcessor;
 import org.intermine.bio.item.util.ItemHolder;
+import org.intermine.bio.reader.AlleleReader;
 import org.intermine.bio.reader.BackgroundAccessionReader;
 import org.intermine.bio.reader.CVReader;
 import org.intermine.bio.reader.CVTermReader;
@@ -137,11 +141,27 @@ public class AppLauncher {
 		
 		bgAccessionStockStep.setStepPostProcessor(backgroundAccessionPostProcessor);
 		
+		// Allele Step
+		
+				
+		AlleleItemProcessor processor6 = new AlleleItemProcessor(service);
+		DatabaseItemReader<SourceAllele> reader6 = new AlleleReader().getReader(service.getConnection());
+		String stepName6 = "Allele Loading Step";
+		
+		Step allelePostProcessor = new AlleleItemPostprocessor(service)
+				.getPostProcessor("Allele PostProcessor", service,
+				taskExecutor);
+		
+		FlowStep<SourceAllele, Item> alleleStep = new FlowStepBuilder<SourceAllele, Item>().build(stepName6, reader6,
+				processor6, taskExecutor);
+		alleleStep.setStepPostProcessor(allelePostProcessor);
+				
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
 		steps.add(stockStep);
 		steps.add(bgAccessionStockStep);
+		steps.add(alleleStep);
 	}
 
 	private static SimpleJob setJob() {
