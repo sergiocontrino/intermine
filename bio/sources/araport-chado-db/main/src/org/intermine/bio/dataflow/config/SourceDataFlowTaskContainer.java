@@ -74,6 +74,10 @@ public interface SourceDataFlowTaskContainer {
 	static final String STOCK_SQL_PATH = "/sql/stock_dataset.sql";
 
 	static final String STOCK_SQL = FileUtils.getSqlFileContents(STOCK_SQL_PATH);
+	
+	static final String STOCK_GENOTYPE_SQL_PATH = "/sql/stock_genotype.sql";
+
+	static final String STOCK_GENOTYPE_SQL = FileUtils.getSqlFileContents(STOCK_GENOTYPE_SQL_PATH);
 
 	static final String STOCK_TEST_SQL_PATH = "/sql/stock_dataset_test.sql";
 

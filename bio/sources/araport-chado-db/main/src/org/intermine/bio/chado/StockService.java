@@ -42,11 +42,6 @@ public class StockService {
 			
 	}
 
-	public static void getStockItem(String name) {
-
-		stockMap.get(name);
-
-	}
 		
 	public static Map<String, ItemHolder> getStockMap() {
 
@@ -65,5 +60,19 @@ public class StockService {
 		 return bgAccessionItemSet;
 	 }
 	
+	 
+	 public static ItemHolder getStockItem(String name) {
+
+			
+			ItemHolder itemHolder = null;
+			
+			if (stockMap.containsKey(name)){
+				itemHolder = stockMap.get(name);
+			}
+			
+			return itemHolder;
+			
+			
+		}
 
 }

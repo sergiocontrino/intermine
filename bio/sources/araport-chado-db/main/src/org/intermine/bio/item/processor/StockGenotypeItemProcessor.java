@@ -16,16 +16,16 @@ import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
 import org.intermine.bio.domain.source.*;
 
-public class GenotypeAlleleItemProcessor extends DataSourceProcessor implements
+public class StockGenotypeItemProcessor extends DataSourceProcessor implements
 		ItemProcessor<SourceFeatureGenotype, Item> {
 
-	protected static final Logger log = Logger.getLogger(GenotypeAlleleItemProcessor.class);
+	protected static final Logger log = Logger.getLogger(StockGenotypeItemProcessor.class);
 
 	private String targetClassName;
 
 	private static final String ITEM_CLASSNAME = "Genotype";
 
-	public GenotypeAlleleItemProcessor(ChadoDBConverter chadoDBConverter) {
+	public StockGenotypeItemProcessor(ChadoDBConverter chadoDBConverter) {
 		super(chadoDBConverter);
 	}
 
@@ -43,7 +43,7 @@ public class GenotypeAlleleItemProcessor extends DataSourceProcessor implements
 		Item item = null;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.info("Creating Stock/Genotype Collection has started. Source Object:" + source);
 
 			Item genotypeItem = GenotypeService.getGenotypeItem(source.getGenotypeUniqueAccession()).getItem();
 			ItemHolder alleleItemHolder = AlleleService.getAlleleItem(source.getFeatureUniqueAccession());
