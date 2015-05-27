@@ -53,9 +53,15 @@ public class StrainItemProcessor extends DataSourceProcessor implements ItemProc
 			item.setAttribute("secondaryIdentifier",
 					StringUtils.capitalize(source.getOrganismType()) + " Id:" + source.getOrganismId());
 
-			log.info("Name   " + source.getAccessionAbbreviation());
-			item.setAttribute("name", source.getAccessionAbbreviation());
-
+			if (!StringUtils.isBlank(source.getAccessionOriginalName())){
+				
+				log.info("Name   " + source.getAccessionOriginalName());
+				item.setAttribute("name", source.getAccessionOriginalName());
+			}else
+			{
+				log.info("Name   " + source.getAccessionAbbreviation());
+				item.setAttribute("name", source.getAccessionAbbreviation());
+     		}
 			
 			log.info("Accession Abbreviation: " + source.getAccessionAbbreviation());
 			item.setAttribute("abbreviationName", source.getAccessionAbbreviation());
