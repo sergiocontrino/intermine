@@ -27,10 +27,12 @@ import org.intermine.bio.domain.source.SourceCVTerm;
 import org.intermine.bio.domain.source.SourceFeatureGenotype;
 import org.intermine.bio.domain.source.SourceGenotype;
 import org.intermine.bio.domain.source.SourceStock;
+import org.intermine.bio.domain.source.SourceStockGenotype;
 import org.intermine.bio.domain.source.SourceStrain;
 import org.intermine.bio.item.postprocessor.AlleleItemPostprocessor;
 import org.intermine.bio.item.postprocessor.BackgroundAccessionStockItemPostprocessor;
 import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
+import org.intermine.bio.item.postprocessor.StockGenotypeItemPostprocessor;
 import org.intermine.bio.item.postprocessor.StockItemPostprocessor;
 import org.intermine.bio.item.processor.AlleleItemProcessor;
 import org.intermine.bio.item.processor.BackgroundAccessionStockItemProcessor;
@@ -38,6 +40,7 @@ import org.intermine.bio.item.processor.CVItemProcessor;
 import org.intermine.bio.item.processor.CVTermProcessor;
 import org.intermine.bio.item.processor.GenotypeAlleleItemProcessor;
 import org.intermine.bio.item.processor.GenotypeItemProcessor;
+import org.intermine.bio.item.processor.StockGenotypeItemProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
 import org.intermine.bio.item.processor.StrainItemProcessor;
 import org.intermine.bio.item.util.ItemHolder;
@@ -47,6 +50,7 @@ import org.intermine.bio.reader.CVReader;
 import org.intermine.bio.reader.CVTermReader;
 import org.intermine.bio.reader.GenotypeAlleleReader;
 import org.intermine.bio.reader.GenotypeReader;
+import org.intermine.bio.reader.StockGenotypeReader;
 import org.intermine.bio.reader.StockReader;
 import org.intermine.bio.reader.StrainReader;
 import org.intermine.bio.dataloader.job.Step;
@@ -174,10 +178,25 @@ public class AppLauncher {
 				new FlowStepBuilder<SourceFeatureGenotype, Item>()
 				.build(stepName8, reader8, processor8, taskExecutor);
 		
-		Step alleleGenotypePostProcessor = new AlleleItemPostprocessor(service).getPostProcessor("Allele PostProcessor",
+		Step alleleGenotypePostProcessor = new AlleleItemPostprocessor(service).getPostProcessor("Allele/Genotype PostProcessor",
 				service, taskExecutor);
 		genotypeAlleleCollectionStep.setStepPostProcessor(alleleGenotypePostProcessor);
 
+		// Genotype/Stock Collection
+		
+		StockGenotypeItemProcessor processor9 = new StockGenotypeItemProcessor(service);
+		DatabaseItemReader<SourceStockGenotype> reader9 = new StockGenotypeReader().getReader(service.getConnection());
+		String stepName9 = "Stock/Genotype Collection Loading Step";
+		
+		Step stockGenotypePostProcessor = new StockGenotypeItemPostprocessor(service).getPostProcessor("Stock/Genotype PostProcessor",
+				service, taskExecutor);
+				
+		FlowStep<SourceStockGenotype, Item> stockGenotypeCollectionStep =
+				new FlowStepBuilder<SourceStockGenotype, Item>()
+				.build(stepName9, reader9, processor9, taskExecutor);
+		
+		stockGenotypeCollectionStep.setStepPostProcessor(stockGenotypePostProcessor);
+	
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
@@ -186,6 +205,8 @@ public class AppLauncher {
 		steps.add(alleleStep);
 		steps.add(genotypeStep);
 		steps.add(genotypeAlleleCollectionStep);
+		steps.add(stockGenotypeCollectionStep);
+		
 	}
 
 	private static SimpleJob setJob() {

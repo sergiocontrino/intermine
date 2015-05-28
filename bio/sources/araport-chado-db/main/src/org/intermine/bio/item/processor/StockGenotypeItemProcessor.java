@@ -17,26 +17,24 @@ import org.intermine.xml.full.Item;
 import org.intermine.bio.domain.source.*;
 
 public class StockGenotypeItemProcessor extends DataSourceProcessor implements
-		ItemProcessor<SourceFeatureGenotype, Item> {
+		ItemProcessor<SourceStockGenotype, Item> {
 
 	protected static final Logger log = Logger.getLogger(StockGenotypeItemProcessor.class);
 
 	private String targetClassName;
-
-	private static final String ITEM_CLASSNAME = "Genotype";
 
 	public StockGenotypeItemProcessor(ChadoDBConverter chadoDBConverter) {
 		super(chadoDBConverter);
 	}
 
 	@Override
-	public Item process(SourceFeatureGenotype item) throws Exception {
+	public Item process(SourceStockGenotype item) throws Exception {
 
 		return createItem(item);
 
 	}
 
-	private Item createItem(SourceFeatureGenotype source) throws ObjectStoreException {
+	private Item createItem(SourceStockGenotype source) throws ObjectStoreException {
 
 		Exception exception = null;
 
@@ -45,12 +43,12 @@ public class StockGenotypeItemProcessor extends DataSourceProcessor implements
 		try {
 			log.info("Creating Stock/Genotype Collection has started. Source Object:" + source);
 
-			Item genotypeItem = GenotypeService.getGenotypeItem(source.getGenotypeUniqueAccession()).getItem();
-			ItemHolder alleleItemHolder = AlleleService.getAlleleItem(source.getFeatureUniqueAccession());
+			Item stockItem = StockService.getStockItem(source.getStockUniqueAccession()).getItem();
+			ItemHolder stockItemHolder = StockService.getStockItem(source.getStockUniqueAccession());
 
-			if (alleleItemHolder != null && genotypeItem != null) {
-				AlleleService.addGenotypeItem(source.getFeatureUniqueAccession(), source.getGenotypeUniqueAccession(),
-						genotypeItem);
+			if (stockItemHolder != null && stockItem != null) {
+				GenotypeService.addStockItem(source.getGenotypeUniqueAccession(), source.getStockUniqueAccession(),
+						stockItem);
 			}
 
 		} catch (Exception e) {
@@ -58,11 +56,11 @@ public class StockGenotypeItemProcessor extends DataSourceProcessor implements
 		} finally {
 
 			if (exception != null) {
-				log.error("Error adding allele to the genotype/allele item set" + source);
+				log.error("Error adding stock to the stock/genotype item set" + source);
 			} else {
-				log.info("Allele has been successfully added to the genotype/allele item set." + " Genotype:"
-						+ source.getGenotypeUniqueAccession() + "/" + source.getGenotypeName() + " Allele:"
-						+ source.getFeatureUniqueAccession() + "/" + source.getFeatureUniqueName());
+				log.info("Stock has been successfully added to the stock/genotype item set." + " Genotype:"
+						+ source.getGenotypeUniqueAccession() + "/" + source.getGenotypeName() + " Stock:"
+						+ source.getStockUniqueAccession() + "/" + source.getStockUniqueName());
 
 			}
 		}

@@ -13,8 +13,8 @@ public class StockGenotypeRowMapper implements RowMapper<SourceStockGenotype> {
 		
 		SourceStockGenotype item = new SourceStockGenotype();
 		
-		item.setStockUniqueName(rs.getString("allele_unique_name"));
-		item.setStockName(rs.getString("alllele_name"));
+		item.setStockUniqueName(rs.getString("stock_name"));
+		item.setStockName(rs.getString("stock_unique_name"));
 		
 		item.setStockUniqueAccession(rs.getString("stock_unique_accession"));
 		

@@ -19,6 +19,8 @@ public class StockService {
 	private static Map<String, ItemHolder> stockMap = new HashMap<String, ItemHolder>();
 	private static MultiMap bgAccessionItemSet = new MultiValueMap();
 	private static MultiKeyMap bgAccessionStockItemMap = new MultiKeyMap();
+	
+	private static MultiMap genotypeItemSet = new MultiValueMap();
 
 		
 	private StockService() {
@@ -54,6 +56,16 @@ public class StockService {
 		bgAccessionStockItemMap.put(stockName, strainName, item);
 		bgAccessionItemSet.put(stockName,item);
 	}
+	
+
+	public static void addGenotypeItem(String stockName, Item item){
+				
+		genotypeItemSet.put(stockName,item);
+	}
+	
+	public static MultiMap getGenotypeItemSet(){
+		 return genotypeItemSet;
+	 }
 	
 	 
 	 public static MultiMap getBgAccessionItemSet(){

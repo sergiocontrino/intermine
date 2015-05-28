@@ -80,7 +80,7 @@ public class GenotypeService {
 	}
 	 
 	 public static MultiMap getGenotypeStockItemSet(){
-		 return genotypeAlleleItemSet;
+		 return genotypeStockItemSet;
 	 }
 
 }
