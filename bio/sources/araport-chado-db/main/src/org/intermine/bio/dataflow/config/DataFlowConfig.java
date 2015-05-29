@@ -7,8 +7,12 @@ import java.util.PriorityQueue;
 import java.util.TreeMap;
 
 import org.apache.commons.collections.map.MultiKeyMap;
+import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVInfo;
 import org.intermine.bio.chado.ChadoCV;
+import org.intermine.bio.data.service.FindService;
+import org.intermine.bio.data.service.GeneFindService;
+import org.intermine.bio.data.service.ServiceLocator;
 import org.intermine.bio.datalineage.CompletionStatus;
 import org.intermine.bio.datalineage.DataFlowStep;
 import org.intermine.bio.datalineage.DataFlowStepSQL;
@@ -18,8 +22,13 @@ import org.intermine.bio.datalineage.PriorityComparator;
 import org.intermine.bio.datalineage.SourceCVComparator;
 import org.intermine.bio.datalineage.StepAction;
 import org.intermine.bio.datalineage.StepComparator;
+import org.intermine.bio.item.postprocessor.AlleleItemPostprocessor;
+import org.intermine.objectstore.ObjectStoreException;
+import org.intermine.model.bio.*;
 
 public class DataFlowConfig {
+
+	protected static final Logger log = Logger.getLogger(DataFlowConfig.class);
 
 	private static PriorityQueue<DataFlowStep> dataFlowCVTaskQueue = new PriorityQueue<DataFlowStep>(20,
 			new PriorityComparator());
@@ -29,11 +38,11 @@ public class DataFlowConfig {
 
 	private static ChadoCV STOCK_TYPE_CHADO_CV = new ChadoCV("stock_type");
 	private static CVInfo CV_INFO = new CVInfo("cv_info");
-	
+
 	private static Map<String, SourceMap> CHADO_CV_MAP = new HashMap<String, SourceMap>();
-	
-	private static  Map<String, String> CHADO_CVTERM_CLASS_MAP = new HashMap<String, String>();
-	 
+
+	private static Map<String, String> CHADO_CVTERM_CLASS_MAP = new HashMap<String, String>();
+
 	private DataFlowConfig() {
 
 	}
@@ -48,15 +57,21 @@ public class DataFlowConfig {
 		return DataFlowCVConfigHolder.INSTANCE;
 	}
 
-	
-
 	public static void initialize() {
 
-		//initCVConfig();
-		//initDataFlowConfig();
+		// initCVConfig();
+		// initDataFlowConfig();
 		initChadoCVMap();
 		initChadoCVTermClassMap();
-
+				
+		FindService geneService = ServiceLocator.getService(ApplicationContext.GENE_SERVICE);
+		
+		try {
+			log.info("Gene Service using Service Locator:" + "ATMG00030");
+			geneService.findbyObjectbyId("ATMG00030");
+			}catch (Exception e){
+				log.info("Error:" + e.getMessage());
+			}
 	}
 
 	public static void initCVConfig() {
@@ -166,7 +181,7 @@ public class DataFlowConfig {
 	}
 
 	public static void initDataFlowConfig() {
-		
+
 		if (dataFlowTaskQueue == null) {
 			dataFlowTaskQueue = new PriorityQueue<DataFlowStep>(20, new PriorityComparator());
 
@@ -259,25 +274,33 @@ public class DataFlowConfig {
 
 	}
 
-		
-	public static void initChadoCVMap(){
-		
-		if (CHADO_CV_MAP == null){
+	public static void initChadoCVMap() {
+
+		if (CHADO_CV_MAP == null) {
 			CHADO_CV_MAP = new HashMap<String, SourceMap>();
 		}
-			
-		
-		SourceMap germplasm_type = new SourceMap("germplasm_type", "stock_type_ontology", "Stock Type Vocabulary", "StockTypeCV");
-		SourceMap stock_category = new SourceMap("stock_category", "stock_category_ontology", "Stock Category Vocabulary", "StockCategoryCV");
-		SourceMap allele_mode_type = new SourceMap("allele_mode_type", "allele_class_ontology", "Allele Class Vocabulary", "AlleleClassCV" );
-		SourceMap mutagen_type = new SourceMap("mutagen_type", "mutagen_ontology", "Mutagen Type Vocabulary", "MutagenCV");
-		SourceMap inheritance_type = new SourceMap("inheritance_type", "inheritance_mode_ontology", "Allele Inheritance Mode Vocabulary", "InheritanceModeCV");
-		SourceMap mutation_site_type = new SourceMap("mutation_site_type", "mutation_site_ontology", "Mutation Site Vocabulary", "InheritanceModeCV");
-		SourceMap polymorphism_type = new SourceMap("polymorphism_type", "sequence_alteration_type", "Sequence Alteration Vocabulary", "SequenceAlterationCV");
-		SourceMap organism_type = new SourceMap("organism_type", "strain_type_ontology", "Strain Type Vocabulary", "StrainTypeCV");
-		SourceMap genotype_type = new SourceMap("genotype_type", "zygosity_ontology", "Zygosity Type Vocabulary", "ZygosityTypeCV");
-		SourceMap contact_type = new SourceMap("contact_type", "contact_type_ontology", "Contact Type Vocabulary", "ContactTypeCV");
-		
+
+		SourceMap germplasm_type = new SourceMap("germplasm_type", "stock_type_ontology", "Stock Type Vocabulary",
+				"StockTypeCV");
+		SourceMap stock_category = new SourceMap("stock_category", "stock_category_ontology",
+				"Stock Category Vocabulary", "StockCategoryCV");
+		SourceMap allele_mode_type = new SourceMap("allele_mode_type", "allele_class_ontology",
+				"Allele Class Vocabulary", "AlleleClassCV");
+		SourceMap mutagen_type = new SourceMap("mutagen_type", "mutagen_ontology", "Mutagen Type Vocabulary",
+				"MutagenCV");
+		SourceMap inheritance_type = new SourceMap("inheritance_type", "inheritance_mode_ontology",
+				"Allele Inheritance Mode Vocabulary", "InheritanceModeCV");
+		SourceMap mutation_site_type = new SourceMap("mutation_site_type", "mutation_site_ontology",
+				"Mutation Site Vocabulary", "InheritanceModeCV");
+		SourceMap polymorphism_type = new SourceMap("polymorphism_type", "sequence_alteration_type",
+				"Sequence Alteration Vocabulary", "SequenceAlterationCV");
+		SourceMap organism_type = new SourceMap("organism_type", "strain_type_ontology", "Strain Type Vocabulary",
+				"StrainTypeCV");
+		SourceMap genotype_type = new SourceMap("genotype_type", "zygosity_ontology", "Zygosity Type Vocabulary",
+				"ZygosityTypeCV");
+		SourceMap contact_type = new SourceMap("contact_type", "contact_type_ontology", "Contact Type Vocabulary",
+				"ContactTypeCV");
+
 		CHADO_CV_MAP.put("germplasm_type", germplasm_type);
 		CHADO_CV_MAP.put("stock_category", stock_category);
 		CHADO_CV_MAP.put("allele_mode_type", allele_mode_type);
@@ -288,17 +311,15 @@ public class DataFlowConfig {
 		CHADO_CV_MAP.put("organism_type", organism_type);
 		CHADO_CV_MAP.put("genotype_type", genotype_type);
 		CHADO_CV_MAP.put("contact_type", contact_type);
-		
-		
-		
+
 	}
-	
-	public static void initChadoCVTermClassMap(){
-		
-		if (CHADO_CVTERM_CLASS_MAP == null){
+
+	public static void initChadoCVTermClassMap() {
+
+		if (CHADO_CVTERM_CLASS_MAP == null) {
 			CHADO_CVTERM_CLASS_MAP = new HashMap<String, String>();
 		}
-			
+
 		CHADO_CVTERM_CLASS_MAP.put("germplasm_type", "StockType");
 		CHADO_CVTERM_CLASS_MAP.put("stock_category", "StockCategory");
 		CHADO_CVTERM_CLASS_MAP.put("allele_mode_type", "AlleleClass");
@@ -309,33 +330,31 @@ public class DataFlowConfig {
 		CHADO_CVTERM_CLASS_MAP.put("organism_type", "StrainType");
 		CHADO_CVTERM_CLASS_MAP.put("genotype_type", "ZygosityType");
 		CHADO_CVTERM_CLASS_MAP.put("contact_type", "ContactType");
-		
-		
+
 	}
-	
-	
-	public static PriorityQueue<DataFlowStep>getDataFlowCVConfig() {
+
+	public static PriorityQueue<DataFlowStep> getDataFlowCVConfig() {
 		return dataFlowCVTaskQueue;
 	}
 
-	public  static PriorityQueue<DataFlowStep> getDataFlowTasks() {
+	public static PriorityQueue<DataFlowStep> getDataFlowTasks() {
 		return dataFlowTaskQueue;
 	}
-	
-	public static ChadoCV getStockTypeCV(){
+
+	public static ChadoCV getStockTypeCV() {
 		return STOCK_TYPE_CHADO_CV;
 	}
-	
-	public static CVInfo getCVInfo(){
+
+	public static CVInfo getCVInfo() {
 		return CV_INFO;
 	}
-	
-	public static Map <String, SourceMap>getChadoCVMap(){
+
+	public static Map<String, SourceMap> getChadoCVMap() {
 		return CHADO_CV_MAP;
 	}
-	
-	public static Map <String, String> getChadoCVTermClassMap(){
+
+	public static Map<String, String> getChadoCVTermClassMap() {
 		return CHADO_CVTERM_CLASS_MAP;
 	}
-	
+
 }

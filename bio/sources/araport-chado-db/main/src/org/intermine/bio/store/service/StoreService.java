@@ -6,12 +6,18 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
+import org.intermine.bio.data.service.GeneFindService;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataflow.config.AppLauncher;
+import org.intermine.bio.dataflow.config.ApplicationContext;
 import org.intermine.bio.dataflow.config.DataFlowConfig;
 import org.intermine.bio.item.util.ItemHolder;
 import org.intermine.bio.reader.CVTermReader;
+import org.intermine.bio.util.OrganismRepository;
+import org.intermine.metadata.Model;
+import org.intermine.objectstore.ObjectStore;
 import org.intermine.objectstore.ObjectStoreException;
+import org.intermine.objectstore.ObjectStoreFactory;
 import org.intermine.xml.full.Item;
 import org.intermine.xml.full.ReferenceList;
 
@@ -20,6 +26,7 @@ public class StoreService {
 	protected static final Logger log = Logger.getLogger(StoreService.class);
 
 	private static ChadoDBConverter service;
+	private static final GeneFindService geneFindService = GeneFindService.getInstance();
 
 	private static class StoreServiceHolder {
 
@@ -84,4 +91,29 @@ public class StoreService {
 
 		return result;
 	}
+	
+	/**
+     * Return the Model of the target database.
+     * @return the model
+     */
+    public static Model getModel() {
+        return service.getModel();
+    }
+    
+    public static ObjectStore getStore() {
+    	
+    	ObjectStore objectStore = null;
+    	
+        try {
+			return ObjectStoreFactory.getObjectStore(ApplicationContext.OBJECT_STORE);
+		} catch (Exception e) {
+			
+			log.error("Error getting object Store by name" + ApplicationContext.OBJECT_STORE);
+			
+			e.printStackTrace();
+		}
+        
+        return objectStore;
+    }
+    
 }
