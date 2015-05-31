@@ -160,6 +160,7 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 			}
 
 			itemId = super.getService().store(item);
+						
 		
 		} catch (ObjectStoreException e) {
 			exception = e;

@@ -57,6 +57,7 @@ public abstract class ChadoProcessor
      */
     public ItemWriter getItemWriter() {
         return chadoDBConverter.getItemWriter();
+      
     }
 
     /**

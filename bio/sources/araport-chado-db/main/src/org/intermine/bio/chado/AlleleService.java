@@ -17,7 +17,11 @@ import org.intermine.bio.item.util.ItemHolder;
 public class AlleleService {
 
 	private static Map<String, ItemHolder> alleleMap = new HashMap<String, ItemHolder>();
+	private static Map<String, ItemHolder> geneMap = new HashMap<String, ItemHolder>();
 	private static MultiMap alleleItemSet = new MultiValueMap();
+	
+	private static MultiMap geneAllelItemSet = new MultiValueMap();
+	
 	private static MultiKeyMap genotypeAlleleItemMap = new MultiKeyMap();
 
 		
@@ -42,6 +46,30 @@ public class AlleleService {
 			
 	}
 
+	public static void addGeneItem(String name, ItemHolder item) {
+
+		if (getGeneItem(name) == null) {
+			
+			geneMap.put(name, item);
+		
+		}
+			
+	}
+	
+	public static ItemHolder getGeneItem(String name) {
+
+		
+		ItemHolder itemHolder = null;
+		
+		if (geneMap.containsKey(name)){
+			itemHolder = geneMap.get(name);
+		}
+		
+		return itemHolder;
+		
+		
+	}
+	
 	public static ItemHolder getAlleleItem(String name) {
 
 		
@@ -68,10 +96,26 @@ public class AlleleService {
 		alleleItemSet.put(alleleName,item);
 	}
 	
+	public static void addAlleleGeneItem(String alleleName, String genotypeName, Item item){
+		
+		geneAllelItemSet.put(alleleName,item);
+	}
+	
+	public static MultiMap getAlleleGeneItemSet(){
+		 return geneAllelItemSet;
+	 }
+	
 	 
 	 public static MultiMap getAlleleItemSet(){
 		 return alleleItemSet;
 	 }
 	
 
+	 public static Map<String, ItemHolder> getGeneMap() {
+
+			return geneMap;
+
+	}
+	 
+	 
 }

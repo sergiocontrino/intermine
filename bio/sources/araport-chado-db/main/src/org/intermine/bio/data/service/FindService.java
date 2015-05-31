@@ -30,10 +30,9 @@ public abstract class FindService {
 
 	protected static final Logger log = Logger.getLogger(FindService.class);
 	
-
 	protected static String targetClassName;
 	protected static String primaryIdentifier;
-	protected static ClassDescriptor classDescriptor;
+	protected ClassDescriptor classDescriptor;
 
 	public abstract InterMineObject findbyObjectbyId(String objectIdentifier) throws ObjectStoreException, Exception;
 
@@ -43,7 +42,7 @@ public abstract class FindService {
 		return targetClassName;
 	}
 
-	public void setClassName(String className) {
+	public static void setClassName(String className) {
 		targetClassName = className;
 	}
 
@@ -55,7 +54,7 @@ public abstract class FindService {
 		primaryIdentifier = identifier;
 	}
 
-	public static ClassDescriptor getModelClassName() {
+	public  ClassDescriptor getModelClassName() {
 
 		Model model = Model.getInstanceByName(ApplicationContext.MODEL_NAME);
 		log.info("Model: " + model.getName());
@@ -63,7 +62,7 @@ public abstract class FindService {
 		return model.getClassDescriptorByName(targetClassName);
 	}
 
-	public static QueryClass getQueryClass() {
+	public QueryClass getQueryClass() {
 		return new QueryClass(getModelClassName().getType());
 	}
 

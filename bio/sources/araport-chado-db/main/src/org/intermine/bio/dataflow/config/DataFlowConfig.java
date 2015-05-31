@@ -65,6 +65,7 @@ public class DataFlowConfig {
 		initChadoCVTermClassMap();
 				
 		FindService geneService = ServiceLocator.getService(ApplicationContext.GENE_SERVICE);
+		FindService alleleService = ServiceLocator.getService(ApplicationContext.ALLELE_SERVICE);
 		
 		try {
 			log.info("Gene Service using Service Locator:" + "ATMG00030");
@@ -72,6 +73,14 @@ public class DataFlowConfig {
 			}catch (Exception e){
 				log.info("Error:" + e.getMessage());
 			}
+		
+		try {
+			log.info("Allele Service using Service Locator:" + "4CL1-1");
+			alleleService .findbyObjectbyId("4CL1-1");
+			}catch (Exception e){
+				log.info("Error:" + e.getMessage());
+			}
+		
 	}
 
 	public static void initCVConfig() {

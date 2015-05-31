@@ -27,30 +27,30 @@ import org.intermine.xml.full.Item;
 import org.intermine.model.InterMineObject;
 import org.intermine.model.bio.*;
 
-public class GeneFindService extends FindService {
+public class AlleleFindService extends FindService {
 
-	protected static final Logger log = Logger.getLogger(GeneFindService.class);
+	protected static final Logger log = Logger.getLogger(AlleleFindService.class);
 
-	private GeneFindService() {
-
-	}
-
-	private static class GeneFindServiceHolder {
-
-		public static final GeneFindService INSTANCE = new GeneFindService();
+	private AlleleFindService() {
 
 	}
 
-	public static GeneFindService getInstance() {
-		targetClassName = "Gene";
+	private static class AlleleFindServiceHolder {
+
+		public static final AlleleFindService INSTANCE = new AlleleFindService();
+
+	}
+
+	public static AlleleFindService getInstance() {
+		targetClassName = "Allele";
 		primaryIdentifier = "primaryIdentifier";
-		return GeneFindServiceHolder.INSTANCE;
+		return AlleleFindServiceHolder.INSTANCE;
 	}
 	
 	@Override
 	public InterMineObject findbyObjectbyId(String objectIdentifier) throws ObjectStoreException, Exception {
 
-		setClassName("Gene");
+		setClassName("Allele");
 		
 		log.info("Creating Query for object : " + getQueryClass() + ";" + "Selector field:" + primaryIdentifier + " ; "
 				+ "Object Id:" + objectIdentifier);
@@ -76,18 +76,23 @@ public class GeneFindService extends FindService {
 		return null;
 	}
 	
-	public Gene getGene(String objectIdentifier) throws ObjectStoreException, IllegalAccessException, Exception{
-		Gene geneItem = null;
+	public Allele getAllele(String objectIdentifier) throws ObjectStoreException, IllegalAccessException, Exception{
+		Allele item = null;
 		
 		InterMineObject objectItem =  findbyObjectbyId(objectIdentifier);
+	
 		
-		geneItem =  (Gene) PostProcessUtil.cloneInterMineObject(objectItem);
+		if (objectItem!=null){
+			item =  (Allele) PostProcessUtil.cloneInterMineObject(objectItem);
+		}
 			
-		if (geneItem!=null){
-			log.info("Found Gene by Primary Id:" + objectIdentifier + ";Gene:" + geneItem + " ;Gene Primary Id:" + geneItem.getId());
+		if (item!=null){
+			log.info("Found Allele by Primary Id:" + objectIdentifier + ";Allele:" + item + " ;Allele Primary Id:" + item.getId());
+		}else{
+			log.info("No results found");
 		}
 		
-		return geneItem;
+		return item;
 	}
 
 }

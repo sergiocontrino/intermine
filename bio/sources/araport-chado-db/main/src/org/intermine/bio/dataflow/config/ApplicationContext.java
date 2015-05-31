@@ -12,5 +12,7 @@ public interface ApplicationContext {
 	public static final String OBJECT_STORE = "os.production";
 	
 	public static final String GENE_SERVICE = "GeneFindService";
+	
+	public static final String ALLELE_SERVICE = "AlleleFindService";
 		
 }

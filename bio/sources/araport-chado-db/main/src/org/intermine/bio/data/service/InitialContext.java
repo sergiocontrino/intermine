@@ -13,6 +13,10 @@ public class InitialContext {
 			 log.info("Looking up and creating a new GeneFindService object");
 			 
 			return GeneFindService.getInstance();
+			
+		}else if (serviceName.equalsIgnoreCase("AlleleFindService")){
+			
+			return AlleleFindService.getInstance();
 		}
 
 		return null;
