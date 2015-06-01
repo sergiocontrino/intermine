@@ -466,9 +466,9 @@ jQuery(document).ready(function () {
 var queryId="${QUERYID}";
 </script>
 
-<script type="text/javascript" charset="utf-8" src="http://cdn.intermine.org/js/d3/3.5.5/d3.min.js"></script>
-<link rel="stylesheet" type="text/css" href="http://cdn.intermine.org/js/intermine/protein-domain/1.0.0/protein-domain.css">
-<script type="text/javascript" charset="utf-8" src="http://cdn.intermine.org/js/intermine/protein-domain/1.0.0/protein-domain.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://cdn.araport.org/js/d3/3.5.5/d3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.araport.org/js/intermine/protein-domain/1.0.0/protein-domain.css">
+<script type="text/javascript" charset="utf-8" src="https://cdn.araport.org/js/intermine/protein-domain/1.0.0/protein-domain.js"></script>
 
 </c:if>
 

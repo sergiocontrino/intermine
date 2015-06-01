@@ -60,12 +60,12 @@
   <tr>
     <td rowspan="2" class="leftcol"><h2><p>Homology</p></h2></td>
     <td>Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree.</td>
-    <td><a href="http://www.pantherdb.org" target="_blank" class="extlink">Panther</a>- Release 9.0, 9 Jun 2014</td>
+    <td><a href="http://www.pantherdb.org" target="_blank" class="extlink">Panther</a>- Release 10.0, 15 May 2015</td>
     <td>Mi et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/23193289 " target="_blank" class="extlink">PubMed: 23193289</a></td>
   </tr>
   <tr>
     <td>Phytozome Homologs Generated with InParanoid</td>
-    <td><a href="http://phytozome.jgi.doe.gov/phytomine" target="_blank" class="extlink">Phytozome</a>- v10</td>
+    <td><a href="http://phytozome.jgi.doe.gov/phytomine" target="_blank" class="extlink">Phytozome</a>- v10.2.1</td>
     <td>Goodstein et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/22110026" target="_blank" class="extlink">PubMed: 22110026</a></td>
   </tr>
 
