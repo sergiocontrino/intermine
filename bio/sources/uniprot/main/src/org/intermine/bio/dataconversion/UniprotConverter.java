@@ -423,8 +423,8 @@ public class UniprotConverter extends BioDirectoryConverter
                 String type = getAttrValue(attrs, "type");
                 if (type.equals(CONFIG.getGeneDesignation())) {
                     entry.addGeneDesignation(getAttrValue(attrs, "value"));
-		} else if (type.equals(CONFIG.getMRNADesignation())){
-		    entry.addMRNADesignation(getAttrValue(attrs, "value"));
+        } else if (type.equals(CONFIG.getMRNADesignation())){
+            entry.addMRNADesignation(getAttrValue(attrs, "value"));
                 } else if ("evidence".equals(type)) {
                     entry.addGOEvidence(entry.getDbref(), getAttrValue(attrs, "value"));
                 }
@@ -686,8 +686,8 @@ public class UniprotConverter extends BioDirectoryConverter
                     /* genes */
                     processGene(protein, uniprotEntry);
 
-		    /* mrna */
-		    processMRNA(protein, uniprotEntry);
+                    /* mrna */
+                    processMRNA(protein, uniprotEntry);
 
                     store(protein);
 
@@ -929,7 +929,7 @@ public class UniprotConverter extends BioDirectoryConverter
             String taxId = uniprotEntry.getTaxonId();
             String uniqueIdentifierField = getUniqueField(taxId);
             Set<String> geneIdentifiers = getGeneIdentifiers(uniprotEntry, uniqueIdentifierField);
-            if (geneIdentifiers == null) {
+            if (geneIdentifiers == null || geneIdentifiers.isEmpty()) {
                 LOG.error("no valid gene identifiers found for "
                         + uniprotEntry.getPrimaryAccession());
                 return;
@@ -1053,7 +1053,7 @@ public class UniprotConverter extends BioDirectoryConverter
             }
 
             String geneRefId = genes.get(identifier);
-	    LOG.info("Looking for: " + identifier + "and got id" + geneRefId);
+            LOG.debug("Looking for: " + identifier + "and got id" + geneRefId);
             if (geneRefId == null) {
                 Item gene = createItem("Gene");
                 gene.setAttribute(uniqueIdentifierField, identifier);
@@ -1101,16 +1101,14 @@ public class UniprotConverter extends BioDirectoryConverter
 
             // which part of XML file to get values (eg. FlyBase, ORF, etc)
             //String method = getGeneConfigMethod(taxId, identifierField);
-	    String method = "gene-designation";
+            String method = "gene-designation";
             String value = getGeneConfigValue(taxId, identifierField);
             Set<String> geneIdentifiers = new HashSet<String>();
-
             if ("name".equals(method)) {
                 geneIdentifiers = getByName(uniprotEntry, taxId, value);
             } else if ("gene-designation".equals(method)) {
-                String identifierValue = uniprotEntry.getGeneDesignation(value);
-                geneIdentifiers.add(identifierValue);
-	    } else if ("dbref".equals(method)) {
+                geneIdentifiers.addAll(uniprotEntry.getGeneDesignation(value));
+            } else if ("dbref".equals(method)) {
                 geneIdentifiers = getByDbref(uniprotEntry, value);
             } else {
                 LOG.error("error processing config for organism " + taxId);
@@ -1125,7 +1123,7 @@ public class UniprotConverter extends BioDirectoryConverter
 
             // which part of XML file to get values (eg. FlyBase, ORF, etc)
             //String method = getGeneConfigMethod(taxId, identifierField);
-	    String method = "mrna-designation";
+            String method = "mrna-designation";
             String value = getGeneConfigValue(taxId, identifierField);
             Set<String> mrnaIdentifiers = new HashSet<String>();
 
@@ -1134,16 +1132,13 @@ public class UniprotConverter extends BioDirectoryConverter
             } else if ("mrna-designation".equals(method)) {
                 String identifierValue = uniprotEntry.getMRNADesignation(value);
                 mrnaIdentifiers.add(identifierValue);
-	    } else if ("dbref".equals(method)) {
+            } else if ("dbref".equals(method)) {
                 mrnaIdentifiers = getByDbref(uniprotEntry, value);
             } else {
                 LOG.error("error processing config for organism " + taxId);
             }
-
-
             return mrnaIdentifiers;
         }
-
 
         private String getGeneConfigMethod(String taxId, String uniqueIdentifierField) {
             // how to get the identifier, eg. dbref OR name
@@ -1186,8 +1181,7 @@ public class UniprotConverter extends BioDirectoryConverter
             Set<String> geneIdentifiers = new HashSet<String>();
             if ("Ensembl".equals(value)) {
                 // See #2122
-                String geneDesignation = uniprotEntry.getGeneDesignation(value);
-                geneIdentifiers.add(geneDesignation);
+                geneIdentifiers.addAll(uniprotEntry.getGeneDesignation(value));
             } else {
                 Map<String, Set<String>> dbrefs = uniprotEntry.getDbrefs();
                 final String msg = "no " + value
