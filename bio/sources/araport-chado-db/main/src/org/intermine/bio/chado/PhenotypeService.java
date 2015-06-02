@@ -17,6 +17,9 @@ public class PhenotypeService {
 
 	private static Map<String, ItemHolder> phenotypeMap = new HashMap<String, ItemHolder>();
 
+	private static MultiMap phenotypeAlleleItemSet = new MultiValueMap();
+	private static MultiMap phenotypeGenotypeItemSet = new MultiValueMap();
+
 	private PhenotypeService() {
 
 	}
@@ -54,6 +57,24 @@ public class PhenotypeService {
 
 		return phenotypeMap;
 
+	}
+
+	public static void addPhenotypeAlleleItem(String phenotypeName, Item item) {
+
+		phenotypeAlleleItemSet.put(phenotypeName, item);
+	}
+
+	public static MultiMap getPhenotypeAlleleItemSet() {
+		return phenotypeAlleleItemSet;
+	}
+
+	public static void addPhenotypeGenotypeItem(String phenotypeName, Item item) {
+
+		phenotypeAlleleItemSet.put(phenotypeName, item);
+	}
+
+	public static MultiMap getPhenotypeGenotypeItemSet() {
+		return phenotypeGenotypeItemSet;
 	}
 
 }

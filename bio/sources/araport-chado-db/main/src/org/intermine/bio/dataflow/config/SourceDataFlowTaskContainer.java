@@ -73,7 +73,7 @@ public interface SourceDataFlowTaskContainer {
 	
 	static final String PHENOTYPE_GENETIC_CONTEXT_SQL_PATH = "/sql/phenotype_genetic_features.sql";
 
-	static final String PHENOTYPE_GENETIC_CONTEXT_SQL = FileUtils.getSqlFileContents(PHENOTYPE_SQL_PATH);
+	static final String PHENOTYPE_GENETIC_CONTEXT_SQL = FileUtils.getSqlFileContents(PHENOTYPE_GENETIC_CONTEXT_SQL_PATH);
 	
 	static final String PUBLICATION_SQL_PATH = "/sql/stock_dataset.sql";
 

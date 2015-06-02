@@ -6,7 +6,7 @@ SELECT
 	p.name phenotype_name,
 	p.uniquename phenotype_unique_accession,
 	p.phenotype_id,
-	'genotype' as type
+	'genotype' as genetic_feature_type
 FROM
 	phenstatement phst JOIN genotype g
 		ON
@@ -22,11 +22,11 @@ SELECT
 	f.name entity_name,
 	f.uniquename entity_unique_name,
 	'Polyallele:' || dbx.accession entity_unique_accession,
-	p.uniquename phenotype_unique_accession,
-	p.name phenotype_name,
 	p.value as phenotype_description,
+	p.name phenotype_name,
+	p.uniquename phenotype_unique_accession,
 	p.phenotype_id,
-	'allele' as type
+	'allele' as genetic_feature_type
 FROM
 	phenotype p JOIN feature_phenotype fp
 		ON

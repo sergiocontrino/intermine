@@ -27,12 +27,14 @@ import org.intermine.bio.domain.source.SourceCVTerm;
 import org.intermine.bio.domain.source.SourceFeatureGenotype;
 import org.intermine.bio.domain.source.SourceGenotype;
 import org.intermine.bio.domain.source.SourcePhenotype;
+import org.intermine.bio.domain.source.SourcePhenotypeGeneticContext;
 import org.intermine.bio.domain.source.SourceStock;
 import org.intermine.bio.domain.source.SourceStockGenotype;
 import org.intermine.bio.domain.source.SourceStrain;
 import org.intermine.bio.item.postprocessor.AlleleItemPostprocessor;
 import org.intermine.bio.item.postprocessor.BackgroundAccessionStockItemPostprocessor;
 import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
+import org.intermine.bio.item.postprocessor.PhenotypeGeneticContextPostprocessor;
 import org.intermine.bio.item.postprocessor.StockGenotypeItemPostprocessor;
 import org.intermine.bio.item.postprocessor.StockItemPostprocessor;
 import org.intermine.bio.item.processor.AlleleItemProcessor;
@@ -41,6 +43,7 @@ import org.intermine.bio.item.processor.CVItemProcessor;
 import org.intermine.bio.item.processor.CVTermProcessor;
 import org.intermine.bio.item.processor.GenotypeAlleleItemProcessor;
 import org.intermine.bio.item.processor.GenotypeItemProcessor;
+import org.intermine.bio.item.processor.PhenotypeGeneticContextItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeItemProcessor;
 import org.intermine.bio.item.processor.StockGenotypeItemProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
@@ -52,6 +55,7 @@ import org.intermine.bio.reader.CVReader;
 import org.intermine.bio.reader.CVTermReader;
 import org.intermine.bio.reader.GenotypeAlleleReader;
 import org.intermine.bio.reader.GenotypeReader;
+import org.intermine.bio.reader.PhenotypeGeneticContextReader;
 import org.intermine.bio.reader.PhenotypeReader;
 import org.intermine.bio.reader.StockGenotypeReader;
 import org.intermine.bio.reader.StockReader;
@@ -210,6 +214,21 @@ public class AppLauncher {
 				.build(stepName10, reader10, processor10, taskExecutor);
 		
 	
+		// Phenotype/Genetic Context Collections
+		
+		PhenotypeGeneticContextItemProcessor processor11 = new PhenotypeGeneticContextItemProcessor(service);
+		DatabaseItemReader<SourcePhenotypeGeneticContext> reader11 = new PhenotypeGeneticContextReader().getReader(service.getConnection());
+		String stepName11 = "Phenotype/Genetic Context Collection Loading Step";
+		
+		Step phenotypeGeneticPostProcessor = new PhenotypeGeneticContextPostprocessor(service).getPostProcessor("Stock/Genotype PostProcessor",
+				service, taskExecutor);
+		
+		FlowStep<SourcePhenotypeGeneticContext, Item> phenotypeGeneticContextCollectionStep =
+				new FlowStepBuilder<SourcePhenotypeGeneticContext, Item>()
+				.build(stepName11, reader11, processor11, taskExecutor);
+		
+		phenotypeGeneticContextCollectionStep.setStepPostProcessor(phenotypeGeneticPostProcessor);
+		
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
@@ -220,6 +239,8 @@ public class AppLauncher {
 		steps.add(genotypeAlleleCollectionStep);
 		steps.add(stockGenotypeCollectionStep);
 		steps.add(phenotypeStep);
+		steps.add(phenotypeGeneticContextCollectionStep);
+		
 		
 	}
 
