@@ -394,6 +394,13 @@
   <tableExportConfig id="bed" className="org.intermine.bio.web.export.BEDHttpExporter"/>
 
   <reportdisplayers>
+<!--
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.MinePathwaysDisplayer"
+                     jspName="model/minePathwaysDisplayer.jsp"
+                     replacesFields="pathways"
+                     placement="Function"
+                     types="Gene"/>
+ -->
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.CytoscapeNetworkDisplayer"
                      jspName="model/cytoscapeNetworkDisplayer.jsp"
