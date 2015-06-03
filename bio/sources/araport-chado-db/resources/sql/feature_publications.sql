@@ -5,6 +5,10 @@ distinct
 	pub.title publication_title,
 	pub.uniquename publication_uniquename,
 	pub.series_name pub_source,
+	pub.volume pub_volume,
+	pub.volumetitle pub_volume_title,
+	pub.issue pub_issue,
+	pub.pages pub_pages,
 	pub.pyear,
 	pub_xref.db_name || ':' || pub_xref.accession pub_unique_accession,
 	pub_xref.accession pub_accession_number,
@@ -115,6 +119,10 @@ SELECT
 	pub.title publication_title,
 	pub.uniquename publication_uniquename,
 	pub.series_name pub_source,
+	pub.volume pub_volume,
+	pub.volumetitle pub_volume_title,
+	pub.issue pub_issue,
+	pub.pages pub_pages,
 	pub.pyear,
 	pub_xref.db_name || ':' || pub_xref.accession pub_unique_accession,
 	pub_xref.accession pub_accession_number,
@@ -214,7 +222,6 @@ WHERE
 		pub_doi.pub_id = pub.pub_id
 WHERE cp.name <> 'unattributed'
 ORDER BY genetic_feature_type, entity_name, pub_unique_accession;
-
 		
 	
 		

@@ -11,13 +11,13 @@ public class SourceCVTerm {
 	private int is_relationshiptype;
 	private int is_obsolete;
 	private String dbName;
-	
-	public SourceCVTerm(){
-		
+
+	public SourceCVTerm() {
+
 	}
 
-	public SourceCVTerm(int cvterm_id, int cv_id, String name, String definition,
-			int is_relationshiptype, int is_obsolete) {
+	public SourceCVTerm(int cvterm_id, int cv_id, String name, String definition, int is_relationshiptype,
+			int is_obsolete) {
 		super();
 		this.cvTermId = cvterm_id;
 		this.cvId = cv_id;
@@ -83,7 +83,6 @@ public class SourceCVTerm {
 		this.dbXrefId = dbXrefId;
 	}
 
-	
 	public String getCvName() {
 		return cvName;
 	}
@@ -99,8 +98,7 @@ public class SourceCVTerm {
 	public void setCvTermName(String cvTermName) {
 		this.cvTermName = cvTermName;
 	}
-	
-	
+
 	public String getDbName() {
 		return dbName;
 	}
@@ -116,6 +114,4 @@ public class SourceCVTerm {
 				+ is_relationshiptype + ", is_obsolete=" + is_obsolete + ", dbName=" + dbName + "]";
 	}
 
-	
-	
-	}
+}

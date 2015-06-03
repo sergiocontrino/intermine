@@ -1,13 +1,13 @@
 package org.intermine.bio.domain.source;
 
 public class SourceCV {
-	
+
 	private int cvId;
 	private String name;
 	private String definition;
-	
-	public SourceCV(){
-		
+
+	public SourceCV() {
+
 	}
 
 	public SourceCV(int cvId, String name, String defintion) {
@@ -40,11 +40,10 @@ public class SourceCV {
 	public void setDefintion(String defintion) {
 		this.definition = defintion;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "SourceCV [cvId=" + cvId + ", name=" + name + ", definition=" + definition + "]";
 	}
-	
 
 }

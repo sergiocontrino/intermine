@@ -248,4 +248,5 @@ join
 		pubauthor pub_ath
 		on 
 		pub_ath.pub_id = ps.pub_id
+		where pub_id = ?
 		order by ps.pub_unique_accession, pub_ath.rank;

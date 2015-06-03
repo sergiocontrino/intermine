@@ -18,7 +18,7 @@ public class SourceStock {
 	private String mutagen;
 	private String stockCategory;
 	private String stockCenterComment;
-	
+
 	private String isMutant;
 	private String isTransgene;
 	private String isNaturalVarinat;
@@ -27,28 +27,26 @@ public class SourceStock {
 	private String specialGrowthConditions;
 	private String growthTemperature;
 	private String durationOfGrowth;
-	
+
 	private int organismId;
 	private int backgroundAccessionId;
-	
+
 	private Set<SourceStrain> backgroundAccession = new HashSet<SourceStrain>();
-		
+
 	private String accessionName;
 
-	
 	public SourceStock() {
 
 	}
 
-	public SourceStock(long stockId, String name, String description
-			) {
+	public SourceStock(long stockId, String name, String description) {
 
 		this.stockId = stockId;
 		this.name = name;
 		this.description = description;
-	
+
 	}
-	
+
 	public long getStockId() {
 		return stockId;
 	}
@@ -77,7 +75,6 @@ public class SourceStock {
 		this.dbxrefId = dbxrefId;
 	}
 
-	
 	public String getTairObjectId() {
 		return germplasmTairAccession;
 	}
@@ -85,7 +82,7 @@ public class SourceStock {
 	public void setTairObjectId(String tairObjectId) {
 		this.germplasmTairAccession = tairObjectId;
 	}
-	
+
 	public int getOrganismId() {
 		return organismId;
 	}
@@ -93,7 +90,6 @@ public class SourceStock {
 	public void setOrganismId(int organismId) {
 		this.organismId = organismId;
 	}
-
 
 	public String getUniqueName() {
 		return uniqueName;
@@ -107,7 +103,6 @@ public class SourceStock {
 		this.stockId = stockId;
 	}
 
-	
 	public int getBackgroundAccessionId() {
 		return backgroundAccessionId;
 	}
@@ -115,7 +110,7 @@ public class SourceStock {
 	public void setBackgroundAccessionId(int backgroundAccessionId) {
 		this.backgroundAccessionId = backgroundAccessionId;
 	}
-	
+
 	public String getAcessionName() {
 		return accessionName;
 	}
@@ -123,7 +118,7 @@ public class SourceStock {
 	public void setAcessionName(String accessionName) {
 		this.accessionName = accessionName;
 	}
-	
+
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
@@ -183,7 +178,7 @@ public class SourceStock {
 	public void setStockCenterComment(String stockCenterComment) {
 		this.stockCenterComment = stockCenterComment;
 	}
-	
+
 	public String getDisplayName() {
 		return displayName;
 	}
@@ -265,7 +260,7 @@ public class SourceStock {
 				+ ", organismId=" + organismId + ", backgroundAccessionId=" + backgroundAccessionId
 				+ ", directBackgroundAccessionId=" + accessionName + "]";
 	}
-	
+
 	public Set<SourceStrain> getBackgroundAccession() {
 		return backgroundAccession;
 	}
@@ -273,9 +268,9 @@ public class SourceStock {
 	public void setBackgroundAccession(Set<SourceStrain> backgroundAccession) {
 		this.backgroundAccession = backgroundAccession;
 	}
-	
-	public void addBackgroundAccession(SourceStrain accession){
+
+	public void addBackgroundAccession(SourceStrain accession) {
 		this.backgroundAccession.add(accession);
 	}
-		
+
 }

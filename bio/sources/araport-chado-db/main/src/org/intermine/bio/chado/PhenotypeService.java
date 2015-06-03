@@ -24,7 +24,7 @@ public class PhenotypeService {
 
 	}
 
-	private static class GenotypeServiceHolder {
+	private static class PhenotypeServiceHolder {
 
 		public static final PhenotypeService INSTANCE = new PhenotypeService();
 
@@ -32,7 +32,7 @@ public class PhenotypeService {
 
 	public static PhenotypeService getInstance() {
 
-		return GenotypeServiceHolder.INSTANCE;
+		return PhenotypeServiceHolder.INSTANCE;
 	}
 
 	public static void addPhenotypeItem(String name, ItemHolder item) {

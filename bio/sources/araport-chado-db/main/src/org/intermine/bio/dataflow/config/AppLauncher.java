@@ -28,6 +28,7 @@ import org.intermine.bio.domain.source.SourceFeatureGenotype;
 import org.intermine.bio.domain.source.SourceGenotype;
 import org.intermine.bio.domain.source.SourcePhenotype;
 import org.intermine.bio.domain.source.SourcePhenotypeGeneticContext;
+import org.intermine.bio.domain.source.SourcePublication;
 import org.intermine.bio.domain.source.SourceStock;
 import org.intermine.bio.domain.source.SourceStockGenotype;
 import org.intermine.bio.domain.source.SourceStrain;
@@ -45,6 +46,7 @@ import org.intermine.bio.item.processor.GenotypeAlleleItemProcessor;
 import org.intermine.bio.item.processor.GenotypeItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeGeneticContextItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeItemProcessor;
+import org.intermine.bio.item.processor.PublicationsItemProcessor;
 import org.intermine.bio.item.processor.StockGenotypeItemProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
 import org.intermine.bio.item.processor.StrainItemProcessor;
@@ -57,6 +59,7 @@ import org.intermine.bio.reader.GenotypeAlleleReader;
 import org.intermine.bio.reader.GenotypeReader;
 import org.intermine.bio.reader.PhenotypeGeneticContextReader;
 import org.intermine.bio.reader.PhenotypeReader;
+import org.intermine.bio.reader.PublicationReader;
 import org.intermine.bio.reader.StockGenotypeReader;
 import org.intermine.bio.reader.StockReader;
 import org.intermine.bio.reader.StrainReader;
@@ -229,6 +232,14 @@ public class AppLauncher {
 		
 		phenotypeGeneticContextCollectionStep.setStepPostProcessor(phenotypeGeneticPostProcessor);
 		
+		PublicationsItemProcessor processor12 = new PublicationsItemProcessor(service);
+		DatabaseItemReader<SourcePublication> reader12 = new PublicationReader().getReader(service.getConnection());
+		String stepName12 = "Publication Loading Step";
+		
+		FlowStep<SourcePublication, Item> publicationStep =
+				new FlowStepBuilder<SourcePublication, Item>()
+				.build(stepName12, reader12, processor12, taskExecutor);
+		
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
@@ -240,6 +251,7 @@ public class AppLauncher {
 		steps.add(stockGenotypeCollectionStep);
 		steps.add(phenotypeStep);
 		steps.add(phenotypeGeneticContextCollectionStep);
+		steps.add(publicationStep);
 		
 		
 	}
