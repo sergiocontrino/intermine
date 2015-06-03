@@ -636,6 +636,22 @@
                                  externalLink="http://www.ebi.ac.uk/interpro/entry/"/>
 
 
+      <enrichmentwidgetdisplayer id="pathway_enrichment"
+                                 title="Pathway Enrichment"
+                                 description="Pathways enriched for genes in this list - data from KEGG and Reactome"
+                                 label="Pathways"
+                                 filterLabel="DataSet"
+                                 filters="All,KEGG pathways data set,Reactome data set"
+                                 startClass="Gene"
+                                 startClassDisplay="primaryIdentifier"
+                                 enrich="pathways.name"
+                                 enrichIdentifier="pathways.identifier"
+                                 constraints="pathways.dataSets.name=[DataSet],organism.taxonId=[list], primaryIdentifier != null"
+                                 typeClass="Gene"
+                                 views="secondaryIdentifier, symbol, organism.name, pathways.identifier, pathways.name, pathways.dataSets.name"/>
+
+
+
        <bagtabledisplayer id="orthologues" title="Orthologues" pathStrings="Gene.homologues.homologue.organism"
                          description="Counts of genes in list with orthologues."
                          displayFields="name"
