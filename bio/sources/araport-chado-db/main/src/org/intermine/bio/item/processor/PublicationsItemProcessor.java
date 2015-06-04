@@ -1,7 +1,13 @@
 package org.intermine.bio.item.processor;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.intermine.bio.chado.AlleleService;
 import org.intermine.bio.chado.CVService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.chado.PhenotypeService;
@@ -12,8 +18,13 @@ import org.intermine.bio.dataconversion.DataSourceProcessor;
 import org.intermine.bio.dataflow.config.ApplicationContext;
 import org.intermine.bio.item.ItemProcessor;
 import org.intermine.bio.item.util.ItemHolder;
+import org.intermine.bio.reader.GeneAlleleCollectionReader;
+import org.intermine.bio.reader.PublicationAuthorReader;
+import org.intermine.bio.store.service.StoreService;
+import org.intermine.item.domain.database.DatabaseItemReader;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
+import org.intermine.xml.full.ReferenceList;
 import org.intermine.bio.domain.source.*;
 
 public class PublicationsItemProcessor extends DataSourceProcessor implements ItemProcessor<SourcePublication, Item> {
@@ -23,6 +34,9 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 	private String targetClassName;
 
 	private static final String ITEM_CLASSNAME = "Publication";
+
+	DatabaseItemReader<SourcePubAuthors> authorsReader = new PublicationAuthorReader().getReader(service
+			.getConnection());
 
 	public PublicationsItemProcessor(ChadoDBConverter chadoDBConverter) {
 		super(chadoDBConverter);
@@ -40,6 +54,8 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 		Exception exception = null;
 
 		Item item = null;
+		
+		ItemHolder itemHolder = null;
 
 		int itemId = -1;
 
@@ -59,17 +75,17 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 				log.info("DOI: " + source.getPubDOI());
 				item.setAttribute("doi", source.getPubDOI());
 			}
-			
+
 			if (!StringUtils.isBlank(source.getPubTitle())) {
 				log.info("Title: " + source.getPubTitle());
 				item.setAttribute("title", source.getPubTitle());
 			}
-			
+
 			if (!StringUtils.isBlank(source.getPubTitle())) {
 				log.info("Journal: " + source.getPubSource());
 				item.setAttribute("journal", source.getPubSource());
 			}
-			
+
 			if (!StringUtils.isBlank(source.getPubIssue())) {
 				log.info("Issue: " + source.getPubIssue());
 				item.setAttribute("issue", source.getPubIssue());
@@ -84,22 +100,22 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 				log.info("Pages: " + source.getPubPages());
 				item.setAttribute("pages", source.getPubPages());
 			}
-			
+
 			if (!StringUtils.isBlank(source.getPubVolume())) {
 				log.info("Volume: " + source.getPubVolume());
 				item.setAttribute("volume", source.getPubVolume());
 			}
-			
+
 			if (!StringUtils.isBlank(source.getPubFirstAuthor())) {
 				log.info("First Author: " + source.getPubFirstAuthor());
 				item.setAttribute("firstAuthor", source.getPubFirstAuthor());
 			}
-			
+
 			if (!StringUtils.isBlank(source.getAbstractText())) {
 				log.info("First Author: " + source.getAbstractText());
 				item.setAttribute("firstAuthor", source.getAbstractText());
 			}
-			
+
 			itemId = super.getService().store(item);
 
 		} catch (ObjectStoreException e) {
@@ -113,7 +129,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 			} else {
 				log.info("Target Item has been created. Target Object:" + item);
 
-				ItemHolder itemHolder = new ItemHolder(item, itemId);
+				itemHolder = new ItemHolder(item, itemId);
 
 				if (itemHolder != null && itemId != -1) {
 					PublicationService.addPublicationItem(source.getPubAccessionNumber(), itemHolder);
@@ -121,6 +137,11 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 
 			}
 		}
+		
+		if (itemHolder!=null) {
+			processAuthorsCollection(source, itemHolder);
+		}
+		
 		return item;
 	}
 
@@ -132,4 +153,191 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 		return this.targetClassName;
 	}
 
+	private Collection<Item> processAuthorsCollection(SourcePublication source, ItemHolder itemHolder) {
+
+		Exception exception = null;
+
+		Collection<Item> collection = new ArrayList<Item>();
+		collection.clear();
+
+		SourcePubAuthors currentItem = null;
+
+		if (source != null && itemHolder!=null) {
+
+			try {
+
+				setParameters(source, authorsReader);
+
+				authorsReader.open();
+				
+				log.info("Publications Authors Reader: Reader has been successfully opened. ");
+				log.info("Publications Authors Reader: Reading dataset has started ... ");
+
+				while (authorsReader.hasNext()) {
+
+					currentItem = authorsReader.read();
+					log.info("SQL" + authorsReader.getSql());
+					log.info("Current Item = " + currentItem);
+					log.info("Parameter values:" + authorsReader.getParameterMap());
+
+					Item authorItem = null;
+					
+					log.info("Author Full Name:" + currentItem.getFullName());
+					
+					ItemHolder authorHolder = PublicationService.getPublicationAuthorItem(currentItem.getFullName());
+					
+					log.info("Author Holder: " + authorHolder);
+					
+					if (authorHolder==null){
+					
+						authorItem = createAuthorItem(currentItem);
+					
+					}else {
+						authorItem = authorHolder.getItem();
+					}
+
+					log.info("Adding to Authors Publication Collection: " + authorItem);
+					
+					if (authorItem!=null) {
+						
+						addToCollection(authorItem, collection);
+					
+					}
+
+				}
+
+				saveAuthorsCollection(collection, itemHolder);
+
+			} catch (Exception e) {
+
+				exception = e;
+
+			} finally {
+				if (exception != null) {
+					log.error("Error processing Authors Publication Collection. Source:" + source);
+				} else {
+
+					log.info("Authors Publication Collection has been successufully processed. Source:" + source);
+
+				}
+			}
+
+		}
+
+		return collection;
+
+	}
+
+	private Item createAuthorItem(SourcePubAuthors source) {
+
+		Exception exception = null;
+		Item item = null;
+		
+		ItemHolder itemHolder = null;
+		
+		int itemId = -1;
+
+		try {
+			
+			if (!StringUtils.isBlank(source.getFullName())) {
+				
+				item = StoreService.getService().createItem("Author");
+				
+				log.info("Item place holder has been created: " + item);
+				
+				log.info("Author Name: " + source.getFullName());
+				item.setAttribute("name", source.getFullName());
+				
+			
+			
+			if (item!=null && !StringUtils.isBlank(source.getAuthorSurName())) {
+
+				item.setAttribute("lastName", source.getAuthorSurName());
+
+			}
+
+			
+			if (item != null && !StringUtils.isBlank(source.getAuthorGivenName())) {
+
+				log.info("Author Initials: " + source.getAuthorGivenName());
+				item.setAttribute("initials", source.getAuthorGivenName());
+
+			}
+			
+			itemId = StoreService.getService().store(item);
+			
+			}
+
+		} catch (ObjectStoreException e) {
+			exception = e;
+		} catch (Exception e) {
+			exception = e;
+		} finally {
+
+			if (exception != null) {
+				log.error("Error storing item for source record:" + source + ";" +exception.getMessage());
+			} else {
+				log.info("Target Item has been created. Target Object:" + item);
+				
+				itemHolder = new ItemHolder(item, itemId);
+
+				if (itemHolder != null && itemId != -1) {
+					PublicationService.addPublicationAuthorItem(source.getFullName(), itemHolder);
+				}
+
+			}
+		}
+
+		return item;
+
+	}
+
+	private void setParameters(SourcePublication source, DatabaseItemReader<SourcePubAuthors> authorsReader) {
+
+		Map<Integer, Object> param = new HashMap<Integer, Object>();
+		param.put(1, source.getPubId());
+
+		authorsReader.setParameterValues(param);
+
+	}
+
+	private boolean addToCollection(Item item, Collection<Item> collection) {
+
+		boolean result = false;
+
+		log.info("Authors Collection Size:"  + collection.size());
+		
+		if (item != null && collection!=null) {
+			collection.add(item);
+		}
+		return result;
+	}
+
+	private void saveAuthorsCollection(Collection<Item> collection, ItemHolder itemHolder) {
+
+		if (itemHolder != null && collection.size() > 0) {
+			int itemId = itemHolder.getItemId();
+
+			ReferenceList referenceList = new ReferenceList();
+			referenceList.setName("authors");
+
+			try {
+
+				StoreService.storeCollection(collection, itemId, referenceList.getName());
+
+				log.info("Authors Collection successfully stored: " + itemHolder.getItem() + ";" + "Collection size:"
+						+ collection.size());
+
+			} catch (ObjectStoreException e) {
+				log.error("Error storing authors collection for publication:" + itemHolder.getItem() + e.getMessage());
+			} catch (Exception e) {
+				log.error("Error storing authors collection for publication:" + itemHolder.getItem() + e.getMessage());
+			}
+
+		} else {
+			log.error("Cannot store Authors collection for publication. Publication or Authors Collection is empty:"
+					+ itemHolder + ";Collection Size:  " + collection.size());
+		}
+
+	}
 }

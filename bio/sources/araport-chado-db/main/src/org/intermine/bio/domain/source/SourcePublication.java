@@ -178,6 +178,17 @@ public class SourcePublication {
 		this.pubId = pubId;
 	}
 
+	@Override
+	public String toString() {
+		return "SourcePublication [pubId=" + pubId + ", pubType=" + pubType + ", pubTitle=" + pubTitle
+				+ ", pubUniqueName=" + pubUniqueName + ", pubSource=" + pubSource + ", pubVolume=" + pubVolume
+				+ ", pubVolumeTitle=" + pubVolumeTitle + ", pubIssue=" + pubIssue + ", pubPages=" + pubPages
+				+ ", pubYear=" + pubYear + ", pubUniqueAccession=" + pubUniqueAccession + ", pubAccessionNumber="
+				+ pubAccessionNumber + ", dbName=" + dbName + ", pubDbUrl=" + pubDbUrl + ", pubdbUrlPrefix="
+				+ pubdbUrlPrefix + ", pubFirstAuthor=" + pubFirstAuthor + ", pubDate=" + pubDate + ", abstractText="
+				+ abstractText + ", pubDOI=" + pubDOI + "]";
+	}
+
 	
 
 }

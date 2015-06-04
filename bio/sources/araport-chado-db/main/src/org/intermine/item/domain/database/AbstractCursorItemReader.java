@@ -236,6 +236,9 @@ public abstract class AbstractCursorItemReader<T> extends AbstractItemCountingIt
 			return item;
 		}
 		catch (SQLException se) {
+			
+			log.error("Attempt to process next row failed: SQL: " +"\n" + getSql() + ";SQL Exception:" + se.getMessage());
+			se.printStackTrace();
 			throw new SQLException("Attempt to process next row failed", getSql(), se);
 		}
 	}

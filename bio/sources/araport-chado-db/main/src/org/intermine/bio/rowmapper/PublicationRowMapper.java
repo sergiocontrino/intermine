@@ -13,6 +13,7 @@ public class PublicationRowMapper implements RowMapper<SourcePublication> {
 		
 		SourcePublication item = new SourcePublication();
 		
+		item.setPubId(rs.getInt("pub_id"));
 		item.setPubType(rs.getString("pub_type"));
 		item.setPubTitle(rs.getString("pub_title"));
 		item.setPubUniqueName(rs.getString("pub_uniquename"));

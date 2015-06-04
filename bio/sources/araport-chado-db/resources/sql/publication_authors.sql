@@ -237,8 +237,10 @@ from source)
 
 select 
 distinct
+ps.pub_id,
 ps.pub_title,
 ps.pub_unique_accession,
+ps.pub_accession_number,
 pub_ath.surname pub_author_surname,
     pub_ath.givennames pub_author_givennames,
     pub_ath.suffix pub_author_suffix,
@@ -248,5 +250,5 @@ join
 		pubauthor pub_ath
 		on 
 		pub_ath.pub_id = ps.pub_id
-		where pub_id = ?
+		where ps.pub_id = ?
 		order by ps.pub_unique_accession, pub_ath.rank;

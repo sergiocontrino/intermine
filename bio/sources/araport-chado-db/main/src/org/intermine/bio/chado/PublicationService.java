@@ -10,15 +10,21 @@ import java.util.TreeMap;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.commons.collections.map.MultiValueMap;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.intermine.xml.full.Item;
+import org.intermine.bio.item.processor.PublicationsItemProcessor;
 import org.intermine.bio.item.util.ItemHolder;
 
 public class PublicationService {
 
 	private static Map<String, ItemHolder> publicationMap = new HashMap<String, ItemHolder>();
+	private static Map<String, ItemHolder> publicationAuthorMap = new HashMap<String, ItemHolder>();
 
 	private static MultiMap publicationStockItemSet = new MultiValueMap();
 	private static MultiMap publicationPhenotypeItemSet = new MultiValueMap();
+
+	protected static final Logger log = Logger.getLogger(PublicationService.class);
 
 	private PublicationService() {
 
@@ -41,6 +47,12 @@ public class PublicationService {
 
 	}
 
+	public static void addPublicationAuthorItem(String name, ItemHolder item) {
+
+		publicationAuthorMap.put(name, item);
+
+	}
+
 	public static ItemHolder getPublicationItem(String name) {
 
 		ItemHolder itemHolder = null;
@@ -53,9 +65,34 @@ public class PublicationService {
 
 	}
 
+	public static ItemHolder getPublicationAuthorItem(String name) {
+
+		ItemHolder itemHolder = null;
+
+		log.info("Publication Author Map Size:" + publicationAuthorMap.size());
+		
+		if (!StringUtils.isBlank(name) && publicationAuthorMap.size() > 0) {
+
+			log.info("Checking Existence of Author by Name:" + name);
+
+			if (publicationAuthorMap.containsKey(name)) {
+				itemHolder = publicationAuthorMap.get(name);
+			}
+		}
+
+		return itemHolder;
+
+	}
+
 	public static Map<String, ItemHolder> getPublicationMap() {
 
 		return publicationMap;
+
+	}
+
+	public static Map<String, ItemHolder> getPublicationAuthorMap() {
+
+		return publicationAuthorMap;
 
 	}
 

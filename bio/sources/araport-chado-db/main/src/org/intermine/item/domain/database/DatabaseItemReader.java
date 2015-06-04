@@ -133,9 +133,8 @@ public class DatabaseItemReader<T> extends AbstractCursorItemReader<T> {
 			parameterMap.putAll(this.parameterValues);
 		}
 
-		if (log.isDebugEnabled()) {
-			log.debug("Using parameterMap:" + parameterMap);
-		}
+		log.debug("Using parameterMap:" + parameterMap);
+		
 		return parameterMap;
 	}
 
