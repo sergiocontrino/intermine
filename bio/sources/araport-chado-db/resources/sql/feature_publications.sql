@@ -1,15 +1,15 @@
 SELECT
 distinct 
     pub.pub_id,
-	cp.name publication_type,
-	pub.title publication_title,
-	pub.uniquename publication_uniquename,
+	cp.name pub_type,
+	pub.title pub_title,
+	pub.uniquename pub_uniquename,
 	pub.series_name pub_source,
 	pub.volume pub_volume,
 	pub.volumetitle pub_volume_title,
 	pub.issue pub_issue,
 	pub.pages pub_pages,
-	pub.pyear,
+	pub.pyear pub_year,
 	pub_xref.db_name || ':' || pub_xref.accession pub_unique_accession,
 	pub_xref.accession pub_accession_number,
 	pub_xref.db_name pub_db_name,
@@ -18,7 +18,7 @@ distinct
 	pub_ath.surname || ' ' || pub_ath.givennames as first_pub_author,
 	pub_year.publication_date,
 	pub_abs.abstract_text,
-	pub_doi.doi,
+	pub_doi.doi pub_doi,
 	s.name entity_name,
 	'Germplasm:' || dbx.accession entity_unique_accession,
 	'germplasm' as genetic_feature_type
@@ -115,15 +115,15 @@ WHERE
 UNION
 SELECT
 	pub.pub_id,
-	cp.name publication_type,
-	pub.title publication_title,
-	pub.uniquename publication_uniquename,
+	cp.name pub_type,
+	pub.title pub_title,
+	pub.uniquename pub_uniquename,
 	pub.series_name pub_source,
 	pub.volume pub_volume,
 	pub.volumetitle pub_volume_title,
 	pub.issue pub_issue,
 	pub.pages pub_pages,
-	pub.pyear,
+	pub.pyear pub_year,
 	pub_xref.db_name || ':' || pub_xref.accession pub_unique_accession,
 	pub_xref.accession pub_accession_number,
 	pub_xref.db_name pub_db_name,
@@ -132,7 +132,7 @@ SELECT
 	pub_ath.surname || ' ' || pub_ath.givennames as first_pub_author,
 	pub_year.publication_date,
 	pub_abs.abstract_text,
-	pub_doi.doi,
+	pub_doi.doi pub_doi,
 	p.name entity_name,
 	p.uniquename entity_unique_accession,
 	'phenotype' as genetic_feature_type
@@ -222,7 +222,3 @@ WHERE
 		pub_doi.pub_id = pub.pub_id
 WHERE cp.name <> 'unattributed'
 ORDER BY genetic_feature_type, entity_name, pub_unique_accession;
-		
-	
-		
-		

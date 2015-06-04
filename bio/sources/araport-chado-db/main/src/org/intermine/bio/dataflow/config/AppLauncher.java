@@ -29,6 +29,7 @@ import org.intermine.bio.domain.source.SourceGenotype;
 import org.intermine.bio.domain.source.SourcePhenotype;
 import org.intermine.bio.domain.source.SourcePhenotypeGeneticContext;
 import org.intermine.bio.domain.source.SourcePublication;
+import org.intermine.bio.domain.source.SourcePublicationFeatures;
 import org.intermine.bio.domain.source.SourceStock;
 import org.intermine.bio.domain.source.SourceStockGenotype;
 import org.intermine.bio.domain.source.SourceStrain;
@@ -36,6 +37,7 @@ import org.intermine.bio.item.postprocessor.AlleleItemPostprocessor;
 import org.intermine.bio.item.postprocessor.BackgroundAccessionStockItemPostprocessor;
 import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
 import org.intermine.bio.item.postprocessor.PhenotypeGeneticContextPostprocessor;
+import org.intermine.bio.item.postprocessor.PublicationFeaturePostprocessor;
 import org.intermine.bio.item.postprocessor.StockGenotypeItemPostprocessor;
 import org.intermine.bio.item.postprocessor.StockItemPostprocessor;
 import org.intermine.bio.item.processor.AlleleItemProcessor;
@@ -46,6 +48,7 @@ import org.intermine.bio.item.processor.GenotypeAlleleItemProcessor;
 import org.intermine.bio.item.processor.GenotypeItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeGeneticContextItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeItemProcessor;
+import org.intermine.bio.item.processor.PublicationsFeaturesItemProcessor;
 import org.intermine.bio.item.processor.PublicationsItemProcessor;
 import org.intermine.bio.item.processor.StockGenotypeItemProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
@@ -59,6 +62,7 @@ import org.intermine.bio.reader.GenotypeAlleleReader;
 import org.intermine.bio.reader.GenotypeReader;
 import org.intermine.bio.reader.PhenotypeGeneticContextReader;
 import org.intermine.bio.reader.PhenotypeReader;
+import org.intermine.bio.reader.PublicationFeaturesReader;
 import org.intermine.bio.reader.PublicationReader;
 import org.intermine.bio.reader.StockGenotypeReader;
 import org.intermine.bio.reader.StockReader;
@@ -223,7 +227,7 @@ public class AppLauncher {
 		DatabaseItemReader<SourcePhenotypeGeneticContext> reader11 = new PhenotypeGeneticContextReader().getReader(service.getConnection());
 		String stepName11 = "Phenotype/Genetic Context Collection Loading Step";
 		
-		Step phenotypeGeneticPostProcessor = new PhenotypeGeneticContextPostprocessor(service).getPostProcessor("Stock/Genotype PostProcessor",
+		Step phenotypeGeneticPostProcessor = new PhenotypeGeneticContextPostprocessor(service).getPostProcessor("Phenotype/Genetic Feature PostProcessor",
 				service, taskExecutor);
 		
 		FlowStep<SourcePhenotypeGeneticContext, Item> phenotypeGeneticContextCollectionStep =
@@ -240,6 +244,22 @@ public class AppLauncher {
 				new FlowStepBuilder<SourcePublication, Item>()
 				.build(stepName12, reader12, processor12, taskExecutor);
 		
+		// Publications && Features
+		
+		
+		PublicationsFeaturesItemProcessor processor14 = new PublicationsFeaturesItemProcessor(service);
+		DatabaseItemReader<SourcePublicationFeatures> reader14 = new PublicationFeaturesReader().getReader(service.getConnection());
+		String stepName14 = "Publication/Features Loading Step";
+		
+		Step publicationFeaturePostProcessor = new PublicationFeaturePostprocessor(service).getPostProcessor("Publication/Feature PostProcessor",
+				service, taskExecutor);
+		
+		FlowStep<SourcePublicationFeatures, Item> publicationFeaturesStep =
+				new FlowStepBuilder<SourcePublicationFeatures, Item>()
+				.build(stepName14, reader14, processor14, taskExecutor);
+		
+		publicationFeaturesStep.setStepPostProcessor(publicationFeaturePostProcessor);
+		
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
@@ -252,6 +272,7 @@ public class AppLauncher {
 		steps.add(phenotypeStep);
 		steps.add(phenotypeGeneticContextCollectionStep);
 		steps.add(publicationStep);
+		steps.add(publicationFeaturesStep);
 		
 		
 	}

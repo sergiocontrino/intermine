@@ -82,6 +82,10 @@ public interface SourceDataFlowTaskContainer {
 	static final String PUBLICATION_AUTHORS_SQL_PATH = "/sql/publication_authors.sql";
 
 	static final String PUBLICATION_AUTHORS_SQL = FileUtils.getSqlFileContents(PUBLICATION_AUTHORS_SQL_PATH);
+	
+	static final String PUBLICATION_FEATURES_SQL_PATH = "/sql/feature_publications.sql";
+
+	static final String PUBLICATION_FEATURES_SQL = FileUtils.getSqlFileContents(PUBLICATION_FEATURES_SQL_PATH);
 
 	static final String STOCK_CENTER_SQL_PATH = "/sql/stock_dataset.sql";
 

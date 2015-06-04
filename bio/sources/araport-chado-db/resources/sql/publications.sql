@@ -243,5 +243,5 @@ pub_db_urlprefix,
 first_pub_author,
 publication_date,
 abstract_text,
-doi pub_poi
+doi pub_doi
 from source;

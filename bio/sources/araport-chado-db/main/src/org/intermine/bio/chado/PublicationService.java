@@ -23,6 +23,8 @@ public class PublicationService {
 
 	private static MultiMap publicationStockItemSet = new MultiValueMap();
 	private static MultiMap publicationPhenotypeItemSet = new MultiValueMap();
+	
+	private static MultiMap bioEntitiesItemSet = new MultiValueMap();
 
 	protected static final Logger log = Logger.getLogger(PublicationService.class);
 
@@ -114,4 +116,12 @@ public class PublicationService {
 		return publicationPhenotypeItemSet;
 	}
 
+	public static void addPublicationBionEntityItem(String publicationName, Item item) {
+
+		bioEntitiesItemSet.put(publicationName, item);
+	}
+	
+	public static MultiMap getPublicationBionEntitiesItemSet() {
+		return bioEntitiesItemSet;
+	}
 }

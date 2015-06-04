@@ -21,6 +21,7 @@ public class StockService {
 	private static MultiKeyMap bgAccessionStockItemMap = new MultiKeyMap();
 	
 	private static MultiMap genotypeItemSet = new MultiValueMap();
+	private static MultiMap publicationItemSet = new MultiValueMap();
 
 		
 	private StockService() {
@@ -67,7 +68,16 @@ public class StockService {
 		 return genotypeItemSet;
 	 }
 	
+	public static void addPublicationItem(String stockName, Item item){
+		
+		publicationItemSet.put(stockName,item);
+	}
 	 
+	
+	public static MultiMap getPublicationItemSet(){
+		 return publicationItemSet;
+	 }
+	
 	 public static MultiMap getBgAccessionItemSet(){
 		 return bgAccessionItemSet;
 	 }

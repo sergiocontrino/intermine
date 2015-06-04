@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import org.intermine.bio.domain.source.*;
 import org.intermine.bio.jdbc.core.RowMapper;
 
-public class PublicationRowMapper implements RowMapper<SourcePublication> {
+public class PublicationFeaturesRowMapper implements RowMapper<SourcePublicationFeatures> {
 
 	@Override
-	public SourcePublication mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public SourcePublicationFeatures mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
-		SourcePublication item = new SourcePublication();
+		SourcePublicationFeatures item = new SourcePublicationFeatures();
 		
 		item.setPubId(rs.getInt("pub_id"));
 		item.setPubType(rs.getString("pub_type"));
@@ -30,7 +30,12 @@ public class PublicationRowMapper implements RowMapper<SourcePublication> {
 		item.setPubFirstAuthor(rs.getString("first_pub_author"));
 		item.setPubDate(rs.getString("publication_date"));
 		item.setAbstractText(rs.getString("abstract_text"));
-		item.setPubDOI(rs.getString("pub_doi"));		
+		item.setPubDOI(rs.getString("pub_doi"));
+		
+		item.setEntityName(rs.getString("entity_name"));
+		item.setEntityUniqueAccession(rs.getString("entity_unique_accession"));
+		
+		item.setGeneticFeatureType(rs.getString("genetic_feature_type"));
 		
 		return item;
 	}
