@@ -20,6 +20,9 @@ public class URLGenerator
 {
 
     private HttpServletRequest request;
+    private String protocol;
+    private static final String DEFAULT_PROTOCOL = "http";
+    private static final String PRE_PATH = "://";
 
     /**
      * Constructor.
@@ -28,11 +31,21 @@ public class URLGenerator
     public URLGenerator(HttpServletRequest request) {
         this.request = request;
     }
+    /**
+     * Constructor.
+     * @param request request
+     * @param protocol  http or https
+     */
+    public URLGenerator(HttpServletRequest request, String protocol) {
+        this.request = request;
+        this.protocol = protocol;
+    }
 
     /**
      * Generates base url. If default context path is defined in web.properties, then this
      * path is used, else request context path is used. This enables generation of links to
      * the application and not to the particular version of application.
+     *
      * @return base url. For example: http://localhost:8080/query
      */
     public String getPermanentBaseURL() {
@@ -49,10 +62,17 @@ public class URLGenerator
 
     private String generateURL(HttpServletRequest request, String contextPath) {
         String port = "";
+
         if (request.getServerPort() != 80) {
             port = ":" + request.getServerPort();
         }
-        String ret = "http://" + request.getServerName() + port;
+
+        // use http if nothing set
+        if (protocol == null || protocol.length() == 0) {
+            protocol = DEFAULT_PROTOCOL;
+        }
+
+        String ret = protocol + PRE_PATH + request.getServerName() + port;
         if (contextPath.length() > 0) {
             ret += contextPath;
         }
