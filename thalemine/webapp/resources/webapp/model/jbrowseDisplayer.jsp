@@ -39,14 +39,14 @@
     <c:set var="extraParams" value="tracklist=1&nav=1&overview=0"/>
     <c:set var="loc" value="${chr}:${offsetstart}..${offsetend}"/>
 
-    <c:set var="jbLink" value="${baseUrl}/?data=${datasource}&loc=${loc}&tracks=${tracks}&${extraParams}"/>
+    <c:set var="jbLink" value="${baseUrl}/?data=${datasource}&loc=${loc}&tracks=${tracks}"/>
+    <c:set var="jbLinkEmbed" value="${jbLink}&${extraParams}"/>
 
     <div>
-        <p>Click and drag the browser to move the view. Check to turn on/off the tracks from left menu to see the data in the main panel.</p>
         <iframe id="jbrowse" name="jbrowse" height="300px" width="98%" style="border: 1px solid #dfdfdf; padding: 1%" src="${jbLink}"></iframe>
         <p>
-            <a href="${jbLink}" target="jbrowse">Center on ${reportObject.object.symbol}</a>&nbsp;|&nbsp;
-            <a href="javascript:;" onclick="jQuery('iframe').css({height: '600px'});">Expand viewer</a>&nbsp;|&nbsp;
+            <a href="${jbLinkEmbed}" target="jbrowse">Center on ${reportObject.object.symbol}</a>&nbsp;|&nbsp;
+            <a href="${jbLink}" target="_blank" class="extlink">Full Screen View</a>&nbsp;|&nbsp;
             Powered by <a href="http://jbrowse.org" target="_blank" class="extlink">JBrowse</a>
         </p>
     </div>
