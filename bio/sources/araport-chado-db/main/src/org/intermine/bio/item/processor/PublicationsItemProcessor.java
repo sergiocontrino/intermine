@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.AlleleService;
 import org.intermine.bio.chado.CVService;
+import org.intermine.bio.chado.DataSourceService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.chado.PhenotypeService;
 import org.intermine.bio.chado.PublicationService;
@@ -34,6 +35,8 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 	private String targetClassName;
 
 	private static final String ITEM_CLASSNAME = "Publication";
+	
+	private static final String DATASOURCE_NAME = "NCBI";
 
 	DatabaseItemReader<SourcePubAuthors> authorsReader = new PublicationAuthorReader().getReader(service
 			.getConnection());
@@ -58,6 +61,8 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 		ItemHolder itemHolder = null;
 
 		int itemId = -1;
+		
+		Item dataSourceItem = DataSourceService.getDataSourceItem(DATASOURCE_NAME).getItem();
 
 		try {
 			log.info("Creating Item has started. Source Object:" + source);
@@ -140,11 +145,24 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 		
 		if (itemHolder!=null) {
 			processAuthorsCollection(source, itemHolder);
+			setDataSourceItem(itemHolder);
 		}
 		
 		return item;
 	}
 
+	private void setDataSourceItem(ItemHolder item){
+		
+		Item dataSourceItem = DataSourceService.getDataSourceItem(DATASOURCE_NAME).getItem();
+		
+		if (dataSourceItem!=null && item!=null){
+			DataSourceService.addPublicationItem(DATASOURCE_NAME, item.getItem());
+			
+			log.info("Publication has been successfully added to the datasource. DataSource:" + dataSourceItem + " Item:"+ item.getItem());
+		}
+		
+	}
+	
 	public void setTargetClassName(String name) {
 		this.targetClassName = name;
 	}
@@ -340,4 +358,5 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 		}
 
 	}
+	
 }

@@ -36,6 +36,8 @@ import org.intermine.bio.domain.source.SourceStrain;
 import org.intermine.bio.item.postprocessor.AlleleItemPostprocessor;
 import org.intermine.bio.item.postprocessor.BackgroundAccessionStockItemPostprocessor;
 import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
+import org.intermine.bio.item.postprocessor.DataSetItemPostprocessor;
+import org.intermine.bio.item.postprocessor.DataSourceItemPostprocessor;
 import org.intermine.bio.item.postprocessor.PhenotypeGeneticContextPostprocessor;
 import org.intermine.bio.item.postprocessor.PublicationFeaturePostprocessor;
 import org.intermine.bio.item.postprocessor.StockGenotypeItemPostprocessor;
@@ -44,6 +46,7 @@ import org.intermine.bio.item.processor.AlleleItemProcessor;
 import org.intermine.bio.item.processor.BackgroundAccessionStockItemProcessor;
 import org.intermine.bio.item.processor.CVItemProcessor;
 import org.intermine.bio.item.processor.CVTermProcessor;
+import org.intermine.bio.item.processor.DataSourceItemProcessor;
 import org.intermine.bio.item.processor.GenotypeAlleleItemProcessor;
 import org.intermine.bio.item.processor.GenotypeItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeGeneticContextItemProcessor;
@@ -113,6 +116,9 @@ public class AppLauncher {
 
 	private static void createSteps() {
 
+		Step dataSourceProcessor = new DataSourceItemProcessor(service).getPostProcessor("DataSource Processor", service,
+				taskExecutor);
+		
 		// CV Step Config
 		CVItemProcessor processor1 = new CVItemProcessor(service);
 		DatabaseItemReader<SourceCV> reader1 = new CVReader().getReader(service.getConnection());
@@ -260,6 +266,15 @@ public class AppLauncher {
 		
 		publicationFeaturesStep.setStepPostProcessor(publicationFeaturePostProcessor);
 		
+		Step dataSourcePostProcessor = new DataSourceItemPostprocessor(service).getPostProcessor("DataSource PostProcessor", service,
+				taskExecutor);
+		
+		
+		Step dataSetPostProcessor = new DataSetItemPostprocessor(service).getPostProcessor("DataSet PostProcessor", service,
+				taskExecutor);
+		
+		steps.add(dataSourceProcessor);
+		
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
@@ -273,6 +288,8 @@ public class AppLauncher {
 		steps.add(phenotypeGeneticContextCollectionStep);
 		steps.add(publicationStep);
 		steps.add(publicationFeaturesStep);
+		
+		steps.add(dataSetPostProcessor);
 		
 		
 	}

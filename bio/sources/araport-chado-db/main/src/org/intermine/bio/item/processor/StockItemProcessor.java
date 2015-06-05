@@ -3,6 +3,8 @@ package org.intermine.bio.item.processor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
+import org.intermine.bio.chado.DataSetService;
+import org.intermine.bio.chado.DataSourceService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.chado.StockService;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
@@ -20,6 +22,7 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 
 	private String targetClassName;
 
+	private static final String DATASET_NAME = "TAIR Germplasm";
 	private static final String ITEM_CLASSNAME = "Stock";
 	private static final String STOCK_ANNOTATION_CLASS_NAME = "StockAnnotation";
 	private static final String CHOROMOSOMAL_CONSTITUTION_ANNOTATION_CLASS_NAME = "ChromosomalConstitutionAnnotation";
@@ -41,6 +44,7 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		Exception exception = null;
 
 		Item item = null;
+		ItemHolder itemHolder = null;
 		
 		int itemId = -1;
 
@@ -178,13 +182,19 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 
 				getStockItems().put(source.getGermplasmTairAccession(), item);
 				
-				ItemHolder itemHolder = new ItemHolder(item, itemId);
+				itemHolder = new ItemHolder(item, itemId);
 
 				if (itemHolder!=null && itemId !=1){
 					StockService.addStockItem(source.getGermplasmTairAccession(), itemHolder);
 				}
 				
 			}
+		}
+		
+		if (itemHolder!=null) {
+			
+			setDataSetItem(itemHolder);
+			
 		}
 		return item;
 	}
@@ -358,5 +368,22 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		}
 
 		return growthAnnotationItem;
+	}
+	
+	
+	private void setDataSetItem(ItemHolder item){
+		
+		Item dataSetItem = getDataSet();
+		
+		if (dataSetItem!=null && item!=null){
+			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
+			
+			log.info("Stock has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"+ item.getItem());
+		}
+		
+	}
+
+	private Item getDataSet(){
+		return DataSetService.getDataSetItem(DATASET_NAME).getItem();
 	}
 }

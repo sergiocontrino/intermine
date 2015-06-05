@@ -3,6 +3,7 @@ package org.intermine.bio.item.processor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
+import org.intermine.bio.chado.DataSetService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.chado.PhenotypeService;
 import org.intermine.bio.chado.StockService;
@@ -21,6 +22,7 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 
 	private String targetClassName;
 
+	private static final String DATASET_NAME = "TAIR Phenotypes";
 	private static final String ITEM_CLASSNAME = "Phenotype";
 
 	public PhenotypeItemProcessor(ChadoDBConverter chadoDBConverter) {
@@ -39,6 +41,8 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 		Exception exception = null;
 
 		Item item = null;
+		
+		ItemHolder itemHolder = null;
 
 		int itemId = -1;
 
@@ -75,13 +79,19 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 			} else {
 				log.info("Target Item has been created. Target Object:" + item);
 
-				ItemHolder itemHolder = new ItemHolder(item, itemId);
+				itemHolder = new ItemHolder(item, itemId);
 
 				if (itemHolder != null && itemId != -1) {
 					PhenotypeService.addPhenotypeItem(source.getUniqueAccession(), itemHolder);
 				}
 
 			}
+		}
+		
+		if (itemHolder!=null) {
+			
+			setDataSetItem(itemHolder);
+			
 		}
 		return item;
 	}
@@ -92,6 +102,22 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 
 	public String getTargetClassName() {
 		return this.targetClassName;
+	}
+	
+	private void setDataSetItem(ItemHolder item){
+		
+		Item dataSetItem = getDataSet();
+		
+		if (dataSetItem!=null && item!=null){
+			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
+			
+			log.info("Phenotype has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"+ item.getItem());
+		}
+		
+	}
+
+	private Item getDataSet(){
+		return DataSetService.getDataSetItem(DATASET_NAME).getItem();
 	}
 
 }

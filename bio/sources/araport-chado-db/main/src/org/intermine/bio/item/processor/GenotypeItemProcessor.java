@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.AlleleService;
 import org.intermine.bio.chado.CVService;
+import org.intermine.bio.chado.DataSetService;
 import org.intermine.bio.chado.GenotypeService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.chado.StockService;
@@ -22,8 +23,9 @@ public class GenotypeItemProcessor extends DataSourceProcessor implements ItemPr
 
 	private String targetClassName;
 
+	private static final String DATASET_NAME = "TAIR Polymorphism";
 	private static final String ITEM_CLASSNAME = "Genotype";
-	
+
 	public GenotypeItemProcessor(ChadoDBConverter chadoDBConverter) {
 		super(chadoDBConverter);
 	}
@@ -40,6 +42,7 @@ public class GenotypeItemProcessor extends DataSourceProcessor implements ItemPr
 		Exception exception = null;
 
 		Item item = null;
+		ItemHolder itemHolder = null;
 
 		int itemId = -1;
 
@@ -58,25 +61,24 @@ public class GenotypeItemProcessor extends DataSourceProcessor implements ItemPr
 
 			log.info("Name   " + source.getName());
 			item.setAttribute("name", source.getName());
-			
+
 			if (!StringUtils.isBlank(source.getDescription())) {
 				log.info("Genotype Description " + source.getDescription());
 				item.setAttribute("description", source.getDescription());
 			}
-			
+
 			if (!StringUtils.isBlank(source.getUniqueName())) {
 				log.info("Genotype Display Name " + source.getUniqueName());
-				item.setAttribute("displayName",source.getUniqueName());
+				item.setAttribute("displayName", source.getUniqueName());
 			}
-				
+
 			Item organismItem = super.getService().getOrganismItem(super.getService().getOrganism().getTaxonId());
 
 			if (organismItem != null) {
 				item.setReference("organism", organismItem);
 			}
-			
+
 			itemId = super.getService().store(item);
-			
 
 		} catch (ObjectStoreException e) {
 			exception = e;
@@ -89,13 +91,19 @@ public class GenotypeItemProcessor extends DataSourceProcessor implements ItemPr
 			} else {
 				log.info("Target Item has been created. Target Object:" + item);
 
-				ItemHolder itemHolder = new ItemHolder(item, itemId);
+				itemHolder = new ItemHolder(item, itemId);
 
 				if (itemHolder != null && itemId != 1) {
 					GenotypeService.addGenotypeItem(source.getUniqueAccession(), itemHolder);
 				}
 
 			}
+		}
+		
+		if (itemHolder!=null) {
+			
+			setDataSetItem(itemHolder);
+			
 		}
 		return item;
 	}
@@ -106,5 +114,22 @@ public class GenotypeItemProcessor extends DataSourceProcessor implements ItemPr
 
 	public String getTargetClassName() {
 		return this.targetClassName;
+	}
+
+	private void setDataSetItem(ItemHolder item) {
+
+		Item dataSetItem = getDataSet();
+
+		if (dataSetItem != null && item != null) {
+			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
+
+			log.info("Genotype has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
+					+ item.getItem());
+		}
+
+	}
+
+	private Item getDataSet() {
+		return DataSetService.getDataSetItem(DATASET_NAME).getItem();
 	}
 }
