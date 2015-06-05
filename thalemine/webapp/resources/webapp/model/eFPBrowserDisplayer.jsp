@@ -34,14 +34,12 @@
       <label for="datasource"><strong>Data Source: </strong></label>
       <select id="datasource" name="datasource">
           <option value="Abiotic_Stress">Abiotic Stress</option>
-          <option value="Abiotic_Stress_At-TAX">Abiotic Stress At-TAX</option>
           <option value="Abiotic_Stress_II">Abiotic Stress II</option>
           <option value="Biotic_Stress">Biotic Stress</option>
           <option value="Biotic_Stress_II">Biotic Stress II</option>
           <option value="Chemical">Chemical</option>
           <option value="Development_RMA">Development RMA</option>
           <option value="Developmental_Map" selected="selected">Developmental Map</option>
-          <option value="Developmental_Map_At-TAX">Developmental Map At-TAX</option>
           <option value="Guard_Cell">Guard Cell</option>
           <option value="Hormone">Hormone</option>
           <option value="Lateral_Root_Initiation">Lateral Root Initiation</option>
@@ -54,7 +52,10 @@
           <option value="Tissue_Specific">Tissue Specific</option>
       </select>
       <br /><br />
-      <img id="eFP-img" src="" />
+      <div id="eFPimage_loading_progress" style="display: none;">
+          <img src="model/images/loading.gif" />
+      </div>
+      <div id="eFPimage"></div>
   </div>
   <div id="powerby">
       <a onmouseout="this.style.backgroundColor='white';" onmouseover="this.style.backgroundColor='#f1f1d1';" title="BAR Webservices" target="_blank" href="http://bar.utoronto.ca/webservices/">
@@ -66,29 +67,35 @@
         var bar_eFPBrowser_url = "${WEB_PROPERTIES['bar.eFPBrowser.prefix']}";
         var agi = jQuery('#agi').val();
         var datasource = ds || jQuery('#datasource').val();
+        var img_not_available = "model/images/eFP_image_img_not_available.png";
+
         if(ds !== undefined) {
             jQuery('#datasource option[value="' + ds + '"]').prop('selected', true);
         }
         var bar_eFPBrowser_params = 'request={"agi":"' + agi + '","datasource":"' + datasource + '"}';
-        jQuery.ajax({
-            type: "GET",
-            url: bar_eFPBrowser_url,
-            data: bar_eFPBrowser_params,
-            success: function(data, textStatus, xhr) {
-                ct = xhr.getResponseHeader("content-type");
-                if(ct === "image/png") {
-                    jQuery('#eFP-img').fadeOut(250, function() { jQuery(this).attr('src', bar_eFPBrowser_url + "?" + bar_eFPBrowser_params); jQuery(this).fadeIn(250); });
-                } else {
-                    jQuery('#eFP-img').attr('src', 'model/images/eFP_image_not_available.png');
-                }
-            }
+
+        var bar_img_url = bar_eFPBrowser_url + "?" + bar_eFPBrowser_params;
+        var img_holder = jQuery('<img>').attr('src', bar_img_url);
+        jQuery('#eFPimage_loading_progress').show();
+
+        img_holder.on('load', function() {
+            jQuery('#eFPimage_loading_progress').hide();
         });
+
+        img_holder.error('load', function() {
+            jQuery('#eFPimage_loading_progress').hide();
+            jQuery('<img>').attr('src', img_not_available);
+        });
+
+        jQuery('#eFPimage').html(img_holder);
     }
 
     jQuery(document).ready(function(){
-            jQuery('#datasource').bind('change', function() {
-                loadeFPimage.apply(this, [undefined])
-            });
+        jQuery('#datasource').bind('change', function() {
+            jQuery('#eFPimage').empty();
+            jQuery('#eFPimage_loading_progress').show();
+            loadeFPimage.apply(this, [undefined])
+        });
         jQuery('#datasource').trigger('change');
     });
 
