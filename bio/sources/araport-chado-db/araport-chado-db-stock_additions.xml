@@ -8,6 +8,8 @@
 	</class>
 	<class name="Stock" extends="BioEntity"
 		is-interface="true">
+		<attribute name="primaryAccession" type="java.lang.String" />
+		<attribute name="stockAccession" type="java.lang.String" />
 		<attribute name="germplasmName" type="java.lang.String" />
 		<attribute name="stockName" type="java.lang.String" />
 		<attribute name="displayName" type="java.lang.String" />
@@ -133,6 +135,11 @@
 		<reference name="zygosity" referenced-type="ZygosityType"/>
 		<attribute name="segregationRatio" type="java.lang.String" />
 	</class>
+	
+	<class name="Synonym" is-interface="true">
+		<attribute name="type" type="java.lang.String" />
+	</class>
+	
 
 
 </classes>

@@ -40,6 +40,9 @@ public class StockRowMapper implements RowMapper<SourceStock> {
 		stock.setDurationOfGrowth(rs.getString("duration_of_growth"));
 		
 		stock.setAcessionName(rs.getString("accession"));
+		
+		stock.setPrimaryAccessionNumber(rs.getString("primary_accession_number"));
+		stock.setStockAccessionNumber(rs.getString("stock_accession_number"));
    
 		return stock;
 	}

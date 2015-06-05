@@ -30,6 +30,9 @@ public class SourceStock {
 
 	private int organismId;
 	private int backgroundAccessionId;
+	
+	private String primaryAccessionNumber;
+	private String stockAccessionNumber;
 
 	private Set<SourceStrain> backgroundAccession = new HashSet<SourceStrain>();
 
@@ -247,6 +250,23 @@ public class SourceStock {
 		this.durationOfGrowth = durationOfGrowth;
 	}
 
+	public String getPrimaryAccessionNumber() {
+		return primaryAccessionNumber;
+	}
+
+	public void setPrimaryAccessionNumber(String primaryAccessionNumber) {
+		this.primaryAccessionNumber = primaryAccessionNumber;
+	}
+
+	public String getStockAccessionNumber() {
+		return stockAccessionNumber;
+	}
+
+	public void setStockAccessionNumber(String stockAccessionNumber) {
+		this.stockAccessionNumber = stockAccessionNumber;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "SourceStock [stockId=" + stockId + ", name=" + name + ", uniqueName=" + uniqueName + ", displayName="
@@ -258,7 +278,24 @@ public class SourceStock {
 				+ isAneploidChromosome + ", ploidy=" + ploidy + ", specialGrowthConditions=" + specialGrowthConditions
 				+ ", growthTemperature=" + growthTemperature + ", durationOfGrowth=" + durationOfGrowth
 				+ ", organismId=" + organismId + ", backgroundAccessionId=" + backgroundAccessionId
-				+ ", directBackgroundAccessionId=" + accessionName + "]";
+				+ ", primaryAccessionNumber=" + primaryAccessionNumber + ", stockAccessionNumber="
+				+ stockAccessionNumber + ", backgroundAccession=" + backgroundAccession + ", accessionName="
+				+ accessionName + ", getStockId()=" + getStockId() + ", getName()=" + getName() + ", getDescription()="
+				+ getDescription() + ", getDbxrefId()=" + getDbxrefId() + ", getTairObjectId()=" + getTairObjectId()
+				+ ", getOrganismId()=" + getOrganismId() + ", getUniqueName()=" + getUniqueName()
+				+ ", getBackgroundAccessionId()=" + getBackgroundAccessionId() + ", getAcessionName()="
+				+ getAcessionName() + ", getStockName()=" + getStockName() + ", getStockType()=" + getStockType()
+				+ ", getGermplasmTairAccession()=" + getGermplasmTairAccession() + ", getStockTairAccession()="
+				+ getStockTairAccession() + ", getMutagen()=" + getMutagen() + ", getStockCategory()="
+				+ getStockCategory() + ", getStockCenterComment()=" + getStockCenterComment() + ", getDisplayName()="
+				+ getDisplayName() + ", getIsMutant()=" + getIsMutant() + ", getIsTransgene()=" + getIsTransgene()
+				+ ", getIsNaturalVarinat()=" + getIsNaturalVarinat() + ", getIsAneploidChromosome()="
+				+ getIsAneploidChromosome() + ", getPloidy()=" + getPloidy() + ", getSpecialGrowthConditions()="
+				+ getSpecialGrowthConditions() + ", getGrowthTemperature()=" + getGrowthTemperature()
+				+ ", getDurationOfGrowth()=" + getDurationOfGrowth() + ", getPrimaryAccessionNumber()="
+				+ getPrimaryAccessionNumber() + ", getStockAccessionNumber()=" + getStockAccessionNumber()
+				+ ", getBackgroundAccession()=" + getBackgroundAccession() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 
 	public Set<SourceStrain> getBackgroundAccession() {

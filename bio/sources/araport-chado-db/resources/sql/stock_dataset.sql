@@ -3,8 +3,10 @@ SELECT
 	s.name,
 	c.name stock_type,
 	'Germplasm:' || dbx.accession germplasm_accession,
+	dbx.accession primary_accession_number,
 	s.description,
 	V.stock_accession,
+	V.stock_accession_number,
 	case when (
 	o.type_id IS NOT null AND
 	oc.name='ecotype')
@@ -57,6 +59,7 @@ FROM
 SELECT
 	s.stock_id,
 	'Stock:' || dbx.accession stock_accession,
+	dbx.accession stock_accession_number,
 	dbx.description
 FROM
 	stock s JOIN stock_dbxref stb

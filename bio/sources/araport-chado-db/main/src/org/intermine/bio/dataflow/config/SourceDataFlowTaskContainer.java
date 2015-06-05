@@ -98,6 +98,10 @@ public interface SourceDataFlowTaskContainer {
 	static final String STOCK_GENOTYPE_SQL_PATH = "/sql/stock_genotype.sql";
 
 	static final String STOCK_GENOTYPE_SQL = FileUtils.getSqlFileContents(STOCK_GENOTYPE_SQL_PATH);
+	
+	static final String STOCK_SYNONYM_SQL_PATH = "/sql/stock_synonym.sql";
+
+	static final String STOCK_SYNONYM_SQL = FileUtils.getSqlFileContents(STOCK_SYNONYM_SQL_PATH);
 
 	static final String STOCK_TEST_SQL_PATH = "/sql/stock_dataset_test.sql";
 

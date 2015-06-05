@@ -166,6 +166,18 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 				
 			}
 					
+
+			log.info("Primary Accession: " + source.getPrimaryAccessionNumber());
+			if (!StringUtils.isBlank(source.getPrimaryAccessionNumber())) {
+				item.setAttribute("primaryAccession", source.getPrimaryAccessionNumber());
+			}
+
+
+			log.info("Stock Accession: " + source.getStockAccessionNumber());
+			
+			if (!StringUtils.isBlank(source.getStockAccessionNumber())) {
+				item.setAttribute("stockAccession", source.getStockAccessionNumber());
+			}
 			
 			itemId = super.getService().store(item);
 

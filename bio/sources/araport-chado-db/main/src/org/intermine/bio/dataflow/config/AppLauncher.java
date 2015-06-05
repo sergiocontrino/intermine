@@ -32,6 +32,7 @@ import org.intermine.bio.domain.source.SourcePublication;
 import org.intermine.bio.domain.source.SourcePublicationFeatures;
 import org.intermine.bio.domain.source.SourceStock;
 import org.intermine.bio.domain.source.SourceStockGenotype;
+import org.intermine.bio.domain.source.SourceStockSynonym;
 import org.intermine.bio.domain.source.SourceStrain;
 import org.intermine.bio.item.postprocessor.AlleleItemPostprocessor;
 import org.intermine.bio.item.postprocessor.BackgroundAccessionStockItemPostprocessor;
@@ -55,6 +56,7 @@ import org.intermine.bio.item.processor.PublicationsFeaturesItemProcessor;
 import org.intermine.bio.item.processor.PublicationsItemProcessor;
 import org.intermine.bio.item.processor.StockGenotypeItemProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
+import org.intermine.bio.item.processor.StockSynonymItemProcessor;
 import org.intermine.bio.item.processor.StrainItemProcessor;
 import org.intermine.bio.item.util.ItemHolder;
 import org.intermine.bio.reader.AlleleReader;
@@ -69,6 +71,7 @@ import org.intermine.bio.reader.PublicationFeaturesReader;
 import org.intermine.bio.reader.PublicationReader;
 import org.intermine.bio.reader.StockGenotypeReader;
 import org.intermine.bio.reader.StockReader;
+import org.intermine.bio.reader.StockSynonymReader;
 import org.intermine.bio.reader.StrainReader;
 import org.intermine.bio.dataloader.job.Step;
 import org.intermine.item.domain.database.DatabaseItemReader;
@@ -275,6 +278,15 @@ public class AppLauncher {
 		
 		steps.add(dataSourceProcessor);
 		
+		StockSynonymItemProcessor processor15 = new StockSynonymItemProcessor(service);
+		DatabaseItemReader<SourceStockSynonym> reader15 = new StockSynonymReader().getReader(service.getConnection());
+		String stepName15 = "Stock/Synonyms Loading Step";
+		
+		FlowStep<SourceStockSynonym, Item> stockSynonymsStep =
+				new FlowStepBuilder<SourceStockSynonym, Item>()
+				.build(stepName15, reader15, processor15, taskExecutor);
+		
+		
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
@@ -290,6 +302,8 @@ public class AppLauncher {
 		steps.add(publicationFeaturesStep);
 		
 		steps.add(dataSetPostProcessor);
+		
+		steps.add(stockSynonymsStep);
 		
 		
 	}
