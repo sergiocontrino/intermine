@@ -131,8 +131,7 @@ public class CodeService extends AbstractQueryService
         Profile profile = getPermission().getProfile();
 
         // Ref to OrthologueLinkController and OrthologueLinkManager
-        String protocol = webProperties.getProperty("protocol");
-        String serviceBaseURL = new URLGenerator(request, protocol).getPermanentBaseURL();
+        String serviceBaseURL = new URLGenerator(request).getPermanentBaseURL();
         // set in project properties
         String projectTitle = webProperties.getProperty("project.title");
         // set in global.web.properties

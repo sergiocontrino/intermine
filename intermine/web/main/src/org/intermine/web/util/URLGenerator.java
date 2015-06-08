@@ -20,8 +20,6 @@ public class URLGenerator
 {
 
     private HttpServletRequest request;
-    private String protocol;
-    private static final String DEFAULT_PROTOCOL = "http";
     private static final String PRE_PATH = "://";
 
     /**
@@ -30,15 +28,6 @@ public class URLGenerator
      */
     public URLGenerator(HttpServletRequest request) {
         this.request = request;
-    }
-    /**
-     * Constructor.
-     * @param request request
-     * @param protocol  http or https
-     */
-    public URLGenerator(HttpServletRequest request, String protocol) {
-        this.request = request;
-        this.protocol = protocol;
     }
 
     /**
@@ -67,12 +56,9 @@ public class URLGenerator
             port = ":" + request.getServerPort();
         }
 
-        // use http if nothing set
-        if (protocol == null || protocol.length() == 0) {
-            protocol = DEFAULT_PROTOCOL;
-        }
+        String scheme = request.getScheme();
 
-        String ret = protocol + PRE_PATH + request.getServerName() + port;
+        String ret = scheme + PRE_PATH + request.getServerName() + port;
         if (contextPath.length() > 0) {
             ret += contextPath;
         }
