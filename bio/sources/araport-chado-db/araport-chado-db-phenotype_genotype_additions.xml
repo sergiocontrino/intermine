@@ -39,6 +39,9 @@
 			reverse-reference="affectedAlleles" />
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="alleles" />
+			
+		<collection name="alleleGeneZygosities" referenced-type="AlleleGeneZygosity"
+			reverse-reference="allele" />
 
 	</class>
 
@@ -101,6 +104,8 @@
 			reverse-reference="affectedGenes" />
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="genes" />
+		<collection name="alleleGeneZygosities" referenced-type="AlleleGeneZygosity"
+			reverse-reference="gene" />
 	</class>
 	<class name="Genotype" extends="BioEntity"
 		is-interface="true">
@@ -112,7 +117,14 @@
 			reverse-reference="genotypes" />
 		<collection name="genes" referenced-type="Gene"
 			reverse-reference="genotypes" />
-		<collection name="stockAlleleInteractions" referenced-type="StockAlleleInteraction" />
 	</class>
 
+	<class name="AlleleGeneZygosity" is-interface="true">
+		<reference name="allele" referenced-type="Allele"
+			reverse-reference="alleleGeneZygosities" />
+		<reference name="gene" referenced-type="Gene"
+			reverse-reference="alleleGeneZygosities" />
+		<reference name="zygosity" referenced-type="ZygosityType"/>
+	</class>
+	
 </classes>

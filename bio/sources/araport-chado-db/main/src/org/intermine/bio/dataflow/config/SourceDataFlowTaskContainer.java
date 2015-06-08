@@ -59,6 +59,10 @@ public interface SourceDataFlowTaskContainer {
 
 	static final String GENE_ALLELE_SQL = FileUtils.getSqlFileContents(GENE_ALLELE_SQL_PATH);
 	
+	static final String ALLELE_GENE_ZYGOSITY_SQL_PATH = "/sql/allele_gene_zygosity.sql";
+
+	static final String ALLELE_GENE_ZYGOSITY_SQL = FileUtils.getSqlFileContents(ALLELE_GENE_ZYGOSITY_SQL_PATH);
+	
 	static final String GENOTYPE_SQL_PATH = "/sql/genotype.sql";
 
 	static final String GENOTYPE_SQL = FileUtils.getSqlFileContents(GENOTYPE_SQL_PATH);

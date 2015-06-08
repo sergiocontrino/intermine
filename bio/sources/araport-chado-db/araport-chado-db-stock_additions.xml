@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <classes>
 	<class name="Allele" extends="SequenceCollection" is-interface="true">
-		<collection name="stockAlleleInteractions" referenced-type="StockAlleleInteraction"
-			reverse-reference="allele" />
 		<reference name="mutagen" referenced-type="Mutagen"
 			reverse-reference="alleles" />
 	</class>
@@ -135,12 +133,6 @@
 		<attribute name="availability" type="java.lang.String" />
 	</class>
 	
-	<class name="StockAlleleInteraction" is-interface="true">
-		<reference name="allele" referenced-type="Allele"
-			reverse-reference="stockAlleleInteractions" />
-		<reference name="zygosity" referenced-type="ZygosityType"/>
-		<attribute name="segregationRatio" type="java.lang.String" />
-	</class>
 	
 	<class name="Synonym" is-interface="true">
 		<attribute name="type" type="java.lang.String" />
