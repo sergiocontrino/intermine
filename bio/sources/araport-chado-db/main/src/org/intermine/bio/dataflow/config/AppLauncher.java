@@ -31,6 +31,8 @@ import org.intermine.bio.domain.source.SourcePhenotypeGeneticContext;
 import org.intermine.bio.domain.source.SourcePublication;
 import org.intermine.bio.domain.source.SourcePublicationFeatures;
 import org.intermine.bio.domain.source.SourceStock;
+import org.intermine.bio.domain.source.SourceStockAvailability;
+import org.intermine.bio.domain.source.SourceStockCenter;
 import org.intermine.bio.domain.source.SourceStockGenotype;
 import org.intermine.bio.domain.source.SourceStockSynonym;
 import org.intermine.bio.domain.source.SourceStrain;
@@ -54,6 +56,8 @@ import org.intermine.bio.item.processor.PhenotypeGeneticContextItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeItemProcessor;
 import org.intermine.bio.item.processor.PublicationsFeaturesItemProcessor;
 import org.intermine.bio.item.processor.PublicationsItemProcessor;
+import org.intermine.bio.item.processor.StockAvailabilityItemProcessor;
+import org.intermine.bio.item.processor.StockCenterItemProcessor;
 import org.intermine.bio.item.processor.StockGenotypeItemProcessor;
 import org.intermine.bio.item.processor.StockItemProcessor;
 import org.intermine.bio.item.processor.StockSynonymItemProcessor;
@@ -69,6 +73,8 @@ import org.intermine.bio.reader.PhenotypeGeneticContextReader;
 import org.intermine.bio.reader.PhenotypeReader;
 import org.intermine.bio.reader.PublicationFeaturesReader;
 import org.intermine.bio.reader.PublicationReader;
+import org.intermine.bio.reader.StockAvailabilityReader;
+import org.intermine.bio.reader.StockCenterReader;
 import org.intermine.bio.reader.StockGenotypeReader;
 import org.intermine.bio.reader.StockReader;
 import org.intermine.bio.reader.StockSynonymReader;
@@ -286,6 +292,25 @@ public class AppLauncher {
 				new FlowStepBuilder<SourceStockSynonym, Item>()
 				.build(stepName15, reader15, processor15, taskExecutor);
 		
+				
+		StockCenterItemProcessor processor16 = new StockCenterItemProcessor(service);
+		DatabaseItemReader<SourceStockCenter> reader16 = new StockCenterReader().getReader(service.getConnection());
+		String stepName16 = "Stock Center Loading Step";
+		
+		FlowStep<SourceStockCenter, Item> stockCenterStep =
+				new FlowStepBuilder<SourceStockCenter, Item>()
+				.build(stepName16, reader16, processor16, taskExecutor);
+		
+		
+		
+		StockAvailabilityItemProcessor processor18 = new StockAvailabilityItemProcessor(service);
+		DatabaseItemReader<SourceStockAvailability> reader18 = new StockAvailabilityReader().getReader(service.getConnection());
+		String stepName18 = "Stock Availaibility Loading Step";
+		
+		
+		FlowStep<SourceStockAvailability, Item> stockAvailabilityStep =
+				new FlowStepBuilder<SourceStockAvailability, Item>()
+				.build(stepName18, reader18, processor18, taskExecutor);
 		
 		steps.add(cvStep);
 		steps.add(cvTermStep);
@@ -304,6 +329,10 @@ public class AppLauncher {
 		steps.add(dataSetPostProcessor);
 		
 		steps.add(stockSynonymsStep);
+		
+		steps.add(stockCenterStep);
+		
+		steps.add(stockAvailabilityStep);
 		
 		
 	}

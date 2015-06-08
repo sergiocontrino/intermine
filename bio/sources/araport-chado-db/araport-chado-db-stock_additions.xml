@@ -29,10 +29,9 @@
 		<reference name="mutagen" referenced-type="Mutagen" reverse-reference="stocks" />
 		<reference name="stockAnnotation" referenced-type="StockAnnotation"
 			reverse-reference="stock" />
-		<collection name="stockCenters" referenced-type="StockCenter"
-			reverse-reference="stocks" />
-		<collection name="stockAlleleInteractions" referenced-type="StockAlleleInteraction"
-			reverse-reference="stock" />
+						
+		<collection name="stockAvailabilities" referenced-type="StockAvailabilityInfo" reverse-reference="stock"/>
+		
 	</class>
 	
 	<class name="StockType" is-interface="true">
@@ -123,13 +122,20 @@
 	</class>
 	
 	<class name="StockCenter" extends="Organization" is-interface="true">
-		<collection name="stocks" referenced-type="Stock"
-			reverse-reference="stockCenters" />
+		<attribute name="stockObjectUrlPrefix" type="java.lang.String" />
+		<collection name="stockAvailabilities" referenced-type="StockAvailabilityInfo" reverse-reference="stockCenter"/>
 	</class>
 
+
+	<class name="StockAvailabilityInfo" is-interface="true">
+		<reference name="stockCenter" referenced-type="StockCenter" reverse-reference="stockAvailabilities"/>
+		<reference name="stock" referenced-type="Stock" reverse-reference="stockAvailabilities"/>
+		<attribute name="stockDisplayNumber" type="java.lang.String" />
+		<attribute name="stockNumber" type="java.lang.String" />
+		<attribute name="availability" type="java.lang.String" />
+	</class>
+	
 	<class name="StockAlleleInteraction" is-interface="true">
-		<reference name="stock" referenced-type="Stock"
-			reverse-reference="stockAlleleInteractions" />
 		<reference name="allele" referenced-type="Allele"
 			reverse-reference="stockAlleleInteractions" />
 		<reference name="zygosity" referenced-type="ZygosityType"/>

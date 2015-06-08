@@ -87,7 +87,7 @@ public interface SourceDataFlowTaskContainer {
 
 	static final String PUBLICATION_FEATURES_SQL = FileUtils.getSqlFileContents(PUBLICATION_FEATURES_SQL_PATH);
 
-	static final String STOCK_CENTER_SQL_PATH = "/sql/stock_dataset.sql";
+	static final String STOCK_CENTER_SQL_PATH = "/sql/stock_center.sql";
 
 	static final String STOCK_CENTER_SQL = FileUtils.getSqlFileContents(STOCK_CENTER_SQL_PATH);
 
@@ -102,6 +102,10 @@ public interface SourceDataFlowTaskContainer {
 	static final String STOCK_SYNONYM_SQL_PATH = "/sql/stock_synonym.sql";
 
 	static final String STOCK_SYNONYM_SQL = FileUtils.getSqlFileContents(STOCK_SYNONYM_SQL_PATH);
+	
+	static final String STOCK_AVAILABILITY_SQL_PATH = "/sql/stock_availability.sql";
+
+	static final String STOCK_AVAILABILITY_SQL = FileUtils.getSqlFileContents(STOCK_AVAILABILITY_SQL_PATH);
 
 	static final String STOCK_TEST_SQL_PATH = "/sql/stock_dataset_test.sql";
 

@@ -1,9 +1,13 @@
 <?xml version="1.0"?>
 <classes>
-		<class name="Contact" extends="DataLineage" is-interface="true">
-		<reference name="type" referenced-type="ContactType" />
+		<class name="Contact" is-interface="true">
+		<attribute name="primaryIdentifier" type="java.lang.String" />
+		<!--  
+		<reference name="type" referenced-type="ContactType" /> -->
+		<attribute name="type" type="java.lang.String" />
 		<attribute name="name" type="java.lang.String" />
-		<attribute name="desciption" type="java.lang.String" />
+		<attribute name="displayName" type="java.lang.String" />
+		<attribute name="description" type="java.lang.String" />
 		<attribute name="email" type="java.lang.String" />
 		<attribute name="url" type="java.lang.String" />
 		<attribute name="phoneNumber" type="java.lang.String" />
