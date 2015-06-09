@@ -61,5 +61,21 @@
     </intro-text>
     <aspect-source name="PantherDB" url="http://www.pantherdb.org/genes/"/>
   </aspect>
+  
+ <aspect name="Alleles">
+    <subtitle>Alleles and Phenotypes</subtitle>
+    <intro-text>
+     Alleles and Phenotypes.
+    </intro-text>
+    <aspect-source name="TAIR Polymorphism"/>
+ </aspect>
+ 
+ <aspect name="Germplasms">
+    <subtitle>Seed/Germplasms</subtitle>
+    <intro-text>
+     ABRC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="TAIR Germplasms/Seed Stocks"/>
+ </aspect>
 
 </aspects>

@@ -252,6 +252,31 @@
       <fieldconfig fieldExpr="taxonId" />
     </fields>
   </class>
+      
+  <class className="org.intermine.model.bio.StockAvailabilityInfo">
+     <fields>
+      <fieldconfig fieldExpr="stockCenter.name" label="Stock Center"/>
+      <fieldconfig fieldExpr="stockDisplayNumber" label="Stock Number"/>
+      <fieldconfig fieldExpr="stockNumber" label="Stock Accession Number"/>
+      <fieldconfig fieldExpr="availability" label="Available At"/>
+      </fields>
+  </class>
+  
+  <class className="org.intermine.model.bio.StockCenter">
+     <fields>
+      <fieldconfig fieldExpr="name" />
+      <fieldconfig fieldExpr="displayName" label="Display Name"/>
+      <fieldconfig fieldExpr="url" label="Web-site"/>
+      </fields>
+  </class>
+  
+  <class className="org.intermine.model.bio.AlleleGeneZygosity">
+     <fields>
+      <fieldconfig fieldExpr="allele.name" label="Allele"/>
+      <fieldconfig fieldExpr="gene.primaryIdentifier" label="Gene"/>
+      <fieldconfig fieldExpr="zygosity.name" label="Zygosity"/>
+     </fields>
+  </class>
 
 <!-- NOTE: you cannot add collections (e.g. genes), breaks summary in report page
 
@@ -269,6 +294,7 @@
 
 -->
 
+ <!-- 
   <class className="org.intermine.model.bio.Protein">
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
@@ -282,8 +308,8 @@
      <table path="keywords.name" showLinksToObjects="true" showInHeader="true" />
     </inlinelist>
   </class>
-
-
+-->
+ <!-- 
  <class className="org.intermine.model.bio.ProteinDomain">
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
@@ -293,7 +319,7 @@
       <fieldconfig fieldExpr="description" />
     </fields>
   </class>
-
+ -->
 
   <class className="org.intermine.model.bio.Publication">
     <headerconfig>
@@ -314,6 +340,8 @@
       <fieldconfig fieldExpr="pubMedId"/>
     </fields>
   </class>
+  
+  <!-- 
   <class className="org.intermine.model.bio.Homologue">
     <fields>
       <fieldconfig fieldExpr="gene.primaryIdentifier" showInResults="false" showInInlineCollection="false" />
@@ -322,6 +350,8 @@
       <fieldconfig fieldExpr="type"/>
     </fields>
   </class>
+  -->
+  
   <class className="org.intermine.model.bio.Sequence">
     <fields>
       <fieldconfig fieldExpr="residues" fieldExporter="org.intermine.bio.web.export.ResidueFieldExporter"
@@ -367,6 +397,7 @@
     </fields>
   </class>
 
+ <!-- 
   <class className="org.intermine.model.bio.UniProtFeature">
     <fields>
       <fieldconfig fieldExpr="type"/>
@@ -375,6 +406,7 @@
       <fieldconfig fieldExpr="description"/>
     </fields>
   </class>
+  -->
 
 <!-- exporters -->
   <tableExportConfig id="sequence" className="org.intermine.bio.web.export.SequenceHttpExporter"/>
@@ -389,25 +421,28 @@
                      placement="Interactions"
                      types="Gene"/>
 
+<!--
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneOntologyDisplayer"
                      jspName="model/geneOntologyDisplayer.jsp"
                      replacesFields="goAnnotation,ontologyAnnotations,secondaryIdentifier"
                      placement="Function"
                      types="Gene"/>
+                     -->
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneStructureDisplayer"
                      jspName="model/geneStructureDisplayer.jsp"
                      replacesFields="transcripts,exons,CDSs,introns,UTRs,fivePrimeUTR,threePrimeUTR,childFeatures"
                      placement="Genomics"
-                     types="Gene,Transcript,Exon,Intron,UTR,CDS,TransposableElementGene"/>
+                     types="Gene,Transcript,Exon,Intron,UTR,CDS,TransposableElementGene"/> 
 
-
+<!--
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.HomologueDisplayer"
                      jspName="model/homologueDisplayer.jsp"
                      replacesFields="homologues"
                      placement="Homology"
                      parameters="{'dataSets': ['Panther data set']}"
                      types="Gene"/>
+                     -->
 
     
     <!--<reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneHomologDisplayer"
@@ -417,18 +452,20 @@
                      parameters="{'dataSets': ['Phytozome Homologs']}"
                      types="Gene"/>-->
 
+ <!-- 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.PhytomineOrthologDisplayer"
                      jspName="model/phytomineOrthologDisplayer.jsp"
                      replacesFields=""
                      placement="Homology"
                      types="Gene"/>
-
+                     -->
+ <!-- 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.ProteinDisplayer"
                      jspName="model/proteinDisplayer.jsp"
                      replacesFields="Protein"
                      placement="Proteins"
                      types="Gene"/>
-
+-->
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.JBrowseDisplayer"
                      jspName="model/jbrowseDisplayer.jsp"
                      replacesFields=""
@@ -453,11 +490,14 @@
                      placement="Proteins"
                      types="Genomics,Protein"/>
 
+ <!-- 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.ProteinSequenceDisplayer"
                      jspName="model/proteinSequenceDisplayer.jsp"
                      replacesFields="sequence"
                      placement="summary"
                      types="Protein"/>
+                     
+                     -->
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.PublicationAnnotationsDisplayer"
                      jspName="model/publicationAnnotationsDisplayer.jsp"
@@ -473,12 +513,14 @@
                      placement="summary"
                      types="BioEntity"/>
 
+ <!-- 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.PathwayDescriptionDisplayer"
                      jspName="model/pathwayDescriptionDisplayer.jsp"
                      showImmediately="true"
                      replacesFields="description"
                      placement="summary"
-                     types="Pathway"/>
+                     types="Pathway"/> -->
+
 
     <reportdisplayer javaClass="org.thalemine.web.displayer.BarEfpBrowserDisplayer"
                      jspName="model/eFPBrowserDisplayer.jsp"
@@ -491,8 +533,14 @@
                      jspName="model/minePathwaysDisplayer.jsp"
                      replacesFields="pathways"
                      placement="summary"
+                     types="Gene"/>   -->
+    
+     <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneAlleleDisplayer"
+                     jspName="model/alleleDisplayer.jsp"
+                     replacesFields=""
+                     placement="Genomics"
                      types="Gene"/>
-   -->
+ 
 
   </reportdisplayers>
 
@@ -530,6 +578,7 @@
                                        publications.journal, publications.year, publications.pubMedId"
                                  externalLink="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;dopt=Abstract&amp;list_uids="/>
 
+ <!-- 
       <enrichmentwidgetdisplayer id="go_enrichment_for_gene"
                                  title="Gene Ontology Enrichment"
                                  description="GO terms enriched for items in this list."
@@ -578,8 +627,8 @@
                                  typeClass="Protein"
                                  views="primaryIdentifier, primaryAccession, organism.name,
                                        keywords.name, keywords.description"/>
-
-
+  -->
+      <!-- 
       <enrichmentwidgetdisplayer id="prot_dom_enrichment_for_gene"
                                  title="Protein Domain Enrichment"
                                  description="Protein Domains enriched for items in this list."
@@ -621,6 +670,7 @@
                                 homologues.homologue.symbol,
                                 homologues.homologue.organism.shortName,
                                 homologues.type"/>
+                              -->
 
 </widgets>
 </webconfig>
