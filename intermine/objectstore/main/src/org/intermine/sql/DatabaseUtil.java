@@ -595,7 +595,7 @@ public final class DatabaseUtil
      */
     public static void removeSequence(Connection con, String sequence) throws SQLException {
         LOG.info("Dropping sequence " + sequence);
-        con.createStatement().execute("DROP SEQUENCE " + sequence);
+        con.createStatement().execute("DROP SEQUENCE IF EXISTS " + sequence);
     }
 
     /**
@@ -607,7 +607,7 @@ public final class DatabaseUtil
      */
     public static void removeView(Connection con, String view) throws SQLException {
         LOG.info("Dropping view " + view);
-        con.createStatement().execute("DROP VIEW " + view);
+        con.createStatement().execute("DROP VIEW IF EXISTS " + view);
     }
 
     /**
