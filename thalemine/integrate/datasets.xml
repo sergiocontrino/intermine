@@ -218,23 +218,4 @@
       <attribute name="url" value="http://www.kegg.jp/kegg/pathway.html" />
       <reference name="publication" ref_id="0_35" />
    </item>
-   <item id="0_37" class="Publication" implements="">
-      <attribute name="pubMedId" value="24243840" />
-   </item>
-   <item id="0_38" class="DataSource" implements="">
-      <attribute name="name" value="Reactome" />
-      <attribute name="description" value="Free, open-source, curated and peer reviewed pathway database" />
-      <attribute name="url" value="http://www.reactome.org" />
-      <collection name="publications">
-         <reference ref_id="0_37" />
-      </collection>
-   </item>
-   <item id="0_39" class="DataSet" implements="">
-      <attribute name="version" value="49" />
-      <reference name="dataSource" ref_id="0_38" />
-      <attribute name="name" value="Reactome data set" />
-      <attribute name="description" value="Non-curated Reactome Linked Dataset that captures the Reactome pathways in BioPAX format" />
-      <attribute name="url" value="http://www.ebi.ac.uk/rdf/services/reactome" />
-      <reference name="publication" ref_id="0_37" />
-   </item>
 </items>

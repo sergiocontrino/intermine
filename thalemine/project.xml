@@ -186,14 +186,6 @@
             <property name="kegg.organisms" value="3702"/>
         </source>
 
-        <source name="reactome" type="biopax">
-            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/reactome/current"/>
-            <property name="biopax.organisms" value="3702"/>
-            <property name="biopax.datasourcename" value="Reactome"/>
-            <property name="biopax.datasetname" value="Reactome data set"/>
-            <property name="biopax.curated" value="false"/>
-        </source>
-
         <source name="generif" type="generif">
             <!-- source last updated: 2015-04-20 13:30:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/generif/current"/>

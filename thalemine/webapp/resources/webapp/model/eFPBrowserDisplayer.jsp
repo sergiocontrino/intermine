@@ -67,7 +67,7 @@
         var bar_eFPBrowser_url = "${WEB_PROPERTIES['bar.eFPBrowser.prefix']}";
         var agi = jQuery('#agi').val();
         var datasource = ds || jQuery('#datasource').val();
-        var img_not_available = "model/images/eFP_image_img_not_available.png";
+        var img_not_available = "model/images/eFP_image_not_available.png";
 
         if(ds !== undefined) {
             jQuery('#datasource option[value="' + ds + '"]').prop('selected', true);

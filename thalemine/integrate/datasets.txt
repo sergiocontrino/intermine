@@ -21,5 +21,3 @@ DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed
 DataSet	GeneRIF	Functional annotation added by scientists to genes described in NCBI Gene	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	04/20/2015
 DataSource	GenomeNet	Japanese network of database and computational services for genome research	http://www.genome.jp	Publication:9397687
 DataSet	KEGG pathways data set	Wiring diagrams of molecular interactions, reactions, and relations	http://www.kegg.jp/kegg/pathway.html	DataSource:GenomeNet,Publication:24214961	72.0
-DataSource	Reactome	Free, open-source, curated and peer reviewed pathway database	http://www.reactome.org	Publication:24243840
-DataSet	Reactome data set	Non-curated Reactome Linked Dataset that captures the Reactome pathways in BioPAX format	http://www.ebi.ac.uk/rdf/services/reactome	DataSource:Reactome,Publication:24243840	49
