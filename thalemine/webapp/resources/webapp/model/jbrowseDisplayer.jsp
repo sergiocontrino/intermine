@@ -36,14 +36,14 @@
     <c:set var="offsetend" value="${end + offset}"/>
 
     <c:set var="tracks" value="TAIR10_loci,TAIR10_genes"/>
-    <c:set var="extraParams" value="tracklist=1&nav=1&overview=0"/>
+    <c:set var="extraParams" value="tracklist=1&nav=1&overview=0&menu=0"/>
     <c:set var="loc" value="${chr}:${offsetstart}..${offsetend}"/>
 
     <c:set var="jbLink" value="${baseUrl}/?data=${datasource}&loc=${loc}&tracks=${tracks}"/>
     <c:set var="jbLinkEmbed" value="${jbLink}&${extraParams}"/>
 
     <div>
-        <iframe id="jbrowse" name="jbrowse" height="300px" width="98%" style="border: 1px solid #dfdfdf; padding: 1%" src="${jbLink}"></iframe>
+        <iframe id="jbrowse" name="jbrowse" height="300px" width="98%" style="border: 1px solid #dfdfdf; padding: 1%" src="${jbLinkEmbed}"></iframe>
         <p>
             <a href="${jbLinkEmbed}" target="jbrowse">Center on ${reportObject.object.symbol}</a>&nbsp;|&nbsp;
             <a href="${jbLink}" target="_blank" class="extlink">Full Screen View</a>&nbsp;|&nbsp;
