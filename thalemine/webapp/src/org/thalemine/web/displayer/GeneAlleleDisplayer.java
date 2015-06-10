@@ -33,12 +33,15 @@ import org.intermine.web.displayer.ReportDisplayer;
 import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
+import org.thalemine.web.domain.AlleleVO;
+import org.intermine.pathquery.OuterJoinStatus;
 
 
 public class GeneAlleleDisplayer extends ReportDisplayer {
 	
 	
 	protected static final Logger LOG = Logger.getLogger(GeneAlleleDisplayer.class);
+	PathQueryExecutor exec;
 	
 	public GeneAlleleDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
 	      super(config, im);
@@ -47,6 +50,10 @@ public class GeneAlleleDisplayer extends ReportDisplayer {
 	@Override
 	  @SuppressWarnings("unchecked")
 	  public void display(HttpServletRequest request, ReportObject reportObject) {
+		
+		HttpSession session = request.getSession();
+	    final InterMineAPI im = SessionMethods.getInterMineAPI(session);
+	      
 		String className = reportObject.getClassDescriptor().getUnqualifiedName();
         request.setAttribute("className", className);
 
@@ -55,6 +62,48 @@ public class GeneAlleleDisplayer extends ReportDisplayer {
 	     Gene gene = (Gene)reportObject.getObject();
 	     
 	     LOG.info("Generating Gene/Alleles Report. Gene Id:" + gene.getPrimaryIdentifier());
+	     
+	     PathQuery query = getAllelesResultSet(gene.getId());
+	     Profile profile = SessionMethods.getProfile(session);
+	     
+	     exec = im.getPathQueryExecutor(profile);
+	     ExportResultsIterator result;
+	     
+	      try {
+	        result = exec.execute(query);
+	      } catch (ObjectStoreException e) {
+	        
+	        LOG.error("Had an ObjectStoreException in Gene/Alleles Displayer java: "+e.getMessage());
+	        return;
+	      }
+
+	      ArrayList<AlleleVO> alleleList = new ArrayList<AlleleVO>();
+	      
+	      while (result.hasNext()) {
+	        List<ResultElement> resElement = result.next();
+	        AlleleVO item = new AlleleVO(resElement);
+	        alleleList.add(item);
+	        LOG.info("Allele:" + item);
+	      }
+	      
 	}
+
 	
+	private PathQuery getAllelesResultSet(Integer id){
+		
+		 PathQuery query = new PathQuery(im.getModel());
+		 
+		// Select the output columns:
+	        query.addViews("Gene.affectedAlleles.name",
+	                       "Gene.affectedAlleles.mutagen.name");
+	        
+		    query.addOrderBy("Gene.affectedAlleles.name", OrderDirection.ASC);
+		 // Outer Joins
+	        // Show all information about these relationships if they exist, but do not require that they exist.
+	        query.setOuterJoinStatus("Gene.affectedAlleles.mutagen", OuterJoinStatus.OUTER);
+	        
+		    query.addConstraint(Constraints.eq("Gene.id",id.toString()));
+		    return query;
+		
+	}
 }
