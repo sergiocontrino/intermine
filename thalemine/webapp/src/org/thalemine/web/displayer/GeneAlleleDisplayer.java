@@ -50,8 +50,11 @@ public class GeneAlleleDisplayer extends ReportDisplayer {
 		String className = reportObject.getClassDescriptor().getUnqualifiedName();
         request.setAttribute("className", className);
 
-	     LOG.info("Entering Gene Allele display ");
+	     LOG.info("Gene Allele Displayer:" + "Class Name:"  + className);
 	     
+	     Gene gene = (Gene)reportObject.getObject();
+	     
+	     LOG.info("Generating Gene/Alleles Report. Gene Id:" + gene.getPrimaryIdentifier());
 	}
 	
 }
