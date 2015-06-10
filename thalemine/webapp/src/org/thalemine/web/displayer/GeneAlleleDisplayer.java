@@ -86,6 +86,10 @@ public class GeneAlleleDisplayer extends ReportDisplayer {
 	        LOG.info("Allele:" + item);
 	      }
 	      
+	   // for accessing this within the jsp
+	      request.setAttribute("geneName",gene.getPrimaryIdentifier());
+	      request.setAttribute("list",alleleList);
+	      request.setAttribute("id",gene.getId());
 	}
 
 	
@@ -94,16 +98,56 @@ public class GeneAlleleDisplayer extends ReportDisplayer {
 		 PathQuery query = new PathQuery(im.getModel());
 		 
 		// Select the output columns:
-	        query.addViews("Gene.affectedAlleles.name",
-	                       "Gene.affectedAlleles.mutagen.name");
+		 
+	        query.addViews("Gene.affectedAlleles.id",
+	        			   "Gene.affectedAlleles.primaryIdentifier",
+	        			   "Gene.affectedAlleles.name",
+	                       "Gene.affectedAlleles.mutagen.name",
+	                       "Gene.affectedAlleles.sequenceAlterationType.name", 
+	                       "Gene.affectedAlleles.mutationSite.name",
+	                       "Gene.affectedAlleles.inheritanceMode.name",
+	                       "Gene.affectedAlleles.alleleClass.name"
+	                       
+	        		);
 	        
-		    query.addOrderBy("Gene.affectedAlleles.name", OrderDirection.ASC);
+	     // Add orderby
+	   	    query.addOrderBy("Gene.affectedAlleles.name", OrderDirection.ASC);
+		    	        
+	        
 		 // Outer Joins
 	        // Show all information about these relationships if they exist, but do not require that they exist.
 	        query.setOuterJoinStatus("Gene.affectedAlleles.mutagen", OuterJoinStatus.OUTER);
+	        query.setOuterJoinStatus("Gene.affectedAlleles.sequenceAlterationType", OuterJoinStatus.OUTER);
+	        query.setOuterJoinStatus("Gene.affectedAlleles.mutationSite", OuterJoinStatus.OUTER);
+	        query.setOuterJoinStatus("Gene.affectedAlleles.inheritanceMode", OuterJoinStatus.OUTER);
+	        query.setOuterJoinStatus("Gene.affectedAlleles.alleleClass", OuterJoinStatus.OUTER);
 	        
 		    query.addConstraint(Constraints.eq("Gene.id",id.toString()));
 		    return query;
+		
+	}
+	
+	
+	private PathQuery getDataSet(){
+		
+		 PathQuery query = new PathQuery(im.getModel());
+		 
+		// Select the output columns:
+		 
+		// Add orderby
+	        query.addOrderBy("Allele.affectedGenes.affectedAlleles.name", OrderDirection.ASC);
+	        
+	        query.addViews(
+	        		"DataSet.id",
+	        		"DataSet.name",
+	                "DataSet.dataSource.name",
+	                "DataSet.url"
+	        		);
+
+	        // Filter the results with the following constraints:
+	        query.addConstraint(Constraints.eq("DataSet.name", "TAIR Polymorphism"));
+	        
+	        return query;
 		
 	}
 }

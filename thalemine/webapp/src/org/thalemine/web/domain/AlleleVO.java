@@ -1,9 +1,17 @@
 package org.thalemine.web.domain;
 
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.intermine.api.results.ResultElement;
+import org.thalemine.web.displayer.GeneAlleleDisplayer;
+import org.apache.log4j.Logger;
+
 
 public class AlleleVO {
+
+	protected static final Logger LOG = Logger.getLogger(AlleleVO.class);
+	
 	
 	private String primaryIdentifier;
 	private String objectId;
@@ -13,134 +21,132 @@ public class AlleleVO {
 	private String sequenceAlterationType;
 	private String mutationSite;
 	private String inheritanceType;
-	
-	
 
-	public AlleleVO(List<ResultElement> resElement){
+	public AlleleVO(List<ResultElement> resElement) {
+
+		objectId = ((resElement.get(0) != null) && (resElement.get(0).getField() != null)) ? resElement.get(0)
+				.getField().toString() : "&nbsp;";
+
+		primaryIdentifier = ((resElement.get(1) != null) && (resElement.get(1).getField() != null)) ? resElement.get(1)
+				.getField().toString() : "&nbsp;";
+
+		name = ((resElement.get(2) != null) && (resElement.get(2).getField() != null)) ? resElement.get(2).getField()
+				.toString() : "&nbsp;";
+
+		mutagen = ((resElement.get(3) != null) && (resElement.get(3).getField() != null)) ? resElement.get(3)
+				.getField().toString() : "&nbsp;";
+
+		mutagen = formatValue("mutagen",mutagen);
 		
-	name = ((resElement.get(0)!=null) && (resElement.get(0).getField()!= null))?
-                resElement.get(0).getField().toString():"&nbsp;";
-                
-    mutagen = ((resElement.get(1)!=null) && (resElement.get(1).getField()!= null))?
-                resElement.get(1).getField().toString():"&nbsp;";
-                
-   // sequenceAlterationType = ((resElement.get(2)!=null) && (resElement.get(2).getField()!= null))?
-     //           resElement.get(2).getField().toString():"&nbsp;";
-                
+		sequenceAlterationType = ((resElement.get(4) != null) && (resElement.get(4).getField() != null)) ? resElement
+				.get(4).getField().toString() : "&nbsp;";
+				
+		sequenceAlterationType = formatValue("sequenceAlterationType",sequenceAlterationType);
+
+		mutationSite = ((resElement.get(5) != null) && (resElement.get(5).getField() != null)) ? resElement.get(5)
+				.getField().toString() : "&nbsp;";
+				
+		mutationSite = formatValue("mutationSite",mutationSite);
+
+		inheritanceType = ((resElement.get(6) != null) && (resElement.get(6).getField() != null)) ? resElement.get(6)
+				.getField().toString() : "&nbsp;";
+				
+		inheritanceType = formatValue("inheritanceType",inheritanceType);
+
+		alleleClass = ((resElement.get(7) != null) && (resElement.get(7).getField() != null)) ? resElement.get(7)
+				.getField().toString() : "&nbsp;";
 		
+		alleleClass = formatValue("alleleClass",alleleClass);
+
+	}
+
+	
+	private String formatValue(String type, String value){
+		String result = value;
+		
+		LOG.info("Value Object Type:" + type +";" + "Value:" + value);
+		
+		if (value!=null && !value.isEmpty()){
+			if (type.equals("sequenceAlterationType") && value.equalsIgnoreCase("T-dna Insertion")){
+				result = "insertion (T-DNA Insertion)";  
+			}
+			
+			if (type.equals("mutagen") && value.equalsIgnoreCase("T Dna Insertion")){
+				result = "T-DNA Insertion";  
+			}
+			
+			if (value.equalsIgnoreCase("UNKNOWN")){
+				result = "&nbsp;";
+			}
+			
+		}
+		
+		return result;
 	}
 	
 	public String getPrimaryIdentifier() {
 		return primaryIdentifier;
 	}
 
-
-
-
 	public void setPrimaryIdentifier(String primaryIdentifier) {
 		this.primaryIdentifier = primaryIdentifier;
 	}
-
-
-
 
 	public String getObjectId() {
 		return objectId;
 	}
 
-
-
-
 	public void setObjectId(String objectId) {
 		this.objectId = objectId;
 	}
-
-
-
 
 	public String getName() {
 		return name;
 	}
 
-
-
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
-
-
 
 	public String getMutagen() {
 		return mutagen;
 	}
 
-
-
-
 	public void setMutagen(String mutagen) {
 		this.mutagen = mutagen;
 	}
-
-
-
 
 	public String getAlleleClass() {
 		return alleleClass;
 	}
 
-
-
-
 	public void setAlleleClass(String alleleClass) {
 		this.alleleClass = alleleClass;
 	}
-
-
-
 
 	public String getSequenceAlterationType() {
 		return sequenceAlterationType;
 	}
 
-
-
-
 	public void setSequenceAlterationType(String sequenceAlterationType) {
 		this.sequenceAlterationType = sequenceAlterationType;
 	}
-
-
-
 
 	public String getMutationSite() {
 		return mutationSite;
 	}
 
-
-
-
 	public void setMutationSite(String mutationSite) {
 		this.mutationSite = mutationSite;
 	}
-
-
-
 
 	public String getInheritanceType() {
 		return inheritanceType;
 	}
 
-
-
-
 	public void setInheritanceType(String inheritanceType) {
 		this.inheritanceType = inheritanceType;
 	}
-
-
-
 
 	@Override
 	public String toString() {
@@ -149,7 +155,5 @@ public class AlleleVO {
 				+ sequenceAlterationType + ", mutationSite=" + mutationSite + ", inheritanceType=" + inheritanceType
 				+ "]";
 	}
-	
-	
 
 }
