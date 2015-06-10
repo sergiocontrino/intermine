@@ -1,5 +1,6 @@
-import java.util.HashMap;
+package org.thalemine.web.displayer;
 
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-
 import org.intermine.api.InterMineAPI;
 import org.intermine.api.profile.Profile;
 import org.intermine.api.query.PathQueryExecutor;
@@ -47,8 +47,8 @@ public class GeneAlleleDisplayer extends ReportDisplayer {
 	@Override
 	  @SuppressWarnings("unchecked")
 	  public void display(HttpServletRequest request, ReportObject reportObject) {
-	      HttpSession session = request.getSession();
-	      final InterMineAPI im = SessionMethods.getInterMineAPI(session);
+		String className = reportObject.getClassDescriptor().getUnqualifiedName();
+        request.setAttribute("className", className);
 
 	     LOG.info("Entering Gene Allele display ");
 	     

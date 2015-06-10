@@ -535,10 +535,10 @@
                      placement="summary"
                      types="Gene"/>   -->
     
-     <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneAlleleDisplayer"
+     <reportdisplayer javaClass="org.thalemine.web.displayer.GeneAlleleDisplayer"
                      jspName="model/alleleDisplayer.jsp"
-                     replacesFields=""
-                     placement="Genomics"
+                     replacesFields="affectedAlleles"
+                     placement="Alleles"
                      types="Gene"/>
  
 
