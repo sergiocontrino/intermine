@@ -132,6 +132,11 @@ div.wrapper { margin-bottom:30px; }
 /* templates */
 div.template h3 span.name { cursor:pointer; }
 
+/* quick fix for modal problem */
+.modal-backdrop {
+display: none;
+}
+
 /* resizing on small screens */
 @media only screen and (max-width:1440px) {
     /* header summary fields */
