@@ -35,6 +35,7 @@ import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.StockVO;
+import org.thalemine.web.domain.StrainVO;
 import org.intermine.pathquery.OuterJoinStatus;
 
 
@@ -79,12 +80,23 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 	      }
 
 	      ArrayList<StockVO> stockList = new ArrayList<StockVO>();
+	      List<StrainVO> backgroundAccessions = new ArrayList<StrainVO>();
 	      
 	      while (result.hasNext()) {
 	        List<ResultElement> resElement = result.next();
 	        StockVO item = new StockVO(resElement);
+	        
+	        List<StrainVO> bgAccessions = new ArrayList<StrainVO>();
+	        
+	        bgAccessions = getBackgroundAccessions(item, profile, im);
+	        
+	        item.setBackgrounds(bgAccessions);
+	        
 	        stockList.add(item);
+	        
 	        LOG.info("Stock:" + item);
+	                  
+	        
 	      }
 	      
 	   // for accessing this within the jsp
@@ -126,6 +138,23 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 	   	    
 	}
 	
+	//Gene.affectedAlleles.genotypes.stocks.backgroundAccessions.abbreviationName"
+	
+	private PathQuery getBackGroundAccesionsResultSet(String id){
+		
+		
+		 PathQuery query = new PathQuery(im.getModel());
+		 
+	       query.addViews(
+	    		    "Stock.backgroundAccessions.id",
+	    		    "Stock.backgroundAccessions.abbreviationName"
+	                );
+	       
+	        
+		    query.addConstraint(Constraints.eq("Stock.id",id));
+		    return query;
+	   	    
+	}
 		
 	private PathQuery getTAIRDataSet(){
 		
@@ -149,4 +178,38 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 	        return query;
 		
 	}
+	
+	private List<StrainVO> getBackgroundAccessions(StockVO item, Profile profile, InterMineAPI im){
+		List<StrainVO> result = new ArrayList<StrainVO>();
+		
+		PathQuery query = getBackGroundAccesionsResultSet(item.getStockObjectId());
+		ExportResultsIterator reader =  getResult(profile, im, query);
+		
+		 while (reader.hasNext()) {
+		        List<ResultElement> resElement = reader.next();
+		        StrainVO  bgItem  = new StrainVO(resElement);
+		        
+		        result.add(bgItem);
+		        LOG.info("Background Accession:" + bgItem);
+		      }
+	
+		return result;
+	}
+	
+	private ExportResultsIterator getResult(Profile profile, InterMineAPI im, PathQuery query){
+		
+		ExportResultsIterator result = null;
+		
+		try {
+	        result = exec.execute(query);
+	      } catch (ObjectStoreException e) {
+	        
+	        LOG.error("Had an ObjectStoreException getResult java: "+e.getMessage());
+	        
+	      }
+		
+		return result;
+	}
+	
+	
 }

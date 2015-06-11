@@ -20,11 +20,12 @@
 		</h3>
 		<p>
 			Data Source: <a target="_blank" href="">ABRC Germplasms/Seed Stocks</a>
-		</p>
-		
-		<p>
+			<span>&nbsp; &nbsp; &nbsp;</span>
+			<span>
 			Data Source: <a target="_blank" href="">NASC Germplasms/Seed Stocks</a>
+			</span>
 		</p>
+			
 		
 	</div>
 
@@ -53,7 +54,9 @@
      				 			${item.genotypeName}
      				 		</td>
      				 		<td>
-     				 			
+     				 			<c:forEach var="bgitem" items="${item.backgrounds}">
+     				 				<a href="report.do?id=${bgitem.objectId}">${bgitem.abbreviationName}</a>
+     				 			</c:forEach>
      				 		</td>
      				 		<td>
      				 			${item.stockName}

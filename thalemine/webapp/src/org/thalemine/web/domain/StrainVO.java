@@ -1,14 +1,37 @@
 package org.thalemine.web.domain;
 
-public class StrainVO {
+import java.util.List;
 
+import org.intermine.api.results.ResultElement;
+import org.apache.log4j.Logger;
+
+public class StrainVO {
+	
+protected static final Logger LOG = Logger.getLogger(StrainVO.class);
+	
 private String objectId;
 private String primaryIdentifier;
 private String name;
 private String abbreviationName;
 
-private StrainVO(){
+public StrainVO(){
 	
+}
+
+public StrainVO(String objectId,String abbreviationName ){
+	this.objectId = objectId;
+	this.abbreviationName = abbreviationName;
+}
+
+
+public StrainVO(List<ResultElement> resElement) {
+
+
+		objectId = ((resElement.get(0) != null) && (resElement.get(0).getField() != null)) ? resElement.get(0)
+				.getField().toString() : "&nbsp;";
+
+		abbreviationName = ((resElement.get(1) != null) && (resElement.get(1).getField() != null)) ? resElement
+				.get(1).getField().toString() : "&nbsp;";
 }
 
 public String getObjectId() {

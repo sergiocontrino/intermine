@@ -21,6 +21,7 @@ public class StockVO {
 	private String germplasmPrimaryAccession;
 	private String stockAccession;
 	private String genotypeDisplayName;
+	private String backGroundAccessionsName;
 	private List<StrainVO> backgrounds = new ArrayList<StrainVO>();
 	private StrainVO strainAccession;
 
@@ -72,7 +73,10 @@ public class StockVO {
 		String backgroundAccessionAbbrName = ((resElement.get(11) != null) && (resElement.get(11).getField() != null)) ? resElement
 				.get(11).getField().toString()
 				: "&nbsp;";
-
+				
+		this.strainAccession = new StrainVO(backgroundAccessionId, backgroundAccessionAbbrName );
+		
+		
 	}
 
 	public String getStockObjectId() {
@@ -179,5 +183,37 @@ public class StockVO {
 		this.strainAccession = strainAccession;
 	}
 
+	@Override
+	public String toString() {
+		return "StockVO [stockObjectId=" + stockObjectId + ", genotypeObjectId=" + genotypeObjectId + ", genotypeName="
+				+ genotypeName + ", stockName=" + stockName + ", germplasmName=" + germplasmName + ", displayName="
+				+ displayName + ", stockPrimaryIdentifier=" + stockPrimaryIdentifier + ", genotypePrimaryIdentifier="
+				+ genotypePrimaryIdentifier + ", germplasmPrimaryAccession=" + germplasmPrimaryAccession
+				+ ", stockAccession=" + stockAccession + ", genotypeDisplayName=" + genotypeDisplayName
+				+ ", backgrounds=" + backgrounds + ", strainAccession=" + strainAccession + "]";
+	}
+
 	
+	public String getBackground(){
+		
+		String result = null;
+		
+		StringBuilder strBuilder= new StringBuilder();
+		
+		for (StrainVO item:backgrounds){
+			strBuilder.append(item.getAbbreviationName());
+			
+			if (backgrounds.size() > 1) {
+				strBuilder.append(";");
+			}
+		}
+		
+		if (strBuilder.length() > 0){
+			result = strBuilder.toString(); 
+		}else{
+			result = "&nbsp;"; 
+		}
+		
+		return result;
+	}
 }
