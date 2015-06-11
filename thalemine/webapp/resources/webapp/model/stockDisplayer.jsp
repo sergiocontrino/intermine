@@ -12,6 +12,7 @@
 <div id="allele-displayer" class="collection-table">
 
 	<c:set var="rowCount" value="${fn:length(list)}" />
+	
 
 	<div class="header">
 		<h3>
@@ -61,11 +62,37 @@
      				 		<td>
      				 			${item.stockName}
      				 		</td>
-     				 		<td>
-     				 			
-     				 		</td>
+     				     	
+     				     	<c:choose>
+								<c:when test="${!empty item.phenotypes}">
+								
+									<table>
+									
+									<thead>
+						<tr>
+							<th>Phenotypes</th>
+							
+						</tr>
+					</thead>
+					<tbody>
+									<c:forEach var="phenotypeItem" items="${item.phenotypes}">	
+									<tr>
+									<td>
+											${phenotypeItem.description}
+									</td>
+									</tr>
+									
+									</c:forEach>
+									
+									</tbody>
+									</table>
+								</c:when>
+							</c:choose>
+					 		
      				 	</tr>
-     				  	</c:forEach>
+     				 	
+     				 </c:forEach>
+     				  	
    					 </tbody>
 				<table>
 			</div>

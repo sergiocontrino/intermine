@@ -34,6 +34,7 @@ import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
 import org.thalemine.web.domain.AlleleVO;
+import org.thalemine.web.domain.PhenotypeVO;
 import org.thalemine.web.domain.StockVO;
 import org.thalemine.web.domain.StrainVO;
 import org.intermine.pathquery.OuterJoinStatus;
@@ -91,6 +92,12 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 	        bgAccessions = getBackgroundAccessions(item, profile, im);
 	        
 	        item.setBackgrounds(bgAccessions);
+	        
+	        List<PhenotypeVO> phenotypes = new ArrayList<PhenotypeVO>();
+	        
+	        phenotypes  = getPhenotypes(gene.getId().toString(), item, profile, im);
+	        
+	        item.setPhenotypes(phenotypes);
 	        
 	        stockList.add(item);
 	        
@@ -156,6 +163,34 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 	   	    
 	}
 		
+
+	private PathQuery getPhenotypesResultSet(String geneId, String stockId){
+		
+		
+		 PathQuery query = new PathQuery(im.getModel());
+		 
+		 query.addViews(
+				 	"Gene.affectedAlleles.genotypes.phenotypesObserved.id",
+	                "Gene.affectedAlleles.genotypes.phenotypesObserved.description",
+				 	"Gene.affectedAlleles.primaryIdentifier",
+	                "Gene.affectedAlleles.genotypes.name",
+	                "Gene.affectedAlleles.genotypes.phenotypesObserved.primaryIdentifier",
+	                "Gene.affectedAlleles.genotypes.stocks.primaryIdentifier",
+	                "Gene.primaryIdentifier");
+
+		   // Add orderby
+	        query.addOrderBy("Gene.affectedAlleles.genotypes.phenotypesObserved.primaryIdentifier", OrderDirection.ASC);
+	        
+	        // Filter the results with the following constraints:
+	        query.addConstraint(Constraints.eq("Gene.id", geneId), "A");
+	        query.addConstraint(Constraints.eq("Gene.affectedAlleles.genotypes.stocks.id", stockId), "B");
+	        // Specify how these constraints should be combined.
+	        query.setConstraintLogic("A and B");
+	        
+		    return query;
+	   	    
+	}
+	
 	private PathQuery getTAIRDataSet(){
 		
 		 PathQuery query = new PathQuery(im.getModel());
@@ -191,6 +226,23 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 		        
 		        result.add(bgItem);
 		        LOG.info("Background Accession:" + bgItem);
+		      }
+	
+		return result;
+	}
+	
+	private List<PhenotypeVO> getPhenotypes(String geneId, StockVO item, Profile profile, InterMineAPI im){
+		List<PhenotypeVO> result = new ArrayList<PhenotypeVO>();
+		
+		PathQuery query = getPhenotypesResultSet(geneId, item.getStockObjectId());
+		ExportResultsIterator reader =  getResult(profile, im, query);
+		
+		 while (reader.hasNext()) {
+		        List<ResultElement> resElement = reader.next();
+		        PhenotypeVO phenotypeItem  = new PhenotypeVO(resElement);
+		        
+		        result.add(phenotypeItem);
+		        LOG.info("Phenotype:" +phenotypeItem);
 		      }
 	
 		return result;

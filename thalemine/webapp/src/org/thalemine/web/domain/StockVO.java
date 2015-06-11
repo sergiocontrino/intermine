@@ -21,10 +21,10 @@ public class StockVO {
 	private String germplasmPrimaryAccession;
 	private String stockAccession;
 	private String genotypeDisplayName;
-	private String backGroundAccessionsName;
 	private List<StrainVO> backgrounds = new ArrayList<StrainVO>();
 	private StrainVO strainAccession;
-
+	private List<PhenotypeVO> phenotypes = new ArrayList<PhenotypeVO>();
+	
 	public StockVO() {
 
 	}
@@ -183,16 +183,13 @@ public class StockVO {
 		this.strainAccession = strainAccession;
 	}
 
-	@Override
-	public String toString() {
-		return "StockVO [stockObjectId=" + stockObjectId + ", genotypeObjectId=" + genotypeObjectId + ", genotypeName="
-				+ genotypeName + ", stockName=" + stockName + ", germplasmName=" + germplasmName + ", displayName="
-				+ displayName + ", stockPrimaryIdentifier=" + stockPrimaryIdentifier + ", genotypePrimaryIdentifier="
-				+ genotypePrimaryIdentifier + ", germplasmPrimaryAccession=" + germplasmPrimaryAccession
-				+ ", stockAccession=" + stockAccession + ", genotypeDisplayName=" + genotypeDisplayName
-				+ ", backgrounds=" + backgrounds + ", strainAccession=" + strainAccession + "]";
+	public List<PhenotypeVO> getPhenotypes() {
+		return phenotypes;
 	}
 
+	public void setPhenotypes(List<PhenotypeVO> phenotypes) {
+		this.phenotypes = phenotypes;
+	}
 	
 	public String getBackground(){
 		
@@ -216,4 +213,17 @@ public class StockVO {
 		
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "StockVO [stockObjectId=" + stockObjectId + ", genotypeObjectId=" + genotypeObjectId + ", genotypeName="
+				+ genotypeName + ", stockName=" + stockName + ", germplasmName=" + germplasmName + ", displayName="
+				+ displayName + ", stockPrimaryIdentifier=" + stockPrimaryIdentifier + ", genotypePrimaryIdentifier="
+				+ genotypePrimaryIdentifier + ", germplasmPrimaryAccession=" + germplasmPrimaryAccession
+				+ ", stockAccession=" + stockAccession + ", genotypeDisplayName=" + genotypeDisplayName
+				+ ", backgrounds=" + backgrounds + ", strainAccession=" + strainAccession + ", phenotypes="
+				+ phenotypes + "]";
+	}
+	
+	
 }
