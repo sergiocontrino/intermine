@@ -69,7 +69,6 @@ public class AuthorVO {
 			strBuilder.append(initials);
 		}
 		
-		
 		return result;
 		
 		

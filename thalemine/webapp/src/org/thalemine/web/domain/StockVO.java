@@ -29,6 +29,30 @@ public class StockVO {
 
 	}
 
+	public StockVO(List<Object> list){
+		init(list);
+	}
+	
+	private void init(List<Object> list){
+		
+		this.genotypeObjectId = getElement(list, 0);
+		this.genotypeDisplayName = getElement(list, 1);
+		this.genotypeName = getElement(list, 2);
+		this.genotypePrimaryIdentifier = getElement(list, 3);
+		this.stockObjectId = getElement(list, 4);
+		this.germplasmName = getElement(list, 5);
+		this.stockPrimaryIdentifier = getElement(list, 6);
+		this.stockName  = getElement(list, 7);
+		this.germplasmPrimaryAccession = getElement(list, 8);
+		this.stockAccession = getElement(list, 9);
+		String backgroundAccessionId = getElement(list, 10);
+		String backgroundAccessionAbbrName = getElement(list, 11);
+		
+		this.strainAccession = new StrainVO(backgroundAccessionId, backgroundAccessionAbbrName );
+		
+	}
+	
+	/*
 	public StockVO(List<ResultElement> resElement) {
 
 		// Genotype Attributes
@@ -60,7 +84,7 @@ public class StockVO {
 				.getField().toString() : "&nbsp;";
 
 		germplasmPrimaryAccession = ((resElement.get(8) != null) && (resElement.get(8).getField() != null)) ? resElement
-				.get(0).getField().toString()
+				.get(8).getField().toString()
 				: "&nbsp;";
 
 		stockAccession = ((resElement.get(9) != null) && (resElement.get(9).getField() != null)) ? resElement.get(9)
@@ -78,7 +102,9 @@ public class StockVO {
 		
 		
 	}
-
+	
+	**/
+		
 	public String getStockObjectId() {
 		return stockObjectId;
 	}
@@ -226,4 +252,12 @@ public class StockVO {
 	}
 	
 	
+	private String getElement(List<Object> list, int index){
+		
+		String element = ((list.get(index) != null) && (list.get(index) != null)) ? list.get(index)
+				.toString() : "&nbsp;";
+		
+		return element;
+		
+	}
 }

@@ -1,5 +1,8 @@
 package org.thalemine.web.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.intermine.api.results.ResultElement;
 import org.apache.log4j.Logger;
 
@@ -11,7 +14,14 @@ public class PublicationVO {
 	private String title;
 	private String year;
 	private String firstAuthor;
+	private List<AuthorVO> authors = new ArrayList<AuthorVO>();
 	
+	public List<AuthorVO> getAuthors() {
+		return authors;
+	}
+	public void setAuthors(List<AuthorVO> authors) {
+		this.authors = authors;
+	}
 	public  PublicationVO(){
 		
 	}

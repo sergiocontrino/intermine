@@ -12,7 +12,7 @@
 <div id="allele-displayer" class="collection-table">
 
 	<c:set var="rowCount" value="${fn:length(list)}" />
-	
+
 
 	<div class="header">
 		<h3>
@@ -20,14 +20,13 @@
 			Stocks
 		</h3>
 		<p>
-			Data Source: <a target="_blank" href="">ABRC Germplasms/Seed Stocks</a>
-			<span>&nbsp; &nbsp; &nbsp;</span>
-			<span>
-			Data Source: <a target="_blank" href="">NASC Germplasms/Seed Stocks</a>
+			Data Source: <a target="_blank" href="">ABRC Germplasms/Seed
+				Stocks</a> <span>&nbsp; &nbsp; &nbsp;</span> <span> Data Source:
+				<a target="_blank" href="">NASC Germplasms/Seed Stocks</a>
 			</span>
 		</p>
-			
-		
+
+
 	</div>
 
 	<c:choose>
@@ -46,62 +45,54 @@
 						</tr>
 					</thead>
 					<tbody>
-     				 	<c:forEach var="item" items="${list}">	
-     				 	<tr>
-     				 		<td>
-     				 		 <a href="report.do?id=${item.stockObjectId}">${item.germplasmName}</a>
-     				 		</td>
-     				 		<td>
-     				 			${item.genotypeName}
-     				 		</td>
-     				 		<td>
-     				 			<c:forEach var="bgitem" items="${item.backgrounds}">
-     				 				<a href="report.do?id=${bgitem.objectId}">${bgitem.abbreviationName}</a>
-     				 			</c:forEach>
-     				 		</td>
-     				 		<td>
-     				 			${item.stockName}
-     				 		</td>
-     				     	
-     				     	<c:choose>
-								<c:when test="${!empty item.phenotypes}">
-								
-									<table>
-									
-									<thead>
-						<tr>
-							<th>Phenotypes</th>
-							
-						</tr>
-					</thead>
-					<tbody>
-									<c:forEach var="phenotypeItem" items="${item.phenotypes}">	
-									<tr>
-									<td>
-											${phenotypeItem.description}
-									</td>
-									</tr>
-									
-									</c:forEach>
-									
-									</tbody>
-									</table>
-								</c:when>
-							</c:choose>
-					 		
-     				 	</tr>
-     				 	
-     				 </c:forEach>
-     				  	
-   					 </tbody>
-				<table>
-			</div>
+						<c:forEach var="item" items="${list}">
+							<tr>
+								<td><a href="report.do?id=${item.stockObjectId}">${item.germplasmName}</a>
+								</td>
+								<td>${item.genotypeName}</td>
+								<td><c:forEach var="bgitem" items="${item.backgrounds}">
+										<a href="report.do?id=${bgitem.objectId}">${bgitem.abbreviationName}</a>
+									</c:forEach></td>
+								<td>${item.stockName}</td>
 
-		</c:when>
-		<c:otherwise>
+								<c:choose>
+									<c:when test="${!empty item.phenotypes}">
+
+										<table>
+
+											<thead>
+												<tr>
+													
+													<th>Phenotypes</th>
+
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach var="phenotypeItem" items="${item.phenotypes}">
+													<tr>
+														<td>${phenotypeItem.description}</td>
+													</tr>
+
+												</c:forEach>
+
+											</tbody>
+										</table>
+									</c:when>
+								</c:choose>
+
+							</tr>
+
+						</c:forEach>
+
+					</tbody>
+					<table>
+						</div>
+
+						</c:when>
+						<c:otherwise>
     			No Allele Data Available
   		</c:otherwise>
-	</c:choose>
-</div>
+						</c:choose>
+						</div>
 
-<!-- /alelleDisplayer.jsp -->
+						<!-- /alelleDisplayer.jsp -->

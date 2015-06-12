@@ -24,7 +24,21 @@ public class PhenotypeVO {
 		this.description =description;
 	}
 
+	
+	
 
+	public PhenotypeVO(List<Object> list) {
+		init(list);
+	}
+
+	private void init(List<Object> list) {
+
+		this.objectId = getElement(list, 0);
+		this.description = getElement(list, 1);
+
+	}
+
+	/**
 	public PhenotypeVO(List<ResultElement> resElement) {
 
 
@@ -34,6 +48,7 @@ public class PhenotypeVO {
 			description = ((resElement.get(1) != null) && (resElement.get(1).getField() != null)) ? resElement
 					.get(1).getField().toString() : "&nbsp;";
 	}
+	*/
 	
 	public String getObjectId() {
 		return objectId;
@@ -61,6 +76,15 @@ public class PhenotypeVO {
 		}else{
 			return "&nbsp;";
 		}
+	}
+	
+	private String getElement(List<Object> list, int index) {
+
+		String element = ((list.get(index) != null) && (list.get(index) != null)) ? list.get(index).toString()
+				: "&nbsp;";
+
+		return element;
+
 	}
 	
 }
