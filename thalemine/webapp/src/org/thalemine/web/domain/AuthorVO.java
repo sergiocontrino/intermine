@@ -6,7 +6,7 @@ import java.util.List;
 import org.intermine.api.results.ResultElement;
 import org.apache.log4j.Logger;
 
-public class AuthorVO {
+public class AuthorVO extends DomainVO {
 	
 	protected static final Logger LOG = Logger.getLogger(AuthorVO.class);
 	
@@ -18,6 +18,18 @@ public class AuthorVO {
 	
 	public AuthorVO(){
 		
+	}
+	
+	public AuthorVO(List<Object> list) {
+		init(list);
+
+	}
+	
+	private void init(List<Object> list) {
+
+		this.objectId = getElement(list, 0);
+		this.name = getElement(list, 1);
+
 	}
 	
 	public String getObjectId() {
@@ -53,23 +65,7 @@ public class AuthorVO {
 	
 	public String toString(){
 		
-		String result = null;
-		
-		StringBuilder strBuilder = new StringBuilder();
-		
-		if (lastName!=null){
-			strBuilder.append(lastName);
-		}
-		
-		if (strBuilder.length() > 0){
-			strBuilder.append(" ");
-		}
-		
-		if (initials!=null){
-			strBuilder.append(initials);
-		}
-		
-		return result;
+		return name;
 		
 		
 	}

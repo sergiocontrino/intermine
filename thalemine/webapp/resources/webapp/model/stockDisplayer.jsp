@@ -6,10 +6,10 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="im"%>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles"%>
 
-<!-- alelleDisplayer.jsp -->
+<!-- stockDisplayer.jsp -->
 
 
-<div id="allele-displayer" class="collection-table">
+<div id="stock-displayer" class="collection-table">
 
 	<c:set var="rowCount" value="${fn:length(list)}" />
 
@@ -20,9 +20,9 @@
 			Stocks
 		</h3>
 		<p>
-			Data Source: <a target="_blank" href="">ABRC Germplasms/Seed
+			Data Source: <a target="_blank" href="${WEB_PROPERTIES['ABRC_SeedStockSearch_url']}">ABRC Germplasms/Seed
 				Stocks</a> <span>&nbsp; &nbsp; &nbsp;</span> <span> Data Source:
-				<a target="_blank" href="">NASC Germplasms/Seed Stocks</a>
+				<a target="_blank" href="${WEB_PROPERTIES['NASC_StockSearch_url']}">NASC Germplasms/Seed Stocks</a>
 			</span>
 		</p>
 
@@ -70,14 +70,26 @@
 											<tbody>
 												<c:forEach var="phenotypeItem" items="${item.phenotypes}">
 													<tr>
-														<td>${phenotypeItem.description}</td>
+														<td>${phenotypeItem.description}
+														<c:choose>
+															<c:when test="${!empty phenotypeItem.publications}">
+																<c:forEach var="publicationItem" items="${phenotypeItem.publications}">
+																<span>&nbsp;</span>
+																	<a href="report.do?id=${publicationItem.objectId}">${publicationItem.displayTitleStockContext}</a>
+																</c:forEach>
+															</c:when>
+														</c:choose>
+														</td>
 													</tr>
-
+									
 												</c:forEach>
 
 											</tbody>
 										</table>
 									</c:when>
+									<c:otherwise>
+											No phenotype information available at this time
+  									</c:otherwise>
 								</c:choose>
 
 							</tr>
@@ -90,9 +102,9 @@
 
 						</c:when>
 						<c:otherwise>
-    			No Allele Data Available
+    			No stock information available at this time
   		</c:otherwise>
 						</c:choose>
 						</div>
 
-						<!-- /alelleDisplayer.jsp -->
+						<!-- /stockDisplayer.jsp -->
