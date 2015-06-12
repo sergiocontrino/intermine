@@ -273,7 +273,6 @@
     <fields>
       <fieldconfig fieldExpr="identifier"/>
       <fieldconfig fieldExpr="name"/>
-      <fieldconfig fieldExpr="curated"/>
     </fields>
     <inlinelist>
       <table path="dataSets.name" showInHeader="true" />
