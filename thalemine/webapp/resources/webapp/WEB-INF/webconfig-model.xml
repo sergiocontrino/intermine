@@ -269,6 +269,20 @@
 
 -->
 
+
+  <class className="org.intermine.model.bio.Pathway">
+    <fields>
+      <fieldconfig fieldExpr="identifier"/>
+      <fieldconfig fieldExpr="name"/>
+      <fieldconfig fieldExpr="curated"/>
+    </fields>
+    <inlinelist>
+      <table path="dataSets.name" showInHeader="true" />
+    </inlinelist>
+  </class>
+
+
+
   <class className="org.intermine.model.bio.Protein">
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
@@ -408,6 +422,13 @@
   <tableExportConfig id="bed" className="org.intermine.bio.web.export.BEDHttpExporter"/>
 
   <reportdisplayers>
+<!--
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.MinePathwaysDisplayer"
+                     jspName="model/minePathwaysDisplayer.jsp"
+                     replacesFields="pathways"
+                     placement="Function"
+                     types="Gene"/>
+ -->
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.CytoscapeNetworkDisplayer"
                      jspName="model/cytoscapeNetworkDisplayer.jsp"
@@ -425,7 +446,7 @@
                      jspName="model/geneStructureDisplayer.jsp"
                      replacesFields="transcripts,exons,CDSs,introns,UTRs,fivePrimeUTR,threePrimeUTR,childFeatures"
                      placement="Genomics"
-                     types="Gene,Transcript,Exon,Intron,UTR,CDS,TransposableElementGene"/>
+                     types="Gene,Transcript,Exon,UTR,TransposableElementGene"/>
 
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.HomologueDisplayer"
@@ -435,7 +456,7 @@
                      parameters="{'dataSets': ['Panther data set']}"
                      types="Gene"/>
 
-    
+
     <!--<reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneHomologDisplayer"
                      jspName="model/geneHomologDisplayer.jsp"
                      replacesFields=""
@@ -511,6 +532,14 @@
                      replacesFields=""
                      placement="Expression"
                      types="Gene"/>
+    <!-- this feature is not ready for production
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.EsynDisplayer"
+                     jspName="model/esynDisplayer.jsp"
+                     replacesFields=""
+                     placement="Interactions"
+                     types="Gene"/>
+    -->
+
 
     <!--  this takes rather long to load, commented for now
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.MinePathwaysDisplayer"
@@ -652,6 +681,22 @@
                                  views="primaryIdentifier,organism.name,proteinDomains.primaryIdentifier,
                                        proteinDomains.name"
                                  externalLink="http://www.ebi.ac.uk/interpro/entry/"/>
+
+
+      <enrichmentwidgetdisplayer id="pathway_enrichment"
+                                 title="Pathway Enrichment"
+                                 description="Pathways enriched for genes in this list - data from KEGG and Reactome"
+                                 label="Pathways"
+                                 filterLabel="DataSet"
+                                 filters="All,KEGG pathways data set,Reactome data set"
+                                 startClass="Gene"
+                                 startClassDisplay="primaryIdentifier"
+                                 enrich="pathways.name"
+                                 enrichIdentifier="pathways.identifier"
+                                 constraints="pathways.dataSets.name=[DataSet],organism.taxonId=[list], primaryIdentifier != null"
+                                 typeClass="Gene"
+                                 views="secondaryIdentifier, symbol, organism.name, pathways.identifier, pathways.name, pathways.dataSets.name"/>
+
 
 
        <bagtabledisplayer id="orthologues" title="Orthologues" pathStrings="Gene.homologues.homologue.organism"
