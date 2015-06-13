@@ -565,7 +565,7 @@
                      jspName="model/alleleZygosity.jsp"
                      replacesFields="alleleGeneZygosities"
                      placement="Stocks"
-                     types="Gene"/>
+                     types="Gene,Allele"/>
 
   </reportdisplayers>
 
