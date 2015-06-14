@@ -37,20 +37,22 @@ import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
 import org.intermine.web.util.URLGenerator;
 import org.thalemine.web.domain.AlleleVO;
+import org.thalemine.web.domain.GeneModelVO;
 import org.thalemine.web.domain.PhenotypeVO;
 import org.thalemine.web.domain.StockVO;
 import org.thalemine.web.domain.StrainVO;
+import org.thalemine.web.query.AlleleQueryService;
 import org.thalemine.web.query.StockQueryService;
 import org.thalemine.web.utils.QueryServiceLocator;
 import org.thalemine.web.utils.WebApplicationContextLocator;
 import org.intermine.pathquery.OuterJoinStatus;
 
-public class StockPhenotypeDisplayer extends ReportDisplayer {
+public class GeneModelDisplayer extends ReportDisplayer {
 
-	private static final String STOCK_SERVICE = "StockQueryService";
-	protected static final Logger log = Logger.getLogger(StockPhenotypeDisplayer.class);
+	private static final String ALLELE_SERVICE = "AlleleQueryService";
+	protected static final Logger log = Logger.getLogger(GeneModelDisplayer.class);
 
-	public StockPhenotypeDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
+	public GeneModelDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
 		super(config, im);
 	}
 
@@ -64,50 +66,38 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 		InterMineObject object = null;
 		
 		String objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();
-		List<StockVO> resultList = new ArrayList<StockVO>();
+		List<GeneModelVO> resultList = new ArrayList<GeneModelVO>();
 
 		try {
 			
 			String contextURL = WebApplicationContextLocator.getServiceUrl(request);
 			log.info("Service Context URL:" + contextURL);
 
-			StockQueryService stockService = (StockQueryService) QueryServiceLocator.getService(STOCK_SERVICE, request);
-			String stockServiceUrl = stockService.getServiceUrl();
-			log.info("Stock Service Context URL:" + contextURL);
-			
-			objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();
+			AlleleQueryService alleleService = (AlleleQueryService) QueryServiceLocator.getService(ALLELE_SERVICE, request);
+			String alleleServiceUrl = alleleService.getServiceUrl();
+			log.info("Allele Service Context URL:" + contextURL);
 			
 			request.setAttribute("className", objectClassName);
-			log.info("Gene StockPhenotype Displayer:" + "Class Name:" + objectClassName);
+			log.info("Allele/Gene Model Displayer:" + "Class Name:" + objectClassName);
 			
-			object = reportObject.getObject();
+			allele = (Allele) reportObject.getObject();		
 
-			if (objectClassName.equals("Gene")){
-				gene = (Gene) reportObject.getObject();
-				log.info("Generating StockPhenotype Report. Gene Id:" + gene.getPrimaryIdentifier());
-			}else if (objectClassName.equals("Allele"))
-			{
-				allele = (Allele) reportObject.getObject();
-				log.info("Generating StockPhenotype Report. Allele Id:" + allele.getPrimaryIdentifier());
-			}else{
-				throw new Exception("Unknown Object Type.");
-			}
-
-			resultList = stockService.getStocks(object, objectClassName);
+			log.info("Allele/Gene Model Displayer:" + "Allele:" + allele.getPrimaryIdentifier());
+			
+			resultList = alleleService.getGeneModels(allele, "allele");
 
 		} catch (Exception e) {
 			exception = e;
 		} finally {
 
 			if (exception != null) {
-				log.error("Error occurred Stock/Phenotypes displayer." + ";Message:" + exception.getMessage()
+				log.error("Error occurred Allele/Gene Model displayer." + ";Message:" + exception.getMessage()
 						+ ";Cause:" + exception.getCause());
 				return;
 			} else {
 				
 				// Set Request Attributes		
 				request.setAttribute("list", resultList);
-				request.setAttribute("id", object.getId());
 			}
 		}
 

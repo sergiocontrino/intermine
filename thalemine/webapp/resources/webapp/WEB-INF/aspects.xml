@@ -61,7 +61,15 @@
     </intro-text>
     <aspect-source name="PantherDB" url="http://www.pantherdb.org/genes/"/>
   </aspect>
-  
+ 
+ <aspect name="Genes">
+    <subtitle>Associated Genes</subtitle>
+    <intro-text>
+    	Associated Genes
+    </intro-text>
+   <aspect-source name="TAIR" url="http://www.arabidopsis.org"/>
+ </aspect>
+ 
  <aspect name="Alleles">
     <subtitle>Alleles and Phenotypes</subtitle>
     <intro-text>

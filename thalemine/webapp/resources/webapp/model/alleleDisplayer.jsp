@@ -19,7 +19,7 @@
 			Alleles
 		</h3>
 		<p>
-			Data Source: <a target="_blank" href="">Polymorphisms</a>
+			Data Source: <a target="_blank" href="${WEB_PROPERTIES['TAIR_PolyAlleleSearch_url']}">Polymorphisms</a>
 		</p>
 	</div>
 
