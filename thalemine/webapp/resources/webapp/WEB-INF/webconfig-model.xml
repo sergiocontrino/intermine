@@ -388,6 +388,7 @@
       <fieldconfig fieldExpr="end"/>
       <fieldconfig fieldExpr="description"/>
     </fields>
+  </class>
     
     <class className="org.intermine.model.bio.AlleleGeneZygosity">
      <fields>
