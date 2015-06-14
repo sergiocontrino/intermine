@@ -9,6 +9,9 @@ public abstract class DomainVO {
 		String element = ((list.get(index) != null) && (list.get(index) != null)) ? list.get(index).toString()
 				: "&nbsp;";
 
+		if (element==null){
+			element = "&nbsp;";
+		}
 		return element;
 
 	}

@@ -1,10 +1,20 @@
 package org.thalemine.web.displayer;
+/*
+ * Copyright (C) 2002-2014 FlyMine
+ *
+ * This code may be freely distributed and modified under the
+ * terms of the GNU Lesser General Public Licence.  This should
+ * be distributed with the code.  See the LICENSE file for more
+ * information or http://www.gnu.org/copyleft/lesser.html.
+ *
+ */
+
+import javax.servlet.http.HttpServletRequest;
 
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Properties;
 import java.util.TreeSet;
 import java.util.TreeMap;
 import java.util.List;
@@ -35,38 +45,40 @@ import org.intermine.web.displayer.ReportDisplayer;
 import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
-import org.intermine.web.util.URLGenerator;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.GeneModelVO;
-import org.thalemine.web.domain.PhenotypeVO;
-import org.thalemine.web.domain.StockVO;
-import org.thalemine.web.domain.StrainVO;
+import org.intermine.pathquery.OuterJoinStatus;
+import org.thalemine.web.domain.AlleleSummaryVO;
 import org.thalemine.web.query.AlleleQueryService;
-import org.thalemine.web.query.StockQueryService;
 import org.thalemine.web.utils.QueryServiceLocator;
 import org.thalemine.web.utils.WebApplicationContextLocator;
-import org.intermine.pathquery.OuterJoinStatus;
 
-public class GeneModelDisplayer extends ReportDisplayer {
-
+ 
+public class AlleleSummaryDisplayer extends ReportDisplayer
+{
+	
 	private static final String ALLELE_SERVICE = "AlleleQueryService";
 	protected static final Logger log = Logger.getLogger(GeneModelDisplayer.class);
 
-	public GeneModelDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
-		super(config, im);
-	}
+    /**
+     * Construct with config and the InterMineAPI.
+     * @param config to describe the report displayer
+     * @param im the InterMine API
+     */
+    public AlleleSummaryDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
+        super(config, im);
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public void display(HttpServletRequest request, ReportObject reportObject) {
-
-		Exception exception = null;
+    @Override
+    public void display(HttpServletRequest request, ReportObject reportObject) {
+       
+    	Exception exception = null;
 		Allele allele = null;
 		
-		String objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();
-		List<GeneModelVO> resultList = new ArrayList<GeneModelVO>();
-
-		try {
+		String objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();	
+		List<AlleleSummaryVO> resultList = new ArrayList<AlleleSummaryVO>();
+		
+		try{
 			
 			String contextURL = WebApplicationContextLocator.getServiceUrl(request);
 			log.info("Service Context URL:" + contextURL);
@@ -76,20 +88,20 @@ public class GeneModelDisplayer extends ReportDisplayer {
 			log.info("Allele Service Context URL:" + contextURL);
 			
 			request.setAttribute("className", objectClassName);
-			log.info("Allele/Gene Model Displayer:" + "Class Name:" + objectClassName);
+			log.info("Allele/Summary Displayer:" + "Class Name:" + objectClassName);
 			
 			allele = (Allele) reportObject.getObject();		
 
-			log.info("Allele/Gene Model Displayer:" + "Allele:" + allele.getPrimaryIdentifier());
+			log.info("Allele/Summary Displayer:" + "Allele:" + allele.getPrimaryIdentifier());
 			
-			resultList = alleleService.getGeneModels(allele, "allele");
-
-		} catch (Exception e) {
+			resultList = alleleService.getAlleleSummary(allele);
+			
+		}catch (Exception e) {
 			exception = e;
 		} finally {
 
 			if (exception != null) {
-				log.error("Error occurred Allele/Gene Model displayer." + ";Message:" + exception.getMessage()
+				log.error("Allele/Summary Displayer." + ";Message:" + exception.getMessage()
 						+ ";Cause:" + exception.getCause());
 				return;
 			} else {
@@ -98,7 +110,5 @@ public class GeneModelDisplayer extends ReportDisplayer {
 				request.setAttribute("list", resultList);
 			}
 		}
-
-	}
-
+    }
 }

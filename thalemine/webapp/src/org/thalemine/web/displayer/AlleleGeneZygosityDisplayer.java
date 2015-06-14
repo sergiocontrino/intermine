@@ -16,10 +16,7 @@ import org.intermine.web.displayer.ReportDisplayer;
 import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 
-/**
- * Displayer for Phytomine Ortholog
- * @author rns
- */
+
 public class AlleleGeneZygosityDisplayer extends ReportDisplayer
 {
 

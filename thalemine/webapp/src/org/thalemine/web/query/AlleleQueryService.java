@@ -3,6 +3,7 @@ package org.thalemine.web.query;
 import org.apache.log4j.Logger;
 import org.intermine.web.logic.session.SessionMethods;
 import org.intermine.web.util.URLGenerator;
+import org.thalemine.web.domain.AlleleSummaryVO;
 import org.thalemine.web.domain.PhenotypeVO;
 import org.thalemine.web.domain.PublicationVO;
 import org.thalemine.web.domain.StockVO;
@@ -112,6 +113,40 @@ public class AlleleQueryService implements Service {
 		
 	}
 	
+	public List<AlleleSummaryVO> getAlleleSummary(Allele item){
+		
+		List<AlleleSummaryVO> resultList = new ArrayList<AlleleSummaryVO>();
+		
+		PathQuery query = null;
+		
+		log.info("Allele Source Item:" + item);
+		
+		query = getAlleleSummaryQueryByAlleleId(item);
+		
+		int rowCount = 0;
+		QueryService service = factory.getQueryService();
+		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+		
+		while (resultSetIterator.hasNext() && rowCount<1 ) {
+
+			List<Object> currentItem = resultSetIterator.next();
+			
+			log.info("Allele Summary Item:" + currentItem);	
+			
+			AlleleSummaryVO alleleItemVO = new AlleleSummaryVO(currentItem);
+			resultList.add(alleleItemVO);
+			
+			log.info("Allele Summary Result Item:" + alleleItemVO);		
+			
+			rowCount++;
+			
+			
+		}
+		
+		return  resultList;
+		
+	}
+	
 	private PathQuery getGeneModelsByAlleleQuery(Allele item) {
 
 		Model model = factory.getModel();
@@ -137,4 +172,32 @@ public class AlleleQueryService implements Service {
 
 	}
 
+	
+	public PathQuery getAlleleSummaryQueryByAlleleId(Allele item){	
+
+		Model model = factory.getModel();
+		PathQuery query = new PathQuery(model);
+
+		query.addViews(
+				"Allele.id",
+				"Allele.primaryIdentifier",
+				"Allele.mutagen.name",
+				"Allele.mutationSite.name",
+				"Allele.sequenceAlterationType.name",
+				"Allele.alleleClass.name",
+				"Allele.inheritanceMode.name"
+				);
+		
+		// Outer Joins
+        // Show all information about these relationships if they exist, but do not require that they exist.
+        query.setOuterJoinStatus("Allele.inheritanceMode", OuterJoinStatus.OUTER);
+        query.setOuterJoinStatus("Allele.mutagen", OuterJoinStatus.OUTER);
+        query.setOuterJoinStatus("Allele.mutationSite", OuterJoinStatus.OUTER);
+        query.setOuterJoinStatus("Allele.sequenceAlterationType", OuterJoinStatus.OUTER);
+        query.setOuterJoinStatus("Allele.alleleClass", OuterJoinStatus.OUTER);
+		
+		query.addConstraint(Constraints.eq("Allele.id", item.getId().toString()));
+		return query;
+
+	}
 }

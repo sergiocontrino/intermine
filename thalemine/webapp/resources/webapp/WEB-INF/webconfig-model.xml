@@ -414,19 +414,18 @@
       </fields>
   </class>
   
-  <class className="org.intermine.model.bio.Allele">
+ <class className="org.intermine.model.bio.Allele">
   
     <headerconfig>
       <titles>
         <title mainTitles="primaryIdentifier|name" numberOfMainTitlesToShow="1" subTitles="*organism.shortName*" />
       </titles>
     </headerconfig>
-  	 <inlinelist>
-    </inlinelist>
+    
   <fields>
   	  <fieldconfig fieldExpr="primaryIdentifier" label="Primary Identifier"/>
   	  <fieldconfig fieldExpr="name" label="Name"/>
-      <fieldconfig fieldExpr="sequenceAlterationType.name" label="Sequence Alteration Type"/>
+      <fieldconfig fieldExpr="sequenceAlterationType.name" label="Sequence Alteration Type" showInInlineCollection="false"/>
       <fieldconfig fieldExpr="mutagen.name" label="Mutagen"/>
       <fieldconfig fieldExpr="mutationSite.name" label="Mutation Site"/>   
       <fieldconfig fieldExpr="description" label="Description"/>
@@ -435,7 +434,7 @@
       <fieldconfig fieldExpr="wildType" label="Is Wild Type"/>
     </fields>
   </class>
-  
+ 
   <class className="org.intermine.model.bio.Phenotype">
   	 <headerconfig>
       <titles>
@@ -446,12 +445,7 @@
   	<fieldconfig fieldExpr="primaryIdentifier" label="Primary Accession" showInResults="false"/>
   	<fieldconfig fieldExpr="secondaryIdentifier" label="Secondary Accession" showInResults="false" showInSummary="false"/>
   </class>
-  
-  <class className="org.intermine.model.bio.Mutagen">
-  	<attribute name="name" showInResults="false" showInInlineCollection="false"/>
-  </class>
-    
-  </class>
+ 
 
 <!-- exporters -->
   <tableExportConfig id="sequence" className="org.intermine.bio.web.export.SequenceHttpExporter"/>
@@ -592,6 +586,13 @@
                      placement="Genes"
                      types="Allele"/>
                      
+     
+      <reportdisplayer javaClass="org.thalemine.web.displayer.AlleleSummaryDisplayer"
+                     jspName="model/alleleSummaryDisplayer.jsp"
+                     replacesFields="sequenceAlterationType, mutagen, mutationSite, alleleClass, inheritanceMode, publications, organism"
+                     placement="summary"
+                     types="Allele"/>
+                     
      <reportdisplayer javaClass="org.thalemine.web.displayer.GeneAlleleDisplayer"
                      jspName="model/alleleDisplayer.jsp"
                      replacesFields="affectedAlleles"
@@ -609,44 +610,6 @@
                      replacesFields="alleleGeneZygosities"
                      placement=""
                      types="Gene,Allele"/>
-      
-        <reportdisplayer javaClass="org.thalemine.web.displayer.ReferenceDisplayer"
-                     jspName="model/nullDisplayer.jsp"
-                     replacesFields="mutagen"
-                     placement=""
-                     types="Allele"/>
-        
-         <reportdisplayer javaClass="org.thalemine.web.displayer.ReferenceDisplayer"
-                     jspName="model/nullDisplayer.jsp"
-                     replacesFields="mutationSite"
-                     placement=""
-                     types="Allele"/>
-         
-         <reportdisplayer javaClass="org.thalemine.web.displayer.ReferenceDisplayer"
-                     jspName="model/nullDisplayer.jsp"
-                     replacesFields="mutationSite"
-                     placement=""
-                     types="Allele"/>
-         
-            
-         <reportdisplayer javaClass="org.thalemine.web.displayer.ReferenceDisplayer"
-                     jspName="model/nullDisplayer.jsp"
-                     replacesFields="inheritanceMode"
-                     placement=""
-                     types="Allele"/>
-                     
-          <reportdisplayer javaClass="org.thalemine.web.displayer.ReferenceDisplayer"
-                     jspName="model/nullDisplayer.jsp"
-                     replacesFields="alleleClass"
-                     placement=""
-                     types="Allele"/>
-                     
-          <reportdisplayer javaClass="org.thalemine.web.displayer.ReferenceDisplayer"
-                     jspName="model/nullDisplayer.jsp"
-                     replacesFields="sequenceAlterationType"
-                     placement=""
-                     types="Allele"/>
->
 
   </reportdisplayers>
 

@@ -59,7 +59,6 @@ public class AlleleVO {
 		alleleClass = formatValue("alleleClass",alleleClass);
 
 	}
-
 	
 	private String formatValue(String type, String value){
 		String result = value;
