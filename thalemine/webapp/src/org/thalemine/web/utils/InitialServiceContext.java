@@ -1,6 +1,7 @@
 package org.thalemine.web.utils;
 
 import org.apache.log4j.Logger;
+import org.thalemine.web.query.AlleleQueryService;
 import org.thalemine.web.query.PublicationQueryService;
 import org.thalemine.web.query.StockQueryService;
 
@@ -22,7 +23,11 @@ public class InitialServiceContext {
 		} else if (serviceName.equalsIgnoreCase("PublicationQueryService")){
 			
 			return PublicationQueryService.getInstance(request);
+		}else if (serviceName.equalsIgnoreCase("AlleleQueryService")){
+			
+			return AlleleQueryService.getInstance(request);
 		}
+		
 	
 		return null;
 	}
