@@ -439,7 +439,7 @@ public class GoConverter extends BioFileConverter
                 }
             }
 
-            if (rslv != null && rslv.hasTaxon(taxonId)) {
+            if (rslv != null && rslv.hasTaxon(taxonId) && !"3702".equals(taxonId)) {
                 if ("10116".equals(taxonId)) { // RGD doesn't have prefix in its annotation data
                     accession = "RGD:" + accession;
                 }
