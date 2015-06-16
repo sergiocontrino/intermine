@@ -34,12 +34,15 @@ import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
 import org.thalemine.web.domain.AlleleVO;
+import org.thalemine.web.query.StockQueryService;
+import org.thalemine.web.utils.QueryServiceLocator;
+import org.thalemine.web.utils.WebApplicationContextLocator;
 import org.intermine.pathquery.OuterJoinStatus;
 
 
 public class GeneAlleleDisplayer extends ReportDisplayer {
 	
-	
+	private static final String STOCK_SERVICE = "StockQueryService";
 	protected static final Logger LOG = Logger.getLogger(GeneAlleleDisplayer.class);
 	PathQueryExecutor exec;
 	
@@ -56,8 +59,16 @@ public class GeneAlleleDisplayer extends ReportDisplayer {
 	      
 		String className = reportObject.getClassDescriptor().getUnqualifiedName();
         request.setAttribute("className", className);
+        
+        String contextURL = WebApplicationContextLocator.getServiceUrl(request);
+		LOG.info("Service Context URL:" + contextURL);
 
-	     LOG.info("Gene Allele Displayer:" + "Class Name:"  + className);
+		StockQueryService stockService = (StockQueryService) QueryServiceLocator.getService(STOCK_SERVICE, request);
+		String stockServiceUrl = stockService.getServiceUrl();
+		LOG.info("Stock Service Context URL:" + contextURL);
+		
+
+	    LOG.info("Gene Allele Displayer:" + "Class Name:"  + className);
 	     
 	     Gene gene = (Gene)reportObject.getObject();
 	     
@@ -90,6 +101,8 @@ public class GeneAlleleDisplayer extends ReportDisplayer {
 	      request.setAttribute("geneName",gene.getPrimaryIdentifier());
 	      request.setAttribute("list",alleleList);
 	      request.setAttribute("id",gene.getId());
+	      request.setAttribute("contextURL",contextURL);
+	      request.setAttribute("stockServiceUrl",stockServiceUrl);
 	}
 
 	
