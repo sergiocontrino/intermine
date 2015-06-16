@@ -14,10 +14,10 @@
 	<c:set var="rowCount" value="${fn:length(list)}" />
 
     <c:out value="${rowCount}" />
-			<p> Context URL
+			<p> CONTEXT URL
 			<c:out value="${contextURL}" />
 			</p>
-			<p> Stock Service URL
+			<p> STOCK SERVICE URL
 	<c:out value="${stockServiceUrl}" />
 	</p>
 
