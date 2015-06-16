@@ -18,14 +18,24 @@ public class InitialServiceContext {
 			
 			 log.info("Looking up and creating a new StockQueryService object");
 			 
-			return StockQueryService.getInstance(request);
+			 StockQueryService service = StockQueryService.getInstance(request);
+			 service.init(request);
+			 
+			 return service;
 			
 		} else if (serviceName.equalsIgnoreCase("PublicationQueryService")){
 			
-			return PublicationQueryService.getInstance(request);
+			PublicationQueryService service = PublicationQueryService.getInstance(request);
+			service.init(request);
+			
+			 return service;
+			
 		}else if (serviceName.equalsIgnoreCase("AlleleQueryService")){
 			
-			return AlleleQueryService.getInstance(request);
+			AlleleQueryService service = AlleleQueryService.getInstance(request);
+			service.init(request);
+			
+			 return service;
 		}
 		
 	

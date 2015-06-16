@@ -5,6 +5,8 @@ import org.intermine.web.logic.session.SessionMethods;
 import org.intermine.web.util.URLGenerator;
 import org.thalemine.web.domain.PhenotypeVO;
 import org.thalemine.web.domain.PublicationVO;
+import org.thalemine.web.domain.StockAnnotationVO;
+import org.thalemine.web.domain.StockAvailabilityVO;
 import org.thalemine.web.domain.StockVO;
 import org.thalemine.web.domain.StrainVO;
 import org.thalemine.web.utils.QueryServiceLocator;
@@ -68,6 +70,32 @@ public class StockQueryService implements Service {
 		publicationService = (PublicationQueryService) QueryServiceLocator.getService(PUBLICATION_SERVICE, request);
 
 		return StockQueryServiceHolder.INSTANCE;
+	}
+
+	public void init(HttpServletRequest request){
+		
+		SERVICE_URL = WebApplicationContextLocator.getServiceUrl(request);
+		factory = new ServiceFactory(SERVICE_URL);
+
+		log.info("Service URL:" + SERVICE_URL);
+
+	}
+	
+	
+	public static String getSERVICE_URL() {
+		return SERVICE_URL;
+	}
+
+	public static void setSERVICE_URL(String sERVICE_URL) {
+		SERVICE_URL = sERVICE_URL;
+	}
+
+	public static ServiceFactory getFactory() {
+		return factory;
+	}
+
+	public static void setFactory(ServiceFactory factory) {
+		StockQueryService.factory = factory;
 	}
 
 	@Override
@@ -138,6 +166,125 @@ public class StockQueryService implements Service {
 		return service.getRowListIterator(query);
 
 	}
+	
+	
+	public List<StockAvailabilityVO> getStockAvailability(InterMineObject item) throws Exception{
+		
+		List<StockAvailabilityVO> result = new ArrayList<StockAvailabilityVO>() ;
+		Exception exception = null;
+		
+		PathQuery query = null;
+		
+		if (item==null){
+			throw new Exception("Stock cannot be null.");
+		}
+		
+		String itemId = item.getId().toString();
+		
+		query = getStockAvailabilityQuery(itemId);
+		
+		QueryService service = factory.getQueryService();
+
+		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+		
+		log.info("Getting Stock Availability Item:" + item);
+		
+		while (resultSetIterator.hasNext()) {
+
+			List<Object> currentItem = resultSetIterator.next();
+
+			StockAvailabilityVO resultItem = new StockAvailabilityVO(currentItem);
+
+			log.info("Stock Availability Item:" + resultItem);
+			
+			result.add(resultItem);
+			
+
+		}
+		
+		return result;
+		
+		
+	}
+	
+	
+	public StockAnnotationVO getStockAnnotation(InterMineObject item) throws Exception{
+		
+		StockAnnotationVO result = null;
+		Exception exception = null;
+		
+		PathQuery query = null;
+		
+		if (item==null){
+			throw new Exception("Stock cannot be null.");
+		}
+		
+		String itemId = item.getId().toString();
+		
+		query = getAnnotationQuery(itemId);
+		
+		QueryService service = factory.getQueryService();
+
+		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+		
+		int rowCount = 0;
+		
+		log.info("Getting Stock Annotation Item:" + item);
+		
+		while (resultSetIterator.hasNext() && rowCount < 1) {
+
+			List<Object> currentItem = resultSetIterator.next();
+
+			result = new StockAnnotationVO(currentItem);
+
+			log.info("Stock Annotation Result Item:" + result);
+			
+			rowCount++;
+
+		}
+		
+		return result;
+		
+	}
+	
+	public List<StrainVO> getAccession(InterMineObject item) throws Exception{
+		
+		Exception exception = null;
+		
+		List<StrainVO> resultList = new ArrayList<StrainVO>();
+		PathQuery query = null;
+		
+		if (item==null){
+			throw new Exception("Stock cannot be null.");
+		}
+		
+		String itemId = item.getId().toString();
+		
+		query = getAccessionsQuery(itemId);
+		
+		QueryService service = factory.getQueryService();
+
+		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+		
+		int rowCount = 0;
+		
+		while (resultSetIterator.hasNext() && rowCount < 1) {
+
+			List<Object> currentItem = resultSetIterator.next();
+
+			StrainVO resultItem = new StrainVO(currentItem, true);
+
+			resultList.add(resultItem);
+
+			log.info("Accession Result Item:" + resultItem);
+			
+			rowCount++;
+
+		}
+		
+		return resultList;
+		
+	}
 
 	public List<StockVO> getStocks(InterMineObject item, String objectClassName) throws Exception{
 
@@ -194,6 +341,77 @@ public class StockQueryService implements Service {
 		return factory.getQueryService();
 	}
 
+
+	private PathQuery getAccessionsQuery(String itemId) {
+
+		Model model = factory.getModel();
+		PathQuery query = new PathQuery(model);
+
+		query.addViews("Stock.accession.id", "Stock.accession.abbreviationName",
+				"Stock.accession.infraspecificName", "Stock.accession.habitat",
+						"Stock.accession.geoLocation"
+				
+				);
+
+		query.addConstraint(Constraints.eq("Stock.id", itemId));
+
+		return query;
+
+	}
+	
+	
+	private PathQuery getStockAvailabilityQuery(String itemId) {
+
+		Model model = factory.getModel();
+		PathQuery query = new PathQuery(model);
+
+		query.addViews(
+				"Stock.id",
+				"Stock.primaryAccession",
+				"Stock.stockAvailabilities.stockDisplayNumber",
+				"Stock.stockAvailabilities.stockCenter.name",
+				"Stock.stockAvailabilities.stockNumber",
+                "Stock.stockAvailabilities.stockCenter.stockObjectUrlPrefix");
+			
+
+        // Add orderby
+        query.addOrderBy("Stock.stockAvailabilities.stockCenter.name", OrderDirection.ASC);
+
+		query.addConstraint(Constraints.eq("Stock.id", itemId));
+
+		return query;
+
+	}
+	
+	private PathQuery getAnnotationQuery(String itemId) {
+
+		Model model = factory.getModel();
+		PathQuery query = new PathQuery(model);
+
+		query.addViews(
+				"Stock.stockAnnotation.id",
+				"Stock.primaryIdentifier",
+				"Stock.mutagen.name",
+				"Stock.stockAnnotation.chromosomalConstitution.aneploidChromosome",
+                "Stock.stockAnnotation.chromosomalConstitution.ploidy",
+                "Stock.stockAnnotation.growthCondition.specialGrowthConditions",
+                "Stock.stockAnnotation.mutant",
+                "Stock.stockAnnotation.transgene",
+                "Stock.stockAnnotation.naturalVariant");
+			
+		// Outer Joins
+        // Show all information about these relationships if they exist, but do not require that they exist.
+        query.setOuterJoinStatus("Stock.stockAnnotation.growthCondition", OuterJoinStatus.OUTER);
+        query.setOuterJoinStatus("Stock.stockAnnotation", OuterJoinStatus.OUTER);
+        query.setOuterJoinStatus("Stock.stockAnnotation.chromosomalConstitution", OuterJoinStatus.OUTER);
+        query.setOuterJoinStatus("Stock.mutagen", OuterJoinStatus.OUTER);
+
+		query.addConstraint(Constraints.eq("Stock.id", itemId));
+
+		return query;
+
+	}
+	
 	private PathQuery getBackGroundAccessionsQuery(String itemId) {
 
 		Model model = factory.getModel();
@@ -206,7 +424,7 @@ public class StockQueryService implements Service {
 		return query;
 
 	}
-
+	
 	public List<StrainVO> getBackgroundAccessions(StockVO item) {
 		List<StrainVO> result = new ArrayList<StrainVO>();
 

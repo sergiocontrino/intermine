@@ -13,11 +13,13 @@ public class QueryServiceLocator {
 
 	   public static Service getService(String serviceName, HttpServletRequest request){
 
+		   /*
 		   Service service = cache.getService(serviceName);
 
 	      if(service != null){
 	         return service;
 	      }
+	      */
 
 	      InitialServiceContext context = new InitialServiceContext();
 	      
