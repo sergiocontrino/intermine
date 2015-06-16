@@ -18,11 +18,13 @@ public class WebApplicationContextLocator {
 	   }
 	
 	public static String getServiceUrl(HttpServletRequest request){
-		
+	
+		/*
 		 if(SERVICE_URL != null){
 	         return SERVICE_URL;
 	      }
 		
+		*/
 		
 	Properties webProperties = SessionMethods.getWebProperties(request.getSession().
 		            getServletContext());

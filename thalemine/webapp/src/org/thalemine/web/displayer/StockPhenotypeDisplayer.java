@@ -65,14 +65,18 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 		
 		String objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();
 		List<StockVO> resultList = new ArrayList<StockVO>();
+		
+		String contextURL = null;
+		String stockServiceUrl = null;
+		
 
 		try {
 			
-			String contextURL = WebApplicationContextLocator.getServiceUrl(request);
+			contextURL = WebApplicationContextLocator.getServiceUrl(request);
 			log.info("Service Context URL:" + contextURL);
 
 			StockQueryService stockService = (StockQueryService) QueryServiceLocator.getService(STOCK_SERVICE, request);
-			String stockServiceUrl = stockService.getServiceUrl();
+			stockServiceUrl = stockService.getServiceUrl();
 			log.info("Stock Service Context URL:" + contextURL);
 			
 			objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();
