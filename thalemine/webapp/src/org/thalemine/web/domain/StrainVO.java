@@ -5,7 +5,7 @@ import java.util.List;
 import org.intermine.api.results.ResultElement;
 import org.apache.log4j.Logger;
 
-public class StrainVO {
+public class StrainVO extends DomainVO {
 
 	protected static final Logger LOG = Logger.getLogger(StrainVO.class);
 
@@ -13,6 +13,10 @@ public class StrainVO {
 	private String primaryIdentifier;
 	private String name;
 	private String abbreviationName;
+	private String infraspecificName;
+	private String habitat;
+
+	private String geoLocation;
 
 	public StrainVO() {
 
@@ -27,6 +31,10 @@ public class StrainVO {
 		init(list);
 	}
 
+	public StrainVO(List<Object> list, boolean allFields) {
+		initAccession(list);
+	}
+	
 	private void init(List<Object> list) {
 
 		this.objectId = getElement(list, 0);
@@ -34,18 +42,17 @@ public class StrainVO {
 
 	}
 
-	/**
-	 * public StrainVO(List<ResultElement> resElement) {
-	 * 
-	 * 
-	 * objectId = ((resElement.get(0) != null) && (resElement.get(0).getField()
-	 * != null)) ? resElement.get(0) .getField().toString() : "&nbsp;";
-	 * 
-	 * abbreviationName = ((resElement.get(1) != null) &&
-	 * (resElement.get(1).getField() != null)) ? resElement
-	 * .get(1).getField().toString() : "&nbsp;"; }
-	 */
+	
+	private void initAccession(List<Object> list) {
 
+		this.objectId = getElement(list, 0);
+		this.abbreviationName = getElement(list, 1);
+		this.infraspecificName = getElement(list, 2);
+		this.habitat = getElement(list, 3);
+		this.geoLocation = getElement(list, 4);
+
+	}
+	
 	public String getObjectId() {
 		return objectId;
 	}
@@ -78,19 +85,29 @@ public class StrainVO {
 		this.abbreviationName = abbreviationName;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "StrainVO [objectId=" + objectId + ", primaryIdentifier=" + primaryIdentifier + ", name=" + name
-				+ ", abbreviationName=" + abbreviationName + "]";
+				+ ", abbreviationName=" + abbreviationName + ", infraspecificName=" + infraspecificName + ", habitat="
+				+ habitat + ", geoLocation=" + geoLocation + "]";
 	}
 
-	private String getElement(List<Object> list, int index) {
+	public String getHabitat() {
+		return habitat;
+	}
 
-		String element = ((list.get(index) != null) && (list.get(index) != null)) ? list.get(index).toString()
-				: "&nbsp;";
+	public void setHabitat(String habitat) {
+		this.habitat = habitat;
+	}
 
-		return element;
+	public String getGeoLocation() {
+		return geoLocation;
+	}
 
+	public void setGeoLocation(String geoLocation) {
+		this.geoLocation = geoLocation;
 	}
 
 }

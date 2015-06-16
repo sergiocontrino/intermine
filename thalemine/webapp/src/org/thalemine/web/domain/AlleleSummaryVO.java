@@ -84,44 +84,6 @@ public class AlleleSummaryVO extends DomainVO {
 		this.primaryIdentifier = primaryIdentifier;
 	}
 
-	private String formatValue(String type, String value){
-		String result = value;
-	
-		log.info("Value:" + value);
-		
-		if (value!=null && !value.isEmpty()){
-			
-			log.info("Working on Value:" + type + ";" + value);
-			
-			if (type.equals("sequenceAlterationType") && value.equalsIgnoreCase("T-dna Insertion")){
-				result = "insertion (T-DNA Insertion)";  
-			}
-			
-			if (type.equals("mutagen") && value.equalsIgnoreCase("T Dna Insertion")){
-				result = "T-DNA Insertion";  
-			}
-			
-			if (value.equalsIgnoreCase("UNKNOWN")){
-				result = "&nbsp;";
-			}
-		
-			
-			if (value.equalsIgnoreCase("null")){
-				result = "&nbsp;";
-			}
-			
-			
-		}
-		
-		if (value.isEmpty()){
-			result = "&nbsp;";
-		}
-		
-		
-		log.info("Formatted Value:" +result);
-		
-		return result;
-	}
 
 	@Override
 	public String toString() {
