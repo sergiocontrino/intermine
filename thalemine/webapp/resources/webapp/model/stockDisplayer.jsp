@@ -13,6 +13,13 @@
 
 	<c:set var="rowCount" value="${fn:length(list)}" />
 
+    <c:out value="${rowCount}" />
+			<p> Context URL
+			<c:out value="${contextURL}" />
+			</p>
+			<p> Stock Service URL
+	<c:out value="${stockServiceUrl}" />
+	</p>
 
 	<div class="header">
 		<h3>
@@ -88,7 +95,11 @@
 										</table>
 									</c:when>
 									<c:otherwise>
+									<tr>
+									<td>
 											No phenotype information available at this time
+									</td>
+									</tr>
   									</c:otherwise>
 								</c:choose>
 

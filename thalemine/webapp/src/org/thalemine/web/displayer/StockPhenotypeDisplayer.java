@@ -108,6 +108,8 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 				// Set Request Attributes		
 				request.setAttribute("list", resultList);
 				request.setAttribute("id", object.getId());
+				request.setAttribute("contextURL",contextURL);
+			    request.setAttribute("stockServiceUrl",stockServiceUrl);
 			}
 		}
 
