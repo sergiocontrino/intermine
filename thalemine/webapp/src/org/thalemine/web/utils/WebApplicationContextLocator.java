@@ -15,9 +15,10 @@ public class WebApplicationContextLocator {
 	
 	private static final String SERVICE_URL = "https://apps.araport.org/demo-thalemine/service/";
 	
+	/*
 	static {
 		SERVICE_URL= null;		
-	   }
+	   } */
 	
 	public static String getServiceUrl(HttpServletRequest request){
 	
