@@ -459,16 +459,18 @@ jQuery(document).ready(function () {
 <c:if test="${aspect eq 'Proteins' && object.type == 'Protein'}">
 <div id="domainregion" class="collection-table column-border" style="margin-bottom: 0px"></div>
   <c:set var="QUERYID" value="${fn:substringAfter(stableLink, 'externalids=')}" />
+  <c:set var="MINEURL" value="${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}" />
 
 <svg id="mychart" class="pdchart" style="width: 100%;"></svg>
 
 <script type="text/javascript" charset="utf-8">
 var queryId="${QUERYID}";
+var mineUrl="${MINEURL}/";
 </script>
 
 <script type="text/javascript" charset="utf-8" src="https://cdn.araport.org/js/d3/3.5.5/d3.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.araport.org/js/intermine/protein-domain/1.0.0/protein-domain.css">
-<script type="text/javascript" charset="utf-8" src="https://cdn.araport.org/js/intermine/protein-domain/1.0.0/protein-domain.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.araport.org/js/intermine/protein-domain/1.1.0/protein-domain.css">
+<script type="text/javascript" charset="utf-8" src="https://cdn.araport.org/js/intermine/protein-domain/1.1.0/protein-domain.js"></script>
 
 </c:if>
 
