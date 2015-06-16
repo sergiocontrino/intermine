@@ -38,7 +38,7 @@
         </c:if>
         <!-- quick fix for MINE-769 -->
         <c:if test="${fn:startsWith(fieldDisplayName,'Pathways')}">
-          <c:set var="fieldDisplayName" value="Pathways<br /><p style='font-weight:normal;font-size:12px'>Data Source: <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=KEGG+pathways+data+set'>KEGG</a></a></p>" />
+          <c:set var="fieldDisplayName" value="Pathways<br /><p style='font-weight:normal;font-size:12px'>Data Source: <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=KEGG+pathways+data+set'>KEGG</a></p>" />
         </c:if>
     <c:set var="placementAndField" value="${aspectPlacement}_${fieldName}" />
     <c:set var="divName" value="${fn:replace(aspectPlacement, ':', '_')}${fieldName}_table" />
