@@ -62,7 +62,7 @@ public class AlleleQueryService implements Service {
 		return AlleleQueryServiceHolder.INSTANCE;
 	}
 	
- public void init(HttpServletRequest request){
+  public void init(HttpServletRequest request){
 		
 		SERVICE_URL = WebApplicationContextLocator.getServiceUrl(request);
 		factory = new ServiceFactory(SERVICE_URL);
