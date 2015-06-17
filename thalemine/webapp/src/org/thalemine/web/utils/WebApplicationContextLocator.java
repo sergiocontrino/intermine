@@ -16,7 +16,7 @@ public class WebApplicationContextLocator {
 	//private static final String SERVICE_URL = "https://apps.araport.org/demo-thalemine/service/";
 	//private static final String SERVICE_URL = "http://localhost:8081/thalemine/service/";
 	
-	private static final String SERVICE_URL = "http://ibelyaev-lx.jcvi.org:8081/service/";
+	private static final String SERVICE_URL = "http://ibelyaev-lx.jcvi.org:8081/thalemine/service/";
 	
 	/*
 	static {
