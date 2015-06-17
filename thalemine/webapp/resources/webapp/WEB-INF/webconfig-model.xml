@@ -450,6 +450,7 @@
     </headerconfig>
     <fields>
   	<fieldconfig fieldExpr="description" showInSummary="true" label="Description"/>
+  	<fieldconfig fieldExpr="primaryIdentifier" showInSummary="false" label="Primary Accession"/>
   	</fields>
   </class>
   
@@ -616,12 +617,18 @@
                      types="Gene"/>
    -->
    
+   <reportdisplayer javaClass="org.thalemine.web.displayer.GeneModelDisplayer"
+                     jspName="model/alleleGeneModelDisplayer.jsp"
+                     replacesFields="affectedGenes"
+                     placement="Genes"
+                     types="Allele"/>
+                     
  	 <reportdisplayer javaClass="org.thalemine.web.displayer.AlleleSummaryDisplayer"
                      jspName="model/alleleSummaryDisplayer.jsp"
                      replacesFields="sequenceAlterationType, mutagen, mutationSite, alleleClass, inheritanceMode, publications, organism"
                      placement="summary"
                      types="Allele"/>
-                     
+                                 
      <reportdisplayer javaClass="org.thalemine.web.displayer.GeneAlleleDisplayer"
                      jspName="model/alleleDisplayer.jsp"
                      replacesFields="affectedAlleles"
