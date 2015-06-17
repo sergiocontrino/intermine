@@ -17,12 +17,6 @@
 		<h3>
 		
 			<c:out value="${rowCount}" />
-			<p> Context URL
-			<c:out value="${contextURL}" />
-			</p>
-			<p> Stock Service URL
-			<c:out value="${stockServiceUrl}" />
-			</p>
 			Alleles
 		</h3>
 		<p>
