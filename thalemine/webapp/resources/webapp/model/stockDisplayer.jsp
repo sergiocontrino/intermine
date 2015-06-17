@@ -27,9 +27,8 @@
 			Stocks
 		</h3>
 		<p>
-			Data Source: <a target="_blank" href="${WEB_PROPERTIES['ABRC_SeedStockSearch_url']}">ABRC Germplasms/Seed
-				Stocks</a> <span>&nbsp; &nbsp; &nbsp;</span> <span> Data Source:
-				<a target="_blank" href="${WEB_PROPERTIES['NASC_StockSearch_url']}">NASC Germplasms/Seed Stocks</a>
+			Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=TAIR+Germplasm">TAIR/ABRC Germplasms/Seed
+				Stocks</a>
 			</span>
 		</p>
 
@@ -56,7 +55,9 @@
 							<tr>
 								<td><a href="report.do?id=${item.stockObjectId}">${item.germplasmName}</a>
 								</td>
-								<td>${item.genotypeName}</td>
+								<td>
+									<a href="report.do?id=${item.genotypeObjectId}">${item.genotypeName}</a>
+								</td>
 								<td><c:forEach var="bgitem" items="${item.backgrounds}">
 										<a href="report.do?id=${bgitem.objectId}">${bgitem.abbreviationName}</a>
 									</c:forEach></td>
@@ -77,7 +78,9 @@
 											<tbody>
 												<c:forEach var="phenotypeItem" items="${item.phenotypes}">
 													<tr>
-														<td>${phenotypeItem.description}
+														<td>														
+														<a href="report.do?id=${phenotypeItem.objectId}">${phenotypeItem.description}</a>
+														<!--  
 														<c:choose>
 															<c:when test="${!empty phenotypeItem.publications}">
 																<c:forEach var="publicationItem" items="${phenotypeItem.publications}">
@@ -85,7 +88,8 @@
 																	<a href="report.do?id=${publicationItem.objectId}">${publicationItem.displayTitleStockContext}</a>
 																</c:forEach>
 															</c:when>
-														</c:choose>
+														</c:choose> -->
+														
 														</td>
 													</tr>
 									

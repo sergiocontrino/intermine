@@ -7,9 +7,4 @@
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles"%>
 
 <!-- null-displayer.jsp -->
-
-
-<div id="null-displayer" class="collection-table">
-</div>
-
 <!-- /null-displayer.jsp -->

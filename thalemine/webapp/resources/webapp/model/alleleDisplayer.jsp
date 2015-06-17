@@ -26,7 +26,7 @@
 			Alleles
 		</h3>
 		<p>
-			Data Source: <a target="_blank" href="${WEB_PROPERTIES['TAIR_PolyAlleleSearch_url']}">Polymorphisms</a>
+			Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=TAIR+Polymorphism">TAIR/ABRC Polymorphisms</a>
 		</p>
 	</div>
 
@@ -50,7 +50,7 @@
      				 	<c:forEach var="item" items="${list}">	
      				 	<tr>
      				 		<td>
-     				 		 <a href="report.do?id=${item.objectId}">${item.name}</a>
+     				 		 <a href="report.do?id=${item.objectId}"><i>${item.name}</i></a>
      				 		</td>
      				 		<td>
      				 			${item.sequenceAlterationType}

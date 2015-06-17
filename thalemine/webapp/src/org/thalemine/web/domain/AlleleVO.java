@@ -1,5 +1,6 @@
 package org.thalemine.web.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -21,6 +22,8 @@ public class AlleleVO {
 	private String sequenceAlterationType;
 	private String mutationSite;
 	private String inheritanceType;
+	private String zygosity;
+	private List<GeneModelVO> geneModels = new ArrayList<GeneModelVO>();
 
 	public AlleleVO(List<ResultElement> resElement) {
 
@@ -32,6 +35,10 @@ public class AlleleVO {
 
 		name = ((resElement.get(2) != null) && (resElement.get(2).getField() != null)) ? resElement.get(2).getField()
 				.toString() : "&nbsp;";
+				
+		if (name!=null){
+			name = name.toLowerCase();
+		}
 
 		mutagen = ((resElement.get(3) != null) && (resElement.get(3).getField() != null)) ? resElement.get(3)
 				.getField().toString() : "&nbsp;";
@@ -60,6 +67,24 @@ public class AlleleVO {
 
 	}
 	
+	public AlleleVO(String itemId, String name){
+		this.objectId = itemId;
+		this.name = name;
+	}
+	
+	public AlleleVO(String itemId, String name, String zygosity){
+		this.objectId = itemId;
+		this.name = name;
+		this.zygosity = zygosity;
+	}
+	
+	public AlleleVO(String itemId, String name, String zygosity, String mutagen){
+		this.objectId = itemId;
+		this.name = name;
+		this.zygosity = formatValue("zygosity", zygosity);
+		this.mutagen = formatValue("mutagen", mutagen);
+	}
+	
 	private String formatValue(String type, String value){
 		String result = value;
 		
@@ -78,9 +103,20 @@ public class AlleleVO {
 				result = "&nbsp;";
 			}
 			
+			if (value.equalsIgnoreCase("null")){
+				result = "&nbsp;";
+			}
 		}
 		
 		return result;
+	}
+	
+	public String getZygosity() {
+		return zygosity;
+	}
+
+	public void setZygosity(String zygosity) {
+		this.zygosity = zygosity;
 	}
 	
 	public String getPrimaryIdentifier() {
@@ -147,12 +183,23 @@ public class AlleleVO {
 		this.inheritanceType = inheritanceType;
 	}
 
+	public List<GeneModelVO> getGeneModels() {
+		return geneModels;
+	}
+
+	public void setGeneModels(List<GeneModelVO> geneModels) {
+		this.geneModels = geneModels;
+	}
+
 	@Override
 	public String toString() {
 		return "AlleleVO [primaryIdentifier=" + primaryIdentifier + ", objectId=" + objectId + ", name=" + name
 				+ ", mutagen=" + mutagen + ", alleleClass=" + alleleClass + ", sequenceAlterationType="
 				+ sequenceAlterationType + ", mutationSite=" + mutationSite + ", inheritanceType=" + inheritanceType
-				+ "]";
+				+ ", zygosity=" + zygosity + ", geneModels=" + geneModels + "]";
 	}
+	
+	
+	
 
 }

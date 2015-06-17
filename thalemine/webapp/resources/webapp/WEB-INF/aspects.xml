@@ -85,5 +85,38 @@
     </intro-text>
     <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
  </aspect>
-
+ 
+ <aspect name="Accession">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+ <aspect name="Genetics">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+ <aspect name="Phenotypes">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+  <aspect name="Stock Availability">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+ 
 </aspects>

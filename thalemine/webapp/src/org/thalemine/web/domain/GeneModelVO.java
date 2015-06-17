@@ -39,7 +39,14 @@ public class GeneModelVO extends DomainVO {
 		this.relationshipType = RELATIONSHIP_TYPE;
 
 	}
+	
+	
+	public GeneModelVO(String itemId, String name) {
+		this.geneModelObjectId = itemId;
+		this.geneModelName = name;
+	}
 
+	
 	public String getAlleleName() {
 		return alleleName;
 	}

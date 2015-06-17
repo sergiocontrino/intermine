@@ -422,7 +422,7 @@
         <title mainTitles="primaryIdentifier|name" numberOfMainTitlesToShow="1" subTitles="*organism.shortName*" />
       </titles>
     </headerconfig>
-    
+  
   <fields>
   	  <fieldconfig fieldExpr="primaryIdentifier" label="Primary Identifier"/>
   	  <fieldconfig fieldExpr="name" label="Name"/>
@@ -435,6 +435,12 @@
       <fieldconfig fieldExpr="wildType" label="Is Wild Type"/>
     </fields>
   </class>
+  
+  <class className="org.intermine.model.bio.SequenceAlterationType">
+  <fields>
+  </fields>
+  	 <tabledisplayer src="/model/nullDisplayer.jsp"/>
+  </class>
  
   <class className="org.intermine.model.bio.Phenotype">
   	 <headerconfig>
@@ -442,11 +448,40 @@
         <title mainTitles="" numberOfMainTitlesToShow="1" subTitles="*organism.shortName*" />
       </titles>
     </headerconfig>
-  	<fieldconfig fieldExpr="description" label="Description"/>
-  	<fieldconfig fieldExpr="primaryIdentifier" label="Primary Accession" showInResults="false"/>
-  	<fieldconfig fieldExpr="secondaryIdentifier" label="Secondary Accession" showInResults="false" showInSummary="false"/>
+    <fields>
+  	<fieldconfig fieldExpr="description" showInSummary="true" label="Description"/>
+  	</fields>
   </class>
- 
+  
+  <class className="org.intermine.model.bio.Mutagen">
+  	 <fields>
+  		<fieldconfig name="name" showInResults="false" showInInlineCollection="false"/>
+  	</fields>
+  </class>
+  
+ <class className="org.intermine.model.bio.Stock">
+ 	<headerconfig>
+      	<titles>
+       		 <title mainTitles="displayName|*type.name*|*primaryIdentifier*" numberOfMainTitlesToShow="3" subTitles="*organism.shortName*" />
+      	</titles>
+ 	</headerconfig>
+ <inlinelist>
+      <table path="synonyms.value" showInHeader="true" lineLength="100" />
+      <table path="backgroundAccessions.abbreviationName" showInHeader="true" showLinksToObjects="true"/>
+ </inlinelist>
+ <fields>
+ 	 <fieldconfig fieldExpr="displayName"/>
+ 	 <fieldconfig fieldExpr="description" label="Description" showInSummary="false"/>
+     <fieldconfig fieldExpr="stockCenterComment" showInSummary="false" label="ABRC Comments"/>
+     <fieldconfig fieldExpr="germplasmName" label="Germplasm Name" showInSummary="false" showInResults="false"/>
+     <fieldconfig fieldExpr="stockName" label="Stock Name" showInSummary="false" showInResults="false"/>
+     <fieldconfig fieldExpr="secondaryIdentifier" label="TAIR Germplasm Accession" showInSummary="false" showInResults="false"/>
+     <fieldconfig fieldExpr="primaryIdentifier" showInSummary="true" showInResults="false" showInHeader="false"/>
+     <fieldconfig fieldExpr="name" label="" showInSummary="false" showInResults="false" displayer="model/nullDisplayer.jsp"/>
+     <fieldconfig fieldExpr="stockAccession" showInSummary="false" showInResults="false" displayer="model/nullDisplayer.jsp" label=""/>
+     <fieldconfig fieldExpr="primaryAccession" showInSummary="false" showInResults="false" displayer="model/nullDisplayer.jsp" label=""/>
+  </fields>
+</class>
 
 <!-- exporters -->
   <tableExportConfig id="sequence" className="org.intermine.bio.web.export.SequenceHttpExporter"/>
@@ -581,14 +616,7 @@
                      types="Gene"/>
    -->
    
-<reportdisplayer javaClass="org.thalemine.web.displayer.GeneModelDisplayer"
-                     jspName="model/alleleGeneModelDisplayer.jsp"
-                     replacesFields="affectedGenes"
-                     placement="Genes"
-                     types="Allele"/>
-                     
-     
-      <reportdisplayer javaClass="org.thalemine.web.displayer.AlleleSummaryDisplayer"
+ 	 <reportdisplayer javaClass="org.thalemine.web.displayer.AlleleSummaryDisplayer"
                      jspName="model/alleleSummaryDisplayer.jsp"
                      replacesFields="sequenceAlterationType, mutagen, mutationSite, alleleClass, inheritanceMode, publications, organism"
                      placement="summary"
@@ -611,6 +639,37 @@
                      replacesFields="alleleGeneZygosities"
                      placement=""
                      types="Gene,Allele"/>
+                     
+       <reportdisplayer javaClass="org.thalemine.web.displayer.StockAccessionDisplayer"
+                     jspName="model/stockAccessionDisplayer.jsp"
+                     replacesFields="accession,organism"
+                     placement="summary"
+                     types="Stock"/>
+       
+       <reportdisplayer javaClass="org.thalemine.web.displayer.StockAnnotationDisplayer"
+                     jspName="model/stockAnnotationDisplayer.jsp"
+                     replacesFields="mutagen,stockAnnotation,stockCategory,type"
+                     placement="summary"
+                     types="Stock"/>
+      
+       <reportdisplayer javaClass="org.thalemine.web.displayer.StockGeneticContextDisplayer"
+                     jspName="model/stockGeneticContextDisplayer.jsp"
+                     replacesFields="genotypes"
+                     placement="Genetics"
+                     types="Stock"/>
+      
+       <reportdisplayer javaClass="org.thalemine.web.displayer.PhenotypesDisplayer"
+                     jspName="model/phenotypesDisplayer.jsp"
+                     replacesFields=""
+                     placement="Phenotypes"
+                     types="Stock"/>
+                        
+      
+       <reportdisplayer javaClass="org.thalemine.web.displayer.StockAvailabilityDisplayer"
+                     jspName="model/stockAvailabilityDisplayer.jsp"
+                     replacesFields="stockAvailabilities"
+                     placement="Stock Availability"
+                     types="Stock"/>
 
   </reportdisplayers>
 
