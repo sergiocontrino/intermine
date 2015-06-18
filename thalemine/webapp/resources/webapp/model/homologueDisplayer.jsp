@@ -32,7 +32,10 @@
         <c:otherwise>
           <td class="one-line">
             <c:forEach items="${genes}" var="resultElement">
+            <!-- removing links (aip request, MINE-892)
               <a href="report.do?id=${resultElement.id}">${resultElement.field}</a>
+            -->
+              ${resultElement.field}
             </c:forEach>
           </td>
         </c:otherwise>
@@ -50,7 +53,7 @@
   <p>There was a problem rendering the displayer.</p>
   <script type="text/javascript">
     jQuery('#homologue-displayer').addClass('warning');
-  </script>  
+  </script>
 </c:otherwise>
 </c:choose>
 </div>
