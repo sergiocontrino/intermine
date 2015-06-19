@@ -115,17 +115,11 @@
   </tr>
 
   <tr>
-    <td rowspan="2" class="leftcol"><h2><p>Pathways</p></h2></td>
+    <td class="leftcol"><h2><p>Pathways</p></h2></td>
     <td>KEGG pathways - Wiring diagrams of molecular interactions, reactions, and relations</td>
     <td><a href="http://www.kegg.jp/kegg/pathway.html" target="_blank" class="extlink">KEGG</a>Release 72.0</td>
     <td>Kanehisa et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/24214961" target="_blank" class="extlink">PubMed: 24214961</a></td>
   </tr>
-  <tr>
-    <td>Non-curated Reactome Linked Dataset that captures the Reactome pathways in BioPAX format</td>
-    <td><a href="http://www.ebi.ac.uk/rdf/services/reactome" target="_blank" class="extlink">Reactome</a>(v49)</td>
-    <td>Croft et al - <a href="http://www.ncbi.nlm.nih.gov/pubmed/24243840" target="_blank" class="extlink">PubMed: 24243840</a></td>
-  </tr>
-
 </table>
 
 </div>
