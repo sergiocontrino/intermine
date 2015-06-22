@@ -361,7 +361,20 @@
         jQuery('#attedexport').hide();
       } else {
         jQuery('#attedexport').show();
-        jQuery('#query-container').imWidget(options);
+        //jQuery('#query-container').imWidget(options);
+
+        imtables.loadDash('#query-container',
+                {start : 0, size : 25},
+                {service : {root : options.url},
+                    query : options.query}
+                ).then(
+                    withTable,
+                    FailureNotification.notify
+                );
+          function withTable(table) {
+                    table.bus.on('list-action:failure', LIST_EVENTS['list-creation:failure']);
+                    table.bus.on('list-action:success', LIST_EVENTS['list-creation:success']);
+                }
       }
 
          }
