@@ -8,7 +8,6 @@
 
 <!-- alelleDisplayer.jsp -->
 
-
 <div id="allele-displayer" class="collection-table">
 
 	<c:set var="rowCount" value="${fn:length(list)}" />
@@ -35,10 +34,15 @@
 						<tr>
 							<th>Allele Name</th>
 							<th>Sequence Alteration Type</th>
-							<th>Allele Class</th>
+							<th title="Antimorphic; Gain-of-function; Hypermorphic; Hypomorphic; Loss-of-function">Allele Class
+								<span></span>
+							</th>
 							<th>Mutagen</th>
-							<th>Inheritance Type</th>
+							<th class="tooltipclass" title="Co-dominant; Dominant; Incompletely Dominant; Recessive">Inheritance Type
+								<span></span>
+							</th>
 						</tr>
+												
 					</thead>
 					<tbody>
      				 	<c:forEach var="item" items="${list}">	
@@ -63,12 +67,25 @@
    					 </tbody>
 				<table>
 			</div>
-
+		
+		<link rel="stylesheet" href="css/tooltip.css" type="text/css" charset="utf-8">
+						
+		<script type="text/javascript">
+		jQuery( ".tooltipclass" )
+		  .mouseover(function() {
+		    jQuery( this ).find( "span" ).text((this).attr('title'));
+		  })
+		  .mouseout(function() {
+			  jQuery( this ).find( "span" ).text((this).attr('title'));
+		  });
+		</script>
+		
 		</c:when>
 		<c:otherwise>
     			No Allele Data Available
   		</c:otherwise>
 	</c:choose>
+
 </div>
 
 <!-- /alelleDisplayer.jsp -->

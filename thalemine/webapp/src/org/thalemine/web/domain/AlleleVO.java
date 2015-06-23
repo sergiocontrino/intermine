@@ -2,18 +2,17 @@ package org.thalemine.web.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
-import org.apache.commons.lang.StringUtils;
 import org.intermine.api.results.ResultElement;
-import org.thalemine.web.displayer.GeneAlleleDisplayer;
 import org.apache.log4j.Logger;
 
 
-public class AlleleVO {
+public class AlleleVO extends DomainVO{
 
 	protected static final Logger LOG = Logger.getLogger(AlleleVO.class);
-	
-	
+		
 	private String primaryIdentifier;
 	private String objectId;
 	private String name;
@@ -24,7 +23,13 @@ public class AlleleVO {
 	private String inheritanceType;
 	private String zygosity;
 	private List<GeneModelVO> geneModels = new ArrayList<GeneModelVO>();
+	private Set<GeneVO> genes = new TreeSet<GeneVO>();
+	private List<GeneVO> geneList = new ArrayList<GeneVO>();
 
+	public AlleleVO(){
+		
+	}
+	
 	public AlleleVO(List<ResultElement> resElement) {
 
 		objectId = ((resElement.get(0) != null) && (resElement.get(0).getField() != null)) ? resElement.get(0)
@@ -85,7 +90,7 @@ public class AlleleVO {
 		this.mutagen = formatValue("mutagen", mutagen);
 	}
 	
-	private String formatValue(String type, String value){
+	public String formatValue(String type, String value){
 		String result = value;
 		
 		LOG.info("Value Object Type:" + type +";" + "Value:" + value);
@@ -190,14 +195,36 @@ public class AlleleVO {
 	public void setGeneModels(List<GeneModelVO> geneModels) {
 		this.geneModels = geneModels;
 	}
+	
+	public void addGeneVO(GeneVO gene){
+		this.addGeneVO(gene);
+	}
+
+	public Set<GeneVO> getGenes() {
+		return genes;
+	}
+
+	public void setGenes(Set<GeneVO> genes) {
+		this.genes = genes;
+	}
+
+	public List<GeneVO> getGeneList() {
+		return geneList;
+	}
+
+	public void setGeneList(List<GeneVO> geneList) {
+		this.geneList = geneList;
+	}
 
 	@Override
 	public String toString() {
 		return "AlleleVO [primaryIdentifier=" + primaryIdentifier + ", objectId=" + objectId + ", name=" + name
 				+ ", mutagen=" + mutagen + ", alleleClass=" + alleleClass + ", sequenceAlterationType="
 				+ sequenceAlterationType + ", mutationSite=" + mutationSite + ", inheritanceType=" + inheritanceType
-				+ ", zygosity=" + zygosity + ", geneModels=" + geneModels + "]";
+				+ ", zygosity=" + zygosity + ", geneModels=" + geneModels + ", genes=" + genes + ", geneList="
+				+ geneList + "]";
 	}
+	
 	
 	
 	

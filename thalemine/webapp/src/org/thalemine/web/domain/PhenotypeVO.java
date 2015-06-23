@@ -4,12 +4,11 @@ package org.thalemine.web.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.intermine.api.results.ResultElement;
 import org.apache.log4j.Logger;
 
 public class PhenotypeVO {
 
-	protected static final Logger LOG = Logger.getLogger(PhenotypeVO.class);
+	protected static final Logger log = Logger.getLogger(PhenotypeVO.class);
 	
 	private String objectId;
 	private String description;

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=US-ASCII"
-	pageEncoding="US-ASCII"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
@@ -29,7 +28,6 @@
 						<tr>
 							<th>Gene Model</th>
 							<th>Locus</th>
-							<th>Association Type</th>
 							<th>Description</th>
 						</tr>
 					</thead>
@@ -51,9 +49,7 @@
      				 			 <a href="report.do?id=${item.geneObjectId}">${item.geneName}</a>
      	
      				 		</td>
-     				 		<td>
-     				 			${item.relationshipType}
-     				 		</td>
+     				 		
      				 		<td>
      				 		
      				 		

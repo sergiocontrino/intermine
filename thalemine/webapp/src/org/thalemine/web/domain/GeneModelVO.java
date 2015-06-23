@@ -14,9 +14,7 @@ public class GeneModelVO extends DomainVO {
 	private String description;
 	private String polymorphismSite;
 	private String relationshipType;
-	
-	private Map<String,String> geneMap = new HashMap<String,String>(); 
-
+		
 	public static final String RELATIONSHIP_TYPE = "is an allele of";
 
 	public GeneModelVO() {
@@ -109,6 +107,55 @@ public class GeneModelVO extends DomainVO {
 
 	public void setRelationshipType(String relationshipType) {
 		this.relationshipType = relationshipType;
+	}
+	
+	public boolean equals(Object obj) {
+
+		if (this == obj) {
+			return true;
+		}
+
+		if (obj != null && getClass() == obj.getClass()) {
+
+			GeneModelVO geneModel = (GeneModelVO) obj; // Classes are equal, downcast
+
+			if (geneModelObjectId.equals(geneModel.getGeneObjectId()) && geneModelName.equals(geneModel.geneModelName)) { // Compare
+																									// attributes
+				return true;
+
+			}
+		}
+
+		return false;
+	}
+	
+	public int hashCode() {
+
+		StringBuilder builder = new StringBuilder();
+
+		if (this.geneModelObjectId != null) {
+
+			builder.append(geneModelObjectId);
+
+		}
+
+		if (this.geneModelName != null) {
+
+			builder.append(geneModelName);
+
+		}
+
+		final int prime = 31;
+		int result = 1;
+
+		if (builder != null && builder.length() > 0) {
+			result = prime * result + builder.hashCode();
+		} else {
+			result = prime * result + 0;
+		}
+
+		return result;
+
 	}
 
 	@Override

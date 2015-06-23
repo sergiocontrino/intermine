@@ -31,6 +31,8 @@ import org.intermine.api.profile.Profile;
 import org.intermine.api.query.PathQueryExecutor;
 import org.intermine.api.results.ExportResultsIterator;
 import org.intermine.api.results.ResultElement;
+import org.intermine.bio.web.displayer.GeneSNPDisplayer.GenoSample;
+import org.intermine.bio.web.displayer.GeneSNPDisplayer.SNPList;
 import org.intermine.model.InterMineObject;
 import org.intermine.model.bio.Gene;
 import org.intermine.model.bio.Allele;
@@ -45,6 +47,7 @@ import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.GeneModelVO;
+import org.thalemine.web.domain.StockAnnotationVO;
 import org.thalemine.web.domain.StrainVO;
 import org.intermine.pathquery.OuterJoinStatus;
 import org.thalemine.web.domain.AlleleSummaryVO;
@@ -54,18 +57,18 @@ import org.thalemine.web.utils.QueryServiceLocator;
 import org.thalemine.web.utils.WebApplicationContextLocator;
 
  
-public class StockAccessionDisplayer extends ReportDisplayer
+public class StockChromosomalConstititutionDisplayer extends ReportDisplayer
 {
 	
 	private static final String STOCK_SERVICE = "StockQueryService";
-	protected static final Logger log = Logger.getLogger(StockAccessionDisplayer.class);
+	protected static final Logger log = Logger.getLogger(StockChromosomalConstititutionDisplayer.class);
 
     /**
      * Construct with config and the InterMineAPI.
      * @param config to describe the report displayer
      * @param im the InterMine API
      */
-    public StockAccessionDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
+    public StockChromosomalConstititutionDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
         super(config, im);
     }
 
@@ -75,7 +78,7 @@ public class StockAccessionDisplayer extends ReportDisplayer
     	Exception exception = null;
 		
 		String objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();	
-		List<StrainVO> resultList = new ArrayList<StrainVO>();
+		StockAnnotationVO result = null;
 		
 		try{
 			
@@ -87,26 +90,28 @@ public class StockAccessionDisplayer extends ReportDisplayer
 			log.info("Stock Service Context URL:" + serviceUrl);
 			
 			request.setAttribute("className", objectClassName);
-			log.info("Stock/Accession Displayer:" + "Class Name:" + objectClassName);
+			log.info("Stock Annotation Displayer:" + "Class Name:" + objectClassName);
 			
 			InterMineObject object = reportObject.getObject();	
 
-			log.info("Stock/Accession Displayer:" + "Stock:" + object);
+			log.info("Stock Annotation Displayer:" + "Stock:" + object);
 			
-			resultList = service.getAccession(object);
+			result = service.getStockAnnotation(object);
+			
+			log.info("Stock Annotation Result:" + result);
 			
 		}catch (Exception e) {
 			exception = e;
 		} finally {
 
 			if (exception != null) {
-				log.error("Stock/Accession Displayer." + ";Message:" + exception.getMessage()
+				log.error("Stock Annotation Displayer." + ";Message:" + exception.getMessage()
 						+ ";Cause:" + exception.getCause());
 				return;
 			} else {
 				
 				// Set Request Attributes		
-				request.setAttribute("list", resultList);
+				request.setAttribute("result", result);
 			}
 		}
     }

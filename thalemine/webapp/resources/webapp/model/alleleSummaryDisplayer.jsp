@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=US-ASCII"
-	pageEncoding="US-ASCII"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
@@ -30,8 +29,12 @@
 							<th>Sequence AlterationType</th>
 							<th>Mutagen</th>
 							<th>Mutation Site</th>
-							<th>Allele Class</th>
-							<th>Inheritance Type</th>
+							<th title="Antimorphic; Gain-of-function; Hypermorphic; Hypomorphic; Loss-of-function">Allele Class
+								<span></span>
+							</th>
+							<th class="tooltipclass" title="Co-dominant; Dominant; Incompletely Dominant; Recessive">Inheritance Type
+								<span></span>
+							</th>
 						</tr>
 					</thead>
 					<tbody>

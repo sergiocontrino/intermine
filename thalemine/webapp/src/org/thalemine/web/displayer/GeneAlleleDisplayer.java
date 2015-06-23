@@ -33,6 +33,7 @@ import org.intermine.web.displayer.ReportDisplayer;
 import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
+import org.thalemine.web.builder.AlleleVOBuilder;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.query.StockQueryService;
 import org.thalemine.web.utils.QueryServiceLocator;
@@ -91,10 +92,14 @@ public class GeneAlleleDisplayer extends ReportDisplayer {
 	      ArrayList<AlleleVO> alleleList = new ArrayList<AlleleVO>();
 	      
 	      while (result.hasNext()) {
-	        List<ResultElement> resElement = result.next();
-	        AlleleVO item = new AlleleVO(resElement);
-	        alleleList.add(item);
-	        LOG.info("Allele:" + item);
+	       List<ResultElement> resElement = result.next();
+	       //AlleleVO item = new AlleleVO(resElement);
+	        
+	      AlleleVOBuilder builder = new AlleleVOBuilder();
+	      AlleleVO item1 = builder.build(resElement);
+	        
+	        alleleList.add(item1);
+	        LOG.info("Allele:" + item1);
 	      }
 	      
 	   // for accessing this within the jsp

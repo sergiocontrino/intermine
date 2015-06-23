@@ -632,7 +632,7 @@
      <reportdisplayer javaClass="org.thalemine.web.displayer.GeneAlleleDisplayer"
                      jspName="model/alleleDisplayer.jsp"
                      replacesFields="affectedAlleles"
-                     placement="Alleles"
+                     placement="Stocks"
                      types="Gene"/>
       
        <reportdisplayer javaClass="org.thalemine.web.displayer.StockPhenotypeDisplayer"
@@ -653,31 +653,39 @@
                      placement="summary"
                      types="Stock"/>
        
-       <reportdisplayer javaClass="org.thalemine.web.displayer.StockAnnotationDisplayer"
-                     jspName="model/stockAnnotationDisplayer.jsp"
+      <reportdisplayer javaClass="org.thalemine.web.displayer.StockAnnotationDisplayer"
+                     jspName="model/stockMutagenDisplayer.jsp"
                      replacesFields="mutagen,stockAnnotation,stockCategory,type"
                      placement="summary"
                      types="Stock"/>
-      
-       <reportdisplayer javaClass="org.thalemine.web.displayer.StockGeneticContextDisplayer"
+            
+      <reportdisplayer javaClass="org.thalemine.web.displayer.StockGeneticContextDisplayer"
                      jspName="model/stockGeneticContextDisplayer.jsp"
                      replacesFields="genotypes"
-                     placement="Genetics"
+                     placement="summary"
                      types="Stock"/>
       
-       <reportdisplayer javaClass="org.thalemine.web.displayer.PhenotypesDisplayer"
+      <reportdisplayer javaClass="org.thalemine.web.displayer.PhenotypesDisplayer"
                      jspName="model/phenotypesDisplayer.jsp"
                      replacesFields=""
                      placement="Phenotypes"
                      types="Stock"/>
-                        
+                     
+      <reportdisplayer javaClass="org.thalemine.web.displayer.StockGrowthRequirementsDisplayer"
+                     jspName="model/stockGrowthRequirements.jsp"
+                     replacesFields=""
+                     placement="Phenotypes"
+                     types="Stock"/>
+                         
       
        <reportdisplayer javaClass="org.thalemine.web.displayer.StockAvailabilityDisplayer"
                      jspName="model/stockAvailabilityDisplayer.jsp"
                      replacesFields="stockAvailabilities"
                      placement="Stock Availability"
                      types="Stock"/>
-
+        
+                        
+     
   </reportdisplayers>
 
 <!-- widgets -->

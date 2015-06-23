@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=US-ASCII"
-	pageEncoding="US-ASCII"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
@@ -29,7 +28,6 @@
 						<tr>
 							<th>Name</th>
 							<th>Locus</th>
-							<th>Gene Name(s)</th>
 							<th>Allele Mutagen</th>
 							<th>Zygosity</th>
 						</tr>
@@ -37,12 +35,7 @@
 					<tbody>
      				 	<c:forEach var="item" items="${list}">	
      				 		
-     				 			<tr>
-     				 				<td>
-     				 						<a href="report.do?id=${item.genotypeObjectId}">Genotype: ${item.genotypeName}</a>
-     				 				</td>
-     				 			</tr>
-     				 					
+     				 			   				 					
      				 		<c:forEach var="alleleitem" items="${item.alleles}">
      				 	<tr>
      				 		<td>
@@ -51,19 +44,13 @@
      				 			</p>
      				 		</td>
      				 		<td>
-     				 				<c:forEach var="geneitem" items="${alleleitem.geneModels}">
+     				 				<c:forEach var="geneitem" items="${alleleitem.geneList}">
      				 					<p>
      				 						<a href="report.do?id=${geneitem.geneObjectId}">${geneitem.geneName}</a>
      				 					</p>
      				 				</c:forEach>
      				 		</td>
-     				 		<td>
-     				 				<c:forEach var="genemodelitem" items="${alleleitem.geneModels}">
-     				 					<p>
-     				 						<a href="report.do?id=${genemodelitem.geneModelObjectId}">${geneitem.geneModelName}</a>
-     				 					</p>
-     				 				</c:forEach>
-     				 		</td>
+     				 		
      				 		<td>
      				 			${alleleitem.mutagen}
      				 		</td>

@@ -1,11 +1,21 @@
 package org.thalemine.web.domain;
 
-import org.apache.log4j.Logger;import java.util.List;
+import org.apache.log4j.Logger;import org.intermine.api.results.ResultElement;
+
+import java.util.List;
 
 
 public abstract class DomainVO {
 	
 	protected static final Logger log = Logger.getLogger(DomainVO.class);
+	
+	/**
+	 * Default constructor.
+	 */
+	public DomainVO() {
+		super();
+	}
+
 
 	protected String getElement(List<Object> list, int index) {
 
@@ -22,6 +32,7 @@ public abstract class DomainVO {
 		return element;
 
 	}
+		
 	
 	protected String formatValue(String type, String value){
 		String result = value;
@@ -60,6 +71,27 @@ public abstract class DomainVO {
 		log.info("Formatted Value:" +result);
 		
 		return result;
+	}
+	
+	protected String createElement(List<ResultElement> list, int index) {
+
+		String element = ((list.get(index) != null) && (list.get(index).getField() != null)) ? list.get(index).getField().toString()
+				: "&nbsp;";
+					
+		log.info("Element:" + element);
+
+		if (element!=null && ((element.equalsIgnoreCase("unknown") || (element.equalsIgnoreCase("null"))))){
+			element = "&nbsp;";
+		}
+		
+		if (element==null){
+			element = "&nbsp;";
+		}
+		
+		log.info("Create element:" + element);
+		
+		return element;
+
 	}
 	
 }

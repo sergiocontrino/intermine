@@ -210,11 +210,11 @@ public List<StockGenotypeVO> getStockGenotypes(InterMineObject item) throws Exce
 				
 			for (AlleleVO alleleItem:alleles){
 				
-				List<GeneModelVO> geneModels = new ArrayList<GeneModelVO>();
-				geneModels = getGeneModels(alleleItem.getObjectId());
-				alleleItem.setGeneModels(geneModels);
+				List<GeneVO> genes = new ArrayList<GeneVO>();
+				genes = getGenes(alleleItem.getObjectId());
+				alleleItem.setGeneList(genes);
 				
-				log.info("Allele Item:" + alleleItem + "Gene Model size:" + alleleItem.getGeneModels().size());
+				log.info("Allele Item:" + alleleItem + "Genes size:" + alleleItem.getGeneList().size());
 				
 			}
 			
@@ -265,6 +265,58 @@ public List<GeneModelVO> getGeneModels(String itemId) throws Exception{
 	
 	return resultList;
 	
+}
+
+public List<GeneVO> getGenes(String itemId) throws Exception{
+	
+	ArrayList<GeneVO> resultList = new ArrayList<GeneVO>();
+
+	PathQuery query = null;
+	
+	log.info("Allele Source Item:" + itemId);
+	
+	query = getGenesByAlleleIdQuery(itemId);
+	
+	QueryService service = factory.getQueryService();
+	Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+	
+	while (resultSetIterator.hasNext()) {
+
+		List<Object> currentItem = resultSetIterator.next();
+		
+		log.info("Gene Item:" + currentItem);	
+		
+		String geneObjectId = getElement(currentItem, 0);
+		String geneName = getElement(currentItem, 2);
+				
+		GeneVO resultItem = new GeneVO(geneObjectId, geneName);
+		
+		resultList.add(resultItem);
+		
+		log.info("Gene Result Item:" + resultItem);		
+		
+		
+	}
+	
+	return resultList;
+	
+}
+
+
+private String getElement(List<Object> list, int index) {
+
+	String element = ((list.get(index) != null) && (list.get(index) != null)) ? list.get(index).toString()
+			: "&nbsp;";
+
+	if (element!=null && ((element.equalsIgnoreCase("unknown") || (element.equalsIgnoreCase("null"))))){
+		element = "&nbsp;";
+	}
+	
+	if (element==null){
+		element = "&nbsp;";
+	}
+	return element;
+
 }
 
 	private List<AlleleVO> getAllelebyStockGenotype(String stockId, String genotypeId) throws Exception{
@@ -652,6 +704,26 @@ public List<GeneModelVO> getGeneModels(String itemId) throws Exception{
 
 	}
 	
+	
+	private PathQuery getGenesByAlleleIdQuery(String itemId) {
+
+		Model model = factory.getModel();
+		PathQuery query = new PathQuery(model);
+
+		query.addViews(
+				"Allele.affectedGenes.id",
+				"Allele.primaryIdentifier",
+				"Allele.affectedGenes.primaryIdentifier"
+				);
+		
+		// Outer Joins
+				// Show all information about these relationships if they exist, but do
+				// not require that they exist.
+		query.addConstraint(Constraints.eq("Allele.id", itemId));
+		
+		return query;
+
+	}
 	private PathQuery getBackGroundAccessionsQuery(String itemId) {
 
 		Model model = factory.getModel();
