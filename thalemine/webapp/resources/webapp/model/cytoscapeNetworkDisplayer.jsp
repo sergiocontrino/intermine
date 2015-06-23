@@ -166,7 +166,7 @@
               var view = new imtables.loadDash(
                       '#cwinlinetable',
                       {size: 25},
-                      {service: {root: $SERVICE.root, token: $SERVICE.token}, query: ${cytoscapeNetworkQueryJson}}
+                      {service: $SERVICE, query: ${cytoscapeNetworkQueryJson}}
                   ).then(
                       withTable,
                       FailureNotification.notify
