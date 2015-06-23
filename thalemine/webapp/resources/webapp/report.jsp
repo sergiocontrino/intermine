@@ -365,8 +365,7 @@
 
         imtables.loadDash('#query-container',
                 {start : 0, size : 25},
-                {service : {root : options.url},
-                    query : options.query}
+                {service: $SERVICE, query : options.query}
                 ).then(
                     withTable,
                     FailureNotification.notify
