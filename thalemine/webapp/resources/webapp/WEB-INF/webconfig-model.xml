@@ -640,14 +640,16 @@
                                  description="Pathways enriched for genes in this list - data from KEGG"
                                  label="Pathways"
                                  filterLabel="DataSet"
-                                 filters="All,KEGG pathways data set,Reactome data set"
+                                 filters="KEGG pathways data set"
                                  startClass="Gene"
                                  startClassDisplay="primaryIdentifier"
                                  enrich="pathways.name"
                                  enrichIdentifier="pathways.identifier"
                                  constraints="pathways.dataSets.name=[DataSet],organism.taxonId=[list], primaryIdentifier != null"
                                  typeClass="Gene"
-                                 views="secondaryIdentifier, symbol, organism.name, pathways.identifier, pathways.name, pathways.dataSets.name"/>
+                                 views="secondaryIdentifier, symbol, organism.name, pathways.identifier, pathways.name, pathways.dataSets.name"
+                                 externalLink="http://www.genome.jp/kegg-bin/show_pathway?org_name=ath&amp;mapno="
+                                 />
 
 
 
