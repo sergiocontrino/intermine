@@ -16,30 +16,30 @@
 		<c:when test="${!empty result}">
 
 
-					<div class="header">
+			<div class="header">
 
-						<h3>Growth Requirements</h3>
+				<h3>Growth Requirements</h3>
 
-					</div>
-					<table>
-						<thead>
-							<tr>
-								<th>Special Growth Conditions</th>
-							</tr>
-						</thead>
-						<tbody>
+			</div>
+			<table>
+				<thead>
+					<tr>
+						<th>Special Growth Conditions</th>
+					</tr>
+				</thead>
+				<tbody>
 
-							<tr>
-								<td>${result.growthConditions}</td>
+					<tr>
+						<td>${result.growthConditions}</td>
 
-							</tr>
+					</tr>
 
-						</tbody>
-					</table>
-				</c:when>
+				</tbody>
+			</table>
+		</c:when>
 
 	</c:choose>
 
-	</div>
+</div>
 
 <!-- /stockGrowthRequirementsDisplayer.jsp -->

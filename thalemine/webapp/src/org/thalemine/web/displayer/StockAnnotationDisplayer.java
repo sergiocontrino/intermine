@@ -96,7 +96,7 @@ public class StockAnnotationDisplayer extends ReportDisplayer
 
 			log.info("Stock Annotation Displayer:" + "Stock:" + object);
 			
-			result = service.getStockAnnotation(object);
+			result = service.getMutagenChromosomalConstitution(object);
 			
 			log.info("Stock Annotation Result:" + result);
 			

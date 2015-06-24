@@ -450,7 +450,8 @@
     </headerconfig>
     <fields>
   	<fieldconfig fieldExpr="description" showInSummary="true" label="Description"/>
-  	<fieldconfig fieldExpr="primaryIdentifier" showInSummary="false" label="Primary Accession"/>
+  	<fieldconfig fieldExpr="primaryIdentifier" label="" showInSummary="false" showInResults="false"  displayer="model/nullDisplayer.jsp"/>
+  	<fieldconfig fieldExpr="secondaryIdentifier" label="" showInSummary="false" showInResults="false" displayer="model/nullDisplayer.jsp"/>
   	</fields>
   </class>
   
@@ -670,21 +671,19 @@
                      replacesFields=""
                      placement="Phenotypes"
                      types="Stock"/>
-                     
-      <reportdisplayer javaClass="org.thalemine.web.displayer.StockGrowthRequirementsDisplayer"
-                     jspName="model/stockGrowthRequirements.jsp"
-                     replacesFields=""
-                     placement="Phenotypes"
-                     types="Stock"/>
-                         
-      
+       
        <reportdisplayer javaClass="org.thalemine.web.displayer.StockAvailabilityDisplayer"
                      jspName="model/stockAvailabilityDisplayer.jsp"
                      replacesFields="stockAvailabilities"
                      placement="Stock Availability"
                      types="Stock"/>
-        
-                        
+                     
+       <reportdisplayer javaClass="org.thalemine.web.displayer.PhenotypeGeneticContextDisplayer"
+                     jspName="model/phenotypeGeneticContextDisplayer.jsp"
+                     replacesFields="observedIn"
+                     placement="Observed In"
+                     types="Phenotype"/>
+                               
      
   </reportdisplayers>
 
@@ -744,7 +743,7 @@
                                  externalLink="http://amigo.geneontology.org/cgi-bin/amigo/term_details?term="
                                  correctionCoefficient="org.intermine.bio.web.widget.GeneLenghtCorrectionCoefficient"/>
 
-
+  
       <enrichmentwidgetdisplayer id="protein_features"
                                  title="UniProt Features"
                                  description="UniProt features enriched for proteins in this list."
@@ -828,7 +827,7 @@
                                 homologues.homologue.primaryIdentifier,
                                 homologues.homologue.symbol,
                                 homologues.homologue.organism.shortName,
-                                homologues.type"/>
+                                homologues.type"/> 
 
 </widgets>
 </webconfig>

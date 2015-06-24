@@ -1,11 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="im"%>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles"%>
 
-<!-- alelleSummaryDisplayer.jsp -->
+<!-- stock-genetic_context-displayer.jsp -->
 
 <style>
 /**
@@ -245,52 +246,68 @@ Unknown: Used when the inheritance type is not known or the information is not y
 
 </c:set>
 
-<div id="allele-summary_displayer" class="collection-table">
+<div id="phenotype-genetic_context-displayer" class="collection-table">
 
 	<div class="header">
-		<h3>			
-			Summary
-		</h3>
-		
+	
+		<h3>Associated Stocks/Polymorphisms</h3>
+
 	</div>
 
 	<c:choose>
 		<c:when test="${!empty list}">
 
 			<div>
-				
+
 
 				<table>
 					<thead>
 						<tr>
-							<th>Sequence AlterationType</th>
-							<th>Mutagen</th>
-							<th>Mutation Site</th>
+							<th>Germplasm Name</th>
+							<th>Allele Name</th>
+							<th>Locus</th>
+							<th>Allele Mutagen</th>
 							<th class="tooltip-top" data-tooltip="${alleleClassTooltip}">Allele Type</th>
 							<th class="tooltip-top" data-tooltip="${inheritanceTypeTooltip}">Inheritance Type</th>
 						</tr>
-					</thead>
+					</thead> 
 					<tbody>
-     				 	<c:forEach var="item" items="${list}">	
-     				 	<tr>
-     				 		<td>
-     				 		${item.sequenceAlterationType}
-     				 		</td>
-     				 		<td>
-     				 			${item.mutagen}
-     				 		</td>
-     				 		<td>
-     				 			${item.mutationSite}
-     				 		</td>
-     				 		<td>
-     				 			${item.alleleClass}
-     				 		</td>
-     				 		<td>
-     				 			${item.inheritanceType}
-     				 		</td>
-     				 	</tr>
-     				  	</c:forEach>
-   					 </tbody>
+						<c:forEach var="item" items="${list}">
+								<tr>
+									<td class="class">
+														
+									<a href="report.do?id=${item.stockObjectId}">${item.stockName}</a>
+									
+									</td>
+									
+								</tr>
+									
+							<c:forEach var="alleleitem" items="${item.alleles}">
+								<tr>
+									<td>
+									</td>
+									<td>
+										<p>
+											<a href="report.do?id=${alleleitem.objectId}"><i>${alleleitem.name}</i></a>
+										</p>
+									</td>
+									<td><c:forEach var="geneitem"
+											items="${alleleitem.geneList}">
+											<p>
+												<a href="report.do?id=${geneitem.geneObjectId}">${geneitem.geneName}</a>
+											</p>
+										</c:forEach></td>
+
+									<td>${alleleitem.mutagen}</td>
+									
+									<td>${alleleitem.alleleClass}</td>
+									
+									<td>${alleleitem.inheritanceType}</td>
+
+								</tr>
+							</c:forEach>
+						</c:forEach>
+					</tbody>
 				</table>
 			</div>
 
@@ -299,4 +316,4 @@ Unknown: Used when the inheritance type is not known or the information is not y
 	</c:choose>
 </div>
 
-<!-- /alelleSummaryDisplayer.jsp -->
+<!-- /phenotype-genetic_context-displayer.jsp -->

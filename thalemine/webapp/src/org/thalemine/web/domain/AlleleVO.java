@@ -90,6 +90,15 @@ public class AlleleVO extends DomainVO{
 		this.mutagen = formatValue("mutagen", mutagen);
 	}
 	
+	public AlleleVO(String itemId, String name, String zygosity, String mutagen, String inheritanceType, String alleleClass){
+		this.objectId = itemId;
+		this.name = name;
+		this.zygosity = formatValue("zygosity", zygosity);
+		this.mutagen = formatValue("mutagen", mutagen);
+		this.inheritanceType = formatValue("inheritanceType ", inheritanceType);
+		this.alleleClass = formatValue("alleleClass ", alleleClass);
+	}
+	
 	public String formatValue(String type, String value){
 		String result = value;
 		
@@ -105,11 +114,11 @@ public class AlleleVO extends DomainVO{
 			}
 			
 			if (value.equalsIgnoreCase("UNKNOWN")){
-				result = "&nbsp;";
+				result = "N/A";
 			}
 			
 			if (value.equalsIgnoreCase("null")){
-				result = "&nbsp;";
+				result = "N/A";
 			}
 		}
 		

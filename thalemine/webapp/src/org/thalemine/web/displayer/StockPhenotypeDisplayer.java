@@ -98,6 +98,7 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 			}
 
 			resultList = stockService.getStocks(object, objectClassName);
+			
 
 		} catch (Exception e) {
 			exception = e;

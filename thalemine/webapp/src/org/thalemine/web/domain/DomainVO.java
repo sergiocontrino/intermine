@@ -20,14 +20,14 @@ public abstract class DomainVO {
 	protected String getElement(List<Object> list, int index) {
 
 		String element = ((list.get(index) != null) && (list.get(index) != null)) ? list.get(index).toString()
-				: "&nbsp;";
+				: "N/A";
 
 		if (element!=null && ((element.equalsIgnoreCase("unknown") || (element.equalsIgnoreCase("null"))))){
-			element = "&nbsp;";
+			element = "N/A";
 		}
 		
 		if (element==null){
-			element = "&nbsp;";
+			element = "N/A";
 		}
 		return element;
 
@@ -52,19 +52,19 @@ public abstract class DomainVO {
 			}
 			
 			if (value.equalsIgnoreCase("UNKNOWN")){
-				result = "&nbsp;";
+				result = "N/A";
 			}
 		
 			
 			if (value.equalsIgnoreCase("null")){
-				result = "&nbsp;";
+				result = "N/A";
 			}
 			
 			
 		}
 		
 		if (value.isEmpty()){
-			result = "&nbsp;";
+			result = "N/A";
 		}
 		
 		
@@ -76,16 +76,16 @@ public abstract class DomainVO {
 	protected String createElement(List<ResultElement> list, int index) {
 
 		String element = ((list.get(index) != null) && (list.get(index).getField() != null)) ? list.get(index).getField().toString()
-				: "&nbsp;";
+				: "N/A";
 					
 		log.info("Element:" + element);
 
 		if (element!=null && ((element.equalsIgnoreCase("unknown") || (element.equalsIgnoreCase("null"))))){
-			element = "&nbsp;";
+			element = "N/A";
 		}
 		
 		if (element==null){
-			element = "&nbsp;";
+			element = "N/A";
 		}
 		
 		log.info("Create element:" + element);

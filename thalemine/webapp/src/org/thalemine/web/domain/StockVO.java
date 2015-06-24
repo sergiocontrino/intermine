@@ -287,7 +287,11 @@ public class StockVO {
 			}
 			
 			if (result!=null){
-				result = result.replaceAll(",", "");
+				result = result.replaceAll(",", " ");
+			}
+			
+			if (result!=null){
+				result = result.replaceAll("  ", " ");
 			}
 			
 			if (result!=null){

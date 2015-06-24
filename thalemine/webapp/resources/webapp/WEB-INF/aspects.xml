@@ -118,6 +118,14 @@
     <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
  </aspect>
  
+ <aspect name="Observed In">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
  <aspect name="Other">
     <subtitle>Germplasms/Seed Stocks</subtitle>
     <intro-text>

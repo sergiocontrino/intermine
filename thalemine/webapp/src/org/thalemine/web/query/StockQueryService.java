@@ -3,6 +3,8 @@ package org.thalemine.web.query;
 import org.apache.log4j.Logger;
 import org.intermine.web.logic.session.SessionMethods;
 import org.intermine.web.util.URLGenerator;
+import org.thalemine.web.builder.StockAnnotationVOBuilder;
+import org.thalemine.web.builder.StockGrowthRequirementsVOBuilder;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.GeneModelVO;
 import org.thalemine.web.domain.GeneVO;
@@ -11,6 +13,7 @@ import org.thalemine.web.domain.PublicationVO;
 import org.thalemine.web.domain.StockAnnotationVO;
 import org.thalemine.web.domain.StockAvailabilityVO;
 import org.thalemine.web.domain.StockGenotypeVO;
+import org.thalemine.web.domain.StockGrowthRequirementsVO;
 import org.thalemine.web.domain.StockVO;
 import org.thalemine.web.domain.StrainVO;
 import org.thalemine.web.utils.QueryServiceLocator;
@@ -78,16 +81,15 @@ public class StockQueryService implements Service {
 		return StockQueryServiceHolder.INSTANCE;
 	}
 
-	public void init(HttpServletRequest request){
-		
+	public void init(HttpServletRequest request) {
+
 		SERVICE_URL = WebApplicationContextLocator.getServiceUrl(request);
 		factory = new ServiceFactory(SERVICE_URL);
 
 		log.info("Service URL:" + SERVICE_URL);
 
 	}
-	
-	
+
 	public static String getSERVICE_URL() {
 		return SERVICE_URL;
 	}
@@ -172,172 +174,264 @@ public class StockQueryService implements Service {
 		return service.getRowListIterator(query);
 
 	}
-	
-public List<StockGenotypeVO> getStockGenotypes(InterMineObject item) throws Exception{
-		
-		List<StockGenotypeVO> result = new ArrayList<StockGenotypeVO>() ;
+
+	public StockGrowthRequirementsVO getStockGrowthRequirements(InterMineObject item) throws Exception {
+
+		StockGrowthRequirementsVO result = null;
 		Exception exception = null;
-		
+
 		PathQuery query = null;
-		
-		if (item==null){
+
+		if (item == null) {
 			throw new Exception("Stock cannot be null.");
 		}
+
+		String itemId = item.getId().toString();
+
+		query = getGrowthRequirementsQuery(itemId);
+
+		QueryService service = factory.getQueryService();
+
+		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+
+		int rowCount = 0;
+
+		log.info("Getting Stock Annotation Item:" + item);
+
+		while (resultSetIterator.hasNext() && rowCount < 1) {
+
+			List<Object> currentItem = resultSetIterator.next();
+
+			result = new StockGrowthRequirementsVOBuilder().build(currentItem);
+
+			log.info("Stock Growth Requirements Result Item:" + result);
+
+			rowCount++;
+
+		}
+
+		return result;
+
+	}
+
+	public List<StockGenotypeVO> getPhenotypeGeneticContext(InterMineObject item) throws Exception {
 		
+		List<StockGenotypeVO> result = new ArrayList<StockGenotypeVO>();
+		Exception exception = null;
+
+		PathQuery query = null;
+
+		if (item == null) {
+			throw new Exception("Stock cannot be null.");
+		}
+
 		String itemId = item.getId().toString();
 		
-		query = getGenotypeQuery(itemId);
+		query = getPhenotypesObservedInQuery(itemId);
 		
 		QueryService service = factory.getQueryService();
 
 		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
-		
+
 		log.info("Getting Genotype Item:" + item);
-		
+
 		while (resultSetIterator.hasNext()) {
 
 			List<Object> currentItem = resultSetIterator.next();
 
 			StockGenotypeVO resultItem = new StockGenotypeVO(currentItem);
-			
+
 			List<AlleleVO> alleles = new ArrayList<AlleleVO>();
-						
-			if (resultItem.getStockObjectId()!=null && resultItem.getGenotypeObjectId()!=null){
-			
+
+			if (resultItem.getStockObjectId() != null && resultItem.getGenotypeObjectId() != null) {
+
 				alleles = getAllelebyStockGenotype(resultItem.getStockObjectId(), resultItem.getGenotypeObjectId());
-			
+
 			}
-				
-			for (AlleleVO alleleItem:alleles){
-				
+
+			for (AlleleVO alleleItem : alleles) {
+
 				List<GeneVO> genes = new ArrayList<GeneVO>();
 				genes = getGenes(alleleItem.getObjectId());
 				alleleItem.setGeneList(genes);
-				
+
 				log.info("Allele Item:" + alleleItem + "Genes size:" + alleleItem.getGeneList().size());
-				
+
 			}
-			
-			if (alleles.size() >0 ){
+
+			if (alleles.size() > 0) {
 				resultItem.setAlleles(alleles);
 			}
-			
+
 			log.info("Genotype Item:" + resultItem);
-			
+
 			result.add(resultItem);
-			
 
 		}
-		
+
 		return result;
 		
-		
-	}
-
-
-public List<GeneModelVO> getGeneModels(String itemId) throws Exception{
-	
-	ArrayList<GeneModelVO> resultList = new ArrayList<GeneModelVO>();
-
-	PathQuery query = null;
-	
-	log.info("Allele Source Item:" + itemId);
-	
-	query = getGeneModelsByAlleleIdQuery(itemId);
-	
-	QueryService service = factory.getQueryService();
-	Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
-	
-	while (resultSetIterator.hasNext()) {
-
-		List<Object> currentItem = resultSetIterator.next();
-		
-		log.info("Gene Model Item:" + currentItem);	
-		
-		GeneModelVO resultItem = new GeneModelVO(currentItem);
-		
-		resultList.add(resultItem);
-		
-		log.info("Gene Model Result Item:" + resultItem);		
-		
-		
 	}
 	
-	return resultList;
-	
-}
+	public List<StockGenotypeVO> getStockGenotypes(InterMineObject item) throws Exception {
 
-public List<GeneVO> getGenes(String itemId) throws Exception{
-	
-	ArrayList<GeneVO> resultList = new ArrayList<GeneVO>();
-
-	PathQuery query = null;
-	
-	log.info("Allele Source Item:" + itemId);
-	
-	query = getGenesByAlleleIdQuery(itemId);
-	
-	QueryService service = factory.getQueryService();
-	Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
-	
-	while (resultSetIterator.hasNext()) {
-
-		List<Object> currentItem = resultSetIterator.next();
-		
-		log.info("Gene Item:" + currentItem);	
-		
-		String geneObjectId = getElement(currentItem, 0);
-		String geneName = getElement(currentItem, 2);
-				
-		GeneVO resultItem = new GeneVO(geneObjectId, geneName);
-		
-		resultList.add(resultItem);
-		
-		log.info("Gene Result Item:" + resultItem);		
-		
-		
-	}
-	
-	return resultList;
-	
-}
-
-
-private String getElement(List<Object> list, int index) {
-
-	String element = ((list.get(index) != null) && (list.get(index) != null)) ? list.get(index).toString()
-			: "&nbsp;";
-
-	if (element!=null && ((element.equalsIgnoreCase("unknown") || (element.equalsIgnoreCase("null"))))){
-		element = "&nbsp;";
-	}
-	
-	if (element==null){
-		element = "&nbsp;";
-	}
-	return element;
-
-}
-
-	private List<AlleleVO> getAllelebyStockGenotype(String stockId, String genotypeId) throws Exception{
-		
-		List<AlleleVO> result = new ArrayList<AlleleVO>();
-		
+		List<StockGenotypeVO> result = new ArrayList<StockGenotypeVO>();
 		Exception exception = null;
+
 		PathQuery query = null;
-		
-		if (stockId==null || genotypeId==null){
-			throw new Exception("Stock/Genotype Id cannot be null.");
+
+		if (item == null) {
+			throw new Exception("Stock cannot be null.");
 		}
-		
-		query = getAlleleQuerybyStockGenotype(stockId,genotypeId);
-		
+
+		String itemId = item.getId().toString();
+
+		query = getGenotypeQuery(itemId);
+
 		QueryService service = factory.getQueryService();
 
 		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
-		
+
+		log.info("Getting Genotype Item:" + item);
+
+		while (resultSetIterator.hasNext()) {
+
+			List<Object> currentItem = resultSetIterator.next();
+
+			StockGenotypeVO resultItem = new StockGenotypeVO(currentItem);
+
+			List<AlleleVO> alleles = new ArrayList<AlleleVO>();
+
+			if (resultItem.getStockObjectId() != null && resultItem.getGenotypeObjectId() != null) {
+
+				alleles = getAllelebyStockGenotype(resultItem.getStockObjectId(), resultItem.getGenotypeObjectId());
+
+			}
+
+			for (AlleleVO alleleItem : alleles) {
+
+				List<GeneVO> genes = new ArrayList<GeneVO>();
+				genes = getGenes(alleleItem.getObjectId());
+				alleleItem.setGeneList(genes);
+
+				log.info("Allele Item:" + alleleItem + "Genes size:" + alleleItem.getGeneList().size());
+
+			}
+
+			if (alleles.size() > 0) {
+				resultItem.setAlleles(alleles);
+			}
+
+			log.info("Genotype Item:" + resultItem);
+
+			result.add(resultItem);
+
+		}
+
+		return result;
+
+	}
+
+	public List<GeneModelVO> getGeneModels(String itemId) throws Exception {
+
+		ArrayList<GeneModelVO> resultList = new ArrayList<GeneModelVO>();
+
+		PathQuery query = null;
+
+		log.info("Allele Source Item:" + itemId);
+
+		query = getGeneModelsByAlleleIdQuery(itemId);
+
+		QueryService service = factory.getQueryService();
+		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+
+		while (resultSetIterator.hasNext()) {
+
+			List<Object> currentItem = resultSetIterator.next();
+
+			log.info("Gene Model Item:" + currentItem);
+
+			GeneModelVO resultItem = new GeneModelVO(currentItem);
+
+			resultList.add(resultItem);
+
+			log.info("Gene Model Result Item:" + resultItem);
+
+		}
+
+		return resultList;
+
+	}
+
+	public List<GeneVO> getGenes(String itemId) throws Exception {
+
+		ArrayList<GeneVO> resultList = new ArrayList<GeneVO>();
+
+		PathQuery query = null;
+
+		log.info("Allele Source Item:" + itemId);
+
+		query = getGenesByAlleleIdQuery(itemId);
+
+		QueryService service = factory.getQueryService();
+		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+
+		while (resultSetIterator.hasNext()) {
+
+			List<Object> currentItem = resultSetIterator.next();
+
+			log.info("Gene Item:" + currentItem);
+
+			String geneObjectId = getElement(currentItem, 0);
+			String geneName = getElement(currentItem, 2);
+
+			GeneVO resultItem = new GeneVO(geneObjectId, geneName);
+
+			resultList.add(resultItem);
+
+			log.info("Gene Result Item:" + resultItem);
+
+		}
+
+		return resultList;
+
+	}
+
+	private String getElement(List<Object> list, int index) {
+
+		String element = ((list.get(index) != null) && (list.get(index) != null)) ? list.get(index).toString()
+				: "&nbsp;";
+
+		if (element != null && ((element.equalsIgnoreCase("unknown") || (element.equalsIgnoreCase("null"))))) {
+			element = "&nbsp;";
+		}
+
+		if (element == null) {
+			element = "&nbsp;";
+		}
+		return element;
+
+	}
+
+	private List<AlleleVO> getAllelebyStockGenotype(String stockId, String genotypeId) throws Exception {
+
+		List<AlleleVO> result = new ArrayList<AlleleVO>();
+
+		Exception exception = null;
+		PathQuery query = null;
+
+		if (stockId == null || genotypeId == null) {
+			throw new Exception("Stock/Genotype Id cannot be null.");
+		}
+
+		query = getAlleleQuerybyStockGenotype(stockId, genotypeId);
+
+		QueryService service = factory.getQueryService();
+
+		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+
 		log.info("Getting Allele Item:" + ";StockId:" + stockId + ";GenotypeId:" + genotypeId);
-		
+
 		while (resultSetIterator.hasNext()) {
 
 			List<Object> currentItem = resultSetIterator.next();
@@ -346,74 +440,87 @@ private String getElement(List<Object> list, int index) {
 			String alleleName = null;
 			String zygosity = null;
 			String mutagen = null;
-			
-			if (currentItem.get(0)!=null){
+			String inheritanceType = null;
+			String alleleClass = null;
+
+			if (currentItem.get(0) != null) {
 				alleleId = currentItem.get(0).toString();
 			}
-			
-			if (currentItem.get(1)!=null){
+
+			if (currentItem.get(1) != null) {
 				alleleName = currentItem.get(1).toString().toLowerCase();
 			}
-			
-			if (currentItem.get(2)!=null){
+
+			if (currentItem.get(2) != null) {
 				zygosity = currentItem.get(2).toString();
-			}else{
-				zygosity  = "&nbsp;";
+			} else {
+				zygosity = "&nbsp;";
 			}
-			
-			if (zygosity.equalsIgnoreCase("null")){
-				zygosity  = "&nbsp;";
+
+			if (zygosity.equalsIgnoreCase("null")) {
+				zygosity = "&nbsp;";
 			}
-			
-			if (currentItem.get(3)!=null){
+
+			if (currentItem.get(3) != null) {
 				mutagen = currentItem.get(3).toString();
-			}else{
-				mutagen  = "&nbsp;";
+			} else {
+				mutagen = "N/A";
+			}
+
+			if (mutagen.equalsIgnoreCase("null")) {
+				mutagen = "&nbsp;";
 			}
 			
-			if (mutagen.equalsIgnoreCase("null")){
-				mutagen  = "&nbsp;";
+			if (currentItem.get(4) != null) {
+				inheritanceType = currentItem.get(4).toString();
+			} else {
+				inheritanceType = "N/A;";
 			}
 			
-			if (alleleId!=null && alleleName!=null){
-		
-				AlleleVO resultItem = new AlleleVO(alleleId, alleleName,zygosity, mutagen);
+			if (currentItem.get(5) != null) {
+				alleleClass = currentItem.get(5).toString();
+			} else {
+				alleleClass = "N/A;";
+			}
+
+
+			if (alleleId != null && alleleName != null) {
+
+				AlleleVO resultItem = new AlleleVO(alleleId, alleleName, zygosity, mutagen, inheritanceType, alleleClass);
 
 				log.info("Allele Item:" + resultItem);
-			
+
 				result.add(resultItem);
-			
+
 			}
-		
-	
+
 		}
-	
-			
+
 		return result;
-					
+
 	}
-	
-	public List<StockAvailabilityVO> getStockAvailability(InterMineObject item) throws Exception{
-		
-		List<StockAvailabilityVO> result = new ArrayList<StockAvailabilityVO>() ;
+
+	public List<StockAvailabilityVO> getStockAvailability(InterMineObject item) throws Exception {
+
+		List<StockAvailabilityVO> result = new ArrayList<StockAvailabilityVO>();
 		Exception exception = null;
-		
+
 		PathQuery query = null;
-		
-		if (item==null){
+
+		if (item == null) {
 			throw new Exception("Stock cannot be null.");
 		}
-		
+
 		String itemId = item.getId().toString();
-		
+
 		query = getStockAvailabilityQuery(itemId);
-		
+
 		QueryService service = factory.getQueryService();
 
 		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
-		
+
 		log.info("Getting Stock Availability Item:" + item);
-		
+
 		while (resultSetIterator.hasNext()) {
 
 			List<Object> currentItem = resultSetIterator.next();
@@ -421,41 +528,38 @@ private String getElement(List<Object> list, int index) {
 			StockAvailabilityVO resultItem = new StockAvailabilityVO(currentItem);
 
 			log.info("Stock Availability Item:" + resultItem);
-			
+
 			result.add(resultItem);
-			
 
 		}
-		
+
 		return result;
-		
-		
+
 	}
-	
-	
-	public StockAnnotationVO getStockAnnotation(InterMineObject item) throws Exception{
-		
+
+	public StockAnnotationVO getStockAnnotation(InterMineObject item) throws Exception {
+
 		StockAnnotationVO result = null;
 		Exception exception = null;
-		
+
 		PathQuery query = null;
-		
-		if (item==null){
+
+		if (item == null) {
 			throw new Exception("Stock cannot be null.");
 		}
-		
+
 		String itemId = item.getId().toString();
-		
+
 		query = getAnnotationQuery(itemId);
-		
+
 		QueryService service = factory.getQueryService();
 
 		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
-		
+
 		int rowCount = 0;
-		
+
 		log.info("Getting Stock Annotation Item:" + item);
-		
+
 		while (resultSetIterator.hasNext() && rowCount < 1) {
 
 			List<Object> currentItem = resultSetIterator.next();
@@ -463,36 +567,75 @@ private String getElement(List<Object> list, int index) {
 			result = new StockAnnotationVO(currentItem);
 
 			log.info("Stock Annotation Result Item:" + result);
-			
+
 			rowCount++;
 
 		}
-		
+
 		return result;
-		
+
 	}
-	
-	public List<StrainVO> getAccession(InterMineObject item) throws Exception{
-		
+
+	public StockAnnotationVO getMutagenChromosomalConstitution(InterMineObject item) throws Exception {
+
+		StockAnnotationVO result = null;
 		Exception exception = null;
-		
-		List<StrainVO> resultList = new ArrayList<StrainVO>();
+
 		PathQuery query = null;
-		
-		if (item==null){
+
+		if (item == null) {
 			throw new Exception("Stock cannot be null.");
 		}
-		
+
 		String itemId = item.getId().toString();
-		
-		query = getAccessionsQuery(itemId);
-		
+
+		query = getMutagenChromosomalConstitutionQuery(itemId);
+
 		QueryService service = factory.getQueryService();
 
 		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
-		
+
 		int rowCount = 0;
-		
+
+		log.info("Getting Mutagen/Chromosomsal Constitution Item:" + item);
+
+		while (resultSetIterator.hasNext() && rowCount < 1) {
+
+			List<Object> currentItem = resultSetIterator.next();
+
+			result = new StockAnnotationVOBuilder().buildByMutagenChromosomalConstitution(currentItem);
+
+			log.info("Mutagen/Chromosomsal Constitution Result Item:" + result);
+
+			rowCount++;
+
+		}
+
+		return result;
+
+	}
+
+	public List<StrainVO> getAccession(InterMineObject item) throws Exception {
+
+		Exception exception = null;
+
+		List<StrainVO> resultList = new ArrayList<StrainVO>();
+		PathQuery query = null;
+
+		if (item == null) {
+			throw new Exception("Stock cannot be null.");
+		}
+
+		String itemId = item.getId().toString();
+
+		query = getAccessionsQuery(itemId);
+
+		QueryService service = factory.getQueryService();
+
+		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+
+		int rowCount = 0;
+
 		while (resultSetIterator.hasNext() && rowCount < 1) {
 
 			List<Object> currentItem = resultSetIterator.next();
@@ -502,16 +645,16 @@ private String getElement(List<Object> list, int index) {
 			resultList.add(resultItem);
 
 			log.info("Accession Result Item:" + resultItem);
-			
+
 			rowCount++;
 
 		}
-		
+
 		return resultList;
-		
+
 	}
 
-	public List<StockVO> getStocks(InterMineObject item, String objectClassName) throws Exception{
+	public List<StockVO> getStocks(InterMineObject item, String objectClassName) throws Exception {
 
 		ArrayList<StockVO> resultList = new ArrayList<StockVO>();
 
@@ -566,164 +709,189 @@ private String getElement(List<Object> list, int index) {
 		return factory.getQueryService();
 	}
 
-
 	private PathQuery getAccessionsQuery(String itemId) {
 
 		Model model = factory.getModel();
 		PathQuery query = new PathQuery(model);
 
-		query.addViews("Stock.accession.id", "Stock.accession.abbreviationName",
-				"Stock.accession.infraspecificName", "Stock.accession.habitat",
-						"Stock.accession.geoLocation"
-				
-				);
+		query.addViews("Stock.accession.id", "Stock.accession.abbreviationName", "Stock.accession.infraspecificName",
+				"Stock.accession.habitat", "Stock.accession.geoLocation"
+
+		);
 
 		query.addConstraint(Constraints.eq("Stock.id", itemId));
 
 		return query;
 
 	}
-	
-	
+
 	private PathQuery getStockAvailabilityQuery(String itemId) {
 
 		Model model = factory.getModel();
 		PathQuery query = new PathQuery(model);
 
-		query.addViews(
-				"Stock.id",
-				"Stock.primaryAccession",
-				"Stock.stockAvailabilities.stockDisplayNumber",
-				"Stock.stockAvailabilities.stockCenter.name",
-				"Stock.stockAvailabilities.stockNumber",
-                "Stock.stockAvailabilities.stockCenter.stockObjectUrlPrefix");
-			
+		query.addViews("Stock.id", "Stock.primaryAccession", "Stock.stockAvailabilities.stockDisplayNumber",
+				"Stock.stockAvailabilities.stockCenter.name", "Stock.stockAvailabilities.stockNumber",
+				"Stock.stockAvailabilities.stockCenter.stockObjectUrlPrefix");
 
-        // Add orderby
-        query.addOrderBy("Stock.stockAvailabilities.stockCenter.name", OrderDirection.ASC);
+		// Add orderby
+		query.addOrderBy("Stock.stockAvailabilities.stockCenter.name", OrderDirection.ASC);
 
 		query.addConstraint(Constraints.eq("Stock.id", itemId));
 
 		return query;
 
 	}
-	
+
 	private PathQuery getAnnotationQuery(String itemId) {
 
 		Model model = factory.getModel();
 		PathQuery query = new PathQuery(model);
 
-		query.addViews(
-				"Stock.stockAnnotation.id",
-				"Stock.primaryIdentifier",
-				"Stock.mutagen.name",
+		query.addViews("Stock.stockAnnotation.id", "Stock.primaryIdentifier", "Stock.mutagen.name",
 				"Stock.stockAnnotation.chromosomalConstitution.aneploidChromosome",
-                "Stock.stockAnnotation.chromosomalConstitution.ploidy",
-                "Stock.stockAnnotation.growthCondition.specialGrowthConditions",
-                "Stock.stockAnnotation.mutant",
-                "Stock.stockAnnotation.transgene",
-                "Stock.stockAnnotation.naturalVariant");
-			
+				"Stock.stockAnnotation.chromosomalConstitution.ploidy",
+				"Stock.stockAnnotation.growthCondition.specialGrowthConditions", "Stock.stockAnnotation.mutant",
+				"Stock.stockAnnotation.transgene", "Stock.stockAnnotation.naturalVariant");
+
 		// Outer Joins
-        // Show all information about these relationships if they exist, but do not require that they exist.
-        query.setOuterJoinStatus("Stock.stockAnnotation.growthCondition", OuterJoinStatus.OUTER);
-        query.setOuterJoinStatus("Stock.stockAnnotation", OuterJoinStatus.OUTER);
-        query.setOuterJoinStatus("Stock.stockAnnotation.chromosomalConstitution", OuterJoinStatus.OUTER);
-        query.setOuterJoinStatus("Stock.mutagen", OuterJoinStatus.OUTER);
+		// Show all information about these relationships if they exist, but do
+		// not require that they exist.
+		query.setOuterJoinStatus("Stock.stockAnnotation.growthCondition", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Stock.stockAnnotation", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Stock.stockAnnotation.chromosomalConstitution", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Stock.mutagen", OuterJoinStatus.OUTER);
 
 		query.addConstraint(Constraints.eq("Stock.id", itemId));
 
 		return query;
 
 	}
-	
-	
+
+	private PathQuery getMutagenChromosomalConstitutionQuery(String itemId) {
+
+		Model model = factory.getModel();
+		PathQuery query = new PathQuery(model);
+		query.addViews("Stock.stockAnnotation.id", "Stock.primaryIdentifier", "Stock.mutagen.name",
+				"Stock.stockAnnotation.chromosomalConstitution.aneploidChromosome",
+				"Stock.stockAnnotation.chromosomalConstitution.ploidy");
+
+		query.setOuterJoinStatus("Stock.stockAnnotation.chromosomalConstitution", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Stock.mutagen", OuterJoinStatus.OUTER);
+
+		query.addConstraint(Constraints.eq("Stock.id", itemId));
+
+		return query;
+
+	}
+
+	private PathQuery getGrowthRequirementsQuery(String itemId) {
+
+		Model model = factory.getModel();
+		PathQuery query = new PathQuery(model);
+
+		query.addViews("Stock.stockAnnotation.id", "Stock.primaryIdentifier",
+				"Stock.stockAnnotation.growthCondition.specialGrowthConditions");
+
+		query.addConstraint(Constraints.eq("Stock.id", itemId));
+
+		return query;
+
+	}
+
 	private PathQuery getGenotypeQuery(String itemId) {
 
 		Model model = factory.getModel();
 		PathQuery query = new PathQuery(model);
-		
-		query.addViews(
-				"Stock.id",
-				"Stock.primaryIdentifier",
-				"Stock.genotypes.id",
-				"Stock.genotypes.name"
-				);
-		
+
+		query.addViews("Stock.id", "Stock.primaryIdentifier", "Stock.genotypes.id", "Stock.genotypes.name");
+
 		query.addConstraint(Constraints.eq("Stock.id", itemId));
 		return query;
 
 	}
 	
-	private PathQuery getAlleleQuerybyStockGenotype(String stockId, String genotypeId) {
+	private PathQuery getPhenotypesObservedInQuery(String itemId) {
 
 		Model model = factory.getModel();
 		PathQuery query = new PathQuery(model);
-		
-		query.addViews(
-				"Stock.genotypes.alleles.id",
-				"Stock.genotypes.alleles.primaryIdentifier",
-				"Stock.genotypes.alleles.alleleGeneZygosities.zygosity.name",
-				"Stock.genotypes.alleles.mutagen.name"
+
+		query.addViews("Stock.id", 
+				"Stock.primaryIdentifier", 
+				"Stock.genotypes.id", 
+				"Stock.genotypes.name",
+				"Stock.genotypes.phenotypesObserved.id"
 				);
 		
-		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleGeneZygosities", OuterJoinStatus.OUTER);
-        query.setOuterJoinStatus("Stock.genotypes.alleles.alleleGeneZygosities.zygosity", OuterJoinStatus.OUTER);
-        query.setOuterJoinStatus("Stock.genotypes.alleles.mutagen", OuterJoinStatus.OUTER);
+		// Add orderby
+		query.addOrderBy("Stock.primaryIdentifier", OrderDirection.ASC);
 
-		
-		query.addConstraint(Constraints.eq("Stock.id", stockId));
-		query.addConstraint(Constraints.eq("Stock.genotypes.id", genotypeId));
-		
+		// Filter the results with the following constraints:
+		query.addConstraint(Constraints.eq("Stock.genotypes.phenotypesObserved.id", itemId));
 		
 		return query;
 
 	}
-	
+
+	private PathQuery getAlleleQuerybyStockGenotype(String stockId, String genotypeId) {
+
+		Model model = factory.getModel();
+		PathQuery query = new PathQuery(model);
+
+		query.addViews("Stock.genotypes.alleles.id", "Stock.genotypes.alleles.primaryIdentifier",
+				"Stock.genotypes.alleles.alleleGeneZygosities.zygosity.name", "Stock.genotypes.alleles.mutagen.name",
+				"Stock.genotypes.alleles.inheritanceMode.name",
+				"Stock.genotypes.alleles.alleleClass.name"
+				);
+
+		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleGeneZygosities", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleGeneZygosities.zygosity", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Stock.genotypes.alleles.mutagen", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Stock.genotypes.alleles.inheritanceMode", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleClass", OuterJoinStatus.OUTER);
+
+		query.addConstraint(Constraints.eq("Stock.id", stockId));
+		query.addConstraint(Constraints.eq("Stock.genotypes.id", genotypeId));
+
+		return query;
+
+	}
+
 	private PathQuery getGeneModelsByAlleleIdQuery(String itemId) {
 
 		Model model = factory.getModel();
 		PathQuery query = new PathQuery(model);
 
-		query.addViews(
-				"Allele.affectedGenes.id",
-				"Allele.affectedGenes.transcripts.id",
-				"Allele.primaryIdentifier",
-				"Allele.affectedGenes.primaryIdentifier",
-				"Allele.affectedGenes.transcripts.primaryIdentifier",
-				 "Allele.affectedGenes.transcripts.curatorSummary"
-				);
-		
+		query.addViews("Allele.affectedGenes.id", "Allele.affectedGenes.transcripts.id", "Allele.primaryIdentifier",
+				"Allele.affectedGenes.primaryIdentifier", "Allele.affectedGenes.transcripts.primaryIdentifier",
+				"Allele.affectedGenes.transcripts.curatorSummary");
+
 		// Outer Joins
-				// Show all information about these relationships if they exist, but do
-				// not require that they exist.
+		// Show all information about these relationships if they exist, but do
+		// not require that they exist.
 		query.setOuterJoinStatus("Allele.affectedGenes.transcripts", OuterJoinStatus.OUTER);
 		query.addConstraint(Constraints.eq("Allele.id", itemId));
-		
+
 		return query;
 
 	}
-	
-	
+
 	private PathQuery getGenesByAlleleIdQuery(String itemId) {
 
 		Model model = factory.getModel();
 		PathQuery query = new PathQuery(model);
 
-		query.addViews(
-				"Allele.affectedGenes.id",
-				"Allele.primaryIdentifier",
-				"Allele.affectedGenes.primaryIdentifier"
-				);
-		
+		query.addViews("Allele.affectedGenes.id", "Allele.primaryIdentifier", "Allele.affectedGenes.primaryIdentifier");
+
 		// Outer Joins
-				// Show all information about these relationships if they exist, but do
-				// not require that they exist.
+		// Show all information about these relationships if they exist, but do
+		// not require that they exist.
 		query.addConstraint(Constraints.eq("Allele.id", itemId));
-		
+
 		return query;
 
 	}
+
 	private PathQuery getBackGroundAccessionsQuery(String itemId) {
 
 		Model model = factory.getModel();
@@ -736,7 +904,7 @@ private String getElement(List<Object> list, int index) {
 		return query;
 
 	}
-	
+
 	public List<StrainVO> getBackgroundAccessions(StockVO item) {
 		List<StrainVO> result = new ArrayList<StrainVO>();
 
@@ -791,19 +959,16 @@ private String getElement(List<Object> list, int index) {
 		Model model = factory.getModel();
 		PathQuery query = new PathQuery(model);
 
-		query.addViews("Allele.genotypes.phenotypesObserved.id",
-				"Allele.genotypes.phenotypesObserved.description",
+		query.addViews("Allele.genotypes.phenotypesObserved.id", "Allele.genotypes.phenotypesObserved.description",
 				"Allele.primaryIdentifier", "Allele.genotypes.name",
-				"Allele.genotypes.phenotypesObserved.primaryIdentifier",
-				"Allele.genotypes.stocks.primaryIdentifier");
+				"Allele.genotypes.phenotypesObserved.primaryIdentifier", "Allele.genotypes.stocks.primaryIdentifier");
 
 		// Add orderby
 		query.addOrderBy("Allele.genotypes.phenotypesObserved.primaryIdentifier", OrderDirection.ASC);
 
 		// Filter the results with the following constraints:
 		query.addConstraint(Constraints.eq("Allele.id", alleleItem.getId().toString()), "A");
-		query.addConstraint(Constraints.eq("Allele.genotypes.stocks.id", stockItem.getStockObjectId()),
-				"B");
+		query.addConstraint(Constraints.eq("Allele.genotypes.stocks.id", stockItem.getStockObjectId()), "B");
 		// Specify how these constraints should be combined.
 		query.setConstraintLogic("A and B");
 
@@ -811,70 +976,66 @@ private String getElement(List<Object> list, int index) {
 
 	}
 
-	
 	private PathQuery getPhenotypesByStockIdQuery(String stockId) {
 
 		Model model = factory.getModel();
 		PathQuery query = new PathQuery(model);
 
-		 query.addViews("Stock.primaryIdentifier",
-	                "Stock.genotypes.primaryIdentifier",
-	                "Stock.genotypes.phenotypesObserved.id",
-	                "Stock.genotypes.phenotypesObserved.description");
+		query.addViews("Stock.primaryIdentifier", "Stock.genotypes.primaryIdentifier",
+				"Stock.genotypes.phenotypesObserved.id", "Stock.genotypes.phenotypesObserved.description");
 
-	        // Add orderby
-	        query.addOrderBy("Stock.primaryIdentifier", OrderDirection.ASC);
+		// Add orderby
+		query.addOrderBy("Stock.primaryIdentifier", OrderDirection.ASC);
 
-	        // Filter the results with the following constraints:
-	    query.addConstraint(Constraints.eq("Stock.id", stockId));
+		// Filter the results with the following constraints:
+		query.addConstraint(Constraints.eq("Stock.id", stockId));
 
 		return query;
 
 	}
-	
-	public List<PhenotypeVO> getStockPhenotypes(InterMineObject item) throws Exception{
-		
+
+	public List<PhenotypeVO> getStockPhenotypes(InterMineObject item) throws Exception {
+
 		List<PhenotypeVO> result = new ArrayList<PhenotypeVO>();
 
-		if (item==null){
+		if (item == null) {
 			throw new Exception("Stock cannot be null.");
 		}
-		
+
 		String itemId = item.getId().toString();
-		
+
 		PathQuery query = getPhenotypesByStockIdQuery(itemId);
 
 		QueryService service = factory.getQueryService();
 
 		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
-		
+
 		while (resultSetIterator.hasNext()) {
 
 			List<Object> currentItem = resultSetIterator.next();
 
-
 			String objectId = null;
 			String description = null;
-						
-			if (currentItem.get(2)!=null){
+
+			if (currentItem.get(2) != null) {
 				objectId = currentItem.get(2).toString();
 			}
-			
-			if (currentItem.get(3)!=null){
+
+			if (currentItem.get(3) != null) {
 				description = currentItem.get(3).toString();
 			}
-			
+
 			PhenotypeVO resultItem = new PhenotypeVO(objectId, description);
 			result.add(resultItem);
 
 			log.info("Phenotype Stock Result Item:" + resultItem);
 
 		}
-		
+
 		return result;
-		
+
 	}
-	
+
 	public List<PhenotypeVO> getPhenotypes(Gene geneItem, StockVO stockItem) {
 
 		List<PhenotypeVO> result = new ArrayList<PhenotypeVO>();
@@ -916,51 +1077,52 @@ private String getElement(List<Object> list, int index) {
 		List<PhenotypeVO> result = new ArrayList<PhenotypeVO>();
 
 		try {
-		
-		Gene gene = null;
-		Allele allele = null;
-		PathQuery query = null;
 
-		if (objectClassName.equals("Gene")) {
-			gene = (Gene) item;
-			query = getPhenotypesByGeneStockQuery(gene, stockItem);
-			log.info("Getting Phenotypes by Gene:" + gene.getPrimaryIdentifier());
-		} else if (objectClassName.equals("Allele")) {
-			allele = (Allele) item;
-			query = getPhenotypesByAlleleStockQuery(allele, stockItem);
-			log.info("Getting Phenotypes by Allele:" + allele.getPrimaryIdentifier());
-		} else{
-			throw new Exception("Unknown Object Type.");
-		}
+			Gene gene = null;
+			Allele allele = null;
+			PathQuery query = null;
 
-		QueryService service = factory.getQueryService();
+			if (objectClassName.equals("Gene")) {
+				gene = (Gene) item;
+				query = getPhenotypesByGeneStockQuery(gene, stockItem);
+				log.info("Getting Phenotypes by Gene:" + gene.getPrimaryIdentifier());
+			} else if (objectClassName.equals("Allele")) {
+				allele = (Allele) item;
+				query = getPhenotypesByAlleleStockQuery(allele, stockItem);
+				log.info("Getting Phenotypes by Allele:" + allele.getPrimaryIdentifier());
+			} else {
+				throw new Exception("Unknown Object Type.");
+			}
 
-		Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
+			QueryService service = factory.getQueryService();
 
-		while (resultSetIterator.hasNext()) {
+			Iterator<List<Object>> resultSetIterator = service.getRowListIterator(query);
 
-			List<Object> currentItem = resultSetIterator.next();
+			while (resultSetIterator.hasNext()) {
 
-			PhenotypeVO resultItem = new PhenotypeVO(currentItem);
+				List<Object> currentItem = resultSetIterator.next();
 
-			if (resultItem.getObjectId() != null && publicationService != null) {
+				PhenotypeVO resultItem = new PhenotypeVO(currentItem);
 
-				List<PublicationVO> publications = new ArrayList<PublicationVO>();
+				if (resultItem.getObjectId() != null && publicationService != null) {
 
-				publications = publicationService.getPhenotypePublications(resultItem);
-				resultItem.setPublications(publications);
-				log.info("Phenotype:" + resultItem + ";Publication Size:" + publications.size());
+					List<PublicationVO> publications = new ArrayList<PublicationVO>();
+
+					publications = publicationService.getPhenotypePublications(resultItem);
+					resultItem.setPublications(publications);
+					log.info("Phenotype:" + resultItem + ";Publication Size:" + publications.size());
+
+				}
+
+				result.add(resultItem);
+
+				log.info("Phenotype Result Item:" + resultItem);
 
 			}
 
-			result.add(resultItem);
-
-			log.info("Phenotype Result Item:" + resultItem);
-
-		}
-
-		} catch(Exception e){
-			log.error("Error getting pehotypes for:" + item + ";" + ";Error:" + e.getMessage() + ";Cause:" + e.getCause());
+		} catch (Exception e) {
+			log.error("Error getting pehotypes for:" + item + ";" + ";Error:" + e.getMessage() + ";Cause:"
+					+ e.getCause());
 		}
 		return result;
 

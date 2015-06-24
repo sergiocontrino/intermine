@@ -62,7 +62,7 @@
      				 	 </c:forEach>
      				  	</c:forEach>
    					 </tbody>
-				<table>
+				</table>
 			</div>
 
 		</c:when>
