@@ -61,26 +61,42 @@
        }
      };
 
-   var formatGeneLink = function(id) {
-       var thalemine_url = '/${WEB_PROPERTIES['webapp.path']}' + '/portal.do?class=Gene&externalids=' + id;
-       var phytomine_url = '${WEB_PROPERTIES['intermines.phytomine.url']}' + '/portal.do?class=Gene&externalids=' + id;
-       var re = new RegExp("^AT");
-          if (re.test(id)) {
-             url = thalemine_url;
-             return formatLink(url, wrapSpan(id), "_blank", 'internal');
-          } else {
-             url = phytomine_url;
-              return formatLink(url, wrapSpan(id), "_blank", 'extlink');
-            }
-     };
+    var formatPhytomineLink = function(id, dataClass, pattern, value) {
+        var thalemine_url = '/${WEB_PROPERTIES['webapp.path']}' + '/portal.do?class=' + dataClass + '&externalids=' + id;
+        var phytomine_url = '${WEB_PROPERTIES['intermines.phytomine.url']}' + '/portal.do?class=' + dataClass + '&externalids=' + id;
+        if (typeof value === 'undefined') {
+            value = id;
+        }
+        var re = new RegExp(pattern);
+        if (re.test(id)) {
+            return formatLink(thalemine_url, wrapSpan(value), "_blank", 'internal');
+        } else {
+            return formatLink(phytomine_url, wrapSpan(value), "_blank", 'extlink');
+        }
+    };
 
-   var phytomineGeneFormatter = function(o) {
-        return formatGeneLink(o.get('name'));
-     };
+    var phytomineGeneFormatter = function(o) {
+        return formatPhytomineLink(o.get('name'), "Gene", "^AT", undefined);
+    };
+
+    var phytomineOrganismFormatter = function(o) {
+        return formatPhytomineLink(o.get('shortName'), "Organism", "thaliana$", undefined);
+    };
+
+    var phytomineDeflineFormatter = function(o) {
+        return formatPhytomineLink(o.get('name'), "Gene", "^AT", o.get('briefDescription'));
+    };
 
     // new way for using imtables
     imtables.formatting
                 .registerFormatter(phytomineGeneFormatter, 'genomic', 'Gene', [ 'name' ]);
+
+    imtables.formatting
+                .registerFormatter(phytomineOrganismFormatter, 'genomic', 'Organism', [ 'shortName' ]);
+
+    imtables.formatting
+                .registerFormatter(phytomineDeflineFormatter, 'genomic', 'Gene', [ 'briefDescription' ]);
+
 
     // note: imtables.loadTable delivers a table without controls (only pagination)
     imtables.loadDash('#phytomine-homolog-container',
