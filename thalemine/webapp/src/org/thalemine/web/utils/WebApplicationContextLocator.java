@@ -3,14 +3,10 @@ package org.thalemine.web.utils;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.util.Properties;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.intermine.web.logic.PortalHelper;
-import org.intermine.web.logic.session.SessionMethods;
-import org.intermine.web.util.URLGenerator;
+
 
 public class WebApplicationContextLocator {
 
@@ -19,20 +15,7 @@ public class WebApplicationContextLocator {
 	private static String SERVICE_URL;
 	private static String BASE_URL;
 	private static final String SERVICE_SUFFIX = "/service/";
-
-	// private static final String SERVICE_URL =
-	// "https://apps.araport.org/demo-thalemine/service/";
-
-	// private static final String SERVICE_URL =
-	// "http://localhost:8081/thalemine/service/";
-
-	// private static final String SERVICE_URL =
-	// "http://ibelyaev-lx.jcvi.org:8081/thalemine/service/";
-
-	/*
-	 * static { SERVICE_URL= null; }
-	 */
-
+	
 	public static String getServiceUrl(HttpServletRequest request) {
 
 		if (SERVICE_URL != null) {
@@ -53,7 +36,7 @@ public class WebApplicationContextLocator {
 
 		if (BASE_URL != null) {
 
-			log.info("Retrieved Portal Base URL=" + BASE_URL);
+			log.info("Retrieved Portal Base URL:" + BASE_URL);
 
 			return BASE_URL;
 		}
@@ -67,9 +50,9 @@ public class WebApplicationContextLocator {
 		try {
 
 			baseUrl = contextUrl.toURL();
-			log.info("Base URL=" + contextUrl);
+			log.info("Base URL:" + contextUrl);
 			String externalBaseUrl = baseUrl.toExternalForm();
-			log.info("External Base URL=" + externalBaseUrl);
+			log.info("External Base URL:" + externalBaseUrl);
 
 		} catch (MalformedURLException e) {
 			exception = e;
@@ -87,7 +70,7 @@ public class WebApplicationContextLocator {
 			}
 		}
 
-		log.info("Obtained Portal Base URL=" + BASE_URL);
+		log.info("Obtained Portal Base URL:" + BASE_URL);
 
 		return BASE_URL;
 	}
