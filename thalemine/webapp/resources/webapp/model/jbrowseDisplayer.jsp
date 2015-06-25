@@ -28,11 +28,12 @@
     <c:set var="datasource" value="${WEB_PROPERTIES['jbrowse.database.source']}"/>
     <c:set var="chr" value="${object.chromosomeLocation.locatedOn.primaryIdentifier}"/>
 
-    <c:set var="padding" value="${10}"/>
     <c:set var="offset" value="${fn:substringBefore((object.length * 0.1), '.')}"/>
     <c:set var="start" value="${object.chromosomeLocation.start}"/>
     <c:set var="end" value="${object.chromosomeLocation.end}"/>
-    <c:set var="offsetstart" value="${start - offset}"/>
+    <c:set var="upstream" value="500"/>
+    <c:set var="offsetstart" value="${start - offset - upstream}"/>
+    <c:if test="${offsetstart < 1}"><c:set var="offsetstart" value="1"/></c:if>
     <c:set var="offsetend" value="${end + offset}"/>
 
     <c:set var="tracks" value="TAIR10_loci,TAIR10_genes"/>
@@ -42,8 +43,19 @@
     <c:set var="jbLink" value="${baseUrl}/?data=${datasource}&loc=${loc}&tracks=${tracks}"/>
     <c:set var="jbLinkEmbed" value="${jbLink}&${extraParams}"/>
 
+    <style text="text/css">
+    .embed-responsive-item {
+        top: 0;
+        left: 0;
+        bottom: 0;
+        height: 300px;
+        width: 100%;
+        border: 0;
+    }
+    </style>
+
     <div>
-        <iframe id="jbrowse" name="jbrowse" height="300px" width="98%" style="border: 1px solid #dfdfdf; padding: 1%" src="${jbLinkEmbed}"></iframe>
+        <iframe name="jbrowse-embed" class="embed-responsive-item" src="${jbLinkEmbed}"></iframe>
         <p>
             <a href="${jbLinkEmbed}" target="jbrowse">Center on ${object.primaryIdentifier}</a>&nbsp;|&nbsp;
             <a href="${jbLink}" target="_blank" class="extlink">Full Screen View</a>&nbsp;|&nbsp;
