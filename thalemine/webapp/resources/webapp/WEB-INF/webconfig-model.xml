@@ -415,26 +415,22 @@
       </fields>
   </class>
   
- <class className="org.intermine.model.bio.Allele">
+<class className="org.intermine.model.bio.Allele">
   
     <headerconfig>
       <titles>
-        <title mainTitles="primaryIdentifier|name" numberOfMainTitlesToShow="1" subTitles="*organism.shortName*" />
+        <title mainTitles="*primaryIdentifier*|name" numberOfMainTitlesToShow="1" subTitles="*organism.shortName*" />
       </titles>
     </headerconfig>
   
   <fields>
-  	  <fieldconfig fieldExpr="primaryIdentifier" label="Primary Identifier"/>
-  	  <fieldconfig fieldExpr="name" label="Name"/>
-      <fieldconfig fieldExpr="sequenceAlterationType.name" label="Sequence Alteration Type" showInInlineCollection="false"/>
-      <fieldconfig fieldExpr="mutagen.name" label="Mutagen"/>
-      <fieldconfig fieldExpr="mutationSite.name" label="Mutation Site"/>   
-      <fieldconfig fieldExpr="description" label="Description"/>
-      <fieldconfig fieldExpr="alleleClass.name" label="Allele Class"/>
-      <fieldconfig fieldExpr="inheritanceMode.name" label="Inheritance"/>
-      <fieldconfig fieldExpr="wildType" label="Is Wild Type"/>
+  	  <fieldconfig fieldExpr="primaryIdentifier" label="Name" displayer="model/alleleName.jsp"/>
+  	  <fieldconfig fieldExpr="sequenceAlterationType.name" label="Sequence Alteration Type" showInInlineCollection="false"/>
+      <fieldconfig fieldExpr="wildType" showInSummary="false" label="Is Wild Type"/>
+      <fieldconfig fieldExpr="name" label="" displayer="model/nullDisplayer.jsp"/>
     </fields>
-  </class>
+        
+ </class>
   
   <class className="org.intermine.model.bio.SequenceAlterationType">
   <fields>
@@ -452,12 +448,6 @@
   	<fieldconfig fieldExpr="description" showInSummary="true" label="Description"/>
   	<fieldconfig fieldExpr="primaryIdentifier" label="" showInSummary="false" showInResults="false"  displayer="model/nullDisplayer.jsp"/>
   	<fieldconfig fieldExpr="secondaryIdentifier" label="" showInSummary="false" showInResults="false" displayer="model/nullDisplayer.jsp"/>
-  	</fields>
-  </class>
-  
-  <class className="org.intermine.model.bio.Mutagen">
-  	 <fields>
-  		<fieldconfig name="name" showInResults="false" showInInlineCollection="false"/>
   	</fields>
   </class>
   
@@ -485,6 +475,39 @@
   </fields>
 </class>
 
+
+<class className="org.intermine.model.bio.Genotype">
+	<headerconfig>
+      	<titles>
+       		 <title mainTitles="primaryIdentifier" numberOfMainTitlesToShow="1" subTitles="*organism.shortName*" displayer="model/genotypeName.jsp" />
+      	</titles>
+ 	</headerconfig>
+	<fields>
+ 	 	<fieldconfig fieldExpr="primaryIdentifier" label="Name" showInSummary="true" displayer="model/genotypeName.jsp"/>
+ 	 	<fieldconfig fieldExpr="description" label="Description/Method" showInSummary="false"/>
+ 	 	<fieldconfig fieldExpr="name" label="" showInSummary="false" displayer="model/nullDisplayer.jsp"/>
+ 	 	<fieldconfig fieldExpr="secondaryIdentifier" label="" showInSummary="false" displayer="model/nullDisplayer.jsp"/>
+ 	 	<fieldconfig fieldExpr="displayName" label="" showInSummary="false" displayer="model/nullDisplayer.jsp"/>
+ 	 </fields>
+</class>
+
+<class className="org.intermine.model.bio.Strain">
+	<headerconfig>
+      	<titles>
+       		 <title mainTitles="primaryIdentifier" numberOfMainTitlesToShow="1" subTitles="*organism.shortName*" displayer="model/genotypeName.jsp" />
+      	</titles>
+ 	</headerconfig>
+	<fields>
+ 	 	<fieldconfig fieldExpr="primaryIdentifier" label="Name" showInSummary="true"/>
+ 	 	<fieldconfig fieldExpr="abbreviationName" showInSummary="false"/>
+ 	 	<fieldconfig fieldExpr="geoLocation" label="Location" showInSummary="true"/>
+ 	 	<fieldconfig fieldExpr="habitat" label="Habitat" showInSummary="false"/>
+ 	 	<fieldconfig fieldExpr="type.name" label="Type" showInSummary="false"/>
+ 	 	<fieldconfig fieldExpr="name" label="" showInSummary="false" displayer="model/nullDisplayer.jsp"/>
+ 	 	<fieldconfig fieldExpr="secondaryIdentifier" label="" showInSummary="false" displayer="model/nullDisplayer.jsp"/>
+ 	    <fieldconfig fieldExpr="accessionNumber" label="" showInSummary="false" displayer="model/nullDisplayer.jsp"/>
+ 	 </fields>
+</class>
 <!-- exporters -->
   <tableExportConfig id="sequence" className="org.intermine.bio.web.export.SequenceHttpExporter"/>
   <tableExportConfig id="gff3" className="org.intermine.bio.web.export.GFF3HttpExporter"/>
@@ -683,6 +706,30 @@
                      replacesFields="observedIn"
                      placement="Observed In"
                      types="Phenotype"/>
+                     
+        <reportdisplayer javaClass="org.thalemine.web.displayer.GenotypeAlleleDisplayer"
+                     jspName="model/genotypeAllelesDisplayer.jsp"
+                     replacesFields="alleles,organism"
+                     placement="Alleles"
+                     types="Genotype"/>
+        
+         <reportdisplayer javaClass="org.thalemine.web.displayer.GenotypePhenotypeDisplayer"
+                     jspName="model/genotypePhenotypeDisplayer.jsp"
+                     replacesFields="phenotypesObserved"
+                     placement="Phenotypes"
+                     types="Genotype"/>
+                     
+         <reportdisplayer javaClass="org.thalemine.web.displayer.GenotypeStockDisplayer"
+                     jspName="model/genotypeStocksDisplayer.jsp"
+                     replacesFields="stocks"
+                     placement="Phenotypes"
+                     types="Genotype"/>
+                     
+          <reportdisplayer javaClass="org.thalemine.web.displayer.AccessionStockDisplayer"
+                     jspName="model/accessionStocksDisplayer.jsp"
+                     replacesFields="backgroundStocks,stocks,organism,type"
+                     placement="Stocks"
+                     types="Strain"/>
                                
      
   </reportdisplayers>

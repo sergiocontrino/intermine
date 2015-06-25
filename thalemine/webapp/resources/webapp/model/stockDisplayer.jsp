@@ -107,7 +107,7 @@ a.button:active {
 							<th>Germplasm Name</th>
 							<th>Genotype</th>
 							<th>Background Accession</th>
-							<th>Stock Name</th>
+							<th>Stock Center</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -126,7 +126,7 @@ a.button:active {
 								<td><c:forEach var="bgitem" items="${item.backgrounds}">
 										<a href="report.do?id=${bgitem.objectId}">${bgitem.abbreviationName}</a>
 									</c:forEach></td>
-								<td><a class="button" href="report.do?id=${item.stockObjectId}#StockAvailabilityDisplayer">Order</td>
+								<td><a class="button" href="report.do?id=${item.stockObjectId}#StockAvailabilityDisplayer">Order</a></td>
 
 								<c:choose>
 									<c:when test="${!empty item.phenotypes}">
@@ -177,7 +177,7 @@ a.button:active {
 						</c:forEach>
 
 					</tbody>
-					<table>
+					</table>
 						</div>
 
 						</c:when>
