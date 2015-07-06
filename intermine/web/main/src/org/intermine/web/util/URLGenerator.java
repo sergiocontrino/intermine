@@ -52,7 +52,7 @@ public class URLGenerator
     private String generateURL(HttpServletRequest request, String contextPath) {
         String port = "";
 
-        if (request.getServerPort() != 80) {
+        if (request.getServerPort() != 80 && request.getServerPort() != 443) {
             port = ":" + request.getServerPort();
         }
 
