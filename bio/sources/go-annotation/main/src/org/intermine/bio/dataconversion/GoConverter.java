@@ -57,9 +57,9 @@ public class GoConverter extends BioFileConverter
     private Map<String, String> evidenceCodes = new LinkedHashMap<String, String>();
     private Map<String, String> dataSets = new LinkedHashMap<String, String>();
     private Map<String, String> publications = new LinkedHashMap<String, String>();
+    private Map<String, String> xrefPub = new LinkedHashMap<String, String>();
     private Map<String, Item> organisms = new LinkedHashMap<String, Item>();
     protected Map<String, String> productMap = new LinkedHashMap<String, String>();
-    private Set<String> dbRefs = new HashSet<String>();
     @SuppressWarnings("unused")
     private Map<String, String> databaseAbbreviations = new HashMap<String, String>();
 
@@ -68,9 +68,6 @@ public class GoConverter extends BioFileConverter
         = new LinkedHashMap<GoTermToGene, Set<Evidence>>();
     private Map<Integer, List<String>> productCollectionsMap;
     private Map<String, Integer> storedProductIds;
-
-    private Map<String, String> xrefPub;
-
 
     // These should be altered for different ontologies:
     protected String termClassName = "GOTerm";
@@ -239,7 +236,6 @@ LOG.info("AAa " + qualifier  + "-" + goId + "-" + withText + "=" + productId);
             if (productIdentifier != null) {
                 // null if no pub found
                 String pubRefId = newPublication(array[5]);
-             LOG.info("DDD IN " + array[5]);
                 // get evidence codes for this goterm|gene pair
                 Set<Evidence> allEvidenceForAnnotation = goTermGeneToEvidence.get(key);
 
@@ -288,7 +284,6 @@ LOG.info("AAa " + qualifier  + "-" + goId + "-" + withText + "=" + productId);
         goTermGeneToEvidence = new LinkedHashMap<GoTermToGene, Set<Evidence>>();
         productCollectionsMap = new LinkedHashMap<Integer, List<String>>();
         storedProductIds = new HashMap<String, Integer>();
-        xrefPub = new HashMap<String, String>();
     }
 
     private void storeProductCollections() throws ObjectStoreException {
@@ -612,87 +607,6 @@ LOG.info("AAa " + qualifier  + "-" + goId + "-" + withText + "=" + productId);
         return dataSetIdentifier;
     }
 
-    private String newPublication1(String codes) throws ObjectStoreException {
-        String pubRefId = null;
-        String[] array = codes.split("[|]");
-        // LOG.info("AAA " + array.length);
-        Set<String> xrefs = new HashSet<String>();
-        Item item = null;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].startsWith("PMID:")) {
-                String pubMedId = array[i].substring(5);
-                LOG.info("AAA2 pubmed " + pubMedId);
-                if (StringUtil.allDigits(pubMedId)) {
-                    pubRefId = publications.get(pubMedId);
-                    if (pubRefId == null) {
-                        item = createItem("Publication");
-                        item.setAttribute("pubMedId", pubMedId);
-                        pubRefId = item.getIdentifier();
-                        publications.put(pubMedId, pubRefId);
-                    }
-                }
-            } else {
-                LOG.info("GOTYA " + array[i]);
-                xrefs.add(array[i]);
-            }
-        }
-        ReferenceList refIds = new ReferenceList("crossReferences");
-
-        // PMID may be first or last so we can't process xrefs until we've looked at all IDs
-        if (StringUtils.isNotEmpty(pubRefId)) {
-            for (String xref : xrefs) {
-                LOG.info("AAdd xref " + xref);
-                refIds.addRefId(createDbReference(xref));
-            }
-        }
-        if (item != null) {
-            LOG.info("2COLL " + refIds.getRefIds());
-            item.addCollection(refIds);
-            store(item);
-        }
-        LOG.info("pubrefid: " + pubRefId);
-        return pubRefId;
-    }
-
-    private String createDbReference1(String value)
-        throws ObjectStoreException {
-        if (StringUtils.isEmpty(value)) {
-            return null;
-        }
-        String dataSource = null;
-        if (!dbRefs.contains(value)) {
-        //    Item item = createItem("DatabaseReference");
-            Item item = createItem("CrossReference");
-            // FB:FBrf0055969
-            if (value.contains(":")) {
-                String[] bits = value.split(":");
-                if (bits.length == 2) {
-                    String db = bits[0];
-                    dataSource = getDataSourceCodeName(db);
-                    value = bits[1];
-                    // LOG.info("GOTYA dbref: " + bits[1]);
-                }
-                if (bits.length == 3) {
-                    // for TAIR reference like
-                    // TAIR:Publication:501682431
-                    String db = bits[0];
-                    dataSource = getDataSourceCodeName(db);
-                    value = bits[1] + ":" + bits[2];
-                    LOG.info("GOTYA dbref: " + bits[1] + "--" + bits[2]);
-                }
-            }
-            LOG.info("GOTYA create xref: " + value);
-            item.setAttribute("identifier", value);
-            if (StringUtils.isNotEmpty(dataSource)) {
-                item.setReference("source", getDataSource(dataSource));
-            }
-            dbRefs.add(value);
-            store(item);
-            LOG.info("returning DBXREF identifier: " + item.getIdentifier());
-            return item.getIdentifier();
-        }
-        return null;
-    }
 
     private String newPublication(String codes) throws ObjectStoreException {
         String pubRefId = null;
@@ -702,7 +616,6 @@ LOG.info("AAa " + qualifier  + "-" + goId + "-" + withText + "=" + productId);
         for (int i = 0; i < array.length; i++) {
             if (array[i].startsWith("PMID:")) {
                 String pubMedId = array[i].substring(5);
-                LOG.info("AAA2 pubmed " + pubMedId);
                 if (StringUtil.allDigits(pubMedId)) {
                     pubRefId = publications.get(pubMedId);
                     if (pubRefId == null) {
@@ -713,20 +626,14 @@ LOG.info("AAa " + qualifier  + "-" + goId + "-" + withText + "=" + productId);
                     }
                 }
             } else {
-                LOG.info("GOTYA " + array[i]);
                 xrefs.add(array[i]);
             }
         }
         // PMID may be first or last so we can't process xrefs until we've looked at all IDs
         if (StringUtils.isNotEmpty(pubRefId)) {
-//            for (String xref : xrefs) {
-//                LOG.info("AAdd xref " + xref);
             createXrefs(pubRefId, xrefs);
- //           }
         }
         if (item != null) {
-            // LOG.info("2COLL " + refIds.getRefIds());
-            // item.addCollection(refIds);
             store(item);
         }
         LOG.info("pubrefid: " + pubRefId);
@@ -743,7 +650,6 @@ LOG.info("AAa " + qualifier  + "-" + goId + "-" + withText + "=" + productId);
         for (String xref : xrefs) {
 
             String dataSource = null;
-            //Item item = createItem("DatabaseReference");
             // FB:FBrf0055969
             if (xref.contains(":")) {
                 String[] bits = xref.split(":");
@@ -758,9 +664,10 @@ LOG.info("AAa " + qualifier  + "-" + goId + "-" + withText + "=" + productId);
                     String db = bits[0];
                     dataSource = getDataSourceCodeName(db);
                     xref = bits[1] + ":" + bits[2];
-                    LOG.info("GOTYA dbref: " + bits[1] + "--" + bits[2]);
+//                    LOG.info("GOTYA dbref: " + bits[1] + "--" + bits[2]);
                 }
             }
+            // create dbxref only if does not exist yet
             if (!xrefPub.containsKey(xref)) {
                 createDbxrefItem(pubRefId, xref, dataSource);
                 xrefPub.put(xref, pubRefId);
@@ -784,57 +691,6 @@ LOG.info("AAa " + qualifier  + "-" + goId + "-" + withText + "=" + productId);
         item.setReference("subject", pubRefId);
         store(item);
     }
-
-
-
-
-
-    private String createDbReference(String value)
-        throws ObjectStoreException {
-        if (StringUtils.isEmpty(value)) {
-            return null;
-        }
-        String dataSource = null;
-        if (!dbRefs.contains(value)) {
-        //    Item item = createItem("DatabaseReference");
-            Item item = createItem("CrossReference");
-            // FB:FBrf0055969
-            if (value.contains(":")) {
-                String[] bits = value.split(":");
-                if (bits.length == 2) {
-                    String db = bits[0];
-                    dataSource = getDataSourceCodeName(db);
-                    value = bits[1];
-                    // LOG.info("GOTYA dbref: " + bits[1]);
-                }
-                if (bits.length == 3) {
-                    // for TAIR reference like
-                    // TAIR:Publication:501682431
-                    String db = bits[0];
-                    dataSource = getDataSourceCodeName(db);
-                    value = bits[1] + ":" + bits[2];
-                    LOG.info("GOTYA dbref: " + bits[1] + "--" + bits[2]);
-                }
-            }
-            LOG.info("GOTYA create xref: " + value);
-            item.setAttribute("identifier", value);
-            if (StringUtils.isNotEmpty(dataSource)) {
-                item.setReference("source", getDataSource(dataSource));
-            }
-            dbRefs.add(value);
-            store(item);
-            LOG.info("returning DBXREF identifier: " + item.getIdentifier());
-            return item.getIdentifier();
-        }
-        return null;
-    }
-
-
-
-
-
-
-
 
 
     private Item newOrganism(String taxonId) throws ObjectStoreException {
