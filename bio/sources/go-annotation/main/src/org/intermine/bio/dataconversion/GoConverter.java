@@ -109,7 +109,31 @@ public class GoConverter extends BioFileConverter
         WITH_TYPES.put("FB", "Gene");
         WITH_TYPES.put("UniProt", "Protein");
         WITH_TYPES.put("NCBI_gi", "Gene");
+        WITH_TYPES.put("GenBank", "Gene");
+
+        WITH_TYPES.put("AGI_LocusCode", "Gene");
+        WITH_TYPES.put("AGI_Locuscode", "Gene");
+        WITH_TYPES.put("AGI_LOCUSCode", "Gene");
+        WITH_TYPES.put("AGI_LOCUSCODE", "Gene");
+        WITH_TYPES.put("AGI_LocusCOde", "Gene");
+        WITH_TYPES.put("agi_locuscode", "Gene");
+        WITH_TYPES.put("Agi_locuscode", "Gene");
+        WITH_TYPES.put("AGI_locuscode", "Gene");
+        WITH_TYPES.put("AGI_locusCode", "Gene");
+        WITH_TYPES.put("AGi_LocusCode", "Gene");
+
+        WITH_TYPES.put("ECOGENE", "Gene");
+        WITH_TYPES.put("TIGR_Ath1", "Gene");
+        WITH_TYPES.put("TAIR", "Gene");
+        WITH_TYPES.put("Tair", "Gene");
+        WITH_TYPES.put("GenBank", "Gene");
+        WITH_TYPES.put("NCBI_Gene", "Gene");
+
+        WITH_TYPES.put("NCBI_GP", "Protein");
         WITH_TYPES.put("SWISS-PROT", "Protein");
+        WITH_TYPES.put("Swiss-Prot", "Protein");
+        WITH_TYPES.put("UniProtKB", "Protein");
+        WITH_TYPES.put("PIR", "Protein");
     }
 
     // read config file that has specific settings for each organism, key is taxon id
@@ -636,7 +660,7 @@ public class GoConverter extends BioFileConverter
         if (item != null) {
             store(item);
         }
-        LOG.info("pubrefid: " + pubRefId);
+        LOG.debug("pubrefid: " + pubRefId);
         return pubRefId;
     }
 
@@ -645,8 +669,7 @@ public class GoConverter extends BioFileConverter
      * @param xrefs
      * @throws ObjectStoreException
      */
-    private void createXrefs(String pubRefId, Set<String> xrefs)
-            throws ObjectStoreException {
+    private void createXrefs(String pubRefId, Set<String> xrefs) throws ObjectStoreException {
         for (String xref : xrefs) {
 
             String dataSource = null;
@@ -740,7 +763,6 @@ public class GoConverter extends BioFileConverter
 
         protected void addPublicationRefId(String publicationRefId) {
             if (publicationRefId != null) {
-                LOG.info("PUB " + publicationRefId);
                 publicationRefIds.add(publicationRefId);
             }
         }
