@@ -234,6 +234,13 @@ public class GoConverter extends BioFileConverter
             if (array.length >= 16) {
                 annotationExtension = array[15];
             }
+
+            // to add dbref like TAIR:Communication:501714663
+            // only ath, i think
+            if (!array[5].contains("PMID") && taxonId.equalsIgnoreCase("3702")) {
+                annotationExtension = array[5];
+            }
+
             if (StringUtils.isNotEmpty(strEvidence)) {
                 storeEvidenceCode(strEvidence);
             } else {
@@ -271,6 +278,7 @@ public class GoConverter extends BioFileConverter
                     allEvidenceForAnnotation = new LinkedHashSet<Evidence>();
                     allEvidenceForAnnotation.add(evidence);
                     goTermGeneToEvidence.put(key, allEvidenceForAnnotation);
+
                     Integer storedAnnotationId = createGoAnnotation(productIdentifier, type,
                             goTermIdentifier, organism, qualifier, dataSource, dataSourceCode,
                             annotationExtension);
