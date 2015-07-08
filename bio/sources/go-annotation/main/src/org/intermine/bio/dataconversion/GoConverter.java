@@ -155,7 +155,6 @@ public class GoConverter extends BioFileConverter
                 LOG.info("Unable to find annotationType property for " + "taxon: " + taxonId
                         + " in file: " + PROP_FILE + ".  Creating genes by default.");
             }
-            LOG.info("DDD in! " + annotationType);
             Config config = new Config(identifier, readColumn, annotationType);
             configs.put(taxonId, config);
         }
@@ -204,7 +203,8 @@ public class GoConverter extends BioFileConverter
             String strEvidence = array[6];
             String withText = array[7];
 
-LOG.info("AAa " + qualifier  + "-" + goId + "-" + withText + "=" + productId);
+            LOG.debug("GO annotation summary for " + goId + ": " + qualifier  + "-" + withText
+                    + "=" + productId);
 
             String annotationExtension = null;
             if (array.length >= 16) {
