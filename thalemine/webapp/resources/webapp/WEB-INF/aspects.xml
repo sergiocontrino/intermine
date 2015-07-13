@@ -61,5 +61,78 @@
     </intro-text>
     <aspect-source name="PantherDB" url="http://www.pantherdb.org/genes/"/>
   </aspect>
-
+ 
+ <aspect name="Genes">
+    <subtitle>Associated Genes</subtitle>
+    <intro-text>
+    	Associated Genes
+    </intro-text>
+   <aspect-source name="TAIR" url="http://www.arabidopsis.org"/>
+ </aspect>
+ 
+ <aspect name="Alleles">
+    <subtitle>Alleles and Phenotypes</subtitle>
+    <intro-text>
+     Alleles and Phenotypes.
+    </intro-text>
+    <aspect-source name="TAIR Polymorphism"/>
+ </aspect>
+ 
+ <aspect name="Stocks">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+ <aspect name="Accession">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+ <aspect name="Genetics">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+ <aspect name="Phenotypes">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+  <aspect name="Stock Availability">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+ <aspect name="Observed In">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+ <aspect name="Other">
+    <subtitle>Germplasms/Seed Stocks</subtitle>
+    <intro-text>
+     ABRC/NASC seed stocks or mutant lines.
+    </intro-text>
+    <aspect-source name="ABRC/NASC Germplasms/Seed Stocks"/>
+ </aspect>
+ 
+ 
 </aspects>
