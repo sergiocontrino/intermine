@@ -35,7 +35,7 @@ public final class ServiceManager implements IServiceManager {
 	private static HashMap<String, BusinessService> serviceCache = new HashMap<String, BusinessService>();
 
 	private ServiceRegistry registry;
-	private IComponentManager componentManager;
+	private IComponentManager componentManager = ComponentManager.getInstance();
 	
 	private ServiceManager(){
 		

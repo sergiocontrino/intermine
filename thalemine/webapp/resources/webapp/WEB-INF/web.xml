@@ -3171,7 +3171,7 @@ The different token types are:
   
   <filter-mapping> 
     <filter-name>contextInitializer</filter-name>
-    <url-pattern>/service/*</url-pattern> 
+    <url-pattern>/*</url-pattern> 
   </filter-mapping> 
   <!-- end Initializing Filter -->
 
