@@ -3,11 +3,11 @@ package org.thalemine.web.query;
 import org.apache.log4j.Logger;
 import org.intermine.web.logic.session.SessionMethods;
 import org.intermine.web.util.URLGenerator;
+import org.thalemine.web.context.WebApplicationContextLocator;
 import org.thalemine.web.domain.AuthorVO;
 import org.thalemine.web.domain.PhenotypeVO;
 import org.thalemine.web.domain.PublicationVO;
 import org.thalemine.web.domain.StockVO;
-import org.thalemine.web.utils.WebApplicationContextLocator;
 
 import javax.servlet.http.HttpServletRequest;
 

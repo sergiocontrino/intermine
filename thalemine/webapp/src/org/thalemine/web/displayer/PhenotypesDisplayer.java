@@ -36,6 +36,7 @@ import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
 import org.intermine.web.util.URLGenerator;
+import org.thalemine.web.context.WebApplicationContextLocator;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.PhenotypeVO;
 import org.thalemine.web.domain.StockGenotypeVO;
@@ -43,13 +44,14 @@ import org.thalemine.web.domain.StockGrowthRequirementsVO;
 import org.thalemine.web.domain.StockVO;
 import org.thalemine.web.domain.StrainVO;
 import org.thalemine.web.query.StockQueryService;
+import org.thalemine.web.service.StockService;
+import org.thalemine.web.service.core.ServiceConfig;
+import org.thalemine.web.service.core.ServiceManager;
 import org.thalemine.web.utils.QueryServiceLocator;
-import org.thalemine.web.utils.WebApplicationContextLocator;
 import org.intermine.pathquery.OuterJoinStatus;
 
 public class PhenotypesDisplayer extends ReportDisplayer {
-
-	private static final String STOCK_SERVICE = "StockQueryService";
+	
 	protected static final Logger log = Logger.getLogger(PhenotypesDisplayer.class);
 
 	public PhenotypesDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
@@ -63,32 +65,28 @@ public class PhenotypesDisplayer extends ReportDisplayer {
 		Exception exception = null;
 		InterMineObject object = null;
 
-		String objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();
 		List<PhenotypeVO> resultList = new ArrayList<PhenotypeVO>();
-
 		StockGrowthRequirementsVO growthConditions = null;
 
-		String contextURL = null;
-		String stockServiceUrl = null;
 
 		try {
 
-			contextURL = WebApplicationContextLocator.getServiceUrl(request);
-			log.info("Service Context URL:" + contextURL);
-
-			StockQueryService stockService = (StockQueryService) QueryServiceLocator.getService(STOCK_SERVICE, request);
-			stockServiceUrl = stockService.getServiceUrl();
-			log.info("Stock Service Context URL:" + contextURL);
-
-			objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();
-
-			request.setAttribute("className", objectClassName);
-			log.info("Phenotypes Displayer:" + "Class Name:" + objectClassName);
-
 			object = reportObject.getObject();
-
-			resultList = stockService.getStockPhenotypes(object);
-			growthConditions = getGrowthConditions(stockService, object);
+			
+			StockService businesservice = (StockService) ServiceManager.getInstance().getService(ServiceConfig.STOCK_SERVICE);
+			
+			if (businesservice!=null){
+				log.info("Calling Stock Service:" + businesservice);
+				
+				growthConditions = businesservice.getGrowthRequirements(object);
+				
+				log.info("Stock Grow VO:" + growthConditions);
+				
+				resultList = businesservice.getStockPhenotypes(object);
+				
+				log.info("Phenotype VO:" + resultList);
+				
+			}
 
 		} catch (Exception e) {
 			exception = e;
@@ -104,32 +102,10 @@ public class PhenotypesDisplayer extends ReportDisplayer {
 				request.setAttribute("list", resultList);
 				request.setAttribute("id", object.getId());
 				request.setAttribute("growthConditions", growthConditions);
-				request.setAttribute("contextURL", contextURL);
-				request.setAttribute("stockServiceUrl", stockServiceUrl);
+
 			}
 		}
 
-	}
-
-	private StockGrowthRequirementsVO getGrowthConditions(StockQueryService service, InterMineObject object) {
-
-		Exception exception = null;
-		StockGrowthRequirementsVO result = null;
-
-		try {
-
-			result = service.getStockGrowthRequirements(object);
-
-		} catch (Exception e) {
-
-		} finally {
-			if (exception != null) {
-				log.error("Error occurred during retrieving Stock Growth Conditions.Phenotypes Displayer."
-						+ ";Message:" + exception.getMessage() + ";Cause:" + exception.getCause());
-			}
-		}
-
-		return result;
 	}
 
 }

@@ -3,8 +3,7 @@ package org.thalemine.web.query;
 import org.apache.log4j.Logger;
 import org.intermine.web.logic.session.SessionMethods;
 import org.intermine.web.util.URLGenerator;
-import org.thalemine.web.builder.StockAnnotationVOBuilder;
-import org.thalemine.web.builder.StockGrowthRequirementsVOBuilder;
+import org.thalemine.web.context.WebApplicationContextLocator;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.GeneModelVO;
 import org.thalemine.web.domain.GeneVO;
@@ -16,8 +15,9 @@ import org.thalemine.web.domain.StockGenotypeVO;
 import org.thalemine.web.domain.StockGrowthRequirementsVO;
 import org.thalemine.web.domain.StockVO;
 import org.thalemine.web.domain.StrainVO;
+import org.thalemine.web.domain.builder.StockAnnotationVOBuilder;
+import org.thalemine.web.domain.builder.StockGrowthRequirementsVOBuilder;
 import org.thalemine.web.utils.QueryServiceLocator;
-import org.thalemine.web.utils.WebApplicationContextLocator;
 
 import javax.servlet.http.HttpServletRequest;
 

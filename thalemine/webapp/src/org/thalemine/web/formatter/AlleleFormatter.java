@@ -37,7 +37,7 @@ public class AlleleFormatter {
 			}
 		}
 
-		log.info("Name:" + result);
+		log.debug("Name:" + result);
 		return result;
 
 	}
@@ -75,7 +75,7 @@ public class AlleleFormatter {
 			}
 		}
 
-		log.info("Name:" + result);
+		log.debug("Name:" + result);
 		return result;
 
 	}

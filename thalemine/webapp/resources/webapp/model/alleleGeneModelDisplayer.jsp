@@ -73,7 +73,7 @@
 
 		</c:when>
 		<c:otherwise>
-    			No Allele Data Available
+    			No Gene Model Data Available
   		</c:otherwise>
 	</c:choose>
 

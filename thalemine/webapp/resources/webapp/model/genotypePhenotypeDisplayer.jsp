@@ -7,7 +7,7 @@
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles"%>
 <%@ taglib uri="/WEB-INF/string.tld" prefix="s"%>
 
-<!-- genotypeAllelesDisplayer.jsp -->
+<!-- genotypePhenotypeDisplayer.jsp -->
 
 <c:set var="object" value="${intermineobject}" />
 <c:set var="phenotypes" value="${object.phenotypesObserved}" />
@@ -50,4 +50,4 @@
 
 
 
-<!-- /alleleAttributesDisplayer.jsp -->
+<!-- /genotypePhenotypeDisplayer.jsp -->

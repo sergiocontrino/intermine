@@ -52,65 +52,6 @@ public class StockVO {
 
 	}
 
-	/*
-	 * public StockVO(List<ResultElement> resElement) {
-	 * 
-	 * // Genotype Attributes
-	 * 
-	 * genotypeObjectId = ((resElement.get(0) != null) &&
-	 * (resElement.get(0).getField() != null)) ? resElement.get(0)
-	 * .getField().toString() : "&nbsp;";
-	 * 
-	 * genotypeDisplayName = ((resElement.get(1) != null) &&
-	 * (resElement.get(1).getField() != null)) ? resElement
-	 * .get(1).getField().toString() : "&nbsp;";
-	 * 
-	 * genotypeName = ((resElement.get(2) != null) &&
-	 * (resElement.get(2).getField() != null)) ? resElement.get(2)
-	 * .getField().toString() : "&nbsp;";
-	 * 
-	 * genotypePrimaryIdentifier = ((resElement.get(3) != null) &&
-	 * (resElement.get(3).getField() != null)) ? resElement
-	 * .get(3).getField().toString() : "&nbsp;";
-	 * 
-	 * // Stock Attributes stockObjectId = ((resElement.get(4) != null) &&
-	 * (resElement.get(4).getField() != null)) ? resElement.get(4)
-	 * .getField().toString() : "&nbsp;";
-	 * 
-	 * germplasmName = ((resElement.get(5) != null) &&
-	 * (resElement.get(5).getField() != null)) ? resElement.get(5)
-	 * .getField().toString() : "&nbsp;";
-	 * 
-	 * stockPrimaryIdentifier = ((resElement.get(6) != null) &&
-	 * (resElement.get(6).getField() != null)) ? resElement
-	 * .get(6).getField().toString() : "&nbsp;";
-	 * 
-	 * stockName = ((resElement.get(7) != null) && (resElement.get(7).getField()
-	 * != null)) ? resElement.get(7) .getField().toString() : "&nbsp;";
-	 * 
-	 * germplasmPrimaryAccession = ((resElement.get(8) != null) &&
-	 * (resElement.get(8).getField() != null)) ? resElement
-	 * .get(8).getField().toString() : "&nbsp;";
-	 * 
-	 * stockAccession = ((resElement.get(9) != null) &&
-	 * (resElement.get(9).getField() != null)) ? resElement.get(9)
-	 * .getField().toString() : "&nbsp;";
-	 * 
-	 * String backgroundAccessionId = ((resElement.get(10) != null) &&
-	 * (resElement.get(10).getField() != null)) ? resElement
-	 * .get(10).getField().toString() : "&nbsp;";
-	 * 
-	 * String backgroundAccessionAbbrName = ((resElement.get(11) != null) &&
-	 * (resElement.get(11).getField() != null)) ? resElement
-	 * .get(11).getField().toString() : "&nbsp;";
-	 * 
-	 * this.strainAccession = new StrainVO(backgroundAccessionId,
-	 * backgroundAccessionAbbrName );
-	 * 
-	 * 
-	 * }
-	 */
-
 	public String getStockObjectId() {
 		return stockObjectId;
 	}

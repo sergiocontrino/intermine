@@ -26,4 +26,4 @@
 	
 </c:choose>
 
-<!-- /genotypeName.jsp -->
+<!-- /alleleName.jsp -->

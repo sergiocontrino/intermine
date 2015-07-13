@@ -47,7 +47,7 @@ public class GenotypeFormatter {
 			}
 		}
 		
-		log.info("Genotype Alleles Name:" + result);
+		log.debug("Genotype Alleles Name:" + result);
 		return result;
 
 	}
@@ -86,7 +86,7 @@ public class GenotypeFormatter {
 			}
 		}
 
-		log.info("Genotype Genes Name:" + result);
+		log.debug("Genotype Genes Name:" + result);
 		
 		return result;
 
@@ -120,7 +120,7 @@ public class GenotypeFormatter {
 			result = builder.toString();
 		}
 
-		log.info("Genotype Formatted Name:" + result);
+		log.debug("Genotype Formatted Name:" + result);
 
 		return result;
 

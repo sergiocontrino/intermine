@@ -36,6 +36,7 @@ import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
 import org.intermine.web.util.URLGenerator;
+import org.thalemine.web.context.WebApplicationContextLocator;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.GeneModelVO;
 import org.thalemine.web.domain.PhenotypeVO;
@@ -43,13 +44,15 @@ import org.thalemine.web.domain.StockVO;
 import org.thalemine.web.domain.StrainVO;
 import org.thalemine.web.query.AlleleQueryService;
 import org.thalemine.web.query.StockQueryService;
+import org.thalemine.web.service.AlleleService;
+import org.thalemine.web.service.StockService;
+import org.thalemine.web.service.core.ServiceConfig;
+import org.thalemine.web.service.core.ServiceManager;
 import org.thalemine.web.utils.QueryServiceLocator;
-import org.thalemine.web.utils.WebApplicationContextLocator;
 import org.intermine.pathquery.OuterJoinStatus;
 
 public class GeneModelDisplayer extends ReportDisplayer {
 
-	private static final String ALLELE_SERVICE = "AlleleQueryService";
 	protected static final Logger log = Logger.getLogger(GeneModelDisplayer.class);
 
 	public GeneModelDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
@@ -61,28 +64,22 @@ public class GeneModelDisplayer extends ReportDisplayer {
 	public void display(HttpServletRequest request, ReportObject reportObject) {
 
 		Exception exception = null;
-		Allele allele = null;
-		
-		String objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();
+		InterMineObject object = null;
 		List<GeneModelVO> resultList = new ArrayList<GeneModelVO>();
 
 		try {
 			
-			String contextURL = WebApplicationContextLocator.getServiceUrl(request);
-			log.info("Service Context URL:" + contextURL);
-
-			AlleleQueryService alleleService = (AlleleQueryService) QueryServiceLocator.getService(ALLELE_SERVICE, request);
-			String alleleServiceUrl = alleleService.getServiceUrl();
-			log.info("Allele Service Context URL:" + contextURL);
+			AlleleService businesservice = (AlleleService) ServiceManager.getInstance().getService(ServiceConfig.ALLELE_SERVICE);
+			object = reportObject.getObject();
 			
-			request.setAttribute("className", objectClassName);
-			log.info("Allele/Gene Model Displayer:" + "Class Name:" + objectClassName);
-			
-			allele = (Allele) reportObject.getObject();		
-
-			log.info("Allele/Gene Model Displayer:" + "Allele:" + allele.getPrimaryIdentifier());
-			
-			resultList = alleleService.getGeneModels(allele, "allele");
+			if (businesservice!=null){
+				log.info("Calling Allele Service:" + businesservice);
+				
+				resultList = businesservice.getGeneModels(object.getId().toString());
+				
+				log.info("Allele/Gene Model Displayer VO:" + resultList);
+				
+			}
 
 		} catch (Exception e) {
 			exception = e;

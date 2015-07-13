@@ -43,6 +43,7 @@ import org.intermine.web.displayer.ReportDisplayer;
 import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
+import org.thalemine.web.context.WebApplicationContextLocator;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.GeneModelVO;
 import org.thalemine.web.domain.StrainVO;
@@ -50,14 +51,15 @@ import org.intermine.pathquery.OuterJoinStatus;
 import org.thalemine.web.domain.AlleleSummaryVO;
 import org.thalemine.web.query.AlleleQueryService;
 import org.thalemine.web.query.StockQueryService;
+import org.thalemine.web.service.StockService;
+import org.thalemine.web.service.core.ServiceConfig;
+import org.thalemine.web.service.core.ServiceManager;
 import org.thalemine.web.utils.QueryServiceLocator;
-import org.thalemine.web.utils.WebApplicationContextLocator;
 
  
 public class StockAccessionDisplayer extends ReportDisplayer
 {
-	
-	private static final String STOCK_SERVICE = "StockQueryService";
+
 	protected static final Logger log = Logger.getLogger(StockAccessionDisplayer.class);
 
     /**
@@ -74,26 +76,24 @@ public class StockAccessionDisplayer extends ReportDisplayer
        
     	Exception exception = null;
 		
-		String objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();	
 		List<StrainVO> resultList = new ArrayList<StrainVO>();
 		
 		try{
-			
-			String contextURL = WebApplicationContextLocator.getServiceUrl(request);
-			log.info("Service Context URL:" + contextURL);
-
-			StockQueryService service = (StockQueryService) QueryServiceLocator.getService(STOCK_SERVICE, request);
-			String serviceUrl = service.getServiceUrl();
-			log.info("Stock Service Context URL:" + serviceUrl);
-			
-			request.setAttribute("className", objectClassName);
-			log.info("Stock/Accession Displayer:" + "Class Name:" + objectClassName);
 			
 			InterMineObject object = reportObject.getObject();	
 
 			log.info("Stock/Accession Displayer:" + "Stock:" + object);
 			
-			resultList = service.getAccession(object);
+			StockService businesservice = (StockService) ServiceManager.getInstance().getService(ServiceConfig.STOCK_SERVICE);
+			
+			if (businesservice!=null){
+				log.info("Calling Stock Service:" + businesservice);
+				
+				resultList = businesservice.getNaturalAccession(object);
+				
+				log.info("Stock/Accession Result:" + resultList);
+				
+			}
 			
 		}catch (Exception e) {
 			exception = e;

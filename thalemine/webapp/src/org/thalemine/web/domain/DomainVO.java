@@ -37,11 +37,11 @@ public abstract class DomainVO {
 	protected String formatValue(String type, String value){
 		String result = value;
 	
-		log.info("Value:" + value);
+		log.debug("Value:" + value);
 		
 		if (value!=null && !value.isEmpty()){
 			
-			log.info("Working on Value:" + type + ";" + value);
+			log.debug("Working on Value:" + type + ";" + value);
 			
 			if (type.equals("sequenceAlterationType") && value.equalsIgnoreCase("T-dna Insertion")){
 				result = "insertion (T-DNA Insertion)";  
@@ -68,7 +68,7 @@ public abstract class DomainVO {
 		}
 		
 		
-		log.info("Formatted Value:" +result);
+		log.debug("Formatted Value:" +result);
 		
 		return result;
 	}
@@ -78,7 +78,7 @@ public abstract class DomainVO {
 		String element = ((list.get(index) != null) && (list.get(index).getField() != null)) ? list.get(index).getField().toString()
 				: "N/A";
 					
-		log.info("Element:" + element);
+		log.debug("Element:" + element);
 
 		if (element!=null && ((element.equalsIgnoreCase("unknown") || (element.equalsIgnoreCase("null"))))){
 			element = "N/A";
@@ -88,7 +88,7 @@ public abstract class DomainVO {
 			element = "N/A";
 		}
 		
-		log.info("Create element:" + element);
+		log.debug("Create element:" + element);
 		
 		return element;
 

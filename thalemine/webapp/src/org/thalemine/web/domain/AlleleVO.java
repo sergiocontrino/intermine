@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 public class AlleleVO extends DomainVO{
 
-	protected static final Logger LOG = Logger.getLogger(AlleleVO.class);
+	protected static final Logger log = Logger.getLogger(AlleleVO.class);
 		
 	private String primaryIdentifier;
 	private String objectId;
@@ -102,7 +102,7 @@ public class AlleleVO extends DomainVO{
 	public String formatValue(String type, String value){
 		String result = value;
 		
-		LOG.info("Value Object Type:" + type +";" + "Value:" + value);
+		log.debug("Value Object Type:" + type +";" + "Value:" + value);
 		
 		if (value!=null && !value.isEmpty()){
 			if (type.equals("sequenceAlterationType") && value.equalsIgnoreCase("T-dna Insertion")){

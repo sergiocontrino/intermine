@@ -66,8 +66,6 @@ public class AuthorVO extends DomainVO {
 	public String toString(){
 		
 		return name;
-		
-		
 	}
 	
 

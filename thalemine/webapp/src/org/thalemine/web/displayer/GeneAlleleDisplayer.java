@@ -33,139 +33,65 @@ import org.intermine.web.displayer.ReportDisplayer;
 import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
-import org.thalemine.web.builder.AlleleVOBuilder;
+import org.thalemine.web.context.WebApplicationContextLocator;
 import org.thalemine.web.domain.AlleleVO;
+import org.thalemine.web.domain.builder.AlleleVOBuilder;
 import org.thalemine.web.query.StockQueryService;
+import org.thalemine.web.service.AlleleService;
+import org.thalemine.web.service.StockService;
+import org.thalemine.web.service.core.ServiceConfig;
+import org.thalemine.web.service.core.ServiceManager;
 import org.thalemine.web.utils.QueryServiceLocator;
-import org.thalemine.web.utils.WebApplicationContextLocator;
 import org.intermine.pathquery.OuterJoinStatus;
 
-
 public class GeneAlleleDisplayer extends ReportDisplayer {
-	
-	private static final String STOCK_SERVICE = "StockQueryService";
-	protected static final Logger LOG = Logger.getLogger(GeneAlleleDisplayer.class);
+
+	protected static final Logger log = Logger.getLogger(GeneAlleleDisplayer.class);
 	PathQueryExecutor exec;
-	
+
 	public GeneAlleleDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
-	      super(config, im);
+		super(config, im);
 	}
 
 	@Override
-	  @SuppressWarnings("unchecked")
-	  public void display(HttpServletRequest request, ReportObject reportObject) {
-		
-		HttpSession session = request.getSession();
-	    final InterMineAPI im = SessionMethods.getInterMineAPI(session);
-	      
-		String className = reportObject.getClassDescriptor().getUnqualifiedName();
-        request.setAttribute("className", className);
-        
-        String contextURL = WebApplicationContextLocator.getServiceUrl(request);
-		LOG.info("Service Context URL:" + contextURL);
+	@SuppressWarnings("unchecked")
+	public void display(HttpServletRequest request, ReportObject reportObject) {
 
-		StockQueryService stockService = (StockQueryService) QueryServiceLocator.getService(STOCK_SERVICE, request);
-		String stockServiceUrl = stockService.getServiceUrl();
-		LOG.info("Stock Service Context URL:" + contextURL);
-		
+		InterMineObject object = reportObject.getObject();
+		Exception exception = null;
+		Gene gene = (Gene) object;
+		List<AlleleVO> alleleList = new ArrayList<AlleleVO>();
 
-	    LOG.info("Gene Allele Displayer:" + "Class Name:"  + className);
-	     
-	     Gene gene = (Gene)reportObject.getObject();
-	     
-	     LOG.info("Generating Gene/Alleles Report. Gene Id:" + gene.getPrimaryIdentifier());
-	     
-	     PathQuery query = getAllelesResultSet(gene.getId());
-	     Profile profile = SessionMethods.getProfile(session);
-	     
-	     exec = im.getPathQueryExecutor(profile);
-	     ExportResultsIterator result;
-	     
-	      try {
-	        result = exec.execute(query);
-	      } catch (ObjectStoreException e) {
-	        
-	        LOG.error("Had an ObjectStoreException in Gene/Alleles Displayer java: "+e.getMessage());
-	        return;
-	      }
+		try {
 
-	      ArrayList<AlleleVO> alleleList = new ArrayList<AlleleVO>();
-	      
-	      while (result.hasNext()) {
-	       List<ResultElement> resElement = result.next();
-	       //AlleleVO item = new AlleleVO(resElement);
-	        
-	      AlleleVOBuilder builder = new AlleleVOBuilder();
-	      AlleleVO item1 = builder.build(resElement);
-	        
-	        alleleList.add(item1);
-	        LOG.info("Allele:" + item1);
-	      }
-	      
-	   // for accessing this within the jsp
-	      request.setAttribute("geneName",gene.getPrimaryIdentifier());
-	      request.setAttribute("list",alleleList);
-	      request.setAttribute("id",gene.getId());
-	      request.setAttribute("contextURL",contextURL);
-	      request.setAttribute("stockServiceUrl",stockServiceUrl);
+			AlleleService businesservice = (AlleleService) ServiceManager.getInstance().getService(
+					ServiceConfig.ALLELE_SERVICE);
+
+			if (businesservice != null) {
+				log.info("Calling Allele Service:" + businesservice);
+
+				alleleList = businesservice.getAllelesByGene(object.getId().toString());
+
+				log.info("Allele VO Result:" + alleleList);
+
+			}
+		} catch (Exception e) {
+			exception = e;
+		}finally {
+
+			if (exception != null) {
+				log.error("Error Gene/Allele Displayer" + ";Message:" + exception.getMessage()
+						+ ";Cause:" + exception.getCause());
+				return;
+			} else {
+				
+				// for accessing this within the jsp
+				request.setAttribute("geneName", gene.getPrimaryIdentifier());
+				request.setAttribute("list", alleleList);
+				request.setAttribute("id", object.getId().toString());
+			}
+		}
+
 	}
 
-	
-	private PathQuery getAllelesResultSet(Integer id){
-		
-		 PathQuery query = new PathQuery(im.getModel());
-		 
-		// Select the output columns:
-		 
-	        query.addViews("Gene.affectedAlleles.id",
-	        			   "Gene.affectedAlleles.primaryIdentifier",
-	        			   "Gene.affectedAlleles.name",
-	                       "Gene.affectedAlleles.mutagen.name",
-	                       "Gene.affectedAlleles.sequenceAlterationType.name", 
-	                       "Gene.affectedAlleles.mutationSite.name",
-	                       "Gene.affectedAlleles.inheritanceMode.name",
-	                       "Gene.affectedAlleles.alleleClass.name"
-	                       
-	        		);
-	        
-	     // Add orderby
-	   	    query.addOrderBy("Gene.affectedAlleles.name", OrderDirection.ASC);
-		    	        
-	        
-		 // Outer Joins
-	        // Show all information about these relationships if they exist, but do not require that they exist.
-	        query.setOuterJoinStatus("Gene.affectedAlleles.mutagen", OuterJoinStatus.OUTER);
-	        query.setOuterJoinStatus("Gene.affectedAlleles.sequenceAlterationType", OuterJoinStatus.OUTER);
-	        query.setOuterJoinStatus("Gene.affectedAlleles.mutationSite", OuterJoinStatus.OUTER);
-	        query.setOuterJoinStatus("Gene.affectedAlleles.inheritanceMode", OuterJoinStatus.OUTER);
-	        query.setOuterJoinStatus("Gene.affectedAlleles.alleleClass", OuterJoinStatus.OUTER);
-	        
-		    query.addConstraint(Constraints.eq("Gene.id",id.toString()));
-		    return query;
-		
-	}
-	
-	
-	private PathQuery getDataSet(){
-		
-		 PathQuery query = new PathQuery(im.getModel());
-		 
-		// Select the output columns:
-		 
-		// Add orderby
-	        query.addOrderBy("Allele.affectedGenes.affectedAlleles.name", OrderDirection.ASC);
-	        
-	        query.addViews(
-	        		"DataSet.id",
-	        		"DataSet.name",
-	                "DataSet.dataSource.name",
-	                "DataSet.url"
-	        		);
-
-	        // Filter the results with the following constraints:
-	        query.addConstraint(Constraints.eq("DataSet.name", "TAIR Polymorphism"));
-	        
-	        return query;
-		
-	}
 }

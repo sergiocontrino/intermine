@@ -45,19 +45,21 @@ import org.intermine.web.displayer.ReportDisplayer;
 import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
+import org.thalemine.web.context.WebApplicationContextLocator;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.GeneModelVO;
 import org.intermine.pathquery.OuterJoinStatus;
 import org.thalemine.web.domain.AlleleSummaryVO;
 import org.thalemine.web.query.AlleleQueryService;
+import org.thalemine.web.service.AlleleService;
+import org.thalemine.web.service.core.ServiceConfig;
+import org.thalemine.web.service.core.ServiceManager;
 import org.thalemine.web.utils.QueryServiceLocator;
-import org.thalemine.web.utils.WebApplicationContextLocator;
 
  
 public class AlleleSummaryDisplayer extends ReportDisplayer
 {
 	
-	private static final String ALLELE_SERVICE = "AlleleQueryService";
 	protected static final Logger log = Logger.getLogger(GeneModelDisplayer.class);
 
     /**
@@ -73,28 +75,23 @@ public class AlleleSummaryDisplayer extends ReportDisplayer
     public void display(HttpServletRequest request, ReportObject reportObject) {
        
     	Exception exception = null;
-		Allele allele = null;
-		
-		String objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();	
+		InterMineObject object = null;
+			
 		List<AlleleSummaryVO> resultList = new ArrayList<AlleleSummaryVO>();
 		
 		try{
 			
-			String contextURL = WebApplicationContextLocator.getServiceUrl(request);
-			log.info("Service Context URL:" + contextURL);
-
-			AlleleQueryService alleleService = (AlleleQueryService) QueryServiceLocator.getService(ALLELE_SERVICE, request);
-			String alleleServiceUrl = alleleService.getServiceUrl();
-			log.info("Allele Service Context URL:" + contextURL);
+			AlleleService businesservice = (AlleleService) ServiceManager.getInstance().getService(ServiceConfig.ALLELE_SERVICE);
+			object = reportObject.getObject();
 			
-			request.setAttribute("className", objectClassName);
-			log.info("Allele/Summary Displayer:" + "Class Name:" + objectClassName);
-			
-			allele = (Allele) reportObject.getObject();		
-
-			log.info("Allele/Summary Displayer:" + "Allele:" + allele.getPrimaryIdentifier());
-			
-			resultList = alleleService.getAlleleSummary(allele);
+			if (businesservice!=null){
+				log.info("Calling Allele Service:" + businesservice);
+				
+				resultList = businesservice.getAlleleSummary(object.getId().toString());
+				
+				log.info("Allele/Summary Displayer VO:" + resultList);
+				
+			}
 			
 		}catch (Exception e) {
 			exception = e;

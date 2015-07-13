@@ -36,18 +36,22 @@ import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
 import org.intermine.web.util.URLGenerator;
+import org.thalemine.web.context.WebApplicationContextLocator;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.PhenotypeVO;
+import org.thalemine.web.domain.StockGrowthRequirementsVO;
 import org.thalemine.web.domain.StockVO;
 import org.thalemine.web.domain.StrainVO;
 import org.thalemine.web.query.StockQueryService;
+import org.thalemine.web.service.BusinessService;
+import org.thalemine.web.service.StockService;
+import org.thalemine.web.service.core.ServiceConfig;
+import org.thalemine.web.service.core.ServiceManager;
 import org.thalemine.web.utils.QueryServiceLocator;
-import org.thalemine.web.utils.WebApplicationContextLocator;
 import org.intermine.pathquery.OuterJoinStatus;
 
 public class StockPhenotypeDisplayer extends ReportDisplayer {
 
-	private static final String STOCK_SERVICE = "StockQueryService";
 	protected static final Logger log = Logger.getLogger(StockPhenotypeDisplayer.class);
 
 	public StockPhenotypeDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
@@ -59,46 +63,46 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 	public void display(HttpServletRequest request, ReportObject reportObject) {
 
 		Exception exception = null;
-		Gene gene = null;
-		Allele allele = null;
 		InterMineObject object = null;
-		
+
 		String objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();
 		List<StockVO> resultList = new ArrayList<StockVO>();
-		
-		String contextURL = null;
-		String stockServiceUrl = null;
-		
+
+		String className = null;
+		String itemId = null;
 
 		try {
-			
-			contextURL = WebApplicationContextLocator.getServiceUrl(request);
-			log.info("Service Context URL:" + contextURL);
 
-			StockQueryService stockService = (StockQueryService) QueryServiceLocator.getService(STOCK_SERVICE, request);
-			stockServiceUrl = stockService.getServiceUrl();
-			log.info("Stock Service Context URL:" + contextURL);
-			
 			objectClassName = reportObject.getClassDescriptor().getUnqualifiedName();
-			
+
 			request.setAttribute("className", objectClassName);
 			log.info("Gene StockPhenotype Displayer:" + "Class Name:" + objectClassName);
-			
+
 			object = reportObject.getObject();
 
-			if (objectClassName.equals("Gene")){
-				gene = (Gene) reportObject.getObject();
-				log.info("Generating StockPhenotype Report. Gene Id:" + gene.getPrimaryIdentifier());
-			}else if (objectClassName.equals("Allele"))
-			{
-				allele = (Allele) reportObject.getObject();
-				log.info("Generating StockPhenotype Report. Allele Id:" + allele.getPrimaryIdentifier());
-			}else{
-				throw new Exception("Unknown Object Type.");
-			}
+			StockService businesservice = (StockService) ServiceManager.getInstance().getService(
+					ServiceConfig.STOCK_SERVICE);
 
-			resultList = stockService.getStocks(object, objectClassName);
-			
+			if (businesservice != null) {
+				log.info("Calling Stock Service." + businesservice);
+
+				itemId = object.getId().toString();
+
+				if (objectClassName.equals("Gene")) {
+
+					className = "gene";
+
+				} else if (objectClassName.equals("Allele")) {
+					className = "allele";
+
+				} else {
+					throw new Exception("Unknown Object Type.");
+				}
+
+				resultList = businesservice.getStocksbyGeneticItem(itemId, className);
+
+				log.info("Stock/Phenotype VO:" + resultList);
+			}
 
 		} catch (Exception e) {
 			exception = e;
@@ -109,12 +113,11 @@ public class StockPhenotypeDisplayer extends ReportDisplayer {
 						+ ";Cause:" + exception.getCause());
 				return;
 			} else {
-				
-				// Set Request Attributes		
+
+				// Set Request Attributes
 				request.setAttribute("list", resultList);
-				request.setAttribute("id", object.getId());
-				request.setAttribute("contextURL",contextURL);
-			    request.setAttribute("stockServiceUrl",stockServiceUrl);
+				request.setAttribute("id", itemId);
+
 			}
 		}
 

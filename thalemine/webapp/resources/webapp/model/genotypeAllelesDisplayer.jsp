@@ -331,4 +331,4 @@ Unknown: Used when the inheritance type is not known or the information is not y
 
 
 
-<!-- /alleleAttributesDisplayer.jsp -->
+<!-- /genotypeAllelesDisplayer.jsp -->
