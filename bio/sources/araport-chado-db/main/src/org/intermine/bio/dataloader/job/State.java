@@ -16,8 +16,7 @@
 package org.intermine.bio.dataloader.job;
 
 /**
- * @author Dave Syer
- * @since 2.0
+ * 
  */
 public interface State {
 

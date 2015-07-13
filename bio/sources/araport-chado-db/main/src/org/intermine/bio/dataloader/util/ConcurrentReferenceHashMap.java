@@ -51,10 +51,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>If not explicitly specified, this implementation will use
  * {@linkplain SoftReference soft entry references}.
  *
- * @author Phillip Webb
- * @since 3.2
- * @param <K> the key type
- * @param <V> the value type
+ * 
  */
 public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implements ConcurrentMap<K, V> {
 

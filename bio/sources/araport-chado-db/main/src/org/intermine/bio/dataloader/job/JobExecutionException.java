@@ -21,7 +21,7 @@ package org.intermine.bio.dataloader.job;
  * exceptions because they signal a user error, or an inconsistent state between
  * the user's instructions and the data.
  * 
- * @author Dave Syer
+ *
  * 
  */
 @SuppressWarnings("serial")

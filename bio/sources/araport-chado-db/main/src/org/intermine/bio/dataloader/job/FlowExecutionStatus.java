@@ -18,9 +18,6 @@ package org.intermine.bio.dataloader.job;
 /**
  * Represents the status of {@link FlowExecution}.
  *
- * @author Dan Garrette
- * @author Dave Syer
- * @since 2.0
  */
 public class FlowExecutionStatus implements Comparable<FlowExecutionStatus> {
 

@@ -18,8 +18,7 @@
 package org.intermine.bio.dataloader.job;
 
 /**
- * Strategy interface for handling a {@link Step} on behalf of a {@link Job}.
- * 
+ *  
  * @author Dave Syer
  * 
  */

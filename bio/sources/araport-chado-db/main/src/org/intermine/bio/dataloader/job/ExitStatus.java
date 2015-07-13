@@ -13,7 +13,7 @@ import org.intermine.bio.dataloader.util.StringUtils;
  *
  * ExitStatus is immutable and therefore thread-safe.
  *
- * @author Dave Syer
+ * 
  *
  */
 @SuppressWarnings("serial")

@@ -24,9 +24,6 @@ import java.util.List;
  * {@link State} implementation that delegates to a {@link FlowExecutor} to
  * execute the specified {@link Step}.
  *
- * @author Dave Syer
- * @author Michael Minella
- * @since 2.0
  */
 public class StepState extends AbstractState implements StepLocator, StepHolder {
 

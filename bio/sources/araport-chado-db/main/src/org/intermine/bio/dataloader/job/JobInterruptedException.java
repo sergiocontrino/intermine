@@ -22,9 +22,7 @@ package org.intermine.bio.dataloader.job;
  * internally it is useful to force a check. The exception will often be wrapped
  * in a runtime exception (usually {@link UnexpectedJobExecutionException} before
  * reaching the client.
- * 
- * @author Lucas Ward
- * @author Dave Syer
+ *
  * 
  */
 @SuppressWarnings("serial")

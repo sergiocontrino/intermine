@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Dave Syer
- * @author Dan Garrette
+ * 
  */
 public class PatternMatcher<S> {
 

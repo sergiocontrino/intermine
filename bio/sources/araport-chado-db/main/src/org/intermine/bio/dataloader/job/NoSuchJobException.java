@@ -21,7 +21,7 @@ package org.intermine.bio.dataloader.job;
  * Checked exception to indicate that a required {@link Job} is not
  * available.
  * 
- * @author Dave Syer
+ * 
  * 
  */
 @SuppressWarnings("serial")

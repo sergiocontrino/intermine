@@ -26,30 +26,7 @@ import org.intermine.bio.dataloader.util.IdGenerator;
 
 
 /**
- * Simple implementation of the {@link JobLauncher} interface. The Spring Core
- * {@link TaskExecutor} interface is used to launch a {@link Job}. This means
- * that the type of executor set is very important. If a
- * {@link SyncTaskExecutor} is used, then the job will be processed
- * <strong>within the same thread that called the launcher.</strong> Care should
- * be taken to ensure any users of this class understand fully whether or not
- * the implementation of TaskExecutor used will start tasks synchronously or
- * asynchronously. The default setting uses a synchronous task executor.
- *
- * There is only one required dependency of this Launcher, a
- * {@link JobRepository}. The JobRepository is used to obtain a valid
- * JobExecution. The Repository must be used because the provided {@link Job}
- * could be a restart of an existing {@link JobInstance}, and only the
- * Repository can reliably recreate it.
- *
- * @author Lucas Ward
- * @author Dave Syer
- * @author Will Schipp
- * @author Michael Minella
- *
- * @since 1.0
- *
- * @see JobRepository
- * @see TaskExecutor
+ * 
  */
 public class SimpleJobLauncher implements JobLauncher {
 

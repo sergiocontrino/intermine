@@ -15,8 +15,6 @@ import java.util.Map;
  * passed in.  Only identifying parameters (per {@link JobParameter#isIdentifying()})
  * are used in the calculation of the key.
  *
- * @author Michael Minella
- * @since 2.2
  */
 public class DefaultJobKeyGenerator implements JobKeyGenerator<JobParameters> {
 

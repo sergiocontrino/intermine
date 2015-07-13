@@ -30,8 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Note that putting <code>null</code> value is equivalent to removing the entry
  * for the given key.
  *
- * @author Lucas Ward
- * @author Douglas Kaminsky
+ * 
  */
 @SuppressWarnings("serial")
 public class ExecutionContext implements Serializable {

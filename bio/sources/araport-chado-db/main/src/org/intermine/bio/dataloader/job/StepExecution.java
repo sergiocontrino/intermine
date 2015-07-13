@@ -11,8 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * {@link JobExecution}, there are additional properties related the processing
  * of items such as commit count, etc.
  *
- * @author Lucas Ward
- * @author Dave Syer
+ *
  *
  */
 @SuppressWarnings("serial")

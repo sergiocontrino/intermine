@@ -4,8 +4,7 @@ package org.intermine.bio.dataloader.job;
  * Strategy interface for the generation of the key used in identifying
  * unique {@link JobInstance}.
  *
- * @author Michael Minella
- *
+ * 
  * @param <T> The type of the source data used to calculate the key.
  * @since 2.2
  */

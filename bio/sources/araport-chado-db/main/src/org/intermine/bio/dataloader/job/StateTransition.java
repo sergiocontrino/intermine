@@ -24,9 +24,6 @@ import org.intermine.bio.dataloader.util.StringUtils;
  * linked by a pattern for the {@link ExitStatus#getExitCode() exit code} of an
  * execution of the originating State.
  *
- * @author Dave Syer
- * @author Michael Minella
- * @since 2.0
  */
 public final class StateTransition {
 

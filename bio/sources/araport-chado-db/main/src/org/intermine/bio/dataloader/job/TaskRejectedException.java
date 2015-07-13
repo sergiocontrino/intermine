@@ -6,10 +6,7 @@ import java.util.concurrent.RejectedExecutionException;
  * Exception thrown when a {@link TaskExecutor} rejects to accept
  * a given task for execution.
  *
- * @author Juergen Hoeller
- * @since 2.0.1
- * @see TaskExecutor#execute(Runnable)
- * @see TaskTimeoutException
+ *
  */
 @SuppressWarnings("serial")
 public class TaskRejectedException extends RejectedExecutionException {

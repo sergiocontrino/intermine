@@ -18,9 +18,7 @@ package org.intermine.bio.dataloader.job;
 /**
  * Interface for obtaining the next {@link JobParameters} in a sequence.
  * 
- * @author Dave Syer
- * @author Lucas Ward
- * @since 2.0
+ * 
  */
 public interface JobParametersIncrementer {
 

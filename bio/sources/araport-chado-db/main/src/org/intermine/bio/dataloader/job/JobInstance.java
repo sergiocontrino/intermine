@@ -15,10 +15,6 @@ package org.intermine.bio.dataloader.job;
  * @see JobExecution
  * @see javax.batch.runtime.JobInstance
  *
- * @author Lucas Ward
- * @author Dave Syer
- * @author Robert Kasanicky
- * @author Michael Minella
  *
  */
 @SuppressWarnings("serial")

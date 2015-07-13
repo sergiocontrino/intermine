@@ -29,8 +29,7 @@ import org.intermine.bio.dataloader.util.ClassUtils;
  * configuration parameters are set here. Therefore, common error handling and
  * listener calling activities are abstracted away from implementations.
  *
- * @author Lucas Ward
- * @author Dave Syer
+ * 
  */
 public abstract class AbstractJob implements Job, StepLocator
 {

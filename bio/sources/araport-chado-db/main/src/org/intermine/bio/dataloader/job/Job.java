@@ -21,7 +21,7 @@ package org.intermine.bio.dataloader.job;
  * be noted that restart policy is applied to the job as a whole and not to a
  * step.
  * 
- * @author Dave Syer
+ *
  * 
  */
 public interface Job {

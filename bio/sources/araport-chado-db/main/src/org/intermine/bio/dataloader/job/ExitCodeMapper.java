@@ -23,9 +23,6 @@ package org.intermine.bio.dataloader.job;
  * framework has specific requirements regarding the operating system process
  * return status.
  * 
- * @author Stijn Maller
- * @author Lucas Ward
- * @author Dave Syer
  */
 public interface ExitCodeMapper {
 

@@ -23,8 +23,7 @@ import org.apache.commons.logging.LogFactory;
  * Implementation of {@link StepHandler} that manages repository and restart
  * concerns.
  *
- * @author Dave Syer
- *
+ * 
  */
 public class SimpleStepHandler implements StepHandler {
 

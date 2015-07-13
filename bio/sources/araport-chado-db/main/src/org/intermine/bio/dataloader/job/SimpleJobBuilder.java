@@ -19,9 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Dave Syer
- * 
- * @since 2.2
  * 
  */
 public class SimpleJobBuilder  {

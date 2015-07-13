@@ -23,8 +23,7 @@ package org.intermine.bio.dataloader.job;
  * implementations should be checked to ensure callers fully understand how the
  * job will be run.
  * 
- * @author Lucas Ward
- * @author Dave Syer
+ * 
  */
 
 public interface JobLauncher {

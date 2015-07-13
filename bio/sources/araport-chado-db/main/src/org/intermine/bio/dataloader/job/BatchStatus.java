@@ -2,10 +2,7 @@ package org.intermine.bio.dataloader.job;
 
 /**
  * Enumeration representing the status of a an Execution.
- * 
- * @author Lucas Ward
- * @author Dave Syer
- * @author Michael Minella
+ *
  */
 public enum BatchStatus {
 

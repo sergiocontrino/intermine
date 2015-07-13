@@ -34,9 +34,7 @@ import org.slf4j.LoggerFactory;
  * list of steps.  Any {@link Step} that fails will fail the job.  The job is
  * considered complete when all steps have been executed.
  *
- * @author Lucas Ward
- * @author Dave Syer
- * @author Michael Minella
+ * 
  */
 public class SimpleJob extends AbstractJob {
 

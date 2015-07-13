@@ -20,7 +20,7 @@ package org.intermine.bio.dataloader.job;
  * Indicates to the framework that a critical error has occurred and processing
  * should immediately stop.
  * 
- * @author Lucas Ward
+ * 
  * 
  */
 public class UnexpectedJobExecutionException extends RuntimeException {

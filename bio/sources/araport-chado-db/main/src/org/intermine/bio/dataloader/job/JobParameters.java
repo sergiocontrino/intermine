@@ -17,9 +17,7 @@ import java.util.Properties;
  * 
  * This class is immutable and therefore thread-safe.
  * 
- * @author Lucas Ward
- * @author Michael Minella
- * @since 1.0
+ * 
  */
 @SuppressWarnings("serial")
 public class JobParameters implements Serializable {

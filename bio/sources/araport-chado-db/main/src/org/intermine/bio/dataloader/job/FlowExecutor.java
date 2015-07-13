@@ -19,8 +19,6 @@ package org.intermine.bio.dataloader.job;
  * Context and execution strategy for {@link FlowJob} to allow it to delegate
  * its execution step by step.
  * 
- * @author Dave Syer
- * @since 2.0
  */
 public interface FlowExecutor {
 

@@ -2,7 +2,7 @@ package org.intermine.bio.dataloader.job;
 /**
  * Strategy for processing in a step.
  * 
- * @author Dave Syer
+ * 
  * 
  */
 public interface Tasklet {

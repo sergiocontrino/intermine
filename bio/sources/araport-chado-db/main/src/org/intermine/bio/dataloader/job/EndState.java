@@ -19,8 +19,7 @@ package org.intermine.bio.dataloader.job;
  * {@link State} implementation for ending a job if it is in progress and
  * continuing if just starting.
  *
- * @author Dave Syer
- * @since 2.0
+ * 
  */
 public class EndState extends AbstractState {
 

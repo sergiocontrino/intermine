@@ -9,11 +9,7 @@ import java.util.Date;
  * used to indicate if the parameter is to be used as part of the identification of
  * a job instance.
  *
- * @author Lucas Ward
- * @author Dave Syer
- * @author Michael Minella
- * @since 2.0
- *
+ * 
  */
 @SuppressWarnings("serial")
 public class JobParameter implements Serializable {

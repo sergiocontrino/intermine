@@ -16,11 +16,6 @@
 package org.intermine.bio.dataloader.job;
 
 
-
-/**
- * @author Dave Syer
- * @since 2.0
- */
 public abstract class AbstractState implements State {
 
 	private final String name;

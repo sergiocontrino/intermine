@@ -24,13 +24,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A base class and utility for other step builders providing access to common properties like job repository and
- * transaction manager.
  * 
- * @author Dave Syer
- * @author Michael Minella
- *
- * @since 2.2
+ *  
  */
 public abstract class StepBuilderHelper<B extends StepBuilderHelper<B>> {
 

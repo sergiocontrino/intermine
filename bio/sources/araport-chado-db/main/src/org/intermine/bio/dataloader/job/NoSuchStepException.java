@@ -19,7 +19,7 @@ package org.intermine.bio.dataloader.job;
  * Exception to signal that a step was requested that is unknown or does not
  * exist.
  * 
- * @author Dave Syer
+ * 
  * 
  */
 @SuppressWarnings("serial")
