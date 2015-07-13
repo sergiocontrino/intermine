@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -34,11 +35,11 @@
         value="${imf:formatFieldStr(pathString, INTERMINE_API, WEBCONFIG)}"/>
         <!-- quick fix for MINE-756 -->
         <c:if test="${fn:startsWith(fieldDisplayName,'Gene Rifs')}">
-          <c:set var="fieldDisplayName" value="Gene RIFs (Gene into Function)<br /><p style='font-weight:normal;font-size:12px'>Data Source: <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=GeneRIF'>NCBI</a></p>" />	  
+          <c:set var="fieldDisplayName" value="GeneRIFs (Gene References Into Functions)<br /><p style='font-weight:normal;font-size:12px'>Data Source: <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=GeneRIF'>NCBI</a></p>" />
         </c:if>
         <!-- quick fix for MINE-769 -->
         <c:if test="${fn:startsWith(fieldDisplayName,'Pathways')}">
-          <c:set var="fieldDisplayName" value="Pathways<br /><p style='font-weight:normal;font-size:12px'>Data Source: <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=KEGG+pathways+data+set'>KEGG</a>, <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=Reactome+data+set'>Reactome</a></p>" />	  
+          <c:set var="fieldDisplayName" value="Pathways<br /><p style='font-weight:normal;font-size:12px'>Data Source: <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=KEGG+pathways+data+set'>KEGG</a></p>" />
         </c:if>
     <c:set var="placementAndField" value="${aspectPlacement}_${fieldName}" />
     <c:set var="divName" value="${fn:replace(aspectPlacement, ':', '_')}${fieldName}_table" />

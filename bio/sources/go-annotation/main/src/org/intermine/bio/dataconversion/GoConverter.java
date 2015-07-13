@@ -57,9 +57,9 @@ public class GoConverter extends BioFileConverter
     private Map<String, String> evidenceCodes = new LinkedHashMap<String, String>();
     private Map<String, String> dataSets = new LinkedHashMap<String, String>();
     private Map<String, String> publications = new LinkedHashMap<String, String>();
+    private Map<String, String> xrefPub = new LinkedHashMap<String, String>();
     private Map<String, Item> organisms = new LinkedHashMap<String, Item>();
     protected Map<String, String> productMap = new LinkedHashMap<String, String>();
-    private Set<String> dbRefs = new HashSet<String>();
     @SuppressWarnings("unused")
     private Map<String, String> databaseAbbreviations = new HashMap<String, String>();
 
@@ -108,6 +108,32 @@ public class GoConverter extends BioFileConverter
     static {
         WITH_TYPES.put("FB", "Gene");
         WITH_TYPES.put("UniProt", "Protein");
+        WITH_TYPES.put("NCBI_gi", "Gene");
+        WITH_TYPES.put("GenBank", "Gene");
+
+        WITH_TYPES.put("AGI_LocusCode", "Gene");
+        WITH_TYPES.put("AGI_Locuscode", "Gene");
+        WITH_TYPES.put("AGI_LOCUSCode", "Gene");
+        WITH_TYPES.put("AGI_LOCUSCODE", "Gene");
+        WITH_TYPES.put("AGI_LocusCOde", "Gene");
+        WITH_TYPES.put("agi_locuscode", "Gene");
+        WITH_TYPES.put("Agi_locuscode", "Gene");
+        WITH_TYPES.put("AGI_locuscode", "Gene");
+        WITH_TYPES.put("AGI_locusCode", "Gene");
+        WITH_TYPES.put("AGi_LocusCode", "Gene");
+
+        WITH_TYPES.put("ECOGENE", "Gene");
+        WITH_TYPES.put("TIGR_Ath1", "Gene");
+        WITH_TYPES.put("TAIR", "Gene");
+        WITH_TYPES.put("Tair", "Gene");
+        WITH_TYPES.put("GenBank", "Gene");
+        WITH_TYPES.put("NCBI_Gene", "Gene");
+
+        WITH_TYPES.put("NCBI_GP", "Protein");
+        WITH_TYPES.put("SWISS-PROT", "Protein");
+        WITH_TYPES.put("Swiss-Prot", "Protein");
+        WITH_TYPES.put("UniProtKB", "Protein");
+        WITH_TYPES.put("PIR", "Protein");
     }
 
     // read config file that has specific settings for each organism, key is taxon id
@@ -153,7 +179,6 @@ public class GoConverter extends BioFileConverter
                 LOG.info("Unable to find annotationType property for " + "taxon: " + taxonId
                         + " in file: " + PROP_FILE + ".  Creating genes by default.");
             }
-
             Config config = new Config(identifier, readColumn, annotationType);
             configs.put(taxonId, config);
         }
@@ -201,10 +226,21 @@ public class GoConverter extends BioFileConverter
             String qualifier = array[3];
             String strEvidence = array[6];
             String withText = array[7];
+
+            LOG.debug("GO annotation summary for " + goId + ": " + qualifier  + "-" + withText
+                    + "=" + productId);
+
             String annotationExtension = null;
             if (array.length >= 16) {
                 annotationExtension = array[15];
             }
+
+            // to add dbref like TAIR:Communication:501714663
+            // only ath, i think
+            if (!array[5].contains("PMID") && taxonId.equalsIgnoreCase("3702")) {
+                annotationExtension = array[5];
+            }
+
             if (StringUtils.isNotEmpty(strEvidence)) {
                 storeEvidenceCode(strEvidence);
             } else {
@@ -229,10 +265,8 @@ public class GoConverter extends BioFileConverter
 
             // null if resolver could not resolve an identifier
             if (productIdentifier != null) {
-
                 // null if no pub found
                 String pubRefId = newPublication(array[5]);
-
                 // get evidence codes for this goterm|gene pair
                 Set<Evidence> allEvidenceForAnnotation = goTermGeneToEvidence.get(key);
 
@@ -244,6 +278,7 @@ public class GoConverter extends BioFileConverter
                     allEvidenceForAnnotation = new LinkedHashSet<Evidence>();
                     allEvidenceForAnnotation.add(evidence);
                     goTermGeneToEvidence.put(key, allEvidenceForAnnotation);
+
                     Integer storedAnnotationId = createGoAnnotation(productIdentifier, type,
                             goTermIdentifier, organism, qualifier, dataSource, dataSourceCode,
                             annotationExtension);
@@ -406,7 +441,7 @@ public class GoConverter extends BioFileConverter
                             withProductList.add(productIdentifier);
                         }
                     } else {
-                        LOG.debug("createWithObjects skipping a withType prefix:" + prefix);
+                        LOG.info("createWithObjects skipping a withType prefix:" + prefix);
                     }
                 }
             }
@@ -439,7 +474,7 @@ public class GoConverter extends BioFileConverter
                 }
             }
 
-            if (rslv != null && rslv.hasTaxon(taxonId)) {
+            if (rslv != null && rslv.hasTaxon(taxonId) && !"3702".equals(taxonId)) {
                 if ("10116".equals(taxonId)) { // RGD doesn't have prefix in its annotation data
                     accession = "RGD:" + accession;
                 }
@@ -604,6 +639,7 @@ public class GoConverter extends BioFileConverter
         return dataSetIdentifier;
     }
 
+
     private String newPublication(String codes) throws ObjectStoreException {
         String pubRefId = null;
         String[] array = codes.split("[|]");
@@ -619,55 +655,74 @@ public class GoConverter extends BioFileConverter
                         item.setAttribute("pubMedId", pubMedId);
                         pubRefId = item.getIdentifier();
                         publications.put(pubMedId, pubRefId);
-
                     }
                 }
             } else {
                 xrefs.add(array[i]);
             }
         }
-        ReferenceList refIds = new ReferenceList("crossReferences");
-
         // PMID may be first or last so we can't process xrefs until we've looked at all IDs
         if (StringUtils.isNotEmpty(pubRefId)) {
-            for (String xref : xrefs) {
-                refIds.addRefId(createDbReference(xref));
-            }
+            createXrefs(pubRefId, xrefs);
         }
         if (item != null) {
-            item.addCollection(refIds);
             store(item);
         }
+        LOG.debug("pubrefid: " + pubRefId);
         return pubRefId;
     }
 
-    private String createDbReference(String value)
-        throws ObjectStoreException {
-        if (StringUtils.isEmpty(value)) {
-            return null;
-        }
-        String dataSource = null;
-        if (!dbRefs.contains(value)) {
-            Item item = createItem("DatabaseReference");
+/**
+     * @param pubRefId
+     * @param xrefs
+     * @throws ObjectStoreException
+     */
+    private void createXrefs(String pubRefId, Set<String> xrefs) throws ObjectStoreException {
+        for (String xref : xrefs) {
+
+            String dataSource = null;
             // FB:FBrf0055969
-            if (value.contains(":")) {
-                String[] bits = value.split(":");
+            if (xref.contains(":")) {
+                String[] bits = xref.split(":");
                 if (bits.length == 2) {
                     String db = bits[0];
                     dataSource = getDataSourceCodeName(db);
-                    value = bits[1];
+                    xref = bits[1];
+                }
+                if (bits.length == 3) {
+                    // for TAIR reference like
+                    // TAIR:Publication:501682431
+                    String db = bits[0];
+                    dataSource = getDataSourceCodeName(db);
+                    xref = bits[1] + ":" + bits[2];
+//                    LOG.info("GOTYA dbref: " + bits[1] + "--" + bits[2]);
                 }
             }
-            item.setAttribute("identifier", value);
-            if (StringUtils.isNotEmpty(dataSource)) {
-                item.setReference("source", getDataSource(dataSource));
+            // create dbxref only if does not exist yet
+            if (!xrefPub.containsKey(xref)) {
+                createDbxrefItem(pubRefId, xref, dataSource);
+                xrefPub.put(xref, pubRefId);
             }
-            dbRefs.add(value);
-            store(item);
-            return item.getIdentifier();
         }
-        return null;
     }
+
+/**
+ * @param pubRefId
+ * @param xref
+ * @param dataSource
+ * @throws ObjectStoreException
+ */
+    private void createDbxrefItem(String pubRefId, String xref, String dataSource)
+            throws ObjectStoreException {
+        Item item = createItem("DatabaseReference");
+        item.setAttribute("identifier", xref);
+        if (StringUtils.isNotEmpty(dataSource)) {
+            item.setReference("source", getDataSource(dataSource));
+        }
+        item.setReference("subject", pubRefId);
+        store(item);
+    }
+
 
     private Item newOrganism(String taxonId) throws ObjectStoreException {
         Item item = organisms.get(taxonId);

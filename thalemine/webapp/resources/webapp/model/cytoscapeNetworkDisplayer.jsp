@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="im" %>
@@ -161,9 +162,20 @@
           jQuery('#cwinlinetable').show().scrollTo('slow', 'swing', -20);
 
           if ((!jQuery.trim(jQuery('#cytoscape-network-results-table-div').html()).length)) {
-              var view = new intermine.query.results.CompactView($SERVICE, ${cytoscapeNetworkQueryJson}, LIST_EVENTS, {pageSize: 25});
-              view.$el.appendTo('#cytoscape-network-results-table-div');
-              view.render();
+
+              var view = new imtables.loadDash(
+                      '#cwinlinetable',
+                      {size: 25},
+                      {service: $SERVICE, query: ${cytoscapeNetworkQueryJson}}
+                  ).then(
+                      withTable,
+                      FailureNotification.notify
+                  );
+
+                  function withTable (table) {
+                      table.bus.on('list-action:failure', LIST_EVENTS['list-creation:failure']);
+                      table.bus.on('list-action:success', LIST_EVENTS['list-creation:success']);
+                  }
           }
         } else {
           jQuery('#cwinlinetable').hide();

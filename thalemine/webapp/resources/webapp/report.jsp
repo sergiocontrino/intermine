@@ -337,10 +337,10 @@
 </div>
 
 <%-- TODO JCVI: Change the link here to your displayer --%>
-<script charset="utf-8" type="text/javascript" src="https://cdn.araport.org/js/atted-displayer/build/atted-displayer-1.0.0.min.js"></script>
+<script charset="utf-8" type="text/javascript" src="${WEB_PROPERTIES['head.cdn.location']}/js/atted-displayer/build/atted-displayer-1.0.0.min.js"></script>
 
 <%-- Comment this out because it changes the formatting of the whole report page relative to the rest of the site --%>
-<%--<link rel="stylesheet" type="text/css" href="https://cdn.araport.org/css/bootstrap/2.3.2/css/bootstrap.min.css">--%>
+<%--<link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/css/bootstrap/2.3.2/css/bootstrap.min.css">--%>
 
 <c:set var="AGI" value="${fn:substringAfter(stableLink, 'externalids=')}" />
 
@@ -361,7 +361,19 @@
         jQuery('#attedexport').hide();
       } else {
         jQuery('#attedexport').show();
-        jQuery('#query-container').imWidget(options);
+        //jQuery('#query-container').imWidget(options);
+
+        imtables.loadDash('#query-container',
+                {start : 0, size : 25},
+                {service: $SERVICE, query : options.query}
+                ).then(
+                    withTable,
+                    FailureNotification.notify
+                );
+          function withTable(table) {
+                    table.bus.on('list-action:failure', LIST_EVENTS['list-creation:failure']);
+                    table.bus.on('list-action:success', LIST_EVENTS['list-creation:success']);
+                }
       }
 
          }
@@ -438,7 +450,7 @@ jQuery(document).ready(function () {
 </script>
 
 <div id="protocols" style="display: none">
-<link rel="stylesheet" type="text/css" href="https://cdn.araport.org/js/intermine/im-tables/latest/imtables.css">
+<link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/im-tables/latest/imtables.css">
 <!-- A place holder element in your page to hold the table -->
 <div id="query-container">
  <p class="apology">
@@ -452,6 +464,29 @@ jQuery(document).ready(function () {
 </c:if>
 
 <!-- /ATTED data -->
+
+
+<!-- PROTEIN DOMAIN data -->
+
+<c:if test="${aspect eq 'Proteins' && object.type == 'Protein'}">
+<div id="domainregion" class="collection-table column-border" style="margin-bottom: 0px"></div>
+  <c:set var="QUERYID" value="${fn:substringAfter(stableLink, 'externalids=')}" />
+  <c:set var="MINEURL" value="${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}" />
+
+<svg id="mychart" class="pdchart" style="width: 100%;"></svg>
+
+<script type="text/javascript" charset="utf-8">
+var queryId="${QUERYID}";
+var mineUrl="${MINEURL}/";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/protein-domain/1.1.0/protein-domain.css">
+<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/protein-domain/1.1.0/protein-domain.js"></script>
+
+</c:if>
+
+<!--  /PROTEIN DOMAIN REGIONS -->
 
   </div>
 

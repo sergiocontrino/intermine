@@ -60,7 +60,7 @@
       </collection>
    </item>
    <item id="0_11" class="DataSet" implements="">
-      <attribute name="version" value="2014_11" />
+      <attribute name="version" value="2015_05" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="Swiss-Prot data set" />
       <attribute name="description" value="High-quality, manually annotated, non-redundant protein sequence database" />
@@ -68,7 +68,7 @@
       <reference name="publication" ref_id="0_9" />
    </item>
    <item id="0_12" class="DataSet" implements="">
-      <attribute name="version" value="2014_11" />
+      <attribute name="version" value="2015_05" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="TrEMBL data set" />
       <attribute name="description" value="Computationally analysed records, enriched with automatic annotation" />
@@ -76,7 +76,7 @@
       <reference name="publication" ref_id="0_9" />
    </item>
    <item id="0_13" class="DataSet" implements="">
-      <attribute name="version" value="2014_11" />
+      <attribute name="version" value="2015_05" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="UniProt FASTA dataset" />
       <attribute name="description" value="Protein sequences and alternative splice forms generated using VARSPLIC" />
@@ -84,7 +84,7 @@
       <reference name="publication" ref_id="0_9" />
    </item>
    <item id="0_14" class="DataSet" implements="">
-      <attribute name="version" value="2014_11" />
+      <attribute name="version" value="2015_05" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="UniProt keywords data set" />
       <attribute name="description" value="Keywords and categories used in UniProtKB" />
@@ -103,7 +103,7 @@
       </collection>
    </item>
    <item id="0_17" class="DataSet" implements="">
-      <attribute name="version" value="v49.0" />
+      <attribute name="version" value="v51.0" />
       <reference name="dataSource" ref_id="0_16" />
       <attribute name="name" value="InterPro data set" />
       <attribute name="description" value="Protein family and domain assignments to proteins" />
@@ -114,7 +114,7 @@
       <attribute name="pubMedId" value="17202162" />
    </item>
    <item id="0_19" class="DataSet" implements="">
-      <attribute name="version" value="v49.0" />
+      <attribute name="version" value="v51.0" />
       <reference name="dataSource" ref_id="0_16" />
       <attribute name="name" value="InterPro GO Annotation data set" />
       <attribute name="description" value="Mapping between InterPro domains and GO terms" />
@@ -133,7 +133,7 @@
       </collection>
    </item>
    <item id="0_22" class="DataSet" implements="">
-      <attribute name="version" value="9.0" />
+      <attribute name="version" value="10.0" />
       <reference name="dataSource" ref_id="0_21" />
       <attribute name="name" value="Panther data set" />
       <attribute name="description" value="Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis" />
@@ -217,43 +217,5 @@
       <attribute name="description" value="Wiring diagrams of molecular interactions, reactions, and relations" />
       <attribute name="url" value="http://www.kegg.jp/kegg/pathway.html" />
       <reference name="publication" ref_id="0_35" />
-   </item>
-   <item id="0_37" class="Publication" implements="">
-      <attribute name="pubMedId" value="24243840" />
-   </item>
-   <item id="0_38" class="DataSource" implements="">
-      <attribute name="name" value="Reactome" />
-      <attribute name="description" value="Free, open-source, curated and peer reviewed pathway database" />
-      <attribute name="url" value="http://www.reactome.org" />
-      <collection name="publications">
-         <reference ref_id="0_37" />
-      </collection>
-   </item>
-   <item id="0_39" class="DataSet" implements="">
-      <attribute name="version" value="49" />
-      <reference name="dataSource" ref_id="0_38" />
-      <attribute name="name" value="Reactome data set" />
-      <attribute name="description" value="Non-curated Reactome Linked Dataset that captures the Reactome pathways in BioPAX format" />
-      <attribute name="url" value="http://www.ebi.ac.uk/rdf/services/reactome" />
-      <reference name="publication" ref_id="0_37" />
-   </item>
-   <item id="0_40" class="Publication" implements="">
-      <attribute name="pubMedId" value="22110026" />
-   </item>
-   <item id="0_41" class="DataSource" implements="">
-      <attribute name="name" value="Phytozome" />
-      <attribute name="description" value="Comparative platform for green plant genomics" />
-      <attribute name="url" value="http://www.phytozome.net" />
-      <collection name="publications">
-         <reference ref_id="0_40" />
-      </collection>
-   </item>
-   <item id="0_42" class="DataSet" implements="">
-      <attribute name="version" value="v10" />
-      <reference name="dataSource" ref_id="0_41" />
-      <attribute name="name" value="Phytozome Homologs" />
-      <attribute name="description" value="Phytozome Homologs Generated with InParanoid" />
-      <attribute name="url" value="http://phytozome.jgi.doe.gov/phytomine" />
-      <reference name="publication" ref_id="0_40" />
    </item>
 </items>

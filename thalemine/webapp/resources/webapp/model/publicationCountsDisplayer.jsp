@@ -13,7 +13,7 @@
 
 
 <div class="header">
-<h3>Publications</h3>
+<h3>${totalNumberOfPubs} Publications</h3>
 
 <c:choose>
   <c:when test="${!empty noResults }">
@@ -23,13 +23,12 @@
 <c:otherwise>
 
   <c:if test="${type=='Gene'}">
-  	<p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=PubMed+to+gene+mapping">NCBI</a></p>
+    <p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=PubMed+to+gene+mapping">NCBI</a></p>
   </c:if>
 
   <c:if test="${type=='Protein'}">
-  	<p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=Swiss-Prot+data+set">Swiss-Prot</a>, <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=UniProt+FASTA+dataset">UniProt</a></p>
+    <p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=Swiss-Prot+data+set">Swiss-Prot</a>, <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=UniProt+FASTA+dataset">UniProt</a></p>
   </c:if>
-    <p>${totalNumberOfPubs} Publications</p>
     </div>
 
     <table>
@@ -102,7 +101,7 @@
           });
         }
     })();
-    </script>    
+    </script>
   </c:otherwise>
 </c:choose>
 </div>

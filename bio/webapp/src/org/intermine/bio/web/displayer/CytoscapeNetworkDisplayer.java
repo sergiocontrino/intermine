@@ -151,7 +151,9 @@ public class CytoscapeNetworkDisplayer extends ReportDisplayer
                 "Gene.interactions.details.type",
                 "Gene.interactions.gene2.symbol",
                 "Gene.interactions.gene2.primaryIdentifier",
-                "Gene.interactions.details.dataSets.dataSource.name",
+                "Gene.interactions.details.experiment.interactionDetectionMethods.name",
+//                "Gene.interactions.details.dataSets.dataSource.name",
+//                "Gene.interactions.gene1.interactions.details.experiment.interactionDetectionMethods.name",
                 "Gene.interactions.details.experiment.publication.title",
                 "Gene.interactions.details.experiment.publication.pubMedId");
 

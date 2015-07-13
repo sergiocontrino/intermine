@@ -128,7 +128,7 @@
   </class>
 
 
-<class className="org.intermine.model.bio.GOAnnotation">
+  <class className="org.intermine.model.bio.GOAnnotation">
     <fields>
       <fieldconfig fieldExpr="subject.primaryIdentifier"/>
       <fieldconfig fieldExpr="subject.symbol"/>
@@ -136,6 +136,16 @@
       <fieldconfig fieldExpr="ontologyTerm.name" />
     </fields>
   </class>
+
+<class className="org.intermine.model.bio.OntologyAnnotation">
+    <fields>
+      <fieldconfig fieldExpr="subject.primaryIdentifier"/>
+      <fieldconfig fieldExpr="subject.symbol"/>
+      <fieldconfig fieldExpr="ontologyTerm.identifier" />
+      <fieldconfig fieldExpr="ontologyTerm.name" />
+    </fields>
+  </class>
+
 
   <class className="org.intermine.model.bio.GOEvidenceCode">
     <fields>
@@ -270,20 +280,18 @@
 -->
 
 
-  <class className="org.intermine.model.bio.Pathway">
+ <class className="org.intermine.model.bio.Pathway">
     <fields>
-      <fieldconfig fieldExpr="identifier"/>
-      <fieldconfig fieldExpr="name"/>
-      <fieldconfig fieldExpr="curated"/>
+     <fieldconfig fieldExpr="identifier"/>
+     <fieldconfig fieldExpr="name"/>
     </fields>
     <inlinelist>
-      <table path="dataSets.name" showInHeader="true" />
+        <table path="dataSets.name" showInHeader="true" />
     </inlinelist>
-  </class>
+ </class>
 
 
-
-  <class className="org.intermine.model.bio.Protein">
+ <class className="org.intermine.model.bio.Protein">
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
@@ -539,7 +547,6 @@
                      replacesFields="transcripts,exons,CDSs,introns,UTRs,fivePrimeUTR,threePrimeUTR,childFeatures"
                      placement="Genomics"
                      types="Gene,Transcript,Exon,UTR,TransposableElementGene"/>
-
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.HomologueDisplayer"
                      jspName="model/homologueDisplayer.jsp"
@@ -849,18 +856,20 @@
 
 
       <enrichmentwidgetdisplayer id="pathway_enrichment"
-                                 title="Pathway Enrichment"
-                                 description="Pathways enriched for genes in this list - data from KEGG and Reactome"
+                                 description="Pathways enriched for genes in this list - data from KEGG"
                                  label="Pathways"
                                  filterLabel="DataSet"
-                                 filters="All,KEGG pathways data set,Reactome data set"
+                                 filters="KEGG pathways data set"
                                  startClass="Gene"
                                  startClassDisplay="primaryIdentifier"
                                  enrich="pathways.name"
                                  enrichIdentifier="pathways.identifier"
                                  constraints="pathways.dataSets.name=[DataSet],organism.taxonId=[list], primaryIdentifier != null"
                                  typeClass="Gene"
-                                 views="secondaryIdentifier, symbol, organism.name, pathways.identifier, pathways.name, pathways.dataSets.name"/>
+                                 views="secondaryIdentifier, symbol, organism.name, pathways.identifier, pathways.name, pathways.dataSets.name"
+                                 externalLink="http://www.genome.jp/kegg-bin/show_pathway?org_name=ath&amp;mapno="
+                                 />
+
 
 
 

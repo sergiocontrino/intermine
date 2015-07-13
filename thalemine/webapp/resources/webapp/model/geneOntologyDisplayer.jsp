@@ -12,7 +12,7 @@
 <div id="geneOntology_displayer" class="collection-table">
 <div class="header">
 <h3>Gene Ontology</h3>
-<p>Data Source: <a target="_blank" href="${WEB_PROPERTIES['GO_url']}">GOA</a>, <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=InterPro+GO+Annotation+data+set">InterPro</a>, <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=GO+Annotation+from+TAIR">TAIR</a></p>
+<p>Data Source: <a target="_blank" href="${WEB_PROPERTIES['GO_url']}">Gene Ontology Consortium</a></p>
 </div>
 
 <c:choose>

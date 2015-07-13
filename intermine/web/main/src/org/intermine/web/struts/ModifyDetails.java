@@ -299,6 +299,7 @@ public class ModifyDetails extends DispatchAction
             return mapping.findForward("reportDisplayer");
 
         } catch (ObjectStoreException e) {
+            LOG.error("Failing while creating " + displayerName + " for object " + reportObjectID);
             e.printStackTrace();
         }
         return null;

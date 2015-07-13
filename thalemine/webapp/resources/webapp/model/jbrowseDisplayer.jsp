@@ -26,27 +26,39 @@
 
     <c:set var="baseUrl" value="${WEB_PROPERTIES['jbrowse.prefix']}"/>
     <c:set var="datasource" value="${WEB_PROPERTIES['jbrowse.database.source']}"/>
-    <c:set var="chr" value="${reportObject.object.chromosomeLocation.locatedOn.primaryIdentifier}"/>
+    <c:set var="chr" value="${object.chromosomeLocation.locatedOn.primaryIdentifier}"/>
 
-    <c:set var="padding" value="${10}"/>
-    <c:set var="offset" value="${fn:substringBefore((reportObject.object.length * 0.1), '.')}"/>
-    <c:set var="start" value="${reportObject.object.chromosomeLocation.start}"/>
-    <c:set var="end" value="${reportObject.object.chromosomeLocation.end}"/>
-    <c:set var="offsetstart" value="${start - offset}"/>
+    <c:set var="offset" value="${fn:substringBefore((object.length * 0.1), '.')}"/>
+    <c:set var="start" value="${object.chromosomeLocation.start}"/>
+    <c:set var="end" value="${object.chromosomeLocation.end}"/>
+    <c:set var="upstream" value="500"/>
+    <c:set var="offsetstart" value="${start - offset - upstream}"/>
+    <c:if test="${offsetstart < 1}"><c:set var="offsetstart" value="1"/></c:if>
     <c:set var="offsetend" value="${end + offset}"/>
 
     <c:set var="tracks" value="TAIR10_loci,TAIR10_genes"/>
-    <c:set var="extraParams" value="tracklist=1&nav=1&overview=0"/>
+    <c:set var="extraParams" value="tracklist=0&nav=0&overview=0&menu=0"/>
     <c:set var="loc" value="${chr}:${offsetstart}..${offsetend}"/>
 
-    <c:set var="jbLink" value="${baseUrl}/?data=${datasource}&loc=${loc}&tracks=${tracks}&${extraParams}"/>
+    <c:set var="jbLink" value="${baseUrl}/?data=${datasource}&loc=${loc}&tracks=${tracks}"/>
+    <c:set var="jbLinkEmbed" value="${jbLink}&${extraParams}"/>
+
+    <style text="text/css">
+    .embed-responsive-item {
+        top: 0;
+        left: 0;
+        bottom: 0;
+        height: 300px;
+        width: 100%;
+        border: 0;
+    }
+    </style>
 
     <div>
-        <p>Click and drag the browser to move the view. Check to turn on/off the tracks from left menu to see the data in the main panel.</p>
-        <iframe id="jbrowse" name="jbrowse" height="300px" width="98%" style="border: 1px solid #dfdfdf; padding: 1%" src="${jbLink}"></iframe>
+        <iframe name="jbrowse-embed" class="embed-responsive-item" src="${jbLinkEmbed}"></iframe>
         <p>
-            <a href="${jbLink}" target="jbrowse">Center on ${reportObject.object.symbol}</a>&nbsp;|&nbsp;
-            <a href="javascript:;" onclick="jQuery('iframe').css({height: '600px'});">Expand viewer</a>&nbsp;|&nbsp;
+            <a href="${jbLinkEmbed}" target="jbrowse">Center on ${object.primaryIdentifier}</a>&nbsp;|&nbsp;
+            <a href="${jbLink}" target="_blank" class="extlink">Full Screen View</a>&nbsp;|&nbsp;
             Powered by <a href="http://jbrowse.org" target="_blank" class="extlink">JBrowse</a>
         </p>
     </div>

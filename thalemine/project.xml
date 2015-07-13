@@ -143,7 +143,7 @@
 
 
         <source name="uniprot-fasta" type="fasta">
- 
+            <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="fasta.taxonId" value="3702"/>
             <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
             <property name="fasta.classAttribute" value="primaryAccession"/>
@@ -158,26 +158,28 @@
 
 
         <source name="uniprot-keywords" type="uniprot-keywords">
- 
+            <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
             <property name="src.data.dir.includes" value="keywlist.xml"/>
         </source>
 
 
         <source name="panther" type="panther">
- 
+           <!-- source last updated: 2015-05-18 11:30:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/orthologs/panther"/>
             <property name="panther.organisms" value="3702 7227 4932 10116 7955 10090 6239 9606"/>
         </source>
 
 
         <source name="interpro" type="interpro">
+            <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/interpro/current"/>
             <property name="src.data.dir.includes" value="interpro.xml"/>
         </source>
 
 
         <source name="protein2ipr" type="protein2ipr">
+            <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/interpro/current"/>
             <property name="src.data.dir.includes" value="protein2ipr.dat"/>
             <property name="organisms" value="3702"/>
@@ -197,6 +199,18 @@
             <property name="generif.datasetname" value="GeneRIF data set"/>
 
         </source>
+
+    <source name="psi-intact" type="psi" >
+      <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/psi/intact/current"/>
+      <property name="intact.organisms" value="3702"/>
+    </source>
+
+    <source name="biogrid" type="biogrid">
+      <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/biogrid/3.3.123"/>
+      <property name="src.data.dir.includes" value="BIOGRID-ORGANISM-Arabidopsis_thaliana-3.3.123.psi25.xml"/>
+      <property name="biogrid.organisms" value="3702"/>
+    </source>
+
 
         <source name="entrez-organism" type="entrez-organism">
             <property name="src.data.file" location="build/organisms.xml"/>
