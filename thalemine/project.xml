@@ -56,6 +56,7 @@
             <property name="source.db.name" value="bar-lu"/>
         </source>
 
+
         <source name="hormone-expressions" type="bar-expressions">
             <property name="source.db.name" value="bar-he"/>
             <property name="dataSourceName" value="atgenexp_hormone"/>
@@ -114,7 +115,7 @@
             <property name="source.db.name" value="bar-ae"/>
             <property name="dataSourceName" value="affydb"/>
             <property name="dataSetTitle" value="BAR Expression Data: affydb"/>
-        </source> -->
+        </source>
 
         <source name="so" type="so">
             <property name="src.data.file" location="../../bio/sources/so/so.obo"/>
@@ -122,17 +123,16 @@
 
         <source name="go" type="go">
             <property name="src.data.file" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
-        </source> -->
-
+        </source>
 
         <source name="go-annotation" type="go-annotation">
- 
+            <!-- source last updated: 2015-04-20 15:30:00 -->
             <property name="ontologyfile" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/go_annotation/" />
             <property name="dataSourceName" value="GO Annotation from TAIR"/>
             <property name="ontologyPrefix" value="GO"/>
         </source>
-        
+
         <source name="uniprot" type="uniprot">
             <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="uniprot.organisms" value="3702"/>
@@ -140,7 +140,6 @@
             <property name="createinterpro" value="true"/>
             <property name="creatego" value="true"/>
         </source>
-
 
         <source name="uniprot-fasta" type="fasta">
             <!-- source last updated: 2015-05-12 15:00:00 -->
@@ -156,27 +155,23 @@
                 value="org.intermine.bio.dataconversion.UniProtFastaLoaderTask"/>
         </source>
 
-
         <source name="uniprot-keywords" type="uniprot-keywords">
             <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
             <property name="src.data.dir.includes" value="keywlist.xml"/>
         </source>
 
-
         <source name="panther" type="panther">
-           <!-- source last updated: 2015-05-18 11:30:00 -->
+            <!-- source last updated: 2015-05-18 11:30:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/orthologs/panther"/>
             <property name="panther.organisms" value="3702 7227 4932 10116 7955 10090 6239 9606"/>
         </source>
-
 
         <source name="interpro" type="interpro">
             <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/interpro/current"/>
             <property name="src.data.dir.includes" value="interpro.xml"/>
         </source>
-
 
         <source name="protein2ipr" type="protein2ipr">
             <!-- source last updated: 2015-05-12 15:00:00 -->
@@ -223,18 +218,6 @@
         <source name="update-publications" type="update-publications">
             <property name="src.data.file" location="build/publications.xml"/>
         </source>
-        
-        <source name="araport-chado-stock" type="araport-chado-db">
-            <property name="source.db.name" value="araport"/>
-            <property name="organisms" value="3702"/>
-            <property name="dataSourceName" value="TAIR"/>
-            <property name="dataSetTitle" value="TAIR Stock"/>
-            <property name="processors"
-            value="org.intermine.bio.dataconversion.StockProcessor"/>
-    		      <property name="converter.class"
-                  value="org.intermine.bio.dataconversion.ChadoDBConverter"/>
-        </source>
-        
     </sources>
 
     <post-processing>
