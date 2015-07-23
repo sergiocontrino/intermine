@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
@@ -40,15 +41,15 @@ input.submit {
        });
 
         if (ids.length < 1) {
-        	alert("Please select some ${searchFacetValues['Category']}s...");
+          alert("Please select some ${searchFacetValues['Category']}s...");
             return false;
         } else {
-        	if (jQuery('#allItems').is(':checked')) {
-        	    jQuery("#allChecked").val('true');
-        	} else {
-        		jQuery("#allChecked").val('false');
-        	}
-        	jQuery("#ids").val(ids);
+          if (jQuery('#allItems').is(':checked')) {
+              jQuery("#allChecked").val('true');
+          } else {
+            jQuery("#allChecked").val('false');
+          }
+          jQuery("#ids").val(ids);
             return true;
         }
     });
@@ -170,19 +171,16 @@ input.submit {
                       <i><c:out value="${searchTerm}" /></i></h1>
                    </c:when>
                    <c:otherwise>
-                     <h1 class="title">Unfortunately, your search for "<c:out value="${searchTerm}" />" did not return
+                     <h1 class="title">Unfortunately, your search for <i><c:out value="${searchTerm}" /></i> did not return
                      any results</h1>
-                 Please try one of these steps to broaden your search:
-
-        <ul>
+                 <b>Please try one of these steps to broaden your search:</b>
           <c:if test="${!empty searchFacetValues}">
-            <li>Remove restrictions by clicking the red <b>(x)</b> above</li>
+            <br>Remove restrictions by clicking the red <b>(x)</b> above
           </c:if>
-          <li>Add an asterisk (*) to the end of a word to search for
-          partial matches, e.g. <i>arabi*</i></li>
-          <li>Search for synonyms using the OR operator, e.g. <i>(binding
-          OR ligase)</i></li>
-        </ul>
+          <br>Add an asterisk (*) to the end of a word to search for
+          partial matches, e.g. <i>arabi*</i>
+          <br>Search for synonyms using the OR operator, e.g. <i>(binding
+          OR ligase)</i>
                    </c:otherwise>
           </c:choose>
         </c:if>
