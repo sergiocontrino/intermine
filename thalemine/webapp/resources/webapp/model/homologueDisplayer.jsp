@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %>
@@ -32,10 +33,15 @@
         <c:otherwise>
           <td class="one-line">
             <c:forEach items="${genes}" var="resultElement">
-            <!-- removing links (aip request, MINE-892)
+            <!-- only links to ath (aip request, MINE-918) -->
+            <c:choose>
+             <c:when test="${entry.key eq 'A. thaliana'}">
               <a href="report.do?id=${resultElement.id}">${resultElement.field}</a>
-            -->
+             </c:when>
+             <c:otherwise>
               ${resultElement.field}
+             </c:otherwise>
+            </c:choose>
             </c:forEach>
           </td>
         </c:otherwise>
