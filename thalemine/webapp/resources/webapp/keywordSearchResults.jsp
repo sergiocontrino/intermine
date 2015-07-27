@@ -171,7 +171,7 @@ input.submit {
                       <i><c:out value="${searchTerm}" /></i></h1>
                    </c:when>
                    <c:otherwise>
-                     <h1 class="title">Unfortunately, your search for <i><c:out value="${searchTerm}" /></i> did not return
+                     <h1 class="title">Your search for <i><c:out value="${searchTerm}" /></i> did not return
                      any results</h1>
                  <b>Please try one of these steps to broaden your search:</b>
           <c:if test="${!empty searchFacetValues}">
