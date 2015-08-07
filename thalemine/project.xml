@@ -239,12 +239,14 @@
         <post-process name="create-intron-features">
             <property name="organisms" value="3702"/>
         </post-process>
+	<post-process name="create-intergenic-region-features"/>
         <post-process name="transfer-sequences"/>
         <post-process name="populate-child-features"/>
-        <post-process name="create-location-range-index" />
         <post-process name="create-overlap-view" />
+        <post-process name="create-location-overlap-index"/>
         <post-process name="create-attribute-indexes"/>
         <post-process name="summarise-objectstore"/>
+	<post-process name="create-autocomplete-index"/>
         <post-process name="create-search-index"/>
     </post-processing>
 </project>
