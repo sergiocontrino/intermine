@@ -61,7 +61,7 @@ public class PsiConverter extends BioFileConverter
     private Set<String> taxonIds = null;
     private Map<String, String> genes = new HashMap<String, String>();
     private Map<MultiKey, Item> interactions = new HashMap<MultiKey, Item>();
-    private static final String ALIAS_TYPE = "gene name";
+    private String ALIAS_TYPE = "gene name";
     private static final String SPOKE_MODEL = "prey";   // don't store if all roles prey
     private static final String DEFAULT_IDENTIFIER = "symbol";
     private static final String DEFAULT_DATASOURCE = "";
@@ -102,10 +102,20 @@ public class PsiConverter extends BioFileConverter
      */
     @Override
     public void process(Reader reader) throws Exception {
+        Boolean noResolver  = false;
+        if (taxonIds.size() == 1 && taxonIds.contains("3702")) {
+            LOG.info("ORGANISM Arabidopsis " + taxonIds + ", not using Id Resolver.");
+            noResolver  = true;
+        } else {
+            // init reslover
+            if (rslv == null) {
+                rslv = IdResolverService.getIdResolverByOrganism(taxonIds);
+            }
+        }
 
-        // init reslover
-        if (rslv == null) {
-            rslv = IdResolverService.getIdResolverByOrganism(taxonIds);
+        // ath uses locus names instead of gene name
+        if (noResolver == true) {
+            ALIAS_TYPE = "locus name";
         }
 
         PsiHandler handler = new PsiHandler();
