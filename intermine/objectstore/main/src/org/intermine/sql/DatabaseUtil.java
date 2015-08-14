@@ -610,6 +610,23 @@ public final class DatabaseUtil
         con.createStatement().execute("DROP VIEW IF EXISTS " + view);
     }
 
+
+    /**
+     * Remove the overlap view from the given database.
+     *
+     * @param con the Connection to the database
+     * @throws SQLException if an error occurs in the underlying database
+     */
+    public static void removeOverlapView(Connection con) throws SQLException {
+        String OVERLAP_VIEW = "overlappingfeaturessequencefeature";
+        LOG.info("Dropping view " + OVERLAP_VIEW);
+        // initially this is a table, need to try dropping table first, if the postprocess has been
+        // run before then it will be a view. We need to try dropping table first then view.
+        con.createStatement().execute("DROP TABLE IF EXISTS " + OVERLAP_VIEW);
+        con.createStatement().execute("DROP VIEW IF EXISTS " + OVERLAP_VIEW);
+    }
+
+
     /**
      * Creates a table name for a class descriptor
      *
