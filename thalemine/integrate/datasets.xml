@@ -14,7 +14,7 @@
       <attribute name="pubMedId" value="22140109" />
    </item>
    <item id="0_4" class="DataSet" implements="">
-      <attribute name="version" value="TAIR10 (Mar 31, 2014)" />
+      <attribute name="version" value="TAIR10 (June 30, 2014)" />
       <reference name="dataSource" ref_id="0_2" />
       <attribute name="name" value="Genome Annotation" />
       <attribute name="description" value="TAIR10 Genome annotation, consisting of genes, TE related genes, other non-coding RNA and transposable elements" />
@@ -41,7 +41,7 @@
       <attribute name="pubMedId" value="15173566" />
    </item>
    <item id="0_8" class="DataSet" implements="">
-      <attribute name="version" value="03/31/2015" />
+      <attribute name="version" value="06/30/2014" />
       <reference name="dataSource" ref_id="0_2" />
       <attribute name="name" value="GO Annotation from TAIR" />
       <attribute name="description" value="GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort" />
@@ -60,7 +60,7 @@
       </collection>
    </item>
    <item id="0_11" class="DataSet" implements="">
-      <attribute name="version" value="2015_05" />
+      <attribute name="version" value="2015_08" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="Swiss-Prot data set" />
       <attribute name="description" value="High-quality, manually annotated, non-redundant protein sequence database" />
@@ -68,7 +68,7 @@
       <reference name="publication" ref_id="0_9" />
    </item>
    <item id="0_12" class="DataSet" implements="">
-      <attribute name="version" value="2015_05" />
+      <attribute name="version" value="2015_08" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="TrEMBL data set" />
       <attribute name="description" value="Computationally analysed records, enriched with automatic annotation" />
@@ -76,7 +76,7 @@
       <reference name="publication" ref_id="0_9" />
    </item>
    <item id="0_13" class="DataSet" implements="">
-      <attribute name="version" value="2015_05" />
+      <attribute name="version" value="2015_08" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="UniProt FASTA dataset" />
       <attribute name="description" value="Protein sequences and alternative splice forms generated using VARSPLIC" />
@@ -84,7 +84,7 @@
       <reference name="publication" ref_id="0_9" />
    </item>
    <item id="0_14" class="DataSet" implements="">
-      <attribute name="version" value="2015_05" />
+      <attribute name="version" value="2015_08" />
       <reference name="dataSource" ref_id="0_10" />
       <attribute name="name" value="UniProt keywords data set" />
       <attribute name="description" value="Keywords and categories used in UniProtKB" />
@@ -103,7 +103,7 @@
       </collection>
    </item>
    <item id="0_17" class="DataSet" implements="">
-      <attribute name="version" value="v51.0" />
+      <attribute name="version" value="v53.0" />
       <reference name="dataSource" ref_id="0_16" />
       <attribute name="name" value="InterPro data set" />
       <attribute name="description" value="Protein family and domain assignments to proteins" />
@@ -114,7 +114,7 @@
       <attribute name="pubMedId" value="17202162" />
    </item>
    <item id="0_19" class="DataSet" implements="">
-      <attribute name="version" value="v51.0" />
+      <attribute name="version" value="v53.0" />
       <reference name="dataSource" ref_id="0_16" />
       <attribute name="name" value="InterPro GO Annotation data set" />
       <attribute name="description" value="Mapping between InterPro domains and GO terms" />
@@ -181,7 +181,7 @@
       <attribute name="pubMedId" value="17148475" />
    </item>
    <item id="0_31" class="DataSet" implements="">
-      <attribute name="version" value="04/20/2015" />
+      <attribute name="version" value="08/14/2015" />
       <reference name="dataSource" ref_id="0_29" />
       <attribute name="name" value="PubMed to gene mapping" />
       <attribute name="description" value="Curated associations between NCBI Gene and PubMed databases" />
@@ -189,7 +189,7 @@
       <reference name="publication" ref_id="0_30" />
    </item>
    <item id="0_32" class="DataSet" implements="">
-      <attribute name="version" value="04/20/2015" />
+      <attribute name="version" value="08/14/2015" />
       <reference name="dataSource" ref_id="0_29" />
       <attribute name="name" value="GeneRIF" />
       <attribute name="description" value="Functional annotation added by scientists to genes described in NCBI Gene" />
