@@ -41,7 +41,11 @@
       <attribute name="pubMedId" value="15173566" />
    </item>
    <item id="0_8" class="DataSet" implements="">
+<<<<<<< HEAD
       <attribute name="version" value="06/30/2014" />
+=======
+      <attribute name="version" value="06/30/2015" />
+>>>>>>> 9eedbf1877bd32eeecec15fee4dabbef14fa1422
       <reference name="dataSource" ref_id="0_2" />
       <attribute name="name" value="GO Annotation from TAIR" />
       <attribute name="description" value="GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort" />
