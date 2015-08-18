@@ -13,7 +13,9 @@ package org.intermine.bio.dataconversion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +31,7 @@ import org.intermine.xml.full.Item;
 public class AipGffGFF3RecordHandler extends GFF3RecordHandler
 {
 
+    private final Map<String, Item> pubmedIdMap = new HashMap<String, Item>();
     /**
      * Create a new AipGffGFF3RecordHandler for the given data model.
      * @param model the model for which items will be created
@@ -71,6 +74,9 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
             // For the following feature classes, check if the Dbxref(s) to the TAIR
             // `locus` and `gene` are defined. If true, assign their values to the
             // InterMine attribute `secondaryIdentifier`
+            //
+            // Also,  check if there are Dbxref(s) to PubMed identifiers. If true,
+            // assign their values to the `Publication` entity of the data model
             regexp = "Gene|MRNA|Pseudogene|TransposableElementGene";
             p = Pattern.compile(regexp);
             m = p.matcher(clsName);
@@ -93,6 +99,18 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
 
                             if (ref.startsWith("gene:") || ref.startsWith("locus:")) {
                                 feature.setAttribute("secondaryIdentifier", ref);
+                            } else if(ref.startsWith("PMID:")) {
+                                String pmid = ref.substring(colonIndex + 1);
+                                Item pubmedItem;
+                                if (pubmedIdMap.containsKey(pmid)) {
+                                    pubmedItem = pubmedIdMap.get(pmid);
+                                } else {
+                                    pubmedItem = converter.createItem("Publication");
+                                    pubmedIdMap.put(pmid, pubmedItem);
+                                    pubmedItem.setAttribute("pubMedId", pmid);
+                                    addItem(pubmedItem);
+                                }
+                                addPublication(pubmedItem);
                             } else {
                                 throw new RuntimeException("unknown external reference type: " + ref);
                             }
