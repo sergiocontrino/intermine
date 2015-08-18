@@ -3,6 +3,13 @@ DataSet	Genome Annotation	TAIR10 Genome annotation, consisting of genes, TE rela
 DataSet	Genome Assembly	TAIR9 Genome assembly, consisting of 5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	DataSource:TAIR,Publication:11130711	TAIR9
 DataSet	Coding Sequence FASTA	TAIR10 Coding sequences, consisting of sequences from all the annotated transcripts	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10
 DataSet	GO Annotation from TAIR	GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:TAIR,Publication:15173566	06/30/2014
+DataSet	GO Annotation from TAIR	GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:TAIR,Publication:15173566	06/30/2014
+DataSet	GO Annotation from TAIR	GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:TAIR,Publication:15173566	06/30/2014
+DataSet	GO Annotation from TAIR	GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:TAIR,Publication:15173566	06/30/2014
+DataSet	GO Annotation from TAIR	GO Annotations made by TAIR curators and the TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:TAIR,Publication:15173566	06/30/2014
+
+
+
 DataSource	UniProt	Comprehensive, high-quality and freely accessible resource of protein sequence and functional information	http://www.uniprot.org	Publication:24253303
 DataSet	Swiss-Prot data set	High-quality, manually annotated, non-redundant protein sequence database	http://web.expasy.org/docs/swiss-prot_guideline.html	DataSource:UniProt,Publication:24253303	2015_08
 DataSet	TrEMBL data set	Computationally analysed records, enriched with automatic annotation	http://www.ebi.ac.uk/uniprot/TrEMBLstats	DataSource:UniProt,Publication:24253303	2015_08
