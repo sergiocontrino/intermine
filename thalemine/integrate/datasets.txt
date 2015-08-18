@@ -1,29 +1,29 @@
-DataSource	TAIR	The Arabidopsis Information Resource	http://www.arabidopsis.org	Publication:11130711	
-DataSet	Genome Annotation	"TAIR10 Genome annotation, consisting of genes, TE related genes, other non-coding RNA and transposable elements"	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	"DataSource:TAIR,Publication:22140109"	"TAIR10 (June 30, 2014)"
-DataSet	Genome Assembly	"TAIR9 Genome assembly, consisting of 5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies"	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	"DataSource:TAIR,Publication:11130711"	TAIR9
-DataSet	Coding Sequence FASTA	"TAIR10 Coding sequences, consisting of sequences from all the annotated transcripts"	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	"DataSource:TAIR,Publication:22140109"	TAIR10
-DataSource	GO	GO Ontology Consortium	http://www.geneontology.org	Publication:25428369	
-DataSet	GO Annotation from GOC	GO annotations assigned by the GO Consortium	http://www.geneontology.org	"DataSource:GO,Publication:25428369"	6/30/2015
-DataSet	GO Annotation from IntAct	GO annotations assigned by IntAct	http://www.geneontology.org	"DataSource:GO,Publication:25428369"	6/30/2015
-DataSet	GO Annotation from RefGenome	GO annotations assigned by RefGenome	http://www.geneontology.org	"DataSource:GO,Publication:25428369"	6/30/2015
-DataSet	GO Annotation from TAIR	GO annotations assigned by TAIR curators	http://www.geneontology.org	"DataSource:GO,Publication:25428369"	6/30/2015
-DataSet	GO Annotation from TIGR	GO annotations assigned by TIGR Arabidopsis annotation effort	http://www.geneontology.org	"DataSource:GO,Publication:25428369"	6/30/2015
-DataSet	GO Annotation from UniProt	GO annotations assigned by UniProt	http://www.geneontology.org	"DataSource:GO,Publication:25428369"	6/30/2015
-DataSource	UniProt	"Comprehensive, high-quality and freely accessible resource of protein sequence and functional information"	http://www.uniprot.org	Publication:24253303	
-DataSet	Swiss-Prot data set	"High-quality, manually annotated, non-redundant protein sequence database"	http://web.expasy.org/docs/swiss-prot_guideline.html	"DataSource:UniProt,Publication:24253303"	2015_08
-DataSet	TrEMBL data set	"Computationally analysed records, enriched with automatic annotation"	http://www.ebi.ac.uk/uniprot/TrEMBLstats	"DataSource:UniProt,Publication:24253303"	2015_08
-DataSet	UniProt FASTA dataset	Protein sequences and alternative splice forms generated using VARSPLIC	ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/README.varsplic	"DataSource:UniProt,Publication:24253303"	2015_08
-DataSet	UniProt keywords data set	Keywords and categories used in UniProtKB	http://www.uniprot.org/docs/keywlist	"DataSource:UniProt,Publication:24253303"	2015_08
-DataSource	InterPro	Protein sequence analysis and classification	http://www.ebi.ac.uk/interpro	Publication:25428371	
-DataSet	InterPro data set	Protein family and domain assignments to proteins	http://www.ebi.ac.uk/interpro	"DataSource:InterPro,Publication:25428371"	v53.0
-DataSet	InterPro GO Annotation data set	Mapping between InterPro domains and GO terms	http://www.ebi.ac.uk/GOA/InterPro2GO	"DataSource:InterPro,Publication:17202162"	v53.0
-DataSource	Panther	Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree	https://www.pantherdb.org	Publication:23193289	
-DataSet	Panther data set	"Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis"	https://www.pantherdb.org	DataSource:Panther	10.0
-DataSource	BAR	The Bio-Analaytic Resource for Plant Biology	http://bar.utoronto.ca	Publication:19401381	
-DataSet	BAR Interactions data set	"Confirmed Arabidopsis protein interactions from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR"	http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi	"DataSource:BAR,Publication:17675552"	
-DataSet	BAR Annotations Lookup	Mapping between an AGI locus and Probeset identifier	http://bar.urotonto.ca	DataSource:BAR	
-DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840	
-DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	"DataSource:NCBI,Publication:17148475"	8/14/2015
-DataSet	GeneRIF	Functional annotation added by scientists to genes described in NCBI Gene	http://www.ncbi.nlm.nih.gov/gene/about-generif	"DataSource:NCBI,Publication:17148475"	8/14/2015
-DataSource	GenomeNet	Japanese network of database and computational services for genome research	http://www.genome.jp	Publication:9397687	
-DataSet	KEGG pathways data set	"Wiring diagrams of molecular interactions, reactions, and relations"	http://www.kegg.jp/kegg/pathway.html	"DataSource:GenomeNet,Publication:24214961"	72.0
+DataSource	TAIR	The Arabidopsis Information Resource	http://www.arabidopsis.org	Publication:11130711
+DataSet	Genome Annotation	TAIR10 Genome annotation, consisting of genes, TE related genes, other non-coding RNA and transposable elements	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10 (June 30, 2014)
+DataSet	Genome Assembly	TAIR9 Genome assembly, consisting of 5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	DataSource:TAIR,Publication:11130711	TAIR9
+DataSet	Coding Sequence FASTA	TAIR10 Coding sequences, consisting of sequences from all the annotated transcripts	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10
+DataSource  GO  GO Ontology Consortium  http://geneontology.org	Publication:25428369
+DataSet	GO Annotation from GOC	GO annotations assigned by the GO Consortium  http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
+DataSet	GO Annotation from IntAct	GO annotations assigned by IntAct  http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
+DataSet	GO Annotation from RefGenome	GO annotations assigned by RefGenome  http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
+DataSet	GO Annotation from TAIR	GO annotations assigned by TAIR curators  http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
+DataSet	GO Annotation from TIGR	GO annotations assigned by TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
+DataSet	GO Annotation from UniProt	GO annotations assigned by UniProt	http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
+DataSource	UniProt	Comprehensive, high-quality and freely accessible resource of protein sequence and functional information	http://www.uniprot.org	Publication:24253303
+DataSet	Swiss-Prot data set	High-quality, manually annotated, non-redundant protein sequence database	http://web.expasy.org/docs/swiss-prot_guideline.html	DataSource:UniProt,Publication:24253303	2015_08
+DataSet	TrEMBL data set	Computationally analysed records, enriched with automatic annotation	http://www.ebi.ac.uk/uniprot/TrEMBLstats	DataSource:UniProt,Publication:24253303	2015_08
+DataSet	UniProt FASTA dataset	Protein sequences and alternative splice forms generated using VARSPLIC	ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/README.varsplic	DataSource:UniProt,Publication:24253303	2015_08
+DataSet	UniProt keywords data set	Keywords and categories used in UniProtKB	http://www.uniprot.org/docs/keywlist	DataSource:UniProt,Publication:24253303	2015_08
+DataSource	InterPro	Protein sequence analysis and classification	http://www.ebi.ac.uk/interpro	Publication:25428371
+DataSet	InterPro data set	Protein family and domain assignments to proteins	http://www.ebi.ac.uk/interpro	DataSource:InterPro,Publication:25428371	v53.0
+DataSet	InterPro GO Annotation data set	Mapping between InterPro domains and GO terms	http://www.ebi.ac.uk/GOA/InterPro2GO	DataSource:InterPro,Publication:17202162	v53.0
+DataSource	Panther	Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree	https://www.pantherdb.org	Publication:23193289
+DataSet	Panther data set	Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis	https://www.pantherdb.org	DataSource:Panther	10.0
+DataSource	BAR	The Bio-Analaytic Resource for Plant Biology	http://bar.utoronto.ca	Publication:19401381
+DataSet	BAR Interactions data set	Confirmed Arabidopsis protein interactions from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR	http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi	DataSource:BAR,Publication:17675552
+DataSet	BAR Annotations Lookup	Mapping between an AGI locus and Probeset identifier	http://bar.urotonto.ca	DataSource:BAR
+DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840
+DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	08/14/2015
+DataSet	GeneRIF	Functional annotation added by scientists to genes described in NCBI Gene	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	08/14/2015
+DataSource	GenomeNet	Japanese network of database and computational services for genome research	http://www.genome.jp	Publication:9397687
+DataSet	KEGG pathways data set	Wiring diagrams of molecular interactions, reactions, and relations	http://www.kegg.jp/kegg/pathway.html	DataSource:GenomeNet,Publication:24214961	72.0
