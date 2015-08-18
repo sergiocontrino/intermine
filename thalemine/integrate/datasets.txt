@@ -3,8 +3,8 @@ DataSet	Genome Annotation	TAIR10 Genome annotation, consisting of genes, TE rela
 DataSet	Genome Assembly	TAIR9 Genome assembly, consisting of 5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	DataSource:TAIR,Publication:11130711	TAIR9
 DataSet	Coding Sequence FASTA	TAIR10 Coding sequences, consisting of sequences from all the annotated transcripts	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10
 DataSource  GO  GO Ontology Consortium  http://geneontology.org	Publication:25428369
-DataSet	GO Annotation from GOC	GO annotations assigned by the GO Consoritum  http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
-DataSet	GO Annotation from InAct	GO annotations assigned by InAct  http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
+DataSet	GO Annotation from GOC	GO annotations assigned by the GO Consortium  http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
+DataSet	GO Annotation from IntAct	GO annotations assigned by IntAct  http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
 DataSet	GO Annotation from RefGenome	GO annotations assigned by RefGenome  http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
 DataSet	GO Annotation from TAIR	GO annotations assigned by TAIR curators  http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
 DataSet	GO Annotation from TIGR	GO annotations assigned by TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
