@@ -72,7 +72,7 @@
   <tr>
     <td rowspan="3" class="leftcol"><h2><p>Gene Ontology</p></h2></td>
     <td>GO annotations made by TAIR curators, TIGR Arabidopsis annotation effort</td>
-    <td><a href="http://www.geneontology.org" target="_blank" class="extlink">Gene Ontology Site</a>- 30 Jun 2014</td>
+    <td><a href="http://www.geneontology.org" target="_blank" class="extlink">Gene Ontology Site</a>- 30 Jun 2015</td>
     <td>Berardini et al., 2004 - <a href="http://www.ncbi.nlm.nih.gov" target="_blank" class="extlink">PubMed: 15173566</a><br />
         Gene Ontology Consortium - <a href="http://www.ncbi.nlm.nih.gov/pubmed/10802651" target="_blank" class="extlink">PubMed:10802651</a></td>
   </tr>
@@ -88,10 +88,20 @@
   </tr>
 
   <tr>
-    <td class="leftcol"><p><h2>Interactions</p><h2></td>
+    <td rowspan="3" class="leftcol"><p><h2>Interactions</p><h2></td>
     <td>Confirmed Arabidopsis interacting proteins come from <a href="http://www.bind.ca/">BIND</a>, the Biomolecular Interaction Network Database, from high-density Arabidopsis protein microarrays (<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=AbstractPlus&list_uids=17360592&query_hl=6&itool=pubmed_ExternalLink">Popescu et al., 2007</a>; <a href="http://dx.doi.org/10.1101/gad.1740009">Popescu et al., 2009</a>), from Braun et al.'s Arabidopsis Interactome <a href="http://dx.doi.org/10.1126/science.1203877">2011</a>, from Wolf Frommer's Membrane protein INteractome Database <a href="http://associomics.org">MIND</a>, and over 1190 other literature sources.</td>
     <td><a href="http://bar.utoronto.ca/" target="_blank" class="extlink">Bio-Analytic Resource</a> for Plant Biology</td>
     <td>Geisler-Lee et al., 2007 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/17675552">PubMed: 17675552</a></td>
+  </tr>
+  <tr>
+    <td>Public database that archives and disseminates genetic and protein interaction data from model organisms and humans</td>
+    <td><a href="http://thebiogrid.org/" target="_blank" class="extlink">BioGRID</a>- version 3.3.123</td>
+    <td>Chatr-Aryamontri et al., 2014 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/25428363">PubMed: 25428363</a></td>
+  </tr>
+  <tr>
+    <td>Freely available, open source database system and analysis tools for molecular interaction data, derived from literature curation or direct user submissions</td>
+    <td><a href="http://www.ebi.ac.uk/intact/" target="_blank" class="extlink">IntAct</a>- 26 Jun 2015</td>
+    <td>Kerrien et al., 2012 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/22121220">PubMed: 22121220</a></td>
   </tr>
 
   <tr>

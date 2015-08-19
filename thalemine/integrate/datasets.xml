@@ -266,4 +266,40 @@
       <attribute name="url" value="http://www.kegg.jp/kegg/pathway.html" />
       <reference name="publication" ref_id="0_41" />
    </item>
+   <item id="0_43" class="Publication" implements="">
+      <attribute name="pubMedId" value="25428363" />
+   </item>
+   <item id="0_44" class="DataSource" implements="">
+      <attribute name="name" value="BioGRID" />
+      <attribute name="description" value="Open access database housing genetic and protein interactions curated from biomedical literature for all major model organism species and humans" />
+      <attribute name="url" value="http://thebiogrid.org" />
+      <collection name="publications">
+         <reference ref_id="0_43" />
+      </collection>
+   </item>
+   <item id="0_45" class="DataSet" implements="">
+      <attribute name="version" value="3.3.123" />
+      <reference name="dataSource" ref_id="0_44" />
+      <attribute name="name" value="BioGRID interaction data set" />
+      <attribute name="description" value="Curated set of genetic and physical interactions for Arabidopsis from BioGRID" />
+      <attribute name="url" value="http://thebiogrid.org" />
+   </item>
+   <item id="0_46" class="Publication" implements="">
+      <attribute name="pubMedId" value="22121220" />
+   </item>
+   <item id="0_47" class="DataSource" implements="">
+      <attribute name="name" value="IntAct" />
+      <attribute name="description" value="Freely available, open source database system and analysis tools for molecular interaction data, derived from literature or direct user submissions" />
+      <attribute name="url" value="http://www.ebi.ac.uk/intact/" />
+      <collection name="publications">
+         <reference ref_id="0_46" />
+      </collection>
+   </item>
+   <item id="0_48" class="DataSet" implements="">
+      <attribute name="version" value="06/26/2015" />
+      <reference name="dataSource" ref_id="0_47" />
+      <attribute name="name" value="IntAct interactions data set" />
+      <attribute name="description" value="Curated binary and complex protein-protein interactions for Arabidopsis from IntAct" />
+      <attribute name="url" value="http://www.ebi.ac.uk/intact/" />
+   </item>
 </items>
