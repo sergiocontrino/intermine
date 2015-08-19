@@ -67,6 +67,7 @@ public class PsiConverter extends BioFileConverter
     private static final String DEFAULT_DATASOURCE = "";
     private static final String BINDING_SITE = "MI:0117";
     private static final Set<String> INTERESTING_COMMENTS = new HashSet<String>();
+    private static final String ATH_TAXONID = "3702";
 
     protected IdResolver rslv;
 
@@ -103,8 +104,8 @@ public class PsiConverter extends BioFileConverter
     @Override
     public void process(Reader reader) throws Exception {
         Boolean noResolver  = false;
-        if (taxonIds.size() == 1 && taxonIds.contains("3702")) {
-            LOG.info("ORGANISM Arabidopsis " + taxonIds + ", not using Id Resolver.");
+        if (taxonIds.size() == 1 && taxonIds.contains(ATH_TAXONID)) {
+            LOG.debug("ORGANISM Arabidopsis " + taxonIds + ", not using Id Resolver.");
             noResolver  = true;
         } else {
             // init reslover
@@ -696,7 +697,9 @@ public class PsiConverter extends BioFileConverter
                 identifier = rslv.resolveId(taxonId, identifier).iterator().next();
                 return identifier;
             }
-
+            if (taxonId.equals(ATH_TAXONID)) {
+                return id.toUpperCase();
+            }
             return id;
         }
 
