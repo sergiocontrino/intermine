@@ -45,6 +45,7 @@
       <fieldconfig fieldExpr="name"/>
       <fieldconfig fieldExpr="description"/>
       <fieldconfig fieldExpr="url" doNotTruncate="true"/>
+      <fieldconfig fieldExpr="version"/>
     </fields>
   </class>
 
