@@ -1,0 +1,4 @@
+<project name="po-annotation-tasks" default="default" basedir=".">
+  <description>build po-annotation tasks</description>
+  <import file="../../../../imbuild/library.xml"/> 
+</project>
