@@ -132,6 +132,16 @@
             <property name="dataSourceName" value="GO Annotation from TAIR"/>
             <property name="ontologyPrefix" value="GO"/>
         </source>
+        <source name="po" type="po">
+            <property name="src.data.file" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/po/plant_ontology.obo"/>
+        </source>
+
+        <source name="po-annotation" type="po-annotation">
+            <property name="ontologyfile" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/po/plant_ontology.obo"/>
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/po_annotation/" />
+            <property name="dataSourceName" value="PO Annotation from TAIR"/>
+            <property name="ontologyPrefix" value="PO"/>
+        </source>
 
         <source name="uniprot" type="uniprot">
             <!-- source last updated: 2015-05-12 15:00:00 -->
