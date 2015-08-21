@@ -95,7 +95,7 @@
   </tr>
   <tr>
     <td>Public database that archives and disseminates genetic and protein interaction data from model organisms and humans</td>
-    <td><a href="http://thebiogrid.org/" target="_blank" class="extlink">BioGRID</a>- version 3.3.123</td>
+    <td><a href="http://thebiogrid.org/" target="_blank" class="extlink">BioGRID</a>- version 3.4.127</td>
     <td>Chatr-Aryamontri et al., 2014 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/25428363">PubMed: 25428363</a></td>
   </tr>
   <tr>

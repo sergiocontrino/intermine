@@ -278,7 +278,7 @@
       </collection>
    </item>
    <item id="0_45" class="DataSet" implements="">
-      <attribute name="version" value="3.3.123" />
+      <attribute name="version" value="3.4.127" />
       <reference name="dataSource" ref_id="0_44" />
       <attribute name="name" value="BioGRID interaction data set" />
       <attribute name="description" value="Curated set of genetic and physical interactions for Arabidopsis from BioGRID" />

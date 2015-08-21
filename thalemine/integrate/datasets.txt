@@ -28,6 +28,6 @@ DataSet	GeneRIF	Functional annotation added by scientists to genes described in 
 DataSource	GenomeNet	Japanese network of database and computational services for genome research	http://www.genome.jp	Publication:9397687
 DataSet	KEGG pathways data set	Wiring diagrams of molecular interactions, reactions, and relations	http://www.kegg.jp/kegg/pathway.html	DataSource:GenomeNet,Publication:24214961	72.0
 DataSource	BioGRID	Open access database housing genetic and protein interactions curated from biomedical literature for all major model organism species and humans	http://thebiogrid.org	Publication:25428363
-DataSet	BioGRID interaction data set	Curated set of genetic and physical interactions for Arabidopsis from BioGRID	http://thebiogrid.org	DataSource:BioGRID	3.3.123
+DataSet	BioGRID interaction data set	Curated set of genetic and physical interactions for Arabidopsis from BioGRID	http://thebiogrid.org	DataSource:BioGRID	3.4.127
 DataSource	IntAct	Freely available, open source database system and analysis tools for molecular interaction data, derived from literature or direct user submissions	http://www.ebi.ac.uk/intact/	Publication:22121220
 DataSet	IntAct interactions data set	Curated binary and complex protein-protein interactions for Arabidopsis from IntAct	http://www.ebi.ac.uk/intact/	DataSource:IntAct	06/26/2015
