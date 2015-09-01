@@ -35,9 +35,13 @@ import org.intermine.objectstore.query.QueryClass;
 import org.intermine.objectstore.query.QueryCollectionReference;
 import org.intermine.objectstore.query.QueryField;
 import org.intermine.objectstore.query.QueryFunction;
+import org.intermine.objectstore.query.QueryObjectReference;
+import org.intermine.objectstore.query.QueryReference;
 import org.intermine.objectstore.query.QueryValue;
 import org.intermine.objectstore.query.Results;
 import org.intermine.objectstore.query.ResultsRow;
+import org.intermine.objectstore.query.SimpleConstraint;
+import org.intermine.objectstore.query.SubqueryConstraint;
 import org.intermine.objectstore.query.SubqueryExistsConstraint;
 import org.intermine.util.DynamicUtil;
 import org.intermine.web.displayer.ReportDisplayer;
@@ -71,7 +75,7 @@ public class PublicationCountsDisplayer extends ReportDisplayer {
 
 		log.info("Thalemine Publication Displayer has started.");
 		Map<Publication, String> bioEntityPublications = new LinkedHashMap<Publication, String>();
-		
+		Map<Publication, String> aggPublications = new LinkedHashMap<Publication, String>();
 
 		InterMineObject object = reportObject.getObject();
 		String type = DynamicUtil.getSimpleClass(object).getSimpleName();
@@ -85,17 +89,29 @@ public class PublicationCountsDisplayer extends ReportDisplayer {
 			Query query = queryManager(im, object, type);
 			bioEntityPublications = getPublications(query, im);
 
+			log.info("Or SubQuery Agg");
+
+			if (type.equals("Gene")) {
+				Model model = im.getModel();
+				QueryClass queryClass = new QueryClass(Class.forName(model.getPackageName() + "." + type));
+				Query queryAgg = getAllAggPublicationsQuery(im, object, type, queryClass);
+				aggPublications = getPublications(queryAgg, im);
+				
+				log.info("Agg Publications Size: " + aggPublications.size());
+			} 
+
 		} catch (Exception e) {
 			exception = e;
 		}
 		if (exception != null) {
-			log.error("Error occurred while retrieving publications for object: " + " ; Message: " + exception.getMessage()
-					+ "; Cause: " + exception.getCause() + "; Object: " + object);
+			log.error("Error occurred while retrieving publications for object: " + " ; Message: "
+					+ exception.getMessage() + "; Cause: " + exception.getCause() + "; Object: " + object);
 			exception.printStackTrace();
 		} else {
-			log.info("Retrieval of the Object Publication Collection has successfully completed. " + "; Publication Collection Size: " +bioEntityPublications.size());
+			log.info("Retrieval of the Object Publication Collection has successfully completed. "
+					+ "; Publication Collection Size: " + bioEntityPublications.size());
 		}
-		
+
 		request.setAttribute("totalNumberOfPubs", bioEntityPublications.size());
 		request.setAttribute("results", bioEntityPublications);
 
@@ -408,7 +424,7 @@ public class PublicationCountsDisplayer extends ReportDisplayer {
 			geneSubQuery.addFrom(qcOtherGenes);
 			geneSubQuery.addToSelect(new QueryValue(1));
 			ConstraintSet geneSubSetCS = new ConstraintSet(ConstraintOp.AND);
-	
+
 			QueryCollectionReference genePubCollection = new QueryCollectionReference(object, "publications");
 			geneSubSetCS.addConstraint(new ContainsConstraint(genePubCollection, ConstraintOp.CONTAINS, qcPub));
 
@@ -427,7 +443,7 @@ public class PublicationCountsDisplayer extends ReportDisplayer {
 			transcriptsSubQuery.addFrom(qcOtherGenes);
 			transcriptsSubQuery.addToSelect(new QueryValue(1));
 			ConstraintSet transcriptsSetCS = new ConstraintSet(ConstraintOp.AND);
-					
+
 			QueryCollectionReference geneTranscriptsCollection = new QueryCollectionReference(object, "transcripts");
 			transcriptsSetCS.addConstraint(new ContainsConstraint(geneTranscriptsCollection, ConstraintOp.CONTAINS,
 					qcTranscript));
@@ -453,7 +469,7 @@ public class PublicationCountsDisplayer extends ReportDisplayer {
 			proteinsSubQuery.addFrom(qcOtherGenes);
 			proteinsSubQuery.addToSelect(new QueryValue(1));
 			ConstraintSet proteinsSetCS = new ConstraintSet(ConstraintOp.AND);
-					
+
 			QueryCollectionReference geneProteinsCollection = new QueryCollectionReference(object, "proteins");
 			proteinsSetCS
 					.addConstraint(new ContainsConstraint(geneProteinsCollection, ConstraintOp.CONTAINS, qcProtein));
@@ -469,6 +485,154 @@ public class PublicationCountsDisplayer extends ReportDisplayer {
 			outerQueryCS.addConstraint(new SubqueryExistsConstraint(ConstraintOp.EXISTS, proteinsSubQuery));
 
 			outerQuery.setConstraint(outerQueryCS);
+
+			outerQuery.addToOrderBy(qfDate, "desc");
+
+		}
+
+		return outerQuery;
+
+	}
+
+	private Query getAllAggPublicationsQuery(InterMineAPI im, InterMineObject object, String type,
+			final QueryClass queryClass) {
+
+		Model model = im.getModel();
+
+		QueryClass qcPub = new QueryClass(Publication.class);
+		QueryClass qcOtherGenes = null;
+		QueryClass qcTranscript = new QueryClass(Transcript.class);
+		QueryClass qcProtein = new QueryClass(Protein.class);
+
+		Query outerQuery = null;
+
+		if (type.equals("Gene")) {
+			// outer query constraints
+
+			log.info("Retrieving All Gene Publications has started. Classes includes: Gene, transcripts, proteins ."
+					+ type);
+			try {
+				qcOtherGenes = new QueryClass(Class.forName(model.getPackageName() + "." + type));
+			} catch (ClassNotFoundException e) {
+				log.error(
+						"Error rendering publication count displayer. Error occurred in Get All Gene Publications method. ",
+						e);
+				return null;
+			}
+
+			outerQuery = new Query();
+
+			ConstraintSet outerQueryCS = new ConstraintSet(ConstraintOp.OR);
+			outerQuery.setDistinct(true);
+
+			// outer query from clause
+			outerQuery.addFrom(qcPub);
+			outerQuery.addFrom(qcOtherGenes);
+
+			// outer query group by clause
+			outerQuery.addToGroupBy(new QueryField(qcPub, "id"));
+
+			QueryField qfDate = new QueryField(qcPub, "year");
+			outerQuery.addToGroupBy(qfDate);
+
+			// outer query select clause
+			outerQuery.addToSelect(qcPub);
+
+			// publication count
+			QueryFunction qf = new QueryFunction();
+			outerQuery.addToSelect(qf);
+
+			outerQuery.addToSelect(qfDate);
+
+			log.info("Retrieving All Gene Publications has started. Classes includes: Gene, transcripts, proteins ."
+					+ type);
+
+			// Gene subquery
+
+			Query geneSubQuery = new Query();
+			QueryClass qcPubGeneSQ = new QueryClass(Publication.class);
+			geneSubQuery.alias(qcPubGeneSQ, "geneSQ");
+			geneSubQuery.setDistinct(false);
+			geneSubQuery.addFrom(qcPubGeneSQ);
+			geneSubQuery.addFrom(qcOtherGenes);
+			geneSubQuery.addToSelect(qcPubGeneSQ);
+			
+			ConstraintSet geneSubSetCS = new ConstraintSet(ConstraintOp.AND);
+
+			QueryCollectionReference genePubCollection = new QueryCollectionReference(object, "publications");
+			geneSubSetCS.addConstraint(new ContainsConstraint(genePubCollection, ConstraintOp.CONTAINS, qcPubGeneSQ));
+
+			QueryCollectionReference geneClassPubCollection = new QueryCollectionReference(qcOtherGenes, "publications");
+			geneSubSetCS.addConstraint(new ContainsConstraint(geneClassPubCollection, ConstraintOp.CONTAINS, qcPubGeneSQ));
+
+			geneSubQuery.setConstraint(geneSubSetCS);
+		
+			outerQueryCS.addConstraint(new SubqueryConstraint(qcPub, ConstraintOp.IN, geneSubQuery));
+
+			// Transcripts SubQuery
+			Query transcriptsSubQuery = new Query();
+			QueryClass qcPubTranscriptsSQ = new QueryClass(Publication.class);
+			transcriptsSubQuery.alias(qcPubTranscriptsSQ, "trSQ");
+			transcriptsSubQuery.setDistinct(false);
+			transcriptsSubQuery.addFrom(qcPubTranscriptsSQ);
+			transcriptsSubQuery.addFrom(qcOtherGenes);
+			transcriptsSubQuery.addFrom(qcTranscript);
+			transcriptsSubQuery.addToSelect(qcPubTranscriptsSQ);
+			ConstraintSet transcriptsSetCS = new ConstraintSet(ConstraintOp.AND);
+
+			QueryCollectionReference geneTranscriptsCollection = new QueryCollectionReference(object, "transcripts");
+			transcriptsSetCS.addConstraint(new ContainsConstraint(geneTranscriptsCollection, ConstraintOp.CONTAINS,
+					qcTranscript));
+
+			QueryCollectionReference transcriptsClassPubCollection = new QueryCollectionReference(qcOtherGenes,
+					"transcripts");
+			transcriptsSetCS.addConstraint(new ContainsConstraint(transcriptsClassPubCollection, ConstraintOp.CONTAINS,
+					qcTranscript));
+
+			QueryCollectionReference transcriptsPubCollection = new QueryCollectionReference(qcTranscript,
+					"publications");
+			transcriptsSetCS.addConstraint(new ContainsConstraint(transcriptsPubCollection, ConstraintOp.CONTAINS,
+					qcPubTranscriptsSQ));
+
+			transcriptsSubQuery.setConstraint(transcriptsSetCS);
+			//outerQueryCS.addConstraint(new SubqueryConstraint(qcPub, ConstraintOp.IN, transcriptsSubQuery));
+
+			// Proteins SubQuery
+			Query proteinsSubQuery = new Query();
+			QueryClass qcPubproteinsSQ = new QueryClass(Publication.class);
+			transcriptsSubQuery.alias(qcPubproteinsSQ, "prSQ");
+			proteinsSubQuery.setDistinct(false);
+			proteinsSubQuery.addFrom(qcPubproteinsSQ);
+			proteinsSubQuery.addFrom(qcProtein);
+			proteinsSubQuery.addFrom(qcOtherGenes);
+			proteinsSubQuery.addToSelect(qcPubproteinsSQ);
+			ConstraintSet proteinsSetCS = new ConstraintSet(ConstraintOp.AND);
+
+			QueryCollectionReference geneProteinsCollection = new QueryCollectionReference(object, "proteins");
+			proteinsSetCS
+					.addConstraint(new ContainsConstraint(geneProteinsCollection, ConstraintOp.CONTAINS, qcProtein));
+
+			QueryCollectionReference proteinsClassPubCollection = new QueryCollectionReference(qcOtherGenes, "proteins");
+			proteinsSetCS.addConstraint(new ContainsConstraint(proteinsClassPubCollection, ConstraintOp.CONTAINS,
+					qcProtein));
+
+			QueryCollectionReference proteinsPubCollection = new QueryCollectionReference(qcProtein, "publications");
+			proteinsSetCS.addConstraint(new ContainsConstraint(proteinsPubCollection, ConstraintOp.CONTAINS, qcPubproteinsSQ));
+
+			proteinsSubQuery.setConstraint(proteinsSetCS);
+			//outerQueryCS.addConstraint(new SubqueryConstraint(qcPub, ConstraintOp.IN, proteinsSubQuery));
+
+			ConstraintSet outerQueryMainCS = new ConstraintSet(ConstraintOp.AND);
+						
+			QueryField geneIdField = new QueryField(qcOtherGenes, "id");
+			QueryValue geneIdValue = new QueryValue(object.getId());
+			SimpleConstraint geneIdCS = new SimpleConstraint(geneIdField, ConstraintOp.EQUALS, geneIdValue);
+			
+			outerQueryMainCS.addConstraint(geneIdCS);
+			outerQueryMainCS.addConstraint(outerQueryCS);
+			
+			outerQuery.setConstraint(outerQueryMainCS);
+			
 			
 			outerQuery.addToOrderBy(qfDate, "desc");
 
@@ -478,7 +642,7 @@ public class PublicationCountsDisplayer extends ReportDisplayer {
 
 	}
 
-	private Map<Publication, String> getPublications(final Query query, final InterMineAPI im) throws Exception{
+	private Map<Publication, String> getPublications(final Query query, final InterMineAPI im) throws Exception {
 
 		Map<Publication, String> publications = new LinkedHashMap<Publication, String>();
 		Exception exception = null;
