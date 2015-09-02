@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.intermine.api.InterMineAPI;
 import org.intermine.bio.util.Constants;
+import org.intermine.metadata.ClassDescriptor;
+import org.intermine.metadata.CollectionDescriptor;
 import org.intermine.metadata.ConstraintOp;
 import org.intermine.model.InterMineObject;
 import org.intermine.objectstore.ObjectStore;
@@ -28,10 +29,10 @@ import org.intermine.objectstore.query.ResultsRow;
 import org.intermine.objectstore.query.SimpleConstraint;
 import org.intermine.objectstore.query.SubqueryConstraint;
 import org.intermine.postprocess.PostProcessor;
-import org.thalemine.web.displayer.Gene;
-import org.thalemine.web.displayer.Protein;
-import org.thalemine.web.displayer.Publication;
-import org.thalemine.web.displayer.Transcript;
+import org.intermine.model.bioGene;
+import org.intermine.model.bio.Protein;
+import org.intermine.model.bio.Publication;
+import org.intermine.model.bioTranscript;
 
 public class AraportGFFPostProcess extends PostProcessor {
 
@@ -89,27 +90,27 @@ public class AraportGFFPostProcess extends PostProcessor {
 
 	private Iterator<?> getGeneSourceIterator(final Query query) {
 
-		((ObjectStoreInterMineImpl) os).precompute(q, Constants.PRECOMPUTE_CATEGORY);
+		((ObjectStoreInterMineImpl) os).precompute(query, Constants.PRECOMPUTE_CATEGORY);
 		Results res = os.execute(query, 5000, true, false, true);
 		return res.iterator();
 	}
 
 	private Iterator<?> getPublicationIterator(final Query query) {
 
-		((ObjectStoreInterMineImpl) os).precompute(q, Constants.PRECOMPUTE_CATEGORY);
+		((ObjectStoreInterMineImpl) os).precompute(query, Constants.PRECOMPUTE_CATEGORY);
 		Results res = os.execute(query, 5000, true, false, true);
 		return res.iterator();
 	}
 
 	private void processGenesTranscriptsPublications() {
 
+		Exception exception = null;
+
 		Set<Gene> set = new HashSet<Gene>();
 		Set<Publication> notExistingTranscriptsPublications = new HashSet<Publication>();
 		Set<Publication> existingGenePublications = new HashSet<Publication>();
-	
-		long startTime = System.currentTimeMillis();
 
-		osw.beginTransaction();
+		long startTime = System.currentTimeMillis();
 
 		Query query = getGeneQuerySourceRecordsbyTranscripts();
 		Iterator<?> iterator = getGeneSourceIterator(query);
@@ -137,26 +138,41 @@ public class AraportGFFPostProcess extends PostProcessor {
 
 			log.info("Current Gene # Not Existing Publication Count: = " + notExistingTranscriptsPublications.size());
 
-			if (notExistingTranscriptsPublications.siaze() > 0 && !notExistingTranscriptsPublications.isEmpty()) {
+			String destClassName = "Gene";
+			String collectionName = "publication";
+
+			if (notExistingTranscriptsPublications.size() > 0 && !notExistingTranscriptsPublications.isEmpty()) {
 				log.info("Adding not existing pub to a gene publication collection.");
 				existingGenePublications.addAll(notExistingTranscriptsPublications);
-				log.info("Current Gene # Existing Publication Count After Merge: = " + existingGenePublications.size());
+				log.info("Current Gene Expected of # Existing Publication Count After the Merge: = "
+						+ existingGenePublications.size());
 
 				// Attempt to store Gene Publication Collection
 
 				try {
 
-					Gene tempGene;
-					tempGene = PostProcessUtil.cloneInterMineObject(gene);
+					for (Publication item : notExistingTranscriptsPublications) {
 
-					tempGene.setFieldValue("publications", existingGenePublications);
+						log.info("Processing Publication for a gene. " + item);
 
-					log.info("Storing gene " + gene.getPrimaryIdentifier() + " with updated publications.");
-
-					osw.store(tempGene);
+						// insertPublicationCollectionField(gene, item,
+						// destClassName, collectionName,
+						// notExistingTranscriptsPublications);
+					}
 
 				} catch (IllegalAccessException e) {
-					throw new RuntimeException("Failed to clone InterMineObject: " + gene, e);
+
+					exception = new Exception("Failed to store Gene Publication Collection: " + "; Gene: " + gene);
+
+				} catch (Exception e) {
+					exception = e;
+				} finally {
+					if (exception != null) {
+						log.error("Error occurred while processing gene publication collection." + "; Gene:" + gene
+								+ "; Message: " + exception.getMessage() + "; Cause: " + exception.getCause());
+					} else {
+						log.info("Publication successfully added to the gene collection.");
+					}
 				}
 
 			} else {
@@ -164,8 +180,6 @@ public class AraportGFFPostProcess extends PostProcessor {
 			}
 
 		}
-
-		osw.commitTransaction();
 
 	}
 
@@ -305,6 +319,115 @@ public class AraportGFFPostProcess extends PostProcessor {
 		}
 
 		return publications;
+
+	}
+
+	private CollectionDescriptor getCollectionDescriptor(final String className, final String collectionName) {
+
+		ClassDescriptor classDesc;
+		CollectionDescriptor colDesc = null;
+		classDesc = osw.getModel().getClassDescriptorByName(className);
+		String classDescAsStr = null;
+		Map<String, CollectionDescriptor> collectionDescMap = new LinkedHashMap<String, CollectionDescriptor>();
+
+		if (classDesc != null) {
+			classDescAsStr = classDesc.getName();
+
+			log.info("Class Descriptor:" + classDescAsStr);
+
+			Set<CollectionDescriptor> collectionDescGene = classDesc.getAllCollectionDescriptors();
+
+			// Adding Class Collection Descriptors to the Map
+			log.info("Adding Class Collection Descriptors to the Map:");
+
+			for (CollectionDescriptor item : collectionDescGene) {
+
+				log.info("Collection Decscriptor Name: " + item.toString());
+
+				boolean manyToManyC = false;
+
+				if (item.relationType() == CollectionDescriptor.M_N_RELATION) {
+					manyToManyC = true;
+				}
+
+				collectionDescMap.put(item.getName(), item);
+
+				log.info("Collection Type Many To Many ?: " + manyToManyC);
+			}
+
+			if (!collectionDescMap.isEmpty() && collectionDescMap.size() > 0) {
+				if (collectionDescMap.containsKey(collectionName)) {
+					colDesc = collectionDescMap.get(collectionName);
+				}
+			}
+		}
+
+		if (colDesc != null) {
+			log.info("Class Collection Desc: " + "; Class: " + "; Collection Desc: " + colDesc.getName());
+		}
+		return colDesc;
+	}
+
+	private void insertPublicationCollectionField(InterMineObject destObject, InterMineObject sourceObject,
+			final String destClassName, final String collectionName, final Set<InterMineObject> collection)
+			throws Exception {
+
+		Exception exception = null;
+		String errorMessage = null;
+
+		try {
+
+			osw.beginTransaction();
+
+			CollectionDescriptor collectionDesc = getCollectionDescriptor(destClassName, collectionName);
+			ClassDescriptor classDesc = osw.getModel().getClassDescriptorByName(destClassName);
+
+			// if this is a many to many collection we can use
+			// ObjectStore.addToCollection which will
+			// write directly to the database.
+			boolean manyToMany = false;
+
+			if (collectionDesc == null) {
+
+				errorMessage = "Cannot find collection " + collectionName + " for the class " + destClassName;
+				exception = new Exception(errorMessage);
+				log.error(errorMessage);
+				throw exception;
+
+			}
+
+			log.info("Found Collection Descriptor: " + "; Class: " + "; Collection Desc: " + collectionDesc.getName());
+
+			if (collectionDesc.relationType() == CollectionDescriptor.M_N_RELATION) {
+				manyToMany = true;
+			}
+
+			log.info("Collection Type Many To Many ?: " + manyToMany);
+
+			if (manyToMany) {
+				osw.addToCollection(destObject.getId(), classDesc.getType(), collectionName, sourceObject.getId());
+			} else {
+
+				InterMineObject tempObject = PostProcessUtil.cloneInterMineObject(destObject);
+				tempObject.setFieldValue(collectionName, collection);
+				osw.store(tempObject);
+
+			}
+
+			osw.commitTransaction();
+
+		} catch (Exception e) {
+			exception = e;
+		} finally {
+
+			if (exception != null) {
+				log.error("Error occurred during persistence of collection for object: " + destObject.toString()
+						+ "; Collection Name: " + collectionName);
+			} else {
+				log.info("Element of Collection " + collectionName + " successfully stored in the database."
+						+ "; Dest Object:" + destObject.toString() + "; Source Object:" + sourceObject.toString());
+			}
+		}
 
 	}
 }
