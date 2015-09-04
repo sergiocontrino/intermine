@@ -59,7 +59,6 @@ public class UniprotConverter extends BioDirectoryConverter
     private Map<String, String> ontologies = new HashMap<String, String>();
     private Map<String, String> keywords = new HashMap<String, String>();
     private Map<String, String> genes = new HashMap<String, String>();
-    private Map<String, String> mrnas = new HashMap<String, String>();
     private Map<String, String> goterms = new HashMap<String, String>();
     private Map<String, String> goEvidenceCodes = new HashMap<String, String>();
     private Map<String, String> ecNumbers = new HashMap<String, String>();
@@ -423,8 +422,6 @@ public class UniprotConverter extends BioDirectoryConverter
                 String type = getAttrValue(attrs, "type");
                 if (type.equals(CONFIG.getGeneDesignation())) {
                     entry.addGeneDesignation(getAttrValue(attrs, "value"));
-        } else if (type.equals(CONFIG.getMRNADesignation())){
-            entry.addMRNADesignation(getAttrValue(attrs, "value"));
                 } else if ("evidence".equals(type)) {
                     entry.addGOEvidence(entry.getDbref(), getAttrValue(attrs, "value"));
                 }
@@ -685,9 +682,6 @@ public class UniprotConverter extends BioDirectoryConverter
 
                     /* genes */
                     processGene(protein, uniprotEntry);
-
-                    /* mrna */
-                    processMRNA(protein, uniprotEntry);
 
                     store(protein);
 
@@ -985,75 +979,14 @@ public class UniprotConverter extends BioDirectoryConverter
             }
         }
 
-        private void processMRNA(Item protein, UniprotEntry uniprotEntry)
-            throws ObjectStoreException {
-            String taxId = uniprotEntry.getTaxonId();
-            String uniqueIdentifierField = getUniqueField(taxId);
-            Set<String> mrnaIdentifiers = getMRNAIdentifiers(uniprotEntry, uniqueIdentifierField);
-            if (mrnaIdentifiers == null) {
-                LOG.error("no valid mrna identifiers found for "
-                        + uniprotEntry.getPrimaryAccession());
-                return;
-            }
-            boolean hasMultipleMRNA = (mrnaIdentifiers.size() == 1 ? false : true);
-            Item mrna = null;
-            for (String identifier : mrnaIdentifiers) {
-                if (StringUtils.isEmpty(identifier)) {
-                    continue;
-                }
-                if (GENE_PREFIXES.containsKey(taxId)) {
-                    // Prepend RGD:
-                    identifier = GENE_PREFIXES.get(taxId) + identifier;
-                }
-                mrna = getMRNA(protein, uniprotEntry, identifier, taxId,
-                        uniqueIdentifierField);
-                // if we only have one mrna, store later, we may have other mrnas fields to update
-                if (mrna != null && hasMultipleMRNA) {
-                    store(mrna);
-                }
-            }
-
-            if (mrna != null && !hasMultipleMRNA) {
-                Set<String> mrnaFields = getOtherFields(taxId);
-                for (String mrnaField : mrnaFields) {
-                    mrnaIdentifiers = getMRNAIdentifiers(uniprotEntry, mrnaField);
-                    if (mrnaIdentifiers == null) {
-                        continue;
-                    }
-                    for (String mrnaIdentifier : mrnaIdentifiers) {
-                        if (StringUtils.isEmpty(mrnaIdentifier)) {
-                            continue;
-                        }
-                        if (GENE_PREFIXES.containsKey(taxId)) {
-                            // Prepend RGD:
-                            mrnaIdentifier = GENE_PREFIXES.get(taxId) + mrnaIdentifier;
-                        }
-
-                        if ("primaryIdentifier".equals(mrnaField)) {
-                            String resolvedId = resolveGene(taxId, mrnaIdentifier);
-                            if (resolvedId == null) {
-                                LOG.info("Can not resolve " + mrnaIdentifier);
-                            } else {
-                                mrna.setAttribute(mrnaField, resolvedId);
-                            }
-                        } else {
-                            mrna.setAttribute(mrnaField, mrnaIdentifier);
-                        }
-                    }
-                }
-                store(mrna);
-            }
-        }
-
         private Item getGene(Item protein, UniprotEntry uniprotEntry, String geneIdentifier,
-            String taxId, String uniqueIdentifierField) {
+                String taxId, String uniqueIdentifierField) {
             String identifier = resolveGene(taxId, geneIdentifier);
             if (identifier == null) {
                 return null;
             }
 
             String geneRefId = genes.get(identifier);
-            LOG.debug("Looking for: " + identifier + "and got id" + geneRefId);
             if (geneRefId == null) {
                 Item gene = createItem("Gene");
                 gene.setAttribute(uniqueIdentifierField, identifier);
@@ -1074,28 +1007,6 @@ public class UniprotConverter extends BioDirectoryConverter
             return null;
         }
 
-        private Item getMRNA(Item protein, UniprotEntry uniprotEntry, String mrnaIdentifier,
-            String taxId, String uniqueIdentifierField) {
-            String identifier = resolveGene(taxId, mrnaIdentifier);
-            if (identifier == null) {
-                return null;
-            }
-
-            String mrnaRefId = mrnas.get(identifier);
-
-            if (mrnaRefId == null) {
-                Item mrna = createItem("MRNA");
-                mrna.setAttribute(uniqueIdentifierField, identifier);
-                mrna.setReference("organism", getOrganism(taxId));
-                mrnaRefId = mrna.getIdentifier();
-                mrnas.put(identifier, mrnaRefId);
-                protein.addToCollection("mRNA", mrnaRefId);
-                return mrna;
-            }
-            protein.addToCollection("mRNA", mrnaRefId);
-            return null;
-        }
-
         private Set<String> getGeneIdentifiers(UniprotEntry uniprotEntry, String identifierField) {
             String taxId = uniprotEntry.getTaxonId();
 
@@ -1113,31 +1024,7 @@ public class UniprotConverter extends BioDirectoryConverter
             } else {
                 LOG.error("error processing config for organism " + taxId);
             }
-
-
             return geneIdentifiers;
-        }
-
-        private Set<String> getMRNAIdentifiers(UniprotEntry uniprotEntry, String identifierField) {
-            String taxId = uniprotEntry.getTaxonId();
-
-            // which part of XML file to get values (eg. FlyBase, ORF, etc)
-            //String method = getGeneConfigMethod(taxId, identifierField);
-            String method = "mrna-designation";
-            String value = getGeneConfigValue(taxId, identifierField);
-            Set<String> mrnaIdentifiers = new HashSet<String>();
-
-            if ("name".equals(method)) {
-                mrnaIdentifiers = getByName(uniprotEntry, taxId, value);
-            } else if ("mrna-designation".equals(method)) {
-                String identifierValue = uniprotEntry.getMRNADesignation(value);
-                mrnaIdentifiers.add(identifierValue);
-            } else if ("dbref".equals(method)) {
-                mrnaIdentifiers = getByDbref(uniprotEntry, value);
-            } else {
-                LOG.error("error processing config for organism " + taxId);
-            }
-            return mrnaIdentifiers;
         }
 
         private String getGeneConfigMethod(String taxId, String uniqueIdentifierField) {
