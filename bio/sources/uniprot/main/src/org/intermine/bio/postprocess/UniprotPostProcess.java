@@ -34,12 +34,12 @@ import org.intermine.model.bio.Protein;
 import org.intermine.model.bio.Publication;
 import org.intermine.model.bio.Transcript;
 
-public class AraportGFFPostProcess extends PostProcessor {
+public class UniprotPostProcess extends PostProcessor {
 
-	private static final Logger log = Logger.getLogger(AraportGFFPostProcess.class);
+	private static final Logger log = Logger.getLogger(UniprotPostProcess.class);
 	protected ObjectStore os;
 
-	public AraportGFFPostProcess(ObjectStoreWriter osw) {
+	public UniprotPostProcess(ObjectStoreWriter osw) {
 
 		super(osw);
 		this.os = osw.getObjectStore();
@@ -49,22 +49,22 @@ public class AraportGFFPostProcess extends PostProcessor {
 	@Override
 	public void postProcess() throws ObjectStoreException {
 
-		log.info("Araport Gff Postprocessor has started.");
+		log.info("Uniprot Postprocessor has started.");
 
 		try {
-			processGenesTranscriptsPublications();
+			processGenesProteinsPublications();
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("Error occrured during araport gff postrprocessing." + ";Message:" + e.getMessage());
+			log.error("Error occrured during uniprot postrprocessing." + ";Message:" + e.getMessage());
 		}
 
-		log.info("Araport Gff Postprocessor has completed.");
+		log.info("Uniprot Postprocessor has completed.");
 
 	}
 
-	private Query getGeneQuerySourceRecordsbyTranscripts() throws ObjectStoreException {
+	private Query getGeneQuerySourceRecordsbyProteins() throws ObjectStoreException {
 
-		log.info("Building of Query Gene Source Records To Validate/Transfer Publications from Transcripts has started.");
+		log.info("Building of Query Gene Source Records To Validate/Transfer Publications from Proteins has started.");
 
 		Query outerQuery = new Query();
 
@@ -74,27 +74,27 @@ public class AraportGFFPostProcess extends PostProcessor {
 		outerQuery.setDistinct(true);
 		QueryClass qcPub = new QueryClass(Publication.class);
 		QueryClass qcGenes = new QueryClass(Gene.class);
-		QueryClass qcTranscript = new QueryClass(Transcript.class);
+		QueryClass qcProtein = new QueryClass(Protein.class);
 
 		// outer query from clause
 		outerQuery.addFrom(qcPub);
-		outerQuery.addFrom(qcTranscript);
+		outerQuery.addFrom(qcProtein);
 		outerQuery.addFrom(qcGenes);
 
 		// outer query select clause
 		outerQuery.addToSelect(qcGenes);
 
 		// join to collection
-		QueryCollectionReference transcriptsGenePubCollection = new QueryCollectionReference(qcGenes, "transcripts");
-		outerQueryCS.addConstraint(new ContainsConstraint(transcriptsGenePubCollection, ConstraintOp.CONTAINS,
-				qcTranscript));
+		QueryCollectionReference proteinGenePubCollection = new QueryCollectionReference(qcGenes, "proteins");
+		outerQueryCS.addConstraint(new ContainsConstraint(proteinGenePubCollection, ConstraintOp.CONTAINS,
+				qcProtein));
 
-		QueryCollectionReference transcriptsPublCollection = new QueryCollectionReference(qcTranscript, "publications");
-		outerQueryCS.addConstraint(new ContainsConstraint(transcriptsPublCollection, ConstraintOp.CONTAINS, qcPub));
+		QueryCollectionReference proteinsPublCollection = new QueryCollectionReference(qcProtein, "publications");
+		outerQueryCS.addConstraint(new ContainsConstraint(proteinsPublCollection, ConstraintOp.CONTAINS, qcPub));
 
 		outerQuery.setConstraint(outerQueryCS);
 
-		log.info("Building of Query Gene Source Records To Validate/Transfer Publications from Transcripts has completed.");
+		log.info("Building of Query Gene Source Records To Validate/Transfer Publications from Proteins has completed.");
 
 		return outerQuery;
 
@@ -152,9 +152,9 @@ public class AraportGFFPostProcess extends PostProcessor {
 		return res.iterator();
 	}
 
-	private void processGenesTranscriptsPublications() throws Exception, ObjectStoreException {
+	private void processGenesProteinsPublications() throws Exception, ObjectStoreException {
 
-		log.info("ProcessGenesTranscriptsPublications has started.");
+		log.info("ProcessGenesProteinsPublications has started.");
 
 		Exception exception = null;
 
@@ -162,11 +162,11 @@ public class AraportGFFPostProcess extends PostProcessor {
 
 		long startTime = System.currentTimeMillis();
 
-		log.info("ProcessGenesTranscriptsPublications before query");
+		log.info("ProcessGenesProteinsPublications before query");
 
-		Query query = getGeneQuerySourceRecordsbyTranscripts();
+		Query query = getGeneQuerySourceRecordsbyProteins();
 
-		log.info("ProcessGenesTranscriptsPublications after query");
+		log.info("ProcessGenesProteinsPublications after query");
 
 		log.info("Gene Source Query:" + query.toString());
 
@@ -203,7 +203,7 @@ public class AraportGFFPostProcess extends PostProcessor {
 
 			log.info("Iterator 5 Line");
 
-			Set<Publication> notExistingTranscriptsPublications = new HashSet<Publication>();
+			Set<Publication> notExistingProteinsPublications = new HashSet<Publication>();
 
 			log.info("Iterator 6 Line");
 
@@ -217,24 +217,24 @@ public class AraportGFFPostProcess extends PostProcessor {
 
 			log.info("Current Gene # Publication Count: = " + existingGenePublications.size());
 
-			notExistingTranscriptsPublications = getPublications(object);
+			notExistingProteinsPublications = getPublications(object);
 
 			log.info("Iterator 8 Line");
 
-			log.info("Current Gene # Not Existing Publication Count: = " + notExistingTranscriptsPublications.size()
+			log.info("Current Gene # Not Existing Publication Count: = " + notExistingProteinsPublications.size()
 					+ "; Gene:" + gene.getPrimaryIdentifier());
 
 			String destClassName = "Gene";
 			String collectionName = "publications";
 
-			if (notExistingTranscriptsPublications.size() > 0 && !notExistingTranscriptsPublications.isEmpty()) {
+			if (notExistingProteinsPublications.size() > 0 && !notExistingProteinsPublications.isEmpty()) {
 				log.info("Adding not existing pub to a gene publication collection.");
 
 				// Attempt to store Gene Publication Collection
 
 				try {
 
-					for (Publication pubItem : notExistingTranscriptsPublications) {
+					for (Publication pubItem : notExistingProteinsPublications) {
 
 						log.info("Attempt to Store Not Existing Pub: Processing Publication for a gene. " + pubItem);
 
@@ -259,7 +259,7 @@ public class AraportGFFPostProcess extends PostProcessor {
 				}
 
 			} else {
-				log.info("Count of # Not Existing Transcripts Publication Size = 0. Nothing to merge!");
+				log.info("Count of # Not Existing Proteins Publication Size = 0. Nothing to merge!");
 			}
 
 			log.info("Processed Gene Count:" + count);
@@ -271,13 +271,13 @@ public class AraportGFFPostProcess extends PostProcessor {
 
 	}
 
-	private Query getNotExistingTranscriptsPubbyGeneQuery(InterMineObject object) {
+	private Query getNotExistingProteinsPubbyGeneQuery(InterMineObject object) {
 
-		log.info("Looking up non-existing transcripst publications for a gene: " + object);
+		log.info("Looking up non-existing proteins publications for a gene: " + object);
 
 		QueryClass qcPub = new QueryClass(Publication.class);
 		QueryClass qcOtherGenes = new QueryClass(Gene.class);
-		QueryClass qcTranscript = new QueryClass(Transcript.class);
+		QueryClass qcProtein = new QueryClass(Protein.class);
 
 		Query outerQuery = new Query();
 
@@ -287,7 +287,7 @@ public class AraportGFFPostProcess extends PostProcessor {
 
 		// outer query from clause
 		outerQuery.addFrom(qcPub);
-		outerQuery.addFrom(qcTranscript);
+		outerQuery.addFrom(qcProtein);
 		outerQuery.addFrom(qcOtherGenes);
 
 		// outer query group by clause
@@ -305,7 +305,7 @@ public class AraportGFFPostProcess extends PostProcessor {
 
 		outerQuery.addToSelect(qfDate);
 
-		log.info("Retrieving Not Existing Gene Publications has started - Transcripts. Classes includes: Gene vs Transcripts .");
+		log.info("Retrieving Not Existing Gene Publications has started - Proteins. Classes includes: Gene vs Proteins .");
 
 		// Gene subquery
 
@@ -336,13 +336,13 @@ public class AraportGFFPostProcess extends PostProcessor {
 		QueryValue geneIdValue = new QueryValue(object.getId());
 		SimpleConstraint geneIdCS = new SimpleConstraint(geneIdField, ConstraintOp.EQUALS, geneIdValue);
 
-		QueryCollectionReference transcriptsGenePubCollection = new QueryCollectionReference(qcOtherGenes,
-				"transcripts");
-		outerQueryMainCS.addConstraint(new ContainsConstraint(transcriptsGenePubCollection, ConstraintOp.CONTAINS,
-				qcTranscript));
+		QueryCollectionReference proteinGenePubCollection = new QueryCollectionReference(qcOtherGenes,
+				"proteins");
+		outerQueryMainCS.addConstraint(new ContainsConstraint(proteinGenePubCollection, ConstraintOp.CONTAINS,
+				qcProtein));
 
-		QueryCollectionReference transcriptsPublCollection = new QueryCollectionReference(qcTranscript, "publications");
-		outerQueryMainCS.addConstraint(new ContainsConstraint(transcriptsPublCollection, ConstraintOp.CONTAINS, qcPub));
+		QueryCollectionReference proteinPublCollection = new QueryCollectionReference(qcProtein, "publications");
+		outerQueryMainCS.addConstraint(new ContainsConstraint(proteinPublCollection, ConstraintOp.CONTAINS, qcPub));
 
 		outerQueryMainCS.addConstraint(geneIdCS);
 		outerQueryMainCS.addConstraint(outerQueryCS);
@@ -360,7 +360,7 @@ public class AraportGFFPostProcess extends PostProcessor {
 
 		long startTime = System.currentTimeMillis();
 
-		Query query = getNotExistingTranscriptsPubbyGeneQuery(object);
+		Query query = getNotExistingProteinsPubbyGeneQuery(object);
 		Iterator<?> iterator = getPublicationIterator(query);
 
 		int itemCount = 0;
