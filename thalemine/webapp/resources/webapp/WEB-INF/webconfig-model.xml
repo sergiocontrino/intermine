@@ -614,7 +614,7 @@
                      types="Publication"/>
 
     <!-- works with classes with publications collection -->
-    <reportdisplayer javaClass="org.thalemine.web.displayer.PublicationCountsDisplayer"
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.PublicationCountsDisplayer"
                      jspName="model/publicationCountsDisplayer.jsp"
                      replacesFields="publications"
                      placement="summary"
