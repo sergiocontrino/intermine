@@ -114,7 +114,7 @@ public class BuildDbTask extends Task
             try {
                 c = database.getConnection();
                 c.setAutoCommit(true);
-                DatabaseUtil.removeOverlapView(c);
+                //DatabaseUtil.removeView(c, OVERLAP_VIEW_NAME);
                 DatabaseUtil.removeAllTables(c);
                 DatabaseUtil.removeSequence(c, SERIAL_SEQUENCE_NAME);
                 DatabaseUtil.

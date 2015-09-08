@@ -574,10 +574,15 @@ public final class DatabaseUtil
     public static void removeAllTables(Connection con) throws SQLException {
         ResultSet res = con.getMetaData().getTables(null, null, "%", null);
         Set<String> tablenames = new HashSet<String>();
+        String OVERLAP_VIEW = "overlappingfeaturessequencefeature";
         while (res.next()) {
             String tablename = res.getString(3);
             if ("TABLE".equals(res.getString(4))) {
                 tablenames.add(tablename);
+            }
+            if ("VIEW".equals(res.getString(4)) && OVERLAP_VIEW.equals(tablename)) {
+                LOG.info("Dropping view " + OVERLAP_VIEW);
+                con.createStatement().execute("DROP VIEW " + tablename);
             }
         }
         for (String tablename : tablenames) {
@@ -609,23 +614,6 @@ public final class DatabaseUtil
         LOG.info("Dropping view " + view);
         con.createStatement().execute("DROP VIEW IF EXISTS " + view);
     }
-
-
-    /**
-     * Remove the overlap view from the given database.
-     *
-     * @param con the Connection to the database
-     * @throws SQLException if an error occurs in the underlying database
-     */
-    public static void removeOverlapView(Connection con) throws SQLException {
-        String OVERLAP_VIEW = "overlappingfeaturessequencefeature";
-        LOG.info("Dropping view " + OVERLAP_VIEW);
-        // initially this is a table, need to try dropping table first, if the postprocess has been
-        // run before then it will be a view. We need to try dropping table first then view.
-        con.createStatement().execute("DROP TABLE IF EXISTS " + OVERLAP_VIEW);
-        con.createStatement().execute("DROP VIEW IF EXISTS " + OVERLAP_VIEW);
-    }
-
 
     /**
      * Creates a table name for a class descriptor
