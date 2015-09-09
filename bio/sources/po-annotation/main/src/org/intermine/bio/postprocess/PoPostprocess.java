@@ -62,14 +62,13 @@ public class PoPostprocess extends PostProcessor
 
 
     /**
-     * Copy all GO annotations from the Protein objects to the corresponding Gene(s)
+     * Copy all PO annotations from the Protein objects to the corresponding Gene(s)
      * @throws ObjectStoreException if anything goes wrong
      */
     @Override
     public void postProcess() throws ObjectStoreException {
 
         long startTime = System.currentTimeMillis();
-
         osw.beginTransaction();
 
         Iterator<?> resIter = findProteinProperties(false);
@@ -88,9 +87,9 @@ public class PoPostprocess extends PostProcessor
                 for (POAnnotation item : annotations.values()) {
                     osw.store(item);
                 }
-                lastGene.setGoAnnotation(new HashSet(annotations.values()));
+                lastGene.setPoAnnotation(new HashSet(annotations.values()));
                 LOG.debug("store gene " + lastGene.getSecondaryIdentifier() + " with "
-                        + lastGene.getGoAnnotation().size() + " GO.");
+                        + lastGene.getPoAnnotation().size() + " PO.");
                 osw.store(lastGene);
 
                 lastGene = thisGene;
@@ -121,9 +120,9 @@ public class PoPostprocess extends PostProcessor
             for (POAnnotation item : annotations.values()) {
                 osw.store(item);
             }
-            lastGene.setGoAnnotation(new HashSet(annotations.values()));
+            lastGene.setPoAnnotation(new HashSet(annotations.values()));
             LOG.debug("store gene " + lastGene.getSecondaryIdentifier() + " with "
-                    + lastGene.getGoAnnotation().size() + " GO.");
+                    + lastGene.getPoAnnotation().size() + " PO.");
             osw.store(lastGene);
         }
 
@@ -179,11 +178,11 @@ public class PoPostprocess extends PostProcessor
     }
 
     /**
-     * Query Gene->Protein->Annotation->GOTerm and return an iterator over the Gene,
-     *  Protein and GOTerm.
+     * Query Gene->Protein->Annotation->POTerm and return an iterator over the Gene,
+     *  Protein and POTerm.
      *
      * @param restrictToPrimaryGoTermsOnly Only get primary Annotation items linking the gene
-     *  and the go term.
+     *  and the po term.
      */
     private Iterator<?> findProteinProperties(boolean restrictToPrimaryGoTermsOnly)
         throws ObjectStoreException {
