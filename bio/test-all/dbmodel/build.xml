@@ -26,6 +26,8 @@
     <merge-additions file="bio/sources/fly/rnai/rnai_additions.xml"/>
     <merge-additions file="bio/sources/go/go_additions.xml"/>
     <merge-additions file="bio/sources/go-annotation/go-annotation_additions.xml"/>
+    <merge-additions file="bio/sources/po/po_additions.xml"/>
+    <merge-additions file="bio/sources/po-annotation/po-annotation_additions.xml"/>
     <merge-additions file="bio/sources/uniprot/uniprot_additions.xml"/>
     <merge-additions file="bio/sources/pdb/pdb_additions.xml"/>
     <merge-additions file="bio/sources/fly/flyreg/flyreg_additions.xml"/>
