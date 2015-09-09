@@ -53,7 +53,7 @@ public class PoConverter extends BioFileConverter
     private static final Map<String, String> WITH_TYPES = new LinkedHashMap<String, String>();
 
     // maps retained across all files
-    protected Map<String, String> goTerms = new LinkedHashMap<String, String>();
+    protected Map<String, String> poTerms = new LinkedHashMap<String, String>();
     private Map<String, String> evidenceCodes = new LinkedHashMap<String, String>();
     private Map<String, String> dataSets = new LinkedHashMap<String, String>();
     private Map<String, String> publications = new LinkedHashMap<String, String>();
@@ -64,8 +64,8 @@ public class PoConverter extends BioFileConverter
     private Map<String, String> databaseAbbreviations = new HashMap<String, String>();
 
     // maps renewed for each file
-    private Map<GoTermToGene, Set<Evidence>> goTermGeneToEvidence
-        = new LinkedHashMap<GoTermToGene, Set<Evidence>>();
+    private Map<PoTermToGene, Set<Evidence>> poTermGeneToEvidence
+        = new LinkedHashMap<PoTermToGene, Set<Evidence>>();
     private Map<Integer, List<String>> productCollectionsMap;
     private Map<String, Integer> storedProductIds;
 
@@ -222,7 +222,7 @@ public class PoConverter extends BioFileConverter
             int readColumn = config.readColumn();
             String productId = array[readColumn];
 
-            String goId = array[4];
+            String poId = array[4];
             String qualifier = array[3];
             String strEvidence = array[6];
             String withText = array[7];
@@ -244,7 +244,7 @@ public class PoConverter extends BioFileConverter
                 storeEvidenceCode(strEvidence);
             } else {
                 throw new IllegalArgumentException("Evidence is a required column but not "
-                        + "found for poterm " + goId + " and productId " + productId);
+                        + "found for poterm " + poId + " and productId " + productId);
             }
 
             String type = config.annotationType;
@@ -253,13 +253,13 @@ public class PoConverter extends BioFileConverter
                 type = array[11];
             }
 
-if (productId.startsWith("gene:")) {
-    type = "mrna";
-    LOG.info("PO MRNA " + productId + "-" + type);
-}
+            if (productId.startsWith("gene:")) {
+                type = "mrna";
+//                LOG.info("PO MRNA " + productId + "-" + type);
+            }
 
             // create unique key for po annotation
-            GoTermToGene key = new GoTermToGene(productId, goId, qualifier);
+            PoTermToGene key = new PoTermToGene(productId, poId, qualifier);
 
             String dataSourceCode = array[14]; // e.g. GDB, where uniprot collect the data from
             String dataSource = array[0]; // e.g. UniProtKB, where the goa file comes from
@@ -272,16 +272,16 @@ if (productId.startsWith("gene:")) {
                 // null if no pub found
                 String pubRefId = newPublication(array[5]);
                 // get evidence codes for this goterm|gene pair
-                Set<Evidence> allEvidenceForAnnotation = goTermGeneToEvidence.get(key);
+                Set<Evidence> allEvidenceForAnnotation = poTermGeneToEvidence.get(key);
 
                 // new evidence
                 if (allEvidenceForAnnotation == null || !StringUtils.isEmpty(withText)) {
-                    String goTermIdentifier = newGoTerm(goId, dataSource, dataSourceCode);
+                    String goTermIdentifier = newPoTerm(poId, dataSource, dataSourceCode);
                     Evidence evidence = new Evidence(strEvidence, pubRefId, withText, organism,
                             dataSource, dataSourceCode);
                     allEvidenceForAnnotation = new LinkedHashSet<Evidence>();
                     allEvidenceForAnnotation.add(evidence);
-                    goTermGeneToEvidence.put(key, allEvidenceForAnnotation);
+                    poTermGeneToEvidence.put(key, allEvidenceForAnnotation);
 
                     Integer storedAnnotationId = createPoAnnotation(productIdentifier, type,
                             goTermIdentifier, organism, qualifier, dataSource, dataSourceCode,
@@ -317,7 +317,7 @@ if (productId.startsWith("gene:")) {
      * Reset maps that don't need to retain their contents between files.
      */
     protected void initialiseMapsForFile() {
-        goTermGeneToEvidence = new LinkedHashMap<GoTermToGene, Set<Evidence>>();
+        poTermGeneToEvidence = new LinkedHashMap<PoTermToGene, Set<Evidence>>();
         productCollectionsMap = new LinkedHashMap<Integer, List<String>>();
         storedProductIds = new HashMap<String, Integer>();
     }
@@ -332,7 +332,7 @@ if (productId.startsWith("gene:")) {
     }
 
     private void storeEvidence() throws ObjectStoreException {
-        for (Set<Evidence> annotationEvidence : goTermGeneToEvidence.values()) {
+        for (Set<Evidence> annotationEvidence : poTermGeneToEvidence.values()) {
             List<String> evidenceRefIds = new ArrayList<String>();
             Integer poAnnotationRefId = null;
             for (Evidence evidence : annotationEvidence) {
@@ -435,7 +435,7 @@ if (productId.startsWith("gene:")) {
                                     false, null);
                         } else if ("FB".equals(prefix)) {
                             // if organism is D. melanogaster then create with gene
-                            // TODO could still be wrong as the FBgn could be a different species
+                            // TODO rm
                             if ("7227".equals(organism.getAttribute("taxonId").getValue())) {
                                 productIdentifier = newProduct(value, className, organism,
                                         dataSource, dataSourceCode, true, "primaryIdentifier");
@@ -514,7 +514,7 @@ if (productId.startsWith("gene:")) {
             }
             if (clsName == null) {
                 throw new IllegalArgumentException("Unrecognised annotation type '" + type + "'");
-            }   
+            }
 
             // if (idField == null) {
             //     Config config = configs.get(taxonId);
@@ -538,9 +538,7 @@ if (productId.startsWith("gene:")) {
         } else {
             includeOrganism = createOrganism;
         }
-        //LOG.info("INNN " + accession +"|" + type +"|" + includeOrganism);
         String key = makeProductKey(accession, type, organism, includeOrganism);
-        //LOG.info("OUTT " + key);
 
         //Have we already seen this product somewhere before?
         // if so, return the product rather than creating a new one...
@@ -554,7 +552,6 @@ if (productId.startsWith("gene:")) {
         if (organism != null && createOrganism) {
             product.setReference("organism", organism.getIdentifier());
         }
-        //LOG.info("NOWW " + idField + "--" + accession);
         product.setAttribute(idField, accession);
 
         String dataSetIdentifier = getDataset(dataSource, dataSourceCode);
@@ -598,23 +595,23 @@ if (productId.startsWith("gene:")) {
 //        return goId;
 //    }
 
-    private String newGoTerm(String identifier, String dataSource,
+    private String newPoTerm(String identifier, String dataSource,
             String dataSourceCode) throws ObjectStoreException {
         if (identifier == null) {
             return null;
         }
 
-        String goTermIdentifier = goTerms.get(identifier);
-        if (goTermIdentifier == null) {
+        String poTermIdentifier = poTerms.get(identifier);
+        if (poTermIdentifier == null) {
             Item item = createItem(termClassName);
             item.setAttribute("identifier", identifier);
             item.addToCollection("dataSets", getDataset(dataSource, dataSourceCode));
             store(item);
 
-            goTermIdentifier = item.getIdentifier();
-            goTerms.put(identifier, goTermIdentifier);
+            poTermIdentifier = item.getIdentifier();
+            poTerms.put(identifier, poTermIdentifier);
         }
-        return goTermIdentifier;
+        return poTermIdentifier;
     }
 
     private void storeEvidenceCode(String code) throws ObjectStoreException {
@@ -724,7 +721,6 @@ if (productId.startsWith("gene:")) {
                     String db = bits[0];
                     dataSource = getDataSourceCodeName(db);
                     xref = bits[1] + ":" + bits[2];
-//                    LOG.info("GOTYA dbref: " + bits[1] + "--" + bits[2]);
                 }
             }
             // create dbxref only if does not exist yet
@@ -853,22 +849,22 @@ if (productId.startsWith("gene:")) {
      * Identify a GoTerm/geneProduct pair with qualifier
      * used to also use evidence code
      */
-    private class GoTermToGene
+    private class PoTermToGene
     {
         private String productId;
-        private String goId;
+        private String poId;
         private String qualifier;
 
         /**
          * Constructor
          *
          * @param productId gene/protein identifier
-         * @param goId      GO term id
+         * @param poId      PO term id
          * @param qualifier qualifier
          */
-        GoTermToGene(String productId, String goId, String qualifier) {
+        PoTermToGene(String productId, String poId, String qualifier) {
             this.productId = productId;
-            this.goId = goId;
+            this.poId = poId;
             this.qualifier = qualifier;
         }
 
@@ -877,11 +873,11 @@ if (productId.startsWith("gene:")) {
          */
         @Override
         public boolean equals(Object o) {
-            if (o instanceof GoTermToGene) {
-                GoTermToGene go = (GoTermToGene) o;
-                return productId.equals(go.productId)
-                        && goId.equals(go.goId)
-                        && qualifier.equals(go.qualifier);
+            if (o instanceof PoTermToGene) {
+                PoTermToGene po = (PoTermToGene) o;
+                return productId.equals(po.productId)
+                        && poId.equals(po.poId)
+                        && qualifier.equals(po.qualifier);
             }
             return false;
         }
@@ -892,7 +888,7 @@ if (productId.startsWith("gene:")) {
         @Override
         public int hashCode() {
             return ((3 * productId.hashCode())
-                    + (5 * goId.hashCode())
+                    + (5 * poId.hashCode())
                     + (7 * qualifier.hashCode()));
         }
 
@@ -903,10 +899,10 @@ if (productId.startsWith("gene:")) {
         public String toString() {
             StringBuffer toStringBuff = new StringBuffer();
 
-            toStringBuff.append("GoTermToGene - productId:");
+            toStringBuff.append("PoTermToGene - productId:");
             toStringBuff.append(productId);
-            toStringBuff.append(" goId:");
-            toStringBuff.append(goId);
+            toStringBuff.append(" poId:");
+            toStringBuff.append(poId);
             toStringBuff.append(" qualifier:");
             toStringBuff.append(qualifier);
 
