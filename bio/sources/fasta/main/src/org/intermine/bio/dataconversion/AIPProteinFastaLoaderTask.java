@@ -102,7 +102,7 @@ public class AIPProteinFastaLoaderTask extends AIPFeatureFastaLoaderTask
         String header = (String) annotation.getProperty("description");
 
         // it doesn't matter too much what the Protein identifier is
-        return mrnaIdentifier + "_Protein";
+        return mrnaIdentifier;
     }
 
 }
