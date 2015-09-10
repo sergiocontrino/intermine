@@ -255,7 +255,6 @@ public class PoConverter extends BioFileConverter
 
             if (productId.startsWith("gene:")) {
                 type = "mrna";
-//                LOG.info("PO MRNA " + productId + "-" + type);
             }
 
             // create unique key for po annotation
