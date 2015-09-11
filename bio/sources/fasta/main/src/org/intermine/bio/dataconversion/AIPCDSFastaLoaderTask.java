@@ -79,7 +79,7 @@ public class AIPCDSFastaLoaderTask extends AIPFeatureFastaLoaderTask
         String header = (String) annotation.getProperty("description");
 
         // it doesn't matter too much what the CDS identifier is
-        return mrnaIdentifier + "_CDS";
+        return mrnaIdentifier;
 
     }
 }

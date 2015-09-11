@@ -1,7 +1,7 @@
 package org.intermine.bio.dataconversion;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -169,5 +169,29 @@ public class AIPFeatureFastaLoaderTask extends FastaLoaderTask
         }
         return mrna;
     }
+
+    /**
+     * Create a Gene with the given primaryIdentifier and organism or return null of MRNA is not in
+     * the data model.
+     * @param identifier primaryIdentifier of Gene to create
+     * @param organism orgnism of Gene to create
+     * @param model the data model
+     * @return an InterMineObject representing a Gene or null if Gene not in the data model
+     * @throws ObjectStoreException if problem storing
+     */
+    protected InterMineObject getGene(String identifier, Organism organism, Model model)
+        throws ObjectStoreException {
+        InterMineObject gene = null;
+        if (model.hasClassDescriptor(model.getPackageName() + ".Gene")) {
+            @SuppressWarnings("unchecked") Class<? extends InterMineObject> geneCls =
+                (Class<? extends InterMineObject>) model.getClassDescriptorByName("Gene").getType();
+            gene = getDirectDataLoader().createObject(geneCls);
+            gene.setFieldValue("primaryIdentifier", identifier);
+            gene.setFieldValue("organism", organism);
+            getDirectDataLoader().store(gene);
+        }
+        return gene;
+    }
+
 
 }

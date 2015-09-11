@@ -36,6 +36,19 @@
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/genome/fasta/"/>
         </source>
 
+        <source name="aip-pep-fasta" type="fasta">
+            <property name="fasta.loaderClassName"
+                value="org.intermine.bio.dataconversion.AIPProteinFastaLoaderTask"/>
+            <property name="fasta.taxonId" value="3702"/>
+            <property name="fasta.sequenceType" value="protein"/>
+            <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
+            <property name="fasta.classAttribute" value="primaryIdentifier"/>
+            <property name="fasta.includes" value="*pep*"/>
+            <property name="fasta.dataSetTitle" value="Protein Sequence FASTA"/>
+            <property name="fasta.dataSourceName" value="TAIR"/>
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/genome/fasta/"/>
+        </source>
+
         <source name="bar-interactions" type="bar-interactions">
             <property name="source.db.name" value="bar"/>
         </source>
