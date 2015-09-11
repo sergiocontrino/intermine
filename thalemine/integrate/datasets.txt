@@ -1,7 +1,8 @@
 DataSource	TAIR	The Arabidopsis Information Resource	http://www.arabidopsis.org	Publication:11130711
-DataSet	Genome Annotation	TAIR10 Genome annotation, consisting of genes, TE related genes, other non-coding RNA and transposable elements	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10 (June 30, 2014)
+DataSet	Genome Annotation	TAIR10 Genome annotation, consisting of genes, TE related genes, other non-coding RNA and transposable elements	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10 (06/30/2014)
 DataSet	Genome Assembly	TAIR9 Genome assembly, consisting of 5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	DataSource:TAIR,Publication:11130711	TAIR9
 DataSet	Coding Sequence FASTA	TAIR10 Coding sequences, consisting of sequences from all the annotated transcripts	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10
+DataSet	PO Annotation from TAIR	Literature-based annotations of genes to Plant Ontology (PO) terms	https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/GO_and_PO_Annotations/Plant_Ontology_Annotations	DataSource:TAIR,Publication:11130711	06/30/2015
 DataSource	GO	GO Ontology Consortium	http://geneontology.org	Publication:25428369
 DataSet	GO Annotation from GOC	GO annotations assigned by the GO Consortium	http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
 DataSet	GO Annotation from IntAct	GO annotations assigned by IntAct	http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
@@ -20,8 +21,8 @@ DataSet	InterPro GO Annotation data set	Mapping between InterPro domains and GO 
 DataSource	Panther	Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree	https://www.pantherdb.org	Publication:23193289
 DataSet	Panther data set	Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis	https://www.pantherdb.org	DataSource:Panther	10.0
 DataSource	BAR	The Bio-Analaytic Resource for Plant Biology	http://bar.utoronto.ca	Publication:19401381
-DataSet	BAR Interactions data set	Confirmed Arabidopsis protein interactions from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR	http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi	DataSource:BAR,Publication:17675552
-DataSet	BAR Annotations Lookup	Mapping between an AGI locus and Probeset identifier	http://bar.urotonto.ca	DataSource:BAR
+DataSet	BAR Interactions data set	Confirmed Arabidopsis protein interactions from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR	http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi	DataSource:BAR,Publication:17675552	10/08/2013
+DataSet	BAR Annotations Lookup	Mapping between an AGI locus and Probeset identifier	http://bar.urotonto.ca	DataSource:BAR	10/08/2013
 DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840
 DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	08/14/2015
 DataSet	GeneRIF	Functional annotation added by scientists to genes described in NCBI Gene	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	08/14/2015
