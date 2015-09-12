@@ -118,27 +118,27 @@ public class PublicationCountsDisplayer extends ReportDisplayer
         q.addFrom(qcPub);
         q.addFrom(qcOtherGenes);
 
-        //SimpleConstraint yearIsNotNull =
-          //      new SimpleConstraint(qfDate, ConstraintOp.IS_NOT_NULL);
-        //cs.addConstraint(yearIsNotNull);
+        SimpleConstraint yearIsNotNull =
+               new SimpleConstraint(qfDate, ConstraintOp.IS_NOT_NULL);
+        cs.addConstraint(yearIsNotNull);
             
         // add constraints to query
         q.setConstraint(cs);
 
         q.addToSelect(qcPub);
 
-        QueryField title= new QueryField(qcPub, "title");
+       // QueryField title= new QueryField(qcPub, "title");
         
         QueryFunction qf = new QueryFunction();
         q.addToSelect(qf);
 
         q.addToGroupBy(new QueryField(qcPub, "id"));
         q.addToGroupBy(qfDate);
-        q.addToGroupBy(title);
+        //q.addToGroupBy(title);
 
         q.addToSelect(qfDate);
                   
-       q.addToOrderBy(title);
+       //q.addToOrderBy(title);
        q.addToOrderBy(qfDate, "desc");
        
         return q;
