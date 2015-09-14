@@ -37,9 +37,9 @@ import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.session.SessionMethods;
 
 
-public class ProteinDisplayer extends ReportDisplayer {
+public class AraportProteinDisplayer extends ReportDisplayer {
 
-  protected static final Logger LOG = Logger.getLogger(ProteinDisplayer.class);
+  protected static final Logger LOG = Logger.getLogger(AraportProteinDisplayer.class);
   PathQueryExecutor exec;
   private HashMap<Integer,String> organismMap = new HashMap<Integer,String>();
 
@@ -48,7 +48,7 @@ public class ProteinDisplayer extends ReportDisplayer {
    * @param config to describe the report displayer
    * @param im the InterMine API
    */
-  public ProteinDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
+  public AraportProteinDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
       super(config, im);
   }
 
@@ -97,13 +97,13 @@ public class ProteinDisplayer extends ReportDisplayer {
             "Gene.proteins.primaryIdentifier",
             "Gene.proteins.primaryAccession",
             "Gene.proteins.uniprotAccession",
-            "Gene.proteins.length"
-//		    ,"Gene.proteins.mRNA.primaryIdentifier"
+            "Gene.proteins.length",
+            "Gene.proteins.mRNA.primaryIdentifier"
+            ,"Gene.proteins.dataSets.name"
             );
 
     query.addOrderBy("Gene.proteins.primaryIdentifier", OrderDirection.ASC);
     query.addConstraint(Constraints.eq("Gene.id",id.toString()));
-    query.addConstraint(Constraints.neq("Gene.proteins.dataSets.name","Protein Sequence FASTA"));
     return query;
   }
 
@@ -113,7 +113,8 @@ public class ProteinDisplayer extends ReportDisplayer {
     private String primaryAccession;
     private String uniprotAccession;
     private String length;
-//    private String geneName;
+    private String geneName;
+    private String source;
 
     public ProteinRecord(List<ResultElement> resElement) {
       // the fields are a copy of the query results
@@ -127,8 +128,10 @@ public class ProteinDisplayer extends ReportDisplayer {
                                  resElement.get(3).getField().toString():"&nbsp;";
       length = ((resElement.get(4)!=null) && (resElement.get(4).getField()!= null))?
                                  resElement.get(4).getField().toString():"&nbsp;";
-//      geneName = ((resElement.get(5)!=null) && (resElement.get(5).getField()!= null))?
-//                                 resElement.get(5).getField().toString():"&nbsp;";
+      geneName = ((resElement.get(5)!=null) && (resElement.get(5).getField()!= null))?
+                                resElement.get(5).getField().toString():"&nbsp;";
+      source = ((resElement.get(6)!=null) && (resElement.get(6).getField()!= null))?
+                                resElement.get(6).getField().toString():"&nbsp;";
     }
 
     public String getId() { return id; }
@@ -136,7 +139,8 @@ public class ProteinDisplayer extends ReportDisplayer {
     public String getPrimaryAccession() { return primaryAccession; }
     public String getUniprotAccession() { return uniprotAccession; }
     public String getLength() { return length; }
-//    public String getGeneName() { return geneName; }
+    public String getGeneName() { return geneName; }
+    public String getSource() { return source; }
   }
 
 }

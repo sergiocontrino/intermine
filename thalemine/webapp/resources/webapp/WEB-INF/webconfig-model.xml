@@ -572,6 +572,12 @@
                      placement="Proteins"
                      types="Gene"/>
 
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.AraportProteinDisplayer"
+                     jspName="model/araportProteinDisplayer.jsp"
+                     replacesFields="Protein"
+                     placement="Proteins"
+                     types="Gene"/>
+
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.JBrowseDisplayer"
                      jspName="model/jbrowseDisplayer.jsp"
                      replacesFields=""
