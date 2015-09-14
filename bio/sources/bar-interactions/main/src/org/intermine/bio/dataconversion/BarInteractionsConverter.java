@@ -44,9 +44,8 @@ public class BarInteractionsConverter extends BioDBConverter
     private Map<String, String> terms = new HashMap<String, String>();
     private static final String PUBMED_PREFIX = "PubMed";
     private static final String INTERACTION_TYPE_MI = "1110";
-    private static final String INTERACTION_DETECTION_MI = "0063";
-    //    private static final String INTERACTION_EXPERIMENT = PUBMED_PREFIX + "17675552";
-    private static final String INTERACTION_EXPERIMENT = "Not Available";
+//    private static final String INTERACTION_DETECTION_MI = "0063";
+//    private static final String INTERACTION_EXPERIMENT = "Not Available";
     private static final Map<String, String> PSI_TERMS = new HashMap<String, String>();
 
     static {
@@ -54,7 +53,6 @@ public class BarInteractionsConverter extends BioDBConverter
         PSI_TERMS.put("MI:0915", "physical");
         PSI_TERMS.put("MI:0218", "physical");
         PSI_TERMS.put("MI:0208", "genetic");
-
     }
 
     /**
@@ -157,7 +155,6 @@ public class BarInteractionsConverter extends BioDBConverter
                     throws ObjectStoreException {
         if (StringUtils.isBlank(interactionsTypeMI)) {
             // we now accept null interaction types
-
             Item detail = createItem("InteractionDetail");
             detail.setAttribute("cv", cv.toString());
             detail.setAttribute("pcc", pcc.toString());
@@ -190,17 +187,11 @@ public class BarInteractionsConverter extends BioDBConverter
     private String getExperiment(String pubString, String interactionsDetectionMI)
             throws ObjectStoreException {
         Item experiment = createItem("InteractionExperiment");
-        if (StringUtils.isBlank(pubString)) {
-            //            return null;
-            pubString = INTERACTION_EXPERIMENT;
-        }
-        // some publications don't start with PubMed, what are those?
-        if(pubString.contains(PUBMED_PREFIX) && pubString.length() > PUBMED_PREFIX.length() + 1) {
+        // only dealing with pubmed publications now
             String pubRefId = getPublicationFromPMID(pubString);
             if (StringUtils.isNotEmpty(pubRefId)) {
                 experiment.setReference("publication", pubRefId);
             }
-        }
         experiment.setAttribute("name", StringUtils.replace(pubString, "\n", ", ", -1));
         if (StringUtils.isBlank(interactionsDetectionMI)) {
             Integer expId = store(experiment);
@@ -296,9 +287,9 @@ public class BarInteractionsConverter extends BioDBConverter
      */
     protected ResultSet runInteractionsQuery(Connection connection) throws SQLException {
         Statement stmt = connection.createStatement();
-        //        String query = "select \"Protein1\", \"Protein2\", \"Quality\", \"Index\", \"Pcc\", \"Bind_id\", " +
-        //                "\"Interactions_detection_mi\", \"Interactions_detection\", \"Interactions_type_mi\", " +
-        //                "\"Interactions_type\" from interactions;";
+        //String query = "select \"Protein1\", \"Protein2\", \"Quality\", \"Index\", \"Pcc\", \"Bind_id\", " +
+        //              "\"Interactions_detection_mi\", \"Interactions_detection\", \"Interactions_type_mi\", " +
+        //              "\"Interactions_type\" from interactions;";
         String query = "select protein1, protein2, quality, index, pcc, bind_id, " +
                 "interactions_detection_mi, interactions_detection, interactions_type_mi, " +
                 "interactions_type from interactions;";
