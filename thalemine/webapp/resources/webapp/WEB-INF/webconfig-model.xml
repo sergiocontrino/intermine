@@ -542,7 +542,7 @@
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneStructureDisplayer"
                      jspName="model/geneStructureDisplayer.jsp"
-                     replacesFields="transcripts,exons,CDSs,introns,UTRs,fivePrimeUTR,threePrimeUTR,childFeatures"
+                     replacesFields="transcripts,exons,CDSs,introns,fivePrimeUTR,threePrimeUTR,childFeatures,overlappingFeatures"
                      placement="Genomics"
                      types="Gene,Transcript,Exon,UTR,TransposableElementGene"/>
 
@@ -578,12 +578,13 @@
                      placement="Genomics"
                      types="Gene,Exon,Intron,MRNA,MiRNA,NcRNA,RRNA,SnRNA,SnoRNA,TRNA,Pseudogene,PseudogenicTranscript,TransposableElementGene"/>
 
+<!-- removed as per MINE-976
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.OverlappingFeaturesDisplayer"
                      jspName="model/overlappingFeaturesDisplayer.jsp"
                      replacesFields="overlappingFeatures"
                      placement="Genomics"
                      types="SequenceFeature"/>
-
+-->
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.SequenceFeatureDisplayer"
                      jspName="model/sequenceFeatureDisplayer.jsp"
                      replacesFields="chromosome,chromosomeLocation,sequence,length,sequenceOntologyTerm,locations,cytoLocation"
