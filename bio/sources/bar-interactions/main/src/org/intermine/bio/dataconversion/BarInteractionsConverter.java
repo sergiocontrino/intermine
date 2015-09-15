@@ -287,12 +287,12 @@ public class BarInteractionsConverter extends BioDBConverter
      */
     protected ResultSet runInteractionsQuery(Connection connection) throws SQLException {
         Statement stmt = connection.createStatement();
-        //String query = "select \"Protein1\", \"Protein2\", \"Quality\", \"Index\", \"Pcc\", \"Bind_id\", " +
-        //              "\"Interactions_detection_mi\", \"Interactions_detection\", \"Interactions_type_mi\", " +
-        //              "\"Interactions_type\" from interactions;";
-        String query = "select protein1, protein2, quality, index, pcc, bind_id, " +
-                "interactions_detection_mi, interactions_detection, interactions_type_mi, " +
-                "interactions_type from interactions;";
+        String query = "select \"Protein1\", \"Protein2\", \"Quality\", \"Index\", \"Pcc\", \"Bind_id\", " +
+                      "\"Interactions_detection_mi\", \"Interactions_detection\", \"Interactions_type_mi\", " +
+                      "\"Interactions_type\" from interactions;";
+        //String query = "select protein1, protein2, quality, index, pcc, bind_id, " +
+        //        "interactions_detection_mi, interactions_detection, interactions_type_mi, " +
+        //        "interactions_type from interactions;";
         ResultSet res = stmt.executeQuery(query);
         return res;
     }
