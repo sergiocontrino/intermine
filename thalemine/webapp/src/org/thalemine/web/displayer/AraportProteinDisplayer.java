@@ -93,6 +93,7 @@ public class AraportProteinDisplayer extends ReportDisplayer {
 
   private PathQuery getProteinTable(Integer id) {
     PathQuery query = new PathQuery(im.getModel());
+    // only araport proteins have mRNAs
     query.addViews( "Gene.proteins.id",
             "Gene.proteins.primaryIdentifier",
             "Gene.proteins.primaryAccession",
