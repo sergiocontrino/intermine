@@ -13,7 +13,7 @@
   <c:when test="${!empty list}">
     <div>
     <div class="header">
-    <h3>${fn:length(list)} Proteins</h3>
+    <h3>${fn:length(list)} UniProt Proteins</h3>
     <p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=Swiss-Prot+data+set">UniProt</a></p>
     </div>
 
