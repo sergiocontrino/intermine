@@ -21,7 +21,6 @@ DataSet	InterPro GO Annotation data set	Mapping between InterPro domains and GO 
 DataSource	Panther	Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree	https://www.pantherdb.org	Publication:23193289
 DataSet	Panther data set	Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis	https://www.pantherdb.org	DataSource:Panther	10.0
 DataSource	BAR	The Bio-Analaytic Resource for Plant Biology	http://bar.utoronto.ca	Publication:19401381
-DataSet	BAR Interactions data set	Confirmed Arabidopsis protein interactions from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR	http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi	DataSource:BAR,Publication:17675552	10/08/2013
 DataSet	BAR Annotations Lookup	Mapping between an AGI locus and Probeset identifier	http://bar.urotonto.ca	DataSource:BAR	10/08/2013
 DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840
 DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	08/14/2015

@@ -15,10 +15,6 @@
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/genome/gff/" />
         </source>
 
-        <source name="bar-interactions" type="bar-interactions">
-            <property name="source.db.name" value="bar"/>
-        </source>
-
         <source name="psi-mi-ontology" type="psi-mi-ontology">
             <property name="src.data.file" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/psi/psi-mi.obo"/>
         </source>
