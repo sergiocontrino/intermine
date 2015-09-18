@@ -277,7 +277,7 @@
       </collection>
    </item>
    <item id="0_44" class="DataSet" implements="">
-      <attribute name="version" value="3.4.127" />
+      <attribute name="version" value="3.4.128" />
       <reference name="dataSource" ref_id="0_43" />
       <attribute name="name" value="BioGRID interaction data set" />
       <attribute name="description" value="Curated set of genetic and physical interactions for Arabidopsis from BioGRID" />
@@ -295,7 +295,7 @@
       </collection>
    </item>
    <item id="0_47" class="DataSet" implements="">
-      <attribute name="version" value="06/26/2015" />
+      <attribute name="version" value="08/22/2015" />
       <reference name="dataSource" ref_id="0_46" />
       <attribute name="name" value="IntAct interactions data set" />
       <attribute name="description" value="Curated binary and complex protein-protein interactions for Arabidopsis from IntAct" />
