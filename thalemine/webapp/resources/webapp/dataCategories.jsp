@@ -95,12 +95,12 @@
   </tr>
   <tr>
     <td>Public database that archives and disseminates genetic and protein interaction data from model organisms and humans</td>
-    <td><a href="http://thebiogrid.org/" target="_blank" class="extlink">BioGRID</a>- version 3.4.127</td>
+    <td><a href="http://thebiogrid.org/" target="_blank" class="extlink">BioGRID</a>- version 3.4.128</td>
     <td>Chatr-Aryamontri et al., 2014 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/25428363">PubMed: 25428363</a></td>
   </tr>
   <tr>
     <td>Freely available, open source database system and analysis tools for molecular interaction data, derived from literature curation or direct user submissions</td>
-    <td><a href="http://www.ebi.ac.uk/intact/" target="_blank" class="extlink">IntAct</a>- 26 Jun 2015</td>
+    <td><a href="http://www.ebi.ac.uk/intact/" target="_blank" class="extlink">IntAct</a>- 22 Aug 2015</td>
     <td>Kerrien et al., 2012 - <a href="http://www.ncbi.nlm.nih.gov/pubmed/22121220">PubMed: 22121220</a></td>
   </tr>
 
