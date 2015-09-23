@@ -32,10 +32,10 @@
 
               <c:choose>
                 <c:when test="${parentTerm eq 'plant anatomy'}">
-                  <tr><th colspan="2">${parentTerm}: expressed in</th></tr>
+                  <tr><th colspan="2">expressed in:</th></tr>
                 </c:when>
                 <c:when test="${parentTerm eq 'plant structure development stage'}">
-                  <tr><th colspan="2">${parentTerm}: expressed during</th></tr>
+                  <tr><th colspan="2">expressed during:</th></tr>
                 </c:when>
               </c:choose>
 <!--               <tr><th colspan="2">${parentTerm}</th></tr>
