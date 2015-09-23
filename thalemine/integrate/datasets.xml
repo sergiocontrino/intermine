@@ -206,108 +206,97 @@
          <reference ref_id="0_30" />
       </collection>
    </item>
-   <item id="0_32" class="Publication" implements="">
-      <attribute name="pubMedId" value="17675552" />
-   </item>
-   <item id="0_33" class="DataSet" implements="">
-      <attribute name="version" value="10/08/2013" />
-      <reference name="dataSource" ref_id="0_31" />
-      <attribute name="name" value="BAR Interactions data set" />
-      <attribute name="description" value="Confirmed Arabidopsis protein interactions from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR" />
-      <attribute name="url" value="http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi" />
-      <reference name="publication" ref_id="0_32" />
-   </item>
-   <item id="0_34" class="DataSet" implements="">
+   <item id="0_32" class="DataSet" implements="">
       <attribute name="version" value="10/08/2013" />
       <reference name="dataSource" ref_id="0_31" />
       <attribute name="name" value="BAR Annotations Lookup" />
       <attribute name="description" value="Mapping between an AGI locus and Probeset identifier" />
       <attribute name="url" value="http://bar.urotonto.ca" />
    </item>
-   <item id="0_35" class="Publication" implements="">
+   <item id="0_33" class="Publication" implements="">
       <attribute name="pubMedId" value="16381840" />
    </item>
-   <item id="0_36" class="DataSource" implements="">
+   <item id="0_34" class="DataSource" implements="">
       <attribute name="name" value="NCBI" />
       <attribute name="description" value="National Center for Biotechnology Information" />
       <attribute name="url" value="http://www.ncbi.nlm.nih.gov" />
       <collection name="publications">
-         <reference ref_id="0_35" />
+         <reference ref_id="0_33" />
       </collection>
    </item>
-   <item id="0_37" class="Publication" implements="">
+   <item id="0_35" class="Publication" implements="">
       <attribute name="pubMedId" value="17148475" />
    </item>
-   <item id="0_38" class="DataSet" implements="">
+   <item id="0_36" class="DataSet" implements="">
       <attribute name="version" value="08/14/2015" />
-      <reference name="dataSource" ref_id="0_36" />
+      <reference name="dataSource" ref_id="0_34" />
       <attribute name="name" value="PubMed to gene mapping" />
       <attribute name="description" value="Curated associations between NCBI Gene and PubMed databases" />
       <attribute name="url" value="ftp://ftp.ncbi.nlm.nih.gov/gene/DATA" />
-      <reference name="publication" ref_id="0_37" />
+      <reference name="publication" ref_id="0_35" />
    </item>
-   <item id="0_39" class="DataSet" implements="">
+   <item id="0_37" class="DataSet" implements="">
       <attribute name="version" value="08/14/2015" />
-      <reference name="dataSource" ref_id="0_36" />
+      <reference name="dataSource" ref_id="0_34" />
       <attribute name="name" value="GeneRIF" />
       <attribute name="description" value="Functional annotation added by scientists to genes described in NCBI Gene" />
       <attribute name="url" value="http://www.ncbi.nlm.nih.gov/gene/about-generif" />
-      <reference name="publication" ref_id="0_37" />
+      <reference name="publication" ref_id="0_35" />
    </item>
-   <item id="0_40" class="Publication" implements="">
+   <item id="0_38" class="Publication" implements="">
       <attribute name="pubMedId" value="9397687" />
    </item>
-   <item id="0_41" class="DataSource" implements="">
+   <item id="0_39" class="DataSource" implements="">
       <attribute name="name" value="GenomeNet" />
       <attribute name="description" value="Japanese network of database and computational services for genome research" />
       <attribute name="url" value="http://www.genome.jp" />
       <collection name="publications">
-         <reference ref_id="0_40" />
+         <reference ref_id="0_38" />
       </collection>
    </item>
-   <item id="0_42" class="Publication" implements="">
+   <item id="0_40" class="Publication" implements="">
       <attribute name="pubMedId" value="24214961" />
    </item>
-   <item id="0_43" class="DataSet" implements="">
+   <item id="0_41" class="DataSet" implements="">
       <attribute name="version" value="72.0" />
-      <reference name="dataSource" ref_id="0_41" />
+      <reference name="dataSource" ref_id="0_39" />
       <attribute name="name" value="KEGG pathways data set" />
       <attribute name="description" value="Wiring diagrams of molecular interactions, reactions, and relations" />
       <attribute name="url" value="http://www.kegg.jp/kegg/pathway.html" />
-      <reference name="publication" ref_id="0_42" />
+      <reference name="publication" ref_id="0_40" />
    </item>
-   <item id="0_44" class="Publication" implements="">
+   <item id="0_42" class="Publication" implements="">
       <attribute name="pubMedId" value="25428363" />
    </item>
-   <item id="0_45" class="DataSource" implements="">
+   <item id="0_43" class="DataSource" implements="">
       <attribute name="name" value="BioGRID" />
       <attribute name="description" value="Open access database housing genetic and protein interactions curated from biomedical literature for all major model organism species and humans" />
       <attribute name="url" value="http://thebiogrid.org" />
       <collection name="publications">
-         <reference ref_id="0_44" />
+         <reference ref_id="0_42" />
       </collection>
    </item>
-   <item id="0_46" class="DataSet" implements="">
-      <attribute name="version" value="3.4.127" />
-      <reference name="dataSource" ref_id="0_45" />
+   <item id="0_44" class="DataSet" implements="">
+      <attribute name="version" value="3.4.128" />
+      <reference name="dataSource" ref_id="0_43" />
       <attribute name="name" value="BioGRID interaction data set" />
       <attribute name="description" value="Curated set of genetic and physical interactions for Arabidopsis from BioGRID" />
       <attribute name="url" value="http://thebiogrid.org" />
    </item>
-   <item id="0_47" class="Publication" implements="">
+   <item id="0_45" class="Publication" implements="">
       <attribute name="pubMedId" value="22121220" />
    </item>
-   <item id="0_48" class="DataSource" implements="">
+   <item id="0_46" class="DataSource" implements="">
       <attribute name="name" value="IntAct" />
       <attribute name="description" value="Freely available, open source database system and analysis tools for molecular interaction data, derived from literature or direct user submissions" />
       <attribute name="url" value="http://www.ebi.ac.uk/intact/" />
       <collection name="publications">
-         <reference ref_id="0_47" />
+         <reference ref_id="0_45" />
       </collection>
    </item>
-   <item id="0_49" class="DataSet" implements="">
-      <attribute name="version" value="06/26/2015" />
-      <reference name="dataSource" ref_id="0_48" />
+   <item id="0_47" class="DataSet" implements="">
+      <attribute name="version" value="08/22/2015" />
+      <reference name="dataSource" ref_id="0_46" />
       <attribute name="name" value="IntAct interactions data set" />
       <attribute name="description" value="Curated binary and complex protein-protein interactions for Arabidopsis from IntAct" />
       <attribute name="url" value="http://www.ebi.ac.uk/intact/" />

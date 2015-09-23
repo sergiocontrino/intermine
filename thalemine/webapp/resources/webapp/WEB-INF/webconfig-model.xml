@@ -665,6 +665,7 @@
                      types="Gene"/>
    -->
 
+   <!--    comment out the stock, polymorphisms, genotypes, phenotypes, alleles displayers
    <reportdisplayer javaClass="org.thalemine.web.displayer.GeneModelDisplayer"
                      jspName="model/alleleGeneModelDisplayer.jsp"
                      replacesFields="affectedGenes"
@@ -754,6 +755,7 @@
                      replacesFields="backgroundStocks,stocks,organism,type"
                      placement="Stocks"
                      types="Strain"/>
+          -->
 
   </reportdisplayers>
 

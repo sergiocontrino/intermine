@@ -1374,7 +1374,7 @@ public class ProfileManager
             profile = createNewProfile(username, null);
         }
 
-        if (email != null && !email.equals("")) {
+        if (email != null && !("".equals(email))) {
             if (!profile.prefers(UserPreferences.EMAIL)) {
                 profile.getPreferences().put(UserPreferences.EMAIL, email);
             }

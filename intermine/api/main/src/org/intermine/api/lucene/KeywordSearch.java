@@ -839,8 +839,8 @@ public final class KeywordSearch
         boolean isPhrase = false;
         if (queryString.startsWith("\"") && queryString.endsWith("\"")) {
             isPhrase = true;
-            queryString=queryString.replaceFirst("\"", "");
-            queryString=queryString.substring(0, queryString.lastIndexOf('"'));
+            queryString = queryString.replaceFirst("\"", "");
+            queryString = queryString.substring(0, queryString.lastIndexOf('"'));
         }
 
 
@@ -848,7 +848,7 @@ public final class KeywordSearch
         //
         int noOfSpaces = qs.length() - qs.replaceAll(" ", "").length();
         if (noOfSpaces > 1) {
-            queryString=queryString.concat("~");
+            queryString = queryString.concat("~");
         }
 
         // keep strings separated by spaces together, i.e. substitute space between words with AND
@@ -867,7 +867,7 @@ public final class KeywordSearch
         // ~ (for fuzzy searches) amd - now allowed
 
         final String[] specialCharacters = {"+", "&&", "||", "!", "(", ")", "{", "}", "[",
-                "]", "^", ":", "\\"};
+            "]", "^", ":", "\\"};
 
 
         for (String s : specialCharacters) {

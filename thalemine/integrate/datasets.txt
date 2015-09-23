@@ -21,7 +21,6 @@ DataSet	InterPro GO Annotation data set	Mapping between InterPro domains and GO 
 DataSource	Panther	Orthologue and paralogue relationships based on the inferred speciation and gene duplication events in the phylogenetic tree	https://www.pantherdb.org	Publication:23193289
 DataSet	Panther data set	Panther orthologues from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat and paralogues from Arabidopsis	https://www.pantherdb.org	DataSource:Panther	10.0
 DataSource	BAR	The Bio-Analaytic Resource for Plant Biology	http://bar.utoronto.ca	Publication:19401381
-DataSet	BAR Interactions data set	Confirmed Arabidopsis protein interactions from several sources (BIND, MIND, Popescu, Braun, Frommer, etc.) compiled by BAR	http://bar.utoronto.ca/interactions/cgi-bin/arabidopsis_interactions_viewer.cgi	DataSource:BAR,Publication:17675552	10/08/2013
 DataSet	BAR Annotations Lookup	Mapping between an AGI locus and Probeset identifier	http://bar.urotonto.ca	DataSource:BAR	10/08/2013
 DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840
 DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	08/14/2015
@@ -29,6 +28,6 @@ DataSet	GeneRIF	Functional annotation added by scientists to genes described in 
 DataSource	GenomeNet	Japanese network of database and computational services for genome research	http://www.genome.jp	Publication:9397687
 DataSet	KEGG pathways data set	Wiring diagrams of molecular interactions, reactions, and relations	http://www.kegg.jp/kegg/pathway.html	DataSource:GenomeNet,Publication:24214961	72.0
 DataSource	BioGRID	Open access database housing genetic and protein interactions curated from biomedical literature for all major model organism species and humans	http://thebiogrid.org	Publication:25428363
-DataSet	BioGRID interaction data set	Curated set of genetic and physical interactions for Arabidopsis from BioGRID	http://thebiogrid.org	DataSource:BioGRID	3.4.127
+DataSet	BioGRID interaction data set	Curated set of genetic and physical interactions for Arabidopsis from BioGRID	http://thebiogrid.org	DataSource:BioGRID	3.4.128
 DataSource	IntAct	Freely available, open source database system and analysis tools for molecular interaction data, derived from literature or direct user submissions	http://www.ebi.ac.uk/intact/	Publication:22121220
-DataSet	IntAct interactions data set	Curated binary and complex protein-protein interactions for Arabidopsis from IntAct	http://www.ebi.ac.uk/intact/	DataSource:IntAct	06/26/2015
+DataSet	IntAct interactions data set	Curated binary and complex protein-protein interactions for Arabidopsis from IntAct	http://www.ebi.ac.uk/intact/	DataSource:IntAct	08/22/2015

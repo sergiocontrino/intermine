@@ -454,13 +454,13 @@ public class Callback extends LoginHandler
 
 
     private String parseReturnto(String state) throws IllegalArgumentException {
-        String URL_PATTERN = "returnto=";
-        int URL_PATTERN_LENGTH = URL_PATTERN.length();
+        String urlPattern = "returnto=";
+        int urlPatternLength = urlPattern.length();
 
         try {
             String stateDecoded = (String) URLDecoder.decode(state, "UTF-8");
-            int returnto_index = stateDecoded.indexOf(URL_PATTERN) + URL_PATTERN_LENGTH;
-            return stateDecoded.substring(returnto_index);
+            int returntoIndex = stateDecoded.indexOf(urlPattern) + urlPatternLength;
+            return stateDecoded.substring(returntoIndex);
         } catch (UnsupportedEncodingException e) {
             throw new AssertionError("UTF-8 is unknown");
         }

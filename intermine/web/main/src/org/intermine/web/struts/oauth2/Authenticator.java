@@ -75,9 +75,10 @@ public class Authenticator extends InterMineAction
 
         String redirectUri = getRedirectUri(webProperties, providerName);
         String realm = webProperties.getProperty("webapp.baseurl");
-        String security_token = UUID.randomUUID().toString();
+        String securityToken = UUID.randomUUID().toString();
         String returnto = URLDecoder.decode(request.getParameter("returnto"),  "UTF-8");
-        String state = URLEncoder.encode("security_token=" + security_token + "&returnto=" + returnto,  "UTF-8");
+        String state = URLEncoder.encode("security_token=" + securityToken + "&returnto="
+                + returnto, "UTF-8");
         request.getSession().setAttribute("oauth2.state", state);
 
         String authorisationUrl = webProperties.getProperty("oauth2." + providerName + ".url.auth");
