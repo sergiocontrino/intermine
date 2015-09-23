@@ -64,7 +64,7 @@ public class PlantOntologyDisplayer extends ReportDisplayer
 
         ONTOLOGIES.add("plant_anatomy");
         ONTOLOGIES.add("plant_structure_development_stage");
-        ONTOLOGIES.add("plant_ontology");
+//        ONTOLOGIES.add("plant_ontology");
 
         EVIDENCE_CODES.put("EXP", "Inferred from Experiment");
         EVIDENCE_CODES.put("IDA", "Inferred from Direct Assay");
