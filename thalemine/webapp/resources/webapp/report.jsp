@@ -337,7 +337,7 @@
 </div>
 
 <%-- TODO JCVI: Change the link here to your displayer --%>
-<script charset="utf-8" type="text/javascript" src="${WEB_PROPERTIES['head.cdn.location']}/js/atted-displayer/build/atted-displayer-1.0.0.min.js"></script>
+<script charset="utf-8" type="text/javascript" src="${WEB_PROPERTIES['head.cdn.location']}/js/atted-displayer/1.1.0/build/atted-displayer-1.1.0.min.js"></script>
 
 <%-- Comment this out because it changes the formatting of the whole report page relative to the rest of the site --%>
 <%--<link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/css/bootstrap/2.3.2/css/bootstrap.min.css">--%>
@@ -346,7 +346,7 @@
 
 <div id="atted_displayercontainer"></div>
    <script type="text/javascript">
-      var id = "${AGI}".charAt(0).toUpperCase() + "${AGI}".slice(1).toLowerCase();
+      var id = "${AGI}";
       var webapp_url = "${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}";
       var attedcallback = function(values) {
 
@@ -388,7 +388,9 @@
             method: 'cor',
             cutoff: 0.7,
             guarantee: 10,
-            service: webapp_url + "/service"
+            service: webapp_url + "/service",
+            atted: "${WEB_PROPERTIES['atted.url.prefix']}",
+            accessToken: "${WEB_PROPERTIES['araport.accessToken']}"
             }
 
 
