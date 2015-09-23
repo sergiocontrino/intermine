@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -28,7 +29,17 @@
         <c:forEach items="${goTerms}" var="parentEntry">
           <c:set var="parentTerm" value="${parentEntry.key}" />
             <thead>
-              <tr><th colspan="2">${parentTerm}</th></tr>
+
+              <c:choose>
+                <c:when test="${parentTerm eq 'plant anatomy'}">
+                  <tr><th colspan="2">${parentTerm}: expressed in</th></tr>
+                </c:when>
+                <c:when test="${parentTerm eq 'plant structure development stage'}">
+                  <tr><th colspan="2">${parentTerm}: expressed during</th></tr>
+                </c:when>
+              </c:choose>
+<!--               <tr><th colspan="2">${parentTerm}</th></tr>
+-->
             </thead>
             <tbody>
             <tr>
