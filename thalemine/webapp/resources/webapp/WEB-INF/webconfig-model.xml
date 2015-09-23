@@ -101,14 +101,7 @@
       <fieldconfig fieldExpr="symbol"/>
       <fieldconfig fieldExpr="name"/>
       <fieldconfig fieldExpr="briefDescription"/>
-<!--       <fieldconfig fieldExpr="poAnnotation.ontologyTerm.name" showInInlineCollection="false" showInSummary="false" label="PO Annotation" />
--->
     </fields>
-
-    <inlinelist>
-     <table path="poAnnotation.ontologyTerm.name" showLinksToObjects="true" showInHeader="true" label="PO Annotation"/>
-    </inlinelist>
-
   </class>
 
   <class className="org.intermine.model.bio.GeneFlankingRegion">
