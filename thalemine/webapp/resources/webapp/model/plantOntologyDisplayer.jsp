@@ -7,12 +7,12 @@
 <%@ taglib uri="http://jakarta.apache.org/taglibs/string-1.1" prefix="str" %>
 
 
-<!-- geneOntologyDisplayer.jsp -->
+<!-- plantOntologyDisplayer.jsp -->
 
-<div id="geneOntology_displayer" class="collection-table">
+<div id="plantOntology_displayer" class="collection-table">
 <div class="header">
-<h3>Gene Ontology</h3>
-<p>Data Source: <a target="_blank" href="${WEB_PROPERTIES['GO_url']}">Gene Ontology Consortium</a></p>
+<h3>Plant Ontology</h3>
+<p>Data Source: <a target="_blank" href="${WEB_PROPERTIES['PO_url']}">Plant Ontology Consortium</a></p>
 </div>
 
 
@@ -71,4 +71,4 @@
   </c:otherwise>
 </c:choose>
 </div>
-<!-- /geneOntologyDisplayer.jsp -->
+<!-- /plantOntologyDisplayer.jsp -->

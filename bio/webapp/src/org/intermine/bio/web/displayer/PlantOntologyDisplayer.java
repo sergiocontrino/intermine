@@ -61,9 +61,10 @@ public class PlantOntologyDisplayer extends ReportDisplayer
     }
 
     static {
-        ONTOLOGIES.add("biological_process");
-        ONTOLOGIES.add("molecular_function");
-        ONTOLOGIES.add("cellular_component");
+
+        ONTOLOGIES.add("plant_anatomy");
+        ONTOLOGIES.add("plant_structure_development_stage");
+        ONTOLOGIES.add("plant_ontology");
 
         EVIDENCE_CODES.put("EXP", "Inferred from Experiment");
         EVIDENCE_CODES.put("IDA", "Inferred from Direct Assay");
@@ -102,7 +103,7 @@ public class PlantOntologyDisplayer extends ReportDisplayer
         }
 
         if (!goLoadedForOrganism) {
-            String noGoMessage = "No Gene Ontology annotation loaded for " + organismName;
+            String noGoMessage = "No Plant Ontology annotation loaded for " + organismName;
             request.setAttribute("noGoMessage", noGoMessage);
         } else {
             Model model = im.getModel();
@@ -169,14 +170,14 @@ public class PlantOntologyDisplayer extends ReportDisplayer
 
     private static PathQuery buildQuery(Model model, Integer geneId) {
         PathQuery q = new PathQuery(model);
-        q.addViews("Gene.poAnnotation.ontologyTerm.parents.name",
+        q.addViews(
+                "Gene.poAnnotation.ontologyTerm.namespace",
                 "Gene.poAnnotation.ontologyTerm.name",
                 "Gene.poAnnotation.evidence.code.code");
-        q.addOrderBy("Gene.poAnnotation.ontologyTerm.parents.name", OrderDirection.ASC);
+        q.addOrderBy("Gene.poAnnotation.ontologyTerm.namespace", OrderDirection.ASC);
         q.addOrderBy("Gene.poAnnotation.ontologyTerm.name", OrderDirection.ASC);
 
-        // parents have to be main ontology
-        q.addConstraint(Constraints.oneOfValues("Gene.poAnnotation.ontologyTerm.parents.name",
+        q.addConstraint(Constraints.oneOfValues("Gene.poAnnotation.ontologyTerm.namespace",
                 ONTOLOGIES));
 
         // not a NOT relationship
