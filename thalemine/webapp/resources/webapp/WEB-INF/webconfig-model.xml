@@ -44,7 +44,7 @@
     <fields>
       <fieldconfig fieldExpr="name"/>
       <fieldconfig fieldExpr="description"/>
-      <fieldconfig fieldExpr="url" doNotTruncate="true"/>
+      <fieldconfig fieldExpr="url" doNotTruncate="true" />
       <fieldconfig fieldExpr="version"/>
     </fields>
   </class>
@@ -101,7 +101,14 @@
       <fieldconfig fieldExpr="symbol"/>
       <fieldconfig fieldExpr="name"/>
       <fieldconfig fieldExpr="briefDescription"/>
+<!--       <fieldconfig fieldExpr="poAnnotation.ontologyTerm.name" showInInlineCollection="false" showInSummary="false" label="PO Annotation" />
+-->
     </fields>
+
+    <inlinelist>
+     <table path="poAnnotation.ontologyTerm.name" showLinksToObjects="true" showInHeader="true" label="PO Annotation"/>
+    </inlinelist>
+
   </class>
 
   <class className="org.intermine.model.bio.GeneFlankingRegion">
@@ -112,7 +119,7 @@
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
       <fieldconfig fieldExpr="includeGene" label="Gene Included?" />
       <fieldconfig fieldExpr="chromosomeLocation" displayer="/model/chromosomeLocDisplayer.jsp" showInResults="false" />
-      <fieldconfig fieldExpr="organism.name" showInInlineCollection="false" label="Organism Name" />
+      <fieldconfig fieldExpr="organism.name" showInInlineCollection="false" label="Organism" />
     </fields>
   </class>
 
@@ -538,6 +545,12 @@
                      jspName="model/geneOntologyDisplayer.jsp"
                      replacesFields="goAnnotation,ontologyAnnotations,secondaryIdentifier"
                      placement="Function"
+                     types="Gene"/>
+
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.PlantOntologyDisplayer"
+                     jspName="model/plantOntologyDisplayer.jsp"
+                     replacesFields="poAnnotation,ontologyAnnotations"
+                     placement="Expression"
                      types="Gene"/>
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneStructureDisplayer"
