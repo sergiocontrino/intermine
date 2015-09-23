@@ -23,7 +23,6 @@ import org.intermine.model.InterMineObject;
 import org.intermine.model.bio.POAnnotation;
 import org.intermine.model.bio.POEvidence;
 import org.intermine.model.bio.POEvidenceCode;
-import org.intermine.model.bio.GOTerm;
 import org.intermine.model.bio.Gene;
 import org.intermine.model.bio.OntologyTerm;
 import org.intermine.model.bio.Protein;
@@ -84,7 +83,7 @@ public class PoPostprocessTest extends XMLTestCase {
 
         for (InterMineObject o : genes) {
             Gene gene = (Gene) o;
-            Set<POAnnotation> POAnnotations = gene.getPOAnnotation();
+            Set<POAnnotation> POAnnotations = gene.getPoAnnotation();
             for (POAnnotation goa : POAnnotations) {
                 OntologyTerm goterm = goa.getOntologyTerm();
                 assertEquals("FOR " + gene.getName(), goterm.getName());
@@ -102,8 +101,8 @@ public class PoPostprocessTest extends XMLTestCase {
         Gene resGene = (Gene) getFromDb(Gene.class).iterator().next();
 
         // one annotation instead of two
-        assertEquals(1, resGene.getPOAnnotation().size());
-        Set<POAnnotation> goes = resGene.getPOAnnotation();
+        assertEquals(1, resGene.getPoAnnotation().size());
+        Set<POAnnotation> goes = resGene.getPoAnnotation();
         for (POAnnotation a : goes) {
             assertEquals(2, a.getEvidence().size());
         }
@@ -123,10 +122,12 @@ public class PoPostprocessTest extends XMLTestCase {
 
         List toStore = new ArrayList(Arrays.asList(new Object[] {gene1, gene2, protein1, protein2}));
 
-        OntologyTerm ontologyTerm1 = (OntologyTerm) DynamicUtil.createObject(Collections.singleton(OntologyTerm.class));
+        OntologyTerm ontologyTerm1 = (OntologyTerm)
+                DynamicUtil.createObject(Collections.singleton(OntologyTerm.class));
         ontologyTerm1.setName("FOR GENE 1");
 
-        OntologyTerm ontologyTerm2 = (OntologyTerm) DynamicUtil.createObject(Collections.singleton(OntologyTerm.class));
+        OntologyTerm ontologyTerm2 = (OntologyTerm)
+                DynamicUtil.createObject(Collections.singleton(OntologyTerm.class));
         ontologyTerm2.setName("FOR GENE 2");
 
         toStore.addAll(setUpAnnotations(protein1, ontologyTerm1));
@@ -141,14 +142,18 @@ public class PoPostprocessTest extends XMLTestCase {
     }
 
     private List setUpAnnotations(Protein protein, OntologyTerm ontologyTerm) {
-        POAnnotation go = (POAnnotation) DynamicUtil.createObject(Collections.singleton(POAnnotation.class));
+        POAnnotation go = (POAnnotation)
+                DynamicUtil.createObject(Collections.singleton(POAnnotation.class));
         go.setSubject(protein);
 
         go.setOntologyTerm(ontologyTerm);
-        POEvidence evidence = (POEvidence) DynamicUtil.createObject(Collections.singleton(POEvidence.class));
-        POEvidenceCode code = (POEvidenceCode) DynamicUtil.createObject(Collections.singleton(POEvidenceCode.class));
+        POEvidence evidence = (POEvidence)
+                DynamicUtil.createObject(Collections.singleton(POEvidence.class));
+        POEvidenceCode code = (POEvidenceCode)
+                DynamicUtil.createObject(Collections.singleton(POEvidenceCode.class));
         evidence.setCode(code);
-        Publication pub = (Publication) DynamicUtil.createObject(Collections.singleton(Publication.class));
+        Publication pub = (Publication)
+                DynamicUtil.createObject(Collections.singleton(Publication.class));
         evidence.addPublications(pub);
         go.setEvidence(Collections.singleton(evidence));
         return new ArrayList(Arrays.asList(new Object[] {go, ontologyTerm, evidence, code, pub}));
@@ -163,29 +168,40 @@ public class PoPostprocessTest extends XMLTestCase {
         Protein protein2 = (Protein) DynamicUtil.createObject(Collections.singleton(Protein.class));
         protein2.addGenes(gene);
 
-        POAnnotation go1 = (POAnnotation) DynamicUtil.createObject(Collections.singleton(POAnnotation.class));
+        POAnnotation go1 = (POAnnotation)
+                DynamicUtil.createObject(Collections.singleton(POAnnotation.class));
         go1.setSubject(protein1);
-        OntologyTerm ontologyTerm = (OntologyTerm) DynamicUtil.createObject(Collections.singleton(OntologyTerm.class));
+        OntologyTerm ontologyTerm = (OntologyTerm)
+                DynamicUtil.createObject(Collections.singleton(OntologyTerm.class));
         go1.setOntologyTerm(ontologyTerm);
-        POEvidence evidence1 = (POEvidence) DynamicUtil.createObject(Collections.singleton(POEvidence.class));
-        POEvidenceCode code1 = (POEvidenceCode) DynamicUtil.createObject(Collections.singleton(POEvidenceCode.class));
+        POEvidence evidence1 = (POEvidence)
+                DynamicUtil.createObject(Collections.singleton(POEvidence.class));
+        POEvidenceCode code1 = (POEvidenceCode)
+                DynamicUtil.createObject(Collections.singleton(POEvidenceCode.class));
         evidence1.setCode(code1);
-        Publication pub1 = (Publication) DynamicUtil.createObject(Collections.singleton(Publication.class));
+        Publication pub1 = (Publication)
+                DynamicUtil.createObject(Collections.singleton(Publication.class));
         evidence1.addPublications(pub1);
         go1.setEvidence(Collections.singleton(evidence1));
 
-        POAnnotation go2 = (POAnnotation) DynamicUtil.createObject(Collections.singleton(POAnnotation.class));
+        POAnnotation go2 = (POAnnotation)
+                DynamicUtil.createObject(Collections.singleton(POAnnotation.class));
         go2.setSubject(protein2);
         go2.setOntologyTerm(ontologyTerm);
-        POEvidence evidence2 = (POEvidence) DynamicUtil.createObject(Collections.singleton(POEvidence.class));
-        POEvidenceCode code2 = (POEvidenceCode) DynamicUtil.createObject(Collections.singleton(POEvidenceCode.class));
+        POEvidence evidence2 = (POEvidence)
+                DynamicUtil.createObject(Collections.singleton(POEvidence.class));
+        POEvidenceCode code2 = (POEvidenceCode)
+                DynamicUtil.createObject(Collections.singleton(POEvidenceCode.class));
         evidence2.setCode(code2);
-        Publication pub2 = (Publication) DynamicUtil.createObject(Collections.singleton(Publication.class));
+        Publication pub2 = (Publication)
+                DynamicUtil.createObject(Collections.singleton(Publication.class));
         evidence2.addPublications(pub2);
         go2.setEvidence(Collections.singleton(evidence2));
 
 
-        List toStore = new ArrayList(Arrays.asList(new Object[] {gene, protein1, protein2, go1, ontologyTerm, evidence1, code1, pub1, go2, ontologyTerm, evidence2, code2, pub2}));
+        List toStore = new ArrayList(Arrays.asList(new Object[]
+                {gene, protein1, protein2, go1, ontologyTerm, evidence1, code1, pub1, go2,
+                ontologyTerm, evidence2, code2, pub2}));
         osw.beginTransaction();
         Iterator i = toStore.iterator();
         while (i.hasNext()) {
