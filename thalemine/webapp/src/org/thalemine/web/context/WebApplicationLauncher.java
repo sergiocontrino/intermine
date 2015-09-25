@@ -5,6 +5,9 @@ import javax.servlet.ServletRequest;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
+import org.thalemine.web.database.DBConnectionManager;
+import org.thalemine.web.database.domain.reader.DataReaderConfig;
+import org.thalemine.web.metadata.DataSummaryService;
 import org.thalemine.web.service.InfrastructureService;
 import org.thalemine.web.service.Initializable;
 import org.thalemine.web.service.Verifiable;
@@ -88,6 +91,12 @@ public class WebApplicationLauncher implements Initializable, Verifiable {
 		log.info("WebApplicationLauncher:Services Initialization has completed.");
 		
 		validateState();
+		
+		DBConnectionManager databaseManager = DBConnectionManager.getInstance();
+		String sqlQuery = DataReaderConfig.getInstance().buildSQL(servletContext, DataReaderConfig.DATASET_SUMMARY_SQL_PATH);
+		
+		DataSummaryService.getInstance(sqlQuery);
+		DataSummaryService.initialize(sqlQuery);
 		
 		} catch(Exception e){
 			exception = e;

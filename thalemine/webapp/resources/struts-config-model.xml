@@ -50,3 +50,8 @@
 <!-- End of Genomic Region Search configuration -->
 
 <action path="/initFriendlyMineLinkDisplayer" type="org.intermine.bio.web.FriendlyMineLinkController"/>
+
+<action path="/displayProjectsSummary"
+  type="org.thalemine.web.controller.DataCategoriesController" />
+  
+<action path="/dataSummary" forward="dataSummary.page" />
