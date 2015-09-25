@@ -51,6 +51,12 @@
 							<b>${item.categoryName}</b>
 						</td>
 						<td><a href="${item.dataSourceUrl}" target="_blank" class="extlink">${item.dataSourceName}</a>
+						<p>
+							<b><span>Gene Count: ${item.geneCount}</span></b>
+							</p>
+							<p>
+							<b><span>Feature Count: ${item.featureCount}</span></b>
+							</p>
 						</td>
 						<td>
 							${item.dataSourceDescription}
@@ -62,24 +68,14 @@
 							<c:if test="${not empty item.dataSetVersion}">
   									- ${item.dataSetVersion}
 							</c:if>
-							<p>
-							<b><span>Gene Count: ${item.geneCount}</span></b>
-							</p>
-							<p>
-							<b><span>Feature Count: ${item.featureCount}</span></b>
-							</p>
 							</c:when>
 							<c:otherwise>
+							
 								${item.dataSetName}
 								<c:if test="${not empty item.dataSetVersion}">
   									- ${item.dataSetVersion}
 								</c:if>
-								<p>
-							<b><span>Gene Count: ${item.geneCount}</span></b>
-							</p>
-							<p>
-							<b><span>Feature Count: ${item.featureCount}</span></b>
-							</p>
+								
 							</c:otherwise>
 						</c:choose>
 										

@@ -99,8 +99,29 @@ FROM
 	author a
 	on a.id = ap.authors
 	group by p.id, p.pubmedid, p.title, p.intermine_year
-
-
+)
+,
+gene_agg_source as (
+select 
+count(*) as gene_count,
+d.id dataset_id
+from dataset d
+join
+bioentitiesdatasets bds
+on 
+d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join gene g
+on g.id = bds.bioentities
+join 
+organism o
+on 
+o.id = g.organismid
+where o.taxonid = 3702
+group by d.id
 )
 
 SELECT
@@ -119,7 +140,7 @@ SELECT
 	p.pubmed_id,
 	p.author_list as authors,
 	p.year,
-	0 gene_count,
+	gs.gene_count,
 	0 feature_count
 	FROM
 	datasource ds JOIN dataset dt
@@ -131,4 +152,7 @@ SELECT
 		left join
 	publication_source p
 	on p.id = dt.publicationid
+	left join
+	gene_agg_source gs
+	on gs.dataset_id = dt.id
 	order by st.sort_order;
