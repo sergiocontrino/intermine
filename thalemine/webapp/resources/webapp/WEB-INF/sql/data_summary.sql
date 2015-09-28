@@ -123,6 +123,257 @@ o.id = g.organismid
 where o.taxonid = 3702
 group by d.id
 )
+,
+pub_agg_feature_source as (
+select 
+count(distinct bp.publications) feature_count,
+d.id dataset_id
+from dataset d
+join
+bioentitiesdatasets bds
+on 
+d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join gene g
+on g.id = bds.bioentities
+join bioentitiespublications bp
+on bp.bioentities = bds.bioentities
+join publication p
+on p.id = bp.publications
+join 
+organism o
+on 
+o.id = g.organismid
+where o.taxonid = 3702 and d.name = 'PubMed to gene mapping'
+group by d.id )
+, 
+
+homolog_agg_feature_source as (
+select 
+count(h.homologueid) as feature_count
+,
+d.id dataset_id
+from dataset d
+join
+bioentitiesdatasets bds
+on 
+d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join gene g
+on g.id = bds.bioentities
+join 
+organism o
+on 
+o.id = g.organismid
+join homologue h 
+on g.id = h.geneid
+where o.taxonid = 3702 and d.name = 'Panther data set'
+group by d.id
+
+)
+,
+protein_agg_source as (
+
+select 
+count(distinct(proteins)) feature_count,
+d.id dataset_id
+from dataset d
+join
+bioentitiesdatasets bds
+on 
+d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join gene g
+on g.id = bds.bioentities
+join
+genesproteins gp
+on gp.genes = g.id
+join protein p
+on p.id = gp.proteins
+join organism o
+on o.id = g.organismid
+where o.taxonid = 3702 and d.name = 'Genome Annotation' 
+and p.uniprotname IS NOT NULL
+group by d.id
+)
+
+,
+go_agg_source as (
+SELECT
+	count(*) feature_count,
+	d.id dataset_id
+	from dataset d
+join
+bioentitiesdatasets bds
+on 
+d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join gene g
+on g.id = bds.bioentities
+join
+genegoannotation go
+on go.gene = g.id
+join organism o
+on o.id = g.organismid
+where o.taxonid = 3702 and ds.name = 'GO'
+group by d.id )
+
+,
+po_agg_source as (
+
+SELECT
+	count(*) feature_count,
+	d.id dataset_id
+	from dataset d
+join
+bioentitiesdatasets bds
+on 
+d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join gene g
+on g.id = bds.bioentities
+join
+genepoannotation go
+on go.gene = g.id
+join organism o
+on o.id = g.organismid
+where o.taxonid = 3702 and d.name = 'PO Annotation from TAIR'
+group by d.id
+)
+,
+
+generif_agg_source as (
+SELECT
+	count(distinct(annotation)) feature_count,
+	d.id dataset_id
+	from dataset d
+join
+bioentitiesdatasets bds
+on 
+d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join gene g
+on g.id = bds.bioentities
+join
+generif gr
+on g.id = gr.geneid
+join organism o
+on o.id = g.organismid
+where o.taxonid = 3702 and d.name = 'GeneRIF'
+group by d.id
+
+)
+,
+
+agg_interactions_source as (
+
+select
+count(distinct(interactiondetail)) feature_count,
+d.id dataset_id
+from dataset d
+join
+datasetsinteractiondetail dl
+on d.id = dl.datasets
+group by d.id
+
+)
+,
+agg_pathways_source as (
+
+select
+count(distinct(pathways)) feature_count,
+d.id dataset_id
+from dataset d
+join
+bioentitiesdatasets bds
+on 
+d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join gene g
+on g.id = bds.bioentities
+join
+genespathways gp
+on g.id = gp.genes
+join organism o
+on o.id = g.organismid
+where o.taxonid = 3702 and d.name = 'KEGG pathways data set'
+group by 
+d.id
+
+)
+,
+agg_feature_count as 
+(
+
+select 
+feature_count,
+dataset_id
+from 
+pub_agg_feature_source
+UNION
+select
+feature_count,
+dataset_id
+from
+homolog_agg_feature_source
+UNION
+select
+feature_count,
+dataset_id
+from
+protein_agg_source
+UNION
+select
+feature_count,
+dataset_id
+from
+go_agg_source
+UNION
+select
+feature_count,
+dataset_id
+from
+po_agg_source
+UNION
+select
+feature_count,
+dataset_id
+from
+generif_agg_source
+UNION
+select
+feature_count,
+dataset_id
+from
+agg_interactions_source
+UNION
+select
+feature_count,
+dataset_id
+from
+agg_pathways_source
+)
 
 SELECT
 	st.category_name,
@@ -141,7 +392,7 @@ SELECT
 	p.author_list as authors,
 	p.year,
 	gs.gene_count,
-	0 feature_count
+	aggf.feature_count
 	FROM
 	datasource ds JOIN dataset dt
 		ON
@@ -155,4 +406,7 @@ SELECT
 	left join
 	gene_agg_source gs
 	on gs.dataset_id = dt.id
+	left join 
+	agg_feature_count aggf
+	on aggf.dataset_id = dt.id
 	order by st.sort_order;
