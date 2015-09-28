@@ -87,7 +87,7 @@
 							<c:if test="${not empty item.author}">
   											 ${item.author}
   												 <c:if test="${not empty item.year}">
-  												 , &nbsp; ${item.year}
+  												 ., &nbsp; ${item.year}
 												</c:if>
 							</c:if>
 							<c:if test="${not empty item.pubMedId}">

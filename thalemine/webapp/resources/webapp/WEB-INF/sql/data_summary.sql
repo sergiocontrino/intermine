@@ -88,17 +88,9 @@ SELECT
 	p.pubmedid pubmed_id,
 	p.title,
 	p.intermine_year as year,
-	string_agg(a.name, ', ' order by lower(a.name)) as author_list
+	p.firstauthor  || ' et al' as author_list
 FROM
 	publication p
-	join
-	authorspublications ap
-	on 
-	ap.publications = p.id
-	join 
-	author a
-	on a.id = ap.authors
-	group by p.id, p.pubmedid, p.title, p.intermine_year
 )
 ,
 gene_agg_source as (
