@@ -102,20 +102,6 @@ public class UniprotPostProcess extends PostProcessor {
 
 	private Iterator<?> getGeneSourceIterator(final Query query) throws ObjectStoreException {
 
-		log.info("In getGeneSourceIterator start");
-
-		if (osw == null) {
-			log.info("OSW Is Null");
-		} else {
-			log.info("OSW Is NOT Null");
-		}
-
-		if (query == null) {
-			log.info("Query Is Null");
-		} else {
-			log.info("Query Is NOT Null");
-		}
-
 		ObjectStore os1 = osw.getObjectStore();
 
 		((ObjectStoreInterMineImpl) os1).precompute(query, Constants.PRECOMPUTE_CATEGORY);
@@ -125,19 +111,10 @@ public class UniprotPostProcess extends PostProcessor {
 			log.info("Gene Source Result Set Size:" + res.size());
 		}
 
-		log.info("In getGeneSourceIterator end");
 		return res.iterator();
 	}
 
 	private Iterator<?> getPublicationIterator(final Query query) throws ObjectStoreException {
-
-		log.info("In getPublicationIterator start");
-
-		if (osw == null) {
-			log.info("OSW Is Null");
-		} else {
-			log.info("OSW Is NOT Null");
-		}
 
 		ObjectStore os1 = osw.getObjectStore();
 
@@ -148,7 +125,6 @@ public class UniprotPostProcess extends PostProcessor {
 			log.info("Publications Result Set Size:" + res.size());
 		}
 
-		log.info("In getPublicationIterator end");
 		return res.iterator();
 	}
 
@@ -162,19 +138,9 @@ public class UniprotPostProcess extends PostProcessor {
 
 		long startTime = System.currentTimeMillis();
 
-		log.info("ProcessGenesProteinsPublications before query");
-
 		Query query = getGeneQuerySourceRecordsbyProteins();
 
-		log.info("ProcessGenesProteinsPublications after query");
-
-		log.info("Gene Source Query:" + query.toString());
-
-		log.info("Before entering iterator");
-
 		Iterator<?> iterator = getGeneSourceIterator(query);
-
-		log.info("After entering iterator");
 
 		int count = 0;
 		int pubAddedCount = 0;
@@ -183,43 +149,23 @@ public class UniprotPostProcess extends PostProcessor {
 
 		while (iterator.hasNext()) {
 
-			log.info("Iterator First Line");
-
 			ResultsRow item = (ResultsRow) iterator.next();
-
-			log.info("Iterator 2 Line");
 
 			Gene gene = (Gene) item.get(0);
 
-			log.info("Iterator 3 Line");
-
 			InterMineObject object = (InterMineObject) gene;
 
-			log.info("Iterator 4 Line");
-
-			log.info("Processing Current Gene: = " + gene.getPrimaryIdentifier());
-
 			count++;
-
-			log.info("Iterator 5 Line");
-
+			
 			Set<Publication> notExistingProteinsPublications = new HashSet<Publication>();
-
-			log.info("Iterator 6 Line");
 
 			Set<Publication> existingGenePublications = new HashSet<Publication>();
 
-			log.info("Iterator 7 Line");
-
 			existingGenePublications = gene.getPublications();
-
-			log.info("Iterator 8 Line");
 
 			log.info("Current Gene # Publication Count: = " + existingGenePublications.size());
 
 			notExistingProteinsPublications = getPublications(object);
-
-			log.info("Iterator 8 Line");
 
 			log.info("Current Gene # Not Existing Publication Count: = " + notExistingProteinsPublications.size()
 					+ "; Gene:" + gene.getPrimaryIdentifier());
@@ -236,13 +182,10 @@ public class UniprotPostProcess extends PostProcessor {
 
 					for (Publication pubItem : notExistingProteinsPublications) {
 
-						log.info("Attempt to Store Not Existing Pub: Processing Publication for a gene. " + pubItem);
-
 						InterMineObject pubObject = (InterMineObject) pubItem;
 						insertPublicationCollectionField(object, pubObject, destClassName, collectionName);
 
-						log.info("Iterator 9 Line");
-					}
+						}
 
 				} catch (Exception e) {
 					exception = e;
@@ -273,8 +216,6 @@ public class UniprotPostProcess extends PostProcessor {
 
 	private Query getNotExistingProteinsPubbyGeneQuery(InterMineObject object) {
 
-		log.info("Looking up non-existing proteins publications for a gene: " + object);
-
 		QueryClass qcPub = new QueryClass(Publication.class);
 		QueryClass qcOtherGenes = new QueryClass(Gene.class);
 		QueryClass qcProtein = new QueryClass(Protein.class);
@@ -304,8 +245,6 @@ public class UniprotPostProcess extends PostProcessor {
 		outerQuery.addToSelect(qf);
 
 		outerQuery.addToSelect(qfDate);
-
-		log.info("Retrieving Not Existing Gene Publications has started - Proteins. Classes includes: Gene vs Proteins .");
 
 		// Gene subquery
 
@@ -372,22 +311,15 @@ public class UniprotPostProcess extends PostProcessor {
 				throw exception;
 			}
 
-			log.info("Input Publication Query: " + query.toString() + "Idl Query: " + query.getIqlQuery());
-
 			while (iterator.hasNext()) {
 
 				ResultsRow item = (ResultsRow) iterator.next();
 				Publication pub = (Publication) item.get(0);
 
-				log.info("Current Publication: = " + pub);
-
 				itemCount++;
 
-				log.info("Object:" + object + "; Current Item Count:" + itemCount);
-
 				Object countObject = (Object) item.get(1);
-				log.info("Count Object: = " + countObject);
-
+				
 				Long publicationCount = (Long) countObject;
 				publications.add(pub);
 
@@ -401,7 +333,7 @@ public class UniprotPostProcess extends PostProcessor {
 				throw exception;
 			} else {
 				log.info("Publication Query has successfully completed. " + "; Result Set Size: " + publications.size()
-						+ "; Object: " + object);
+						);
 			}
 		}
 
@@ -420,16 +352,11 @@ public class UniprotPostProcess extends PostProcessor {
 		if (classDesc != null) {
 			classDescAsStr = classDesc.getName();
 
-			// log.info("Class Descriptor:" + classDescAsStr);
-
 			Set<CollectionDescriptor> collectionDescGene = classDesc.getAllCollectionDescriptors();
 
 			// Adding Class Collection Descriptors to the Map
-			// log.info("Adding Class Collection Descriptors to the Map:");
-
+			
 			for (CollectionDescriptor item : collectionDescGene) {
-
-				// log.info("Collection Decscriptor Name: " + item.toString());
 
 				boolean manyToManyC = false;
 
@@ -439,7 +366,6 @@ public class UniprotPostProcess extends PostProcessor {
 
 				collectionDescMap.put(item.getName(), item);
 
-				// log.info("Collection Type Many To Many ?: " + manyToManyC);
 			}
 
 			if (!collectionDescMap.isEmpty() && collectionDescMap.size() > 0) {
@@ -449,9 +375,6 @@ public class UniprotPostProcess extends PostProcessor {
 			}
 		}
 
-		if (colDesc != null) {
-			log.info("Class Collection Desc: " + "; Class: " + "; Collection Desc: " + colDesc.getName());
-		}
 		return colDesc;
 	}
 
@@ -480,18 +403,15 @@ public class UniprotPostProcess extends PostProcessor {
 
 			}
 
-			log.info("Found Collection Descriptor: " + "; Class: " + "; Collection Desc: " + collectionDesc.getName());
-
 			if (collectionDesc.relationType() == CollectionDescriptor.M_N_RELATION) {
 				manyToMany = true;
 			}
 
-			log.info("Collection Type Many To Many ?: " + manyToMany);
-
+			
 			if (manyToMany) {
-				log.info("Adding Pub to Gene/Pub Collection before");
+				
 				osw.addToCollection(destObject.getId(), classDesc.getType(), collectionName, sourceObject.getId());
-				log.info("Adding Pub to Gene/Pub Collection after");
+				
 			} else { // publications will be always many to many
 
 				// InterMineObject tempObject =
@@ -512,7 +432,7 @@ public class UniprotPostProcess extends PostProcessor {
 						+ exception.getCause());
 				throw exception;
 			} else {
-				log.info("Element of Collection " + collectionName + " successfully stored in the database."
+				log.debug("Element of Collection " + collectionName + " successfully stored in the database."
 						+ "; Dest Object:" + destObject.toString() + "; Source Object:" + sourceObject.toString());
 			}
 		}
