@@ -24,6 +24,17 @@ public class DataSummaryRowMapper implements RowMapper<DataSummaryVO> {
 		item.setDataSourceDescription(rs.getString("datasource_description"));
 		item.setDataSourceUrl(rs.getString("datasource_url"));
 		item.setDataSetName(rs.getString("dataset_name"));
+		String data_source_description = rs.getString("datasource_description");
+		String data_set_description = rs.getString("dataset_name");
+				
+		if (StringUtils.isNotBlank(data_source_description) && data_set_description.equals("PubMed to gene mapping")){
+			StringBuilder pubDataSource = new StringBuilder();
+			pubDataSource.append(data_source_description + "\n");
+			pubDataSource.append(" ;TAIR/The Arabidopsis Information Resource " +"\n");
+			pubDataSource.append(" ; UniProt");
+			item.setDataSourceDescription(pubDataSource.toString());
+		}
+					
 		item.setDataSetDescription(rs.getString("dataset_description"));
 		item.setDataSetUrl(rs.getString("dataset_url"));
 		item.setDataSetVersion(rs.getString("dataset_version"));
