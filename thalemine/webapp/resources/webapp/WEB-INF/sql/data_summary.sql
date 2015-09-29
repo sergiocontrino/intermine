@@ -73,7 +73,7 @@ select
 			then 1
 		when (category_name = 'Proteins')
 			then 2
-		when (category_name = 'Homology')
+		when (category_name = 'Proteins Domains')
 			then 3
 		when (category_name = 'Homology')
 			then 4
@@ -576,14 +576,69 @@ SELECT
 	on agg_f_ds.datasource_id = ds.id
 	where dt.name <> 'BAR Annotations Lookup'
 	order by st.sort_order )
-	
+,
+
+protein_domain_summary_helper as (
+
+select
+cast('Protein Domains' as text) as category_name,
+3 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+d.description dataset_description,
+d.id dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+count(distinct g.id) gene_count,
+count(*) as feature_count
+from
+genesproteins gp
+join
+gene g
+on g.id = gp.genes
+join
+protein pt
+on pt.id = gp.proteins
+join
+proteindomainsproteins ptd
+on ptd.proteins = pt.id
+join
+proteindomain pd
+on pd.id = ptd.proteindomains
+join
+bioentitiesdatasets bds
+on bds.bioentities = pd.id
+join
+dataset d
+on d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join
+organism o
+on
+o.id = g.organismid
+left join
+	publication_source p
+	on p.id = d.publicationid
+where o.taxonid = 3702 and pt.uniprotname IS NOT NULL
+group by d.id, ds.id, ds.name, d.name, d.description, ds.description, d.version, ds.url, d.url, p.pubmed_id, p.author_list, p.year
+
+)
+
 select 
 distinct 
 category_name,
 sort_order,
 datasource_id,
 datasource_name,
-datasource_id,
 datasource_url,
 datasource_description,
 dataset_description,
@@ -598,4 +653,25 @@ gene_count,
 feature_count
 from 
 data_summary_source
+UNION
+select
+distinct 
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from
+protein_domain_summary_helper
 order by sort_order;
