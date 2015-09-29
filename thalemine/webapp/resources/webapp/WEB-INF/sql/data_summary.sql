@@ -5,6 +5,12 @@ SELECT
 	ds.id datasource_id,
 	dt.name dataset_name,
 	case 
+		when (ds.name = 'GO')
+			then true
+		else
+			false
+	end as hide_empty_rows,
+	case 
 		when (dt.name = 'Genome Annotation' OR 	dt.name = 'GeneRIF' or dt.name = 'Genome Assembly' or dt.name = 'Coding Sequence FASTA')
 		then 'Genes'
 	   when (	
@@ -30,7 +36,9 @@ SELECT
 	   		dt.name = 'atgenexp_stress' or
 	   		dt.name = 'root' or
 	   		dt.name = 'seed_db' or
-	   		dt.name = 'affydb')
+	   		dt.name = 'affydb' or
+	   		dt.name = 'arabidopsis_ecotypes'
+	   		)
 	   	then 'Expression'	
 	   	when (dt.name = 'PubMed to gene mapping')
 		then 'Publications'
@@ -55,6 +63,7 @@ select
 	datasource_id,
 	dataset_name,
 	category_name,
+	hide_empty_rows,
 	case 
 		when (category_name = 'Genes')
 			then 1
@@ -80,7 +89,9 @@ select
 			999
 	end as sort_order
 from
-datacategory dc )
+datacategory dc 
+where dataset_name <> 'BAR Annotations Lookup'
+)
 ,
 publication_source as (
 SELECT
@@ -112,7 +123,7 @@ join
 organism o
 on 
 o.id = g.organismid
-where o.taxonid = 3702
+where o.taxonid = 3702 and d.name <> 'BAR Annotations Lookup'
 group by d.id
 )
 ,
@@ -315,7 +326,7 @@ d.id
 
 )
 ,
-agg_feature_count as 
+agg_feature_count_helper as 
 (
 
 select 
@@ -366,25 +377,108 @@ dataset_id
 from
 agg_pathways_source
 )
+,
 
+agg_feature_count as (
+select
+feature_count,
+dataset_id,
+ds.id datasource_id
+from
+agg_feature_count_helper
+join
+dataset dt
+on dataset_id = dt.id
+join
+datasource ds 
+on ds.id = dt.datasourceid
+)
+,
+feature_data_source_agg as
+(
+select
+sum(feature_count) feature_count,
+datasource_id
+from
+agg_feature_count
+group by 
+datasource_id
+)
+,
+gene_data_source_agg as (
+select 
+count(*) as gene_count,
+ds.id datasource_id
+from dataset d
+join
+bioentitiesdatasets bds
+on 
+d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join gene g
+on g.id = bds.bioentities
+join 
+organism o
+on 
+o.id = g.organismid
+where o.taxonid = 3702
+group by ds.id )
+,
+data_summary_source as(
 SELECT
+	distinct
 	st.category_name,
 	st.sort_order,
+	st.hide_empty_rows,
 	ds.name datasource_name,
 	ds.id datasource_id,
 	ds.url datasource_url,
 	ds.description datasource_description,
-	dt.description dataset_description,
-	dt.id dataset_id,
-	dt.name dataset_name,
+	case 
+		when (ds.name = 'GO' or ds.name = 'BAR') 
+			then
+				ds.description
+		 else dt.description
+	end as dataset_description,
+	case 
+		when (ds.name = 'GO' or ds.name = 'BAR') 
+			then
+				ds.id
+		 else dt.id
+	end as dataset_id,
+	case 
+		when (ds.name = 'GO' or ds.name = 'BAR') 
+			then
+				ds.name
+		 else dt.name
+	end as dataset_name,
 	dt.version dataset_version,
-	dt.url dataset_url,
-	dt.description dataset_description,
+	case 
+		when (ds.name = 'GO' or ds.name = 'BAR') 
+			then
+				ds.url
+		 else dt.url
+	end as dataset_url,
 	p.pubmed_id,
 	p.author_list as authors,
 	p.year,
-	gs.gene_count,
-	aggf.feature_count
+	case 
+		when (ds.name = 'GO') 
+			then
+				gds.gene_count
+		 else gs.gene_count
+	end as gene_count,
+	gds.gene_count data_source_gene_count,
+	case 
+		when (ds.name = 'GO') 
+			then
+				agg_f_ds.feature_count
+		 else aggf.feature_count
+	end as feature_count,
+	agg_f_ds.feature_count data_source_feature_count
 	FROM
 	datasource ds JOIN dataset dt
 		ON
@@ -400,5 +494,35 @@ SELECT
 	on gs.dataset_id = dt.id
 	left join 
 	agg_feature_count aggf
-	on aggf.dataset_id = dt.id
-	order by st.sort_order;
+	on aggf.dataset_id = dt.id 
+	left join
+	gene_data_source_agg gds
+	on gds.datasource_id = ds.id
+	left join
+	feature_data_source_agg agg_f_ds
+	on agg_f_ds.datasource_id = ds.id
+	where dt.name <> 'BAR Annotations Lookup'
+	order by st.sort_order )
+	
+select 
+distinct 
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_id,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from 
+data_summary_source
+order by sort_order;
