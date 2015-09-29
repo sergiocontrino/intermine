@@ -35,8 +35,9 @@
 	<thead>
 		<tr>
 			<th>Data Category</th>
+			<th>Gene Count</th>
+			<th>Feature Count</th>
 			<th>Data Source</th>
-			<th>Data Source Description</th>
 			<th>Data Set</th>
 			<th>Data Set Description</th>
 			<th>PubMed</th>
@@ -50,15 +51,15 @@
 						<td>
 							<b>${item.categoryName}</b>
 						</td>
-						<td><a href="${item.dataSourceUrl}" target="_blank" class="extlink">${item.dataSourceName}</a>
-						<p>
-							<b><span>Gene Count: ${item.geneCount}</span></b>
-							</p>
-							<p>
-							<b><span>Feature Count: ${item.featureCount}</span></b>
-							</p>
+						<td>
+							<b>${item.geneCount}</b>
 						</td>
 						<td>
+							<b>${item.featureCount}</b>
+						</td>
+						<td>
+							<a href="${item.dataSourceUrl}" target="_blank" class="extlink">${item.dataSourceName}</a>
+							- 
 							${item.dataSourceDescription}
 						</td>
 						<td>
@@ -87,7 +88,7 @@
 							<c:if test="${not empty item.author}">
   											 ${item.author}
   												 <c:if test="${not empty item.year}">
-  												 ., &nbsp; ${item.year}
+  												 ${item.year}
 												</c:if>
 							</c:if>
 							<c:if test="${not empty item.pubMedId}">

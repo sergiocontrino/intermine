@@ -11,7 +11,9 @@ SELECT
 			false
 	end as hide_empty_rows,
 	case 
-		when (dt.name = 'Genome Annotation' OR 	dt.name = 'GeneRIF' or dt.name = 'Genome Assembly' or dt.name = 'Coding Sequence FASTA')
+		when (dt.name = 'Genome Assembly')
+		then 'Genome Assembly'
+		when (dt.name = 'Genome Annotation' or dt.name = 'Coding Sequence FASTA')
 		then 'Genes'
 	   when (	
 			dt.name = 'Swiss-Prot data set' OR
@@ -40,7 +42,7 @@ SELECT
 	   		dt.name = 'arabidopsis_ecotypes'
 	   		)
 	   	then 'Expression'	
-	   	when (dt.name = 'PubMed to gene mapping')
+	   	when (dt.name = 'PubMed to gene mapping' OR dt.name = 'GeneRIF')
 		then 'Publications'
 		when (dt.name = 'KEGG pathways data set')
 		then 'Pathways'
@@ -65,6 +67,8 @@ select
 	category_name,
 	hide_empty_rows,
 	case 
+		when (category_name = 'Genome Assembly')
+			then 0
 		when (category_name = 'Genes')
 			then 1
 		when (category_name = 'Proteins')
@@ -90,7 +94,7 @@ select
 	end as sort_order
 from
 datacategory dc 
-where dataset_name <> 'BAR Annotations Lookup'
+where dataset_name not in  ('BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 )
 ,
 publication_source as (
@@ -99,10 +103,50 @@ SELECT
 	p.pubmedid pubmed_id,
 	p.title,
 	p.intermine_year as year,
-	p.firstauthor  || ' et al' as author_list
+	p.firstauthor  as author_list
 FROM
 	publication p
+),
+
+gene_pub_source as (
+SELECT
+	distinct
+	g.primaryidentifier,
+	p.pubmedid,
+	(select d.id from dataset d where d.name = 'PubMed to gene mapping' limit 1) dataset_id
+FROM
+	gene g JOIN bioEntitiespublications bp
+		ON
+		bp.bioentities = g.id JOIN publication p
+		ON
+		p.id = bp.publications
+		join organism o on 
+		g.organismid = o.id and o.taxonid = 3702
+		)	
+,
+gene_rif_pub_agg_source as (
+select 
+count(distinct(annotation)) as feature_count,
+(select d.id from dataset d where d.name = 'GeneRIF' limit 1) dataset_id
+from generif gr
+join
+gene g
+on g.id = gr.geneid
+join
+publication p
+on gr.publicationid = p.id
+join organism o on 
+g.organismid = o.id and o.taxonid = 3702
 )
+,
+
+ncbi_pub_agg_source as (
+select 
+count(*) feature_count,
+dataset_id
+from 
+gene_pub_source gs 
+group by dataset_id )
 ,
 gene_agg_source as (
 select 
@@ -123,35 +167,23 @@ join
 organism o
 on 
 o.id = g.organismid
-where o.taxonid = 3702 and d.name <> 'BAR Annotations Lookup'
+where o.taxonid = 3702 and d.name not in  ('BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 group by d.id
 )
 ,
 pub_agg_feature_source as (
 select 
-count(distinct bp.publications) feature_count,
-d.id dataset_id
-from dataset d
-join
-bioentitiesdatasets bds
-on 
-d.id = bds.datasets
-join
-datasource ds 
-ON
-ds.id = d.datasourceid
-join gene g
-on g.id = bds.bioentities
-join bioentitiespublications bp
-on bp.bioentities = bds.bioentities
-join publication p
-on p.id = bp.publications
-join 
-organism o
-on 
-o.id = g.organismid
-where o.taxonid = 3702 and d.name = 'PubMed to gene mapping'
-group by d.id )
+feature_count,
+dataset_id
+from 
+gene_rif_pub_agg_source
+UNION
+select
+feature_count,
+dataset_id
+from 
+ncbi_pub_agg_source
+ )
 , 
 
 homolog_agg_feature_source as (
@@ -324,11 +356,52 @@ where o.taxonid = 3702 and d.name = 'KEGG pathways data set'
 group by 
 d.id
 
-)
+),
+
+genome_assembly_agg_source as (
+select count(*) feature_count, 
+d.id dataset_id
+from dataset d
+join
+bioentitiesdatasets ds
+on 
+d."id" = ds.datasets
+join sequencefeature g
+on g."id" = ds.bioentities
+where d.name = 'Genome Assembly'
+group by d.id
+),
+
+cds_agg_source as (
+select count(*) feature_count, 
+d.id dataset_id
+from dataset d
+join
+bioentitiesdatasets ds
+on 
+d."id" = ds.datasets
+join cds c
+on c.id = ds.bioentities
+join
+gene g
+on g.id = c.geneid
+group by d.id)
+
 ,
 agg_feature_count_helper as 
 (
-
+select
+feature_count,
+dataset_id
+from
+cds_agg_source
+UNION
+select 
+feature_count,
+dataset_id
+from 
+genome_assembly_agg_source
+UNION
 select 
 feature_count,
 dataset_id
