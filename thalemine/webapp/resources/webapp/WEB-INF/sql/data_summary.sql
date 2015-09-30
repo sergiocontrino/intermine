@@ -4,6 +4,7 @@ SELECT
 	dt.id dataset_id,
 	ds.id datasource_id,
 	dt.name dataset_name,
+	ds.name datasource_name,
 	case 
 		when (ds.name = 'GO')
 			then true
@@ -95,6 +96,7 @@ select
 from
 datacategory dc 
 where dataset_name not in  ('BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
+and dc.datasource_name not in ('BAR', 'InterPro')
 )
 ,
 publication_source as (
@@ -596,7 +598,7 @@ p.author_list as authors,
 p.year,
 d.version dataset_version,
 count(distinct g.id) gene_count,
-count(*) as feature_count
+count(distinct ptd.proteindomains) as feature_count
 from
 genesproteins gp
 join
@@ -631,6 +633,64 @@ left join
 where o.taxonid = 3702 and pt.uniprotname IS NOT NULL
 group by d.id, ds.id, ds.name, d.name, d.description, ds.description, d.version, ds.url, d.url, p.pubmed_id, p.author_list, p.year
 
+)
+,
+expression_datasource as
+(
+select 
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+ds.description dataset_description,
+d.id dataset_id,
+ds.description dataset_name,
+ds.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version
+from dataset d
+join
+datasource ds
+on d.datasourceid = ds.id
+left join
+publication_source p
+on p.id = d.publicationid
+where ds.name = 'BAR'
+)
+,
+expression_summary as (
+select 
+cast ('Expression' as text) category_name,
+8 sort_order,
+eds.datasource_id,
+eds.datasource_name,
+eds.datasource_url,
+eds.datasource_description,
+eds.dataset_description,
+eds.dataset_id,
+eds.dataset_name,
+eds.dataset_url,
+eds.dataset_version,
+eds.pubmed_id,
+eds.authors,
+eds.year,
+gene_count,
+feature_count
+from (
+select 
+gene_count,
+feature_count,
+(select d.id from dataset d
+join datasource ds
+on ds.id = d.datasourceid
+ where ds.name = 'BAR' limit 1) dataset_id
+from 
+staging.expression_agg_source_mv ) V
+join
+expression_datasource eds
+on V.dataset_id = eds.dataset_id 
 )
 
 select 
@@ -674,4 +734,25 @@ gene_count,
 feature_count
 from
 protein_domain_summary_helper
+UNION
+select
+distinct 
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from
+expression_summary
 order by sort_order;
