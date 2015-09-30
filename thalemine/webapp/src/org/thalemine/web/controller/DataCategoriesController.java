@@ -42,10 +42,12 @@ public class DataCategoriesController extends TilesAction {
 
 		Exception exception = null;
 		List<DataSummaryVO> results = new ArrayList<DataSummaryVO>();
+		List<DataSummaryVO> geneResults = new ArrayList<DataSummaryVO>();
 
 		log.info("Data Summary Retrieval has started.");
 		try {
 			results = DataSummaryService.getSummary();
+			geneResults = DataSummaryService.getGeneSummary();
 		} catch (Exception e) {
 			exception = e;
 		} finally {
@@ -56,6 +58,7 @@ public class DataCategoriesController extends TilesAction {
 
 			} else {
 				request.setAttribute("results", results);
+				request.setAttribute("generesults", geneResults);
 				log.info("Summary Successfully Retrieved." + "ResultSet size:" + results.size());
 			}
 		}

@@ -16,8 +16,8 @@ public class DataSummaryVO {
 	private String pubMedId;
 	private String author;
 	private String year;
-	private int geneCount;
-	private int featureCount;
+	private String geneCount;
+	private String featureCount;
 	
 	public DataSummaryVO(){
 		
@@ -96,16 +96,16 @@ public class DataSummaryVO {
 	public void setYear(String year) {
 		this.year = year;
 	}
-	public int getGeneCount() {
+	public String getGeneCount() {
 		return geneCount;
 	}
-	public void setGeneCount(int geneCount) {
+	public void setGeneCount(String geneCount) {
 		this.geneCount = geneCount;
 	}
-	public int getFeatureCount() {
+	public String getFeatureCount() {
 		return featureCount;
 	}
-	public void setFeatureCount(int featureCount) {
+	public void setFeatureCount(String featureCount) {
 		this.featureCount = featureCount;
 	}
 	

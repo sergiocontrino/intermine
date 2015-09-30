@@ -31,6 +31,78 @@
 	</im:boxarea>
 
 	<br />
+	
+	<table cellpadding="0" cellspacing="0" border="0" class="dbsources">
+	<thead>
+		<tr>
+			<th>Data Category</th>
+			<th>Feature Count</th>
+			<th>Data Source</th>
+			<th>Data Set</th>
+			<th>Data Set Description</th>
+			<th>PubMed</th>
+		</tr>
+	<thead>
+		<c:choose>
+		<c:when test="${!empty generesults}">
+			<tbody>
+				<c:forEach var="item" items="${generesults}">
+					<tr>
+						<td>
+							<b>${item.categoryName}</b>
+						</td>
+						<td>
+							<b>${item.featureCount}</b>
+						</td>
+						<td>
+							<a href="${item.dataSourceUrl}" target="_blank" class="extlink">${item.dataSourceName}</a>
+							- 
+							${item.dataSourceDescription}
+						</td>
+						<td>
+						<c:choose>
+							<c:when test="${not empty item.dataSetUrl}">
+							<a href="${item.dataSetUrl}" target="_blank" class="extlink">${item.dataSetName}</a>
+							<c:if test="${not empty item.dataSetVersion}">
+  									- ${item.dataSetVersion}
+							</c:if>
+							</c:when>
+							<c:otherwise>
+							
+								${item.dataSetName}
+								<c:if test="${not empty item.dataSetVersion}">
+  									- ${item.dataSetVersion}
+								</c:if>
+								
+							</c:otherwise>
+						</c:choose>
+										
+						</td>
+						<td>
+							${item.dataSetDescription}
+						</td>
+						<td>
+							<c:if test="${not empty item.author}">
+  											 ${item.author}
+  												 <c:if test="${not empty item.year}">
+  												 ${item.year}
+												</c:if>
+							</c:if>
+							<c:if test="${not empty item.pubMedId}">
+								<br>
+								<a href="http://www.ncbi.nlm.nih.gov/pubmed/${item.pubMedId}" target="_blank" class="extlink">PubMed: ${item.pubMedId}</a>
+								</br>
+							</c:if>
+							</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</c:when>
+
+	</c:choose>
+
+	</table>
+	
 	<table cellpadding="0" cellspacing="0" border="0" class="dbsources">
 	<thead>
 		<tr>

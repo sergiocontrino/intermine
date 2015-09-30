@@ -238,7 +238,7 @@ join protein p
 on p.id = gp.proteins
 join organism o
 on o.id = g.organismid
-where o.taxonid = 3702 and d.name = 'Genome Annotation' 
+where o.taxonid = 3702 and ds.name = 'UniProt' 
 and p.uniprotname IS NOT NULL
 group by d.id
 )
@@ -630,7 +630,7 @@ o.id = g.organismid
 left join
 	publication_source p
 	on p.id = d.publicationid
-where o.taxonid = 3702 and pt.uniprotname IS NOT NULL
+where o.taxonid = 3702 and pt.uniprotname IS NOT NULL and ds.name = 'InterPro'
 group by d.id, ds.id, ds.name, d.name, d.description, ds.description, d.version, ds.url, d.url, p.pubmed_id, p.author_list, p.year
 
 )
@@ -676,21 +676,11 @@ eds.dataset_version,
 eds.pubmed_id,
 eds.authors,
 eds.year,
-gene_count,
-feature_count
-from (
-select 
-gene_count,
-feature_count,
-(select d.id from dataset d
-join datasource ds
-on ds.id = d.datasourceid
- where ds.name = 'BAR' limit 1) dataset_id
+24005 as gene_count,
+2952615 as feature_count
 from 
-staging.expression_agg_source_mv ) V
-join
 expression_datasource eds
-on V.dataset_id = eds.dataset_id 
+limit 1
 )
 ,
 phytomozome_summary as (
@@ -720,15 +710,15 @@ select
 cast('Expression' as text) category_name,
 8 sort_order,
 999999999 datasource_id,
-cast('AtGenExpress' as text) as datasource_name,
-cast('http://www.weigelworld.org/resources/microarray/AtGenExpress/' as text) as datasource_url,
-cast('AtGenExpress data summarizing global gene expression in Arabidopsis in response to seven basic phytohormones (auxin, cytokinin, gibberellin, brassinosteroid, abscisic acid, jasmonate and ethylene) and their inhibitors (and in related experiments), as part of the AtGenExpress project.' as text) as datasource_description,
-cast('AtGenExpress data summarizing global gene expression in Arabidopsis in response to seven basic phytohormones (auxin, cytokinin, gibberellin, brassinosteroid, abscisic acid, jasmonate and ethylene) and their inhibitors (and in related experiments), as part of the AtGenExpress project.' as text)  dataset_description,
+cast('ATTED-II' as text) as datasource_name,
+cast('http://atted.jp/' as text) as datasource_url,
+cast('provides co-regulated gene relationships to estimate gene functions' as text) as datasource_description,
+cast('provides co-regulated gene relationships to estimate gene functions' as text)  dataset_description,
 9999999 dataset_id,
-cast('AtGenExpress' as text) dataset_name,
-cast('http://www.weigelworld.org/resources/microarray/AtGenExpress/' as text) dataset_url,
-cast('18419781' as text) pubmed_id,
-cast('Goda' as text) as authors,
+cast('ATTED-II' as text) dataset_name,
+cast('http://atted.jp/' as text) dataset_url,
+cast('' as text) pubmed_id,
+cast('' as text) as authors,
 cast(2008 as int) as year,
 cast ('' as text) dataset_version,
 0 as gene_count,
@@ -752,8 +742,8 @@ dataset_version,
 pubmed_id,
 authors,
 year,
-gene_count,
-feature_count
+cast(gene_count as text) as gene_count,
+cast(feature_count as text) as feature_count
 from 
 data_summary_source
 UNION
@@ -773,8 +763,8 @@ dataset_version,
 pubmed_id,
 authors,
 year,
-gene_count,
-feature_count
+cast(gene_count as text) as gene_count,
+cast(feature_count as text) as feature_count
 from
 protein_domain_summary_helper
 UNION
@@ -794,8 +784,8 @@ dataset_version,
 pubmed_id,
 authors,
 year,
-gene_count,
-feature_count
+cast(gene_count as text) as gene_count,
+cast(feature_count as text) as feature_count
 from
 expression_summary
 UNION
@@ -815,8 +805,8 @@ dataset_version,
 pubmed_id,
 authors,
 year,
-gene_count,
-feature_count
+cast('real-time' as text) as gene_count,
+cast('real-time' as text) as feature_count
 from
 phytomozome_summary
 UNION
@@ -835,8 +825,8 @@ dataset_version,
 pubmed_id,
 authors,
 year,
-gene_count,
-feature_count
+cast('real-time' as text) as gene_count,
+cast('real-time' as text) as feature_count
 from
 atgen_express_summary
 order by sort_order, datasource_id;

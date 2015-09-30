@@ -22,6 +22,7 @@ public class DataSummaryService {
 	
 	private static final Logger log = Logger.getLogger(DataSummaryService.class);
 	private static List<DataSummaryVO> results = null;
+	private static List<DataSummaryVO> geneResults = null;
 	private static String SQL;
 	private static DatabaseItemReader<DataSummaryVO> reader;
 		
@@ -51,6 +52,15 @@ public class DataSummaryService {
 		
 		return results;
 	}
+	
+	public static synchronized List<DataSummaryVO> getGeneSummary() throws ObjectStoreException, Exception {
+
+		if (geneResults == null) {
+			createDataSummary();
+		}
+		
+		return geneResults;
+	}
 
 	private static void doExecute(){
 		
@@ -63,11 +73,18 @@ public class DataSummaryService {
 			while (reader.hasNext()) {
 				
 				item = reader.read();
+				
+				if (item.getCategoryName().equals("Genome Assembly") || item.getCategoryName().equals("Genes")) {
+					geneResults.add(item);
+					
+				}else{
+					results.add(item);
+				}
+				
 				log.info("SQL" + reader.getSql());
 				log.info("Current Item = " + item);
 				log.info("Parameter values:" + reader.getParameterMap());
-				
-				results.add(item);
+							
 			}
 			
 		} catch (UnexpectedInputException e1) {
@@ -103,6 +120,7 @@ public class DataSummaryService {
 		
 		setReader();
 		results = new ArrayList<DataSummaryVO>();
+		geneResults = new ArrayList<DataSummaryVO>();
 		doExecute();
 	}
 

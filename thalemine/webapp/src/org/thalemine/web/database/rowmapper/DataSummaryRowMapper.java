@@ -48,8 +48,13 @@ public class DataSummaryRowMapper implements RowMapper<DataSummaryVO> {
 		log.info("Processed Name:" + processedName);
 		item.setAuthor(processedName);
 
-		item.setGeneCount(rs.getInt("gene_count"));
-		item.setFeatureCount(rs.getInt("feature_count"));
+		item.setGeneCount(rs.getString("gene_count"));
+		
+		if (item.getCategoryName().equals("Genes")){
+			item.setFeatureCount(rs.getString("gene_count"));
+		}else{
+			item.setFeatureCount(rs.getString("feature_count"));
+		}
 
 		return item;
 	}
