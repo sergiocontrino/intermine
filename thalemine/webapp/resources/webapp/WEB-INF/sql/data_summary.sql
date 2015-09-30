@@ -692,6 +692,49 @@ join
 expression_datasource eds
 on V.dataset_id = eds.dataset_id 
 )
+,
+phytomozome_summary as (
+select 
+cast('Homology' as text) as category_name,
+4 sort_order,
+999999999 datasource_id,
+cast('Phytozome' as text) as datasource_name,
+cast('http://phytozome.jgi.doe.gov/phytomine' as text) as datasource_url,
+cast('Phytozome Homologs Generated with InParanoid' as text) as datasource_description,
+cast('Phytozome Homologs Generated with InParanoid' as text)  dataset_description,
+999 dataset_id,
+cast('Phytozome' as text) dataset_name,
+cast('http://phytozome.jgi.doe.gov/phytomine' as text) dataset_url,
+cast('22110026' as text) pubmed_id,
+cast('Goodstein' as text) as authors,
+cast(2012 as int) as year,
+cast ('' as text) dataset_version,
+0 as gene_count,
+0 as feature_count
+
+)
+,
+
+atgen_express_summary as (
+select 
+cast('Expression' as text) category_name,
+8 sort_order,
+999999999 datasource_id,
+cast('AtGenExpress' as text) as datasource_name,
+cast('http://www.weigelworld.org/resources/microarray/AtGenExpress/' as text) as datasource_url,
+cast('AtGenExpress data summarizing global gene expression in Arabidopsis in response to seven basic phytohormones (auxin, cytokinin, gibberellin, brassinosteroid, abscisic acid, jasmonate and ethylene) and their inhibitors (and in related experiments), as part of the AtGenExpress project.' as text) as datasource_description,
+cast('AtGenExpress data summarizing global gene expression in Arabidopsis in response to seven basic phytohormones (auxin, cytokinin, gibberellin, brassinosteroid, abscisic acid, jasmonate and ethylene) and their inhibitors (and in related experiments), as part of the AtGenExpress project.' as text)  dataset_description,
+9999999 dataset_id,
+cast('AtGenExpress' as text) dataset_name,
+cast('http://www.weigelworld.org/resources/microarray/AtGenExpress/' as text) dataset_url,
+cast('18419781' as text) pubmed_id,
+cast('Goda' as text) as authors,
+cast(2008 as int) as year,
+cast ('' as text) dataset_version,
+0 as gene_count,
+0 as feature_count
+
+)
 
 select 
 distinct 
@@ -755,4 +798,45 @@ gene_count,
 feature_count
 from
 expression_summary
-order by sort_order;
+UNION
+select
+distinct 
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from
+phytomozome_summary
+UNION
+select
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from
+atgen_express_summary
+order by sort_order, datasource_id;
