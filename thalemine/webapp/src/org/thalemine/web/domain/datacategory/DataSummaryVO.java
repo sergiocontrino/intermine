@@ -1,10 +1,15 @@
 package org.thalemine.web.domain.datacategory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DataSummaryVO {
 	
 	private long dataSourceId;
 	private long dataSetId;
 	private int sortOrderId;
+	private String rowType;
+	private int parentDataSetId;
 	private String categoryName;
 	private String dataSourceName;
 	private String dataSetName;
@@ -18,6 +23,7 @@ public class DataSummaryVO {
 	private String year;
 	private String geneCount;
 	private String featureCount;
+	private List <DataSummaryVO> categoryDetails = new ArrayList<DataSummaryVO>();
 	
 	public DataSummaryVO(){
 		
@@ -125,17 +131,47 @@ public class DataSummaryVO {
 		this.dataSetVersion = dataSetVersion;
 	}
 
+	
+	public String getRowType() {
+		return rowType;
+	}
+
+	public void setRowType(String rowType) {
+		this.rowType = rowType;
+	}
+
+	public int getParentDataSetId() {
+		return parentDataSetId;
+	}
+
+	public void setParentDataSetId(int parentDataSetId) {
+		this.parentDataSetId = parentDataSetId;
+	}
+
+	public void addCategoryDetail(DataSummaryVO detail){
+		categoryDetails.add(detail);
+	}
+
+	public List<DataSummaryVO> getCategoryDetails() {
+		return categoryDetails;
+	}
+
+	public void setCategoryDetails(List<DataSummaryVO> categoryDetails) {
+		this.categoryDetails = categoryDetails;
+	}
+
 	@Override
 	public String toString() {
 		return "DataSummaryVO [dataSourceId=" + dataSourceId + ", dataSetId=" + dataSetId + ", sortOrderId="
-				+ sortOrderId + ", categoryName=" + categoryName + ", dataSourceName=" + dataSourceName
-				+ ", dataSetName=" + dataSetName + ", dataSetVersion=" + dataSetVersion + ", dataSetDescription="
-				+ dataSetDescription + ", dataSourceDescription=" + dataSourceDescription + ", dataSourceUrl="
-				+ dataSourceUrl + ", dataSetUrl=" + dataSetUrl + ", pubMedId=" + pubMedId + ", author=" + author
-				+ ", year=" + year + ", geneCount=" + geneCount + ", featureCount=" + featureCount + "]";
+				+ sortOrderId + ", rowType=" + rowType + ", parentDataSetId=" + parentDataSetId + ", categoryName="
+				+ categoryName + ", dataSourceName=" + dataSourceName + ", dataSetName=" + dataSetName
+				+ ", dataSetVersion=" + dataSetVersion + ", dataSetDescription=" + dataSetDescription
+				+ ", dataSourceDescription=" + dataSourceDescription + ", dataSourceUrl=" + dataSourceUrl
+				+ ", dataSetUrl=" + dataSetUrl + ", pubMedId=" + pubMedId + ", author=" + author + ", year=" + year
+				+ ", geneCount=" + geneCount + ", featureCount=" + featureCount + ", categoryDetails="
+				+ categoryDetails + "]";
 	}
 	
 
 	
-
 }

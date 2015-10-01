@@ -505,6 +505,8 @@ group by ds.id )
 data_summary_source as(
 SELECT
 	distinct
+	cast('summary' as text) as row_type,
+	0 as parent_dataset_id,
 	st.category_name,
 	st.sort_order,
 	st.hide_empty_rows,
@@ -583,6 +585,8 @@ SELECT
 protein_domain_summary_helper as (
 
 select
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
 cast('Protein Domains' as text) as category_name,
 3 as sort_order,
 ds.id datasource_id,
@@ -662,6 +666,8 @@ where ds.name = 'BAR'
 ,
 expression_summary as (
 select 
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
 cast ('Expression' as text) category_name,
 8 sort_order,
 eds.datasource_id,
@@ -685,6 +691,8 @@ limit 1
 ,
 phytomozome_summary as (
 select 
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
 cast('Homology' as text) as category_name,
 4 sort_order,
 999999999 datasource_id,
@@ -707,6 +715,8 @@ cast ('' as text) dataset_version,
 
 atgen_express_summary as (
 select 
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
 cast('Expression' as text) category_name,
 8 sort_order,
 999999999 datasource_id,
@@ -727,7 +737,9 @@ cast ('' as text) dataset_version,
 )
 
 select 
-distinct 
+distinct
+row_type,
+parent_dataset_id,
 category_name,
 sort_order,
 datasource_id,
@@ -748,7 +760,9 @@ from
 data_summary_source
 UNION
 select
-distinct 
+distinct
+row_type,
+parent_dataset_id,
 category_name,
 sort_order,
 datasource_id,
@@ -769,7 +783,9 @@ from
 protein_domain_summary_helper
 UNION
 select
-distinct 
+distinct
+row_type,
+parent_dataset_id,
 category_name,
 sort_order,
 datasource_id,
@@ -791,6 +807,8 @@ expression_summary
 UNION
 select
 distinct 
+row_type,
+parent_dataset_id,
 category_name,
 sort_order,
 datasource_id,
@@ -811,6 +829,8 @@ from
 phytomozome_summary
 UNION
 select
+row_type,
+parent_dataset_id,
 category_name,
 sort_order,
 datasource_id,

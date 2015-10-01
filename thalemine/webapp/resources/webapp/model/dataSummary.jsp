@@ -17,7 +17,7 @@
 </im:boxarea>
 --%>
 
-	<im:boxarea title="Data Computed From Database" stylename="yellbox">
+	<im:boxarea title="Data" stylename="yellbox">
 		<p>ThaleMine integrates data from a large number of sources into a
 			single data warehouse.</p>
 		<p>This page lists the data that are included in the current
@@ -133,6 +133,15 @@
 							<a href="${item.dataSourceUrl}" target="_blank" class="extlink">${item.dataSourceName}</a>
 							- 
 							${item.dataSourceDescription}
+																			
+							<c:forEach var="itemdetail" items="${item.categoryDetails}">
+								<br/>
+								<a href="${itemdetail.dataSourceUrl}" target="_blank" class="extlink">${itemdetail.dataSourceName}</a>
+							- 
+								${itemdetail.dataSourceDescription}
+								
+							</c:forEach>
+							
 						</td>
 						<td>
 						<c:choose>
@@ -151,6 +160,28 @@
 								
 							</c:otherwise>
 						</c:choose>
+						
+						<c:forEach var="itemdetail" items="${item.categoryDetails}">
+							<br/>
+							<c:choose>
+							<c:when test="${not empty itemdetail.dataSetUrl}">
+							<a href="${itemdetail.dataSetUrl}" target="_blank" class="extlink">${itemdetail.dataSetName}</a>
+							<c:if test="${not empty itemdetail.dataSetVersion}">
+  									- ${itemdetail.dataSetVersion}
+							</c:if>
+							</c:when>
+							<c:otherwise>
+							
+								${itemdetail.dataSetName}
+								<c:if test="${not empty itemdetail.dataSetVersion}">
+  									- ${itemdetail.dataSetVersion}
+								</c:if>
+								
+							</c:otherwise>
+						</c:choose>
+						
+								
+						</c:forEach>
 										
 						</td>
 						<td>

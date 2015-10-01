@@ -12,6 +12,7 @@ public class DataReaderConfig {
 	
 	public static final String DATASET_SQL_PATH = "/WEB-INF/sql/dataset.sql";
 	public static final String DATASET_SUMMARY_SQL_PATH = "/WEB-INF/sql/data_summary.sql";
+	public static final String DATASET_DETAILS_SQL_PATH = "/WEB-INF/sql/pub_category_details.sql";
 	
 	private static final Logger log = Logger.getLogger(DataReaderConfig.class);
 	

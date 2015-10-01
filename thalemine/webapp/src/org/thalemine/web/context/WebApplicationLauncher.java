@@ -94,9 +94,10 @@ public class WebApplicationLauncher implements Initializable, Verifiable {
 		
 		DBConnectionManager databaseManager = DBConnectionManager.getInstance();
 		String sqlQuery = DataReaderConfig.getInstance().buildSQL(servletContext, DataReaderConfig.DATASET_SUMMARY_SQL_PATH);
-		
-		DataSummaryService.getInstance(sqlQuery);
-		DataSummaryService.initialize(sqlQuery);
+		String sqlDetailsQuery = DataReaderConfig.getInstance().buildSQL(servletContext, DataReaderConfig.DATASET_DETAILS_SQL_PATH);
+				
+		DataSummaryService.getInstance(sqlQuery, sqlDetailsQuery);
+		DataSummaryService.initialize(sqlQuery, sqlDetailsQuery);
 		
 		} catch(Exception e){
 			exception = e;
