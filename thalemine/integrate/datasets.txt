@@ -13,8 +13,8 @@ DataSet	GO Annotation from UniProt	GO annotations assigned by UniProt	http://www
 DataSource	UniProt	Comprehensive, high-quality and freely accessible resource of protein sequence and functional information	http://www.uniprot.org	Publication:24253303
 DataSet	Swiss-Prot data set	High-quality, manually annotated, non-redundant protein sequence database	http://web.expasy.org/docs/swiss-prot_guideline.html	DataSource:UniProt,Publication:24253303	2015_09
 DataSet	TrEMBL data set	Computationally analysed records, enriched with automatic annotation	http://www.ebi.ac.uk/uniprot/TrEMBLstats	DataSource:UniProt,Publication:24253303	2015_09
-DataSet	UniProt FASTA dataset	Protein sequences and alternative splice forms generated using VARSPLIC	ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/README.varsplic	DataSource:UniProt,Publication:24253303	2015_08
-DataSet	UniProt keywords data set	Keywords and categories used in UniProtKB	http://www.uniprot.org/docs/keywlist	DataSource:UniProt,Publication:24253303	2015_08
+DataSet	UniProt FASTA dataset	Protein sequences and alternative splice forms generated using VARSPLIC	ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/README.varsplic	DataSource:UniProt,Publication:24253303	2015_09
+DataSet	UniProt keywords data set	Keywords and categories used in UniProtKB	http://www.uniprot.org/docs/keywlist	DataSource:UniProt,Publication:24253303	2015_09
 DataSource	InterPro	Protein sequence analysis and classification	http://www.ebi.ac.uk/interpro	Publication:25428371
 DataSet	InterPro data set	Protein family and domain assignments to proteins	http://www.ebi.ac.uk/interpro	DataSource:InterPro,Publication:25428371	v53.0
 DataSet	InterPro GO Annotation data set	Mapping between InterPro domains and GO terms	http://www.ebi.ac.uk/GOA/InterPro2GO	DataSource:InterPro,Publication:17202162	v53.0
