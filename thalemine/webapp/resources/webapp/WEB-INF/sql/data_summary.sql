@@ -43,8 +43,10 @@ SELECT
 	   		dt.name = 'arabidopsis_ecotypes'
 	   		)
 	   	then 'Expression'	
-	   	when (dt.name = 'PubMed to gene mapping' OR dt.name = 'GeneRIF')
+	   	when (dt.name = 'PubMed to gene mapping')
 		then 'Publications'
+		when (dt.name = 'GeneRIF')
+		then 'GeneRIF'
 		when (dt.name = 'KEGG pathways data set')
 		then 'Pathways'
 		when (dt.name = 'PO Annotation from TAIR')
@@ -88,8 +90,10 @@ select
 			then 8
 		when (category_name = 'Publications')
 			then 9
-		when (category_name = 'Pathways')
+		when (category_name = 'GeneRIF')
 			then 10
+		when (category_name = 'Pathways')
+			then 11
 		else
 			999
 	end as sort_order
@@ -683,7 +687,7 @@ eds.pubmed_id,
 eds.authors,
 eds.year,
 24005 as gene_count,
-2952615 as feature_count
+123 as feature_count
 from 
 expression_datasource eds
 limit 1
@@ -717,7 +721,7 @@ atgen_express_summary as (
 select 
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
-cast('Expression' as text) category_name,
+cast('Co-Expression' as text) category_name,
 8 sort_order,
 999999999 datasource_id,
 cast('ATTED-II' as text) as datasource_name,
