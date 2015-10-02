@@ -11,8 +11,8 @@ DataSet	GO Annotation from TAIR	GO annotations assigned by TAIR curators	http://
 DataSet	GO Annotation from TIGR	GO annotations assigned by TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
 DataSet	GO Annotation from UniProt	GO annotations assigned by UniProt	http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
 DataSource	UniProt	Comprehensive, high-quality and freely accessible resource of protein sequence and functional information	http://www.uniprot.org	Publication:24253303
-DataSet	Swiss-Prot data set	High-quality, manually annotated, non-redundant protein sequence database	http://web.expasy.org/docs/swiss-prot_guideline.html	DataSource:UniProt,Publication:24253303	2015_08
-DataSet	TrEMBL data set	Computationally analysed records, enriched with automatic annotation	http://www.ebi.ac.uk/uniprot/TrEMBLstats	DataSource:UniProt,Publication:24253303	2015_08
+DataSet	Swiss-Prot data set	High-quality, manually annotated, non-redundant protein sequence database	http://web.expasy.org/docs/swiss-prot_guideline.html	DataSource:UniProt,Publication:24253303	2015_09
+DataSet	TrEMBL data set	Computationally analysed records, enriched with automatic annotation	http://www.ebi.ac.uk/uniprot/TrEMBLstats	DataSource:UniProt,Publication:24253303	2015_09
 DataSet	UniProt FASTA dataset	Protein sequences and alternative splice forms generated using VARSPLIC	ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/README.varsplic	DataSource:UniProt,Publication:24253303	2015_08
 DataSet	UniProt keywords data set	Keywords and categories used in UniProtKB	http://www.uniprot.org/docs/keywlist	DataSource:UniProt,Publication:24253303	2015_08
 DataSource	InterPro	Protein sequence analysis and classification	http://www.ebi.ac.uk/interpro	Publication:25428371
@@ -23,8 +23,8 @@ DataSet	Panther data set	Panther orthologues from Yeast, Roundworm, Fruit Fly, Z
 DataSource	BAR	The Bio-Analaytic Resource for Plant Biology	http://bar.utoronto.ca	Publication:19401381
 DataSet	BAR Annotations Lookup	Mapping between an AGI locus and Probeset identifier	http://bar.urotonto.ca	DataSource:BAR	10/08/2013
 DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840
-DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	08/14/2015
-DataSet	GeneRIF	Functional annotation added by scientists to genes described in NCBI Gene	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	08/14/2015
+DataSet	PubMed to gene mapping	Curated associations between NCBI Gene and PubMed databases	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	10/2/2015
+DataSet	GeneRIF	Functional annotation added by scientists to genes described in NCBI Gene	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	10/2/2015
 DataSource	GenomeNet	Japanese network of database and computational services for genome research	http://www.genome.jp	Publication:9397687
 DataSet	KEGG pathways data set	Wiring diagrams of molecular interactions, reactions, and relations	http://www.kegg.jp/kegg/pathway.html	DataSource:GenomeNet,Publication:24214961	72.0
 DataSource	BioGRID	Open access database housing genetic and protein interactions curated from biomedical literature for all major model organism species and humans	http://thebiogrid.org	Publication:25428363
