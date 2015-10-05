@@ -51,6 +51,9 @@ public class DataSummaryRowMapper implements RowMapper<DataSummaryVO> {
 		}else{
 			item.setFeatureCount(rs.getString("feature_count"));
 		}
+		
+		
+		item.setUnits(rs.getString("units"));
 
 		return item;
 	}

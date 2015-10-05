@@ -60,6 +60,7 @@ pubmed_id,
 authors,
 year,
 cast(0 as text) as gene_count,
-cast(0 as text) as feature_count
+cast(0 as text) as feature_count,
+NULL units
 from
 pub_category_details
