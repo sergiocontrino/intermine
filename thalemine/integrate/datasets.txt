@@ -1,7 +1,9 @@
 DataSource	TAIR	The Arabidopsis Information Resource	http://www.arabidopsis.org	Publication:11130711
-DataSet	Genome Annotation	TAIR10 Genome annotation, consisting of genes, TE related genes, other non-coding RNA and transposable elements	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10 (06/30/2014)
-DataSet	Genome Assembly	TAIR9 Genome assembly, consisting of 5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	DataSource:TAIR,Publication:11130711	TAIR9
-DataSet	Coding Sequence FASTA	TAIR10 Coding sequences, consisting of sequences from all the annotated transcripts	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/annotation_data.jsp	DataSource:TAIR,Publication:22140109	TAIR10
+DataSource	Araport	Arabidopsis Information Portal	https://www.araport.org	Publication:25414324
+DataSet	Genome Annotation	Araport11 Genome annotation	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 (10/2015)
+DataSet	Genome Assembly	TAIR10 Genome assembly (5 Chromosomes plus Chloroplast and Mitochondrial genome assemblies)	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	DataSource:TAIR,Publication:11130711	TAIR9
+DataSet	Coding Sequence FASTA	Araport11 Coding sequences	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 (10/2015)
+DataSet	Protein Sequence FASTA	Araport11 Protein sequences	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 (10/2015)
 DataSet	PO Annotation from TAIR	Literature-based annotations of genes to Plant Ontology (PO) terms	https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/GO_and_PO_Annotations/Plant_Ontology_Annotations	DataSource:TAIR,Publication:11130711	06/30/2015
 DataSource	GO	GO Ontology Consortium	http://geneontology.org	Publication:25428369
 DataSet	GO Annotation from GOC	GO annotations assigned by the GO Consortium	http://www.geneontology.org	DataSource:GO,Publication:25428369	06/30/2015
