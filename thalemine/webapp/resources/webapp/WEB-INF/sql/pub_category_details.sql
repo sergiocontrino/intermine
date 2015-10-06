@@ -16,7 +16,7 @@ cast('https://www.arabidopsis.org/download/index-auto.jsp?dir=%2Fdownload_files%
 cast('' as text) pubmed_id,
 cast('' as text) as authors,
 cast(2008 as int) as year,
-cast ('06/30/2015' as text) dataset_version,
+cast ('09/30/2015' as text) dataset_version,
 0 as gene_count,
 0 as feature_count
 UNION
@@ -36,7 +36,7 @@ cast('http://www.uniprot.org/' as text) dataset_url,
 cast('' as text) pubmed_id,
 cast('' as text) as authors,
 cast(2008 as int) as year,
-cast ('2015_08' as text) dataset_version,
+cast ('2015_09' as text) dataset_version,
 0 as gene_count,
 0 as feature_count
 )

@@ -139,15 +139,11 @@
 						</td>
 						<td>
 							<a href="${item.dataSourceUrl}" target="_blank" class="extlink">${item.dataSourceName}</a>
-							- 
-							${item.dataSourceDescription}
-																			
+																										
 							<c:forEach var="itemdetail" items="${item.categoryDetails}">
 								<br/>
 								<a href="${itemdetail.dataSourceUrl}" target="_blank" class="extlink">${itemdetail.dataSourceName}</a>
-							- 
-								${itemdetail.dataSourceDescription}
-								
+														
 							</c:forEach>
 							
 						</td>
