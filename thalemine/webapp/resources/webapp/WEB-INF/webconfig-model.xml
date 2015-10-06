@@ -295,7 +295,7 @@
  <class className="org.intermine.model.bio.LocusHistory">
      <fields>
          <fieldconfig fieldExpr="source.name" label="Source" />
-         <fieldconfig fieldExpr="operation" label="Type of Operation" />
+         <fieldconfig fieldExpr="locusOperation" label="Type of Operation" />
          <fieldconfig fieldExpr="datestamp" label="Operation Date (YYYYMMDD)" />
      </fields>
  </class>
