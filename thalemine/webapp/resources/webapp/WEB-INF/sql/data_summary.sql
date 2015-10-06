@@ -172,7 +172,7 @@ join
 organism o
 on 
 o.id = g.organismid
-where o.taxonid = 3702 and d.name not in  ('IntAct', 'BioGRID', 'Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
+where o.taxonid = 3702 and g.isobsolete = false and d.name not in  ('IntAct', 'BioGRID', 'Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 group by d.id
 )
 ,
