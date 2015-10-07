@@ -8,7 +8,7 @@
 
 <div class="header">
 <h3>eFP Visualization</h3>
-    <p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=BAR+Interactions+data+set">BAR</a></p>
+    <p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=Arabidopsis+eFP">BAR</a></p>
 </div>
 
 <c:set var="object" value="${reportObject.object}"/>
