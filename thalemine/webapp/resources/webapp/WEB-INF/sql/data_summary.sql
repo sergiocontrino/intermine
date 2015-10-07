@@ -99,8 +99,8 @@ select
 	end as sort_order
 from
 datacategory dc 
-where dataset_name not in  ('BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
-and dc.datasource_name not in ('BAR', 'InterPro')
+where dataset_name not in  ('IntAct', 'BioGRID', 'PO Annotation from TAIR','Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
+and dc.datasource_name not in ('BAR', 'InterPro', 'GO', 'IntAct', 'BioGRID') 
 )
 ,
 publication_source as (
@@ -117,8 +117,7 @@ FROM
 gene_pub_source as (
 SELECT
 	distinct
-	g.primaryidentifier,
-	p.pubmedid,
+	count(distinct p.pubmedid) feature_count,
 	(select d.id from dataset d where d.name = 'PubMed to gene mapping' limit 1) dataset_id
 FROM
 	gene g JOIN bioEntitiespublications bp
@@ -132,7 +131,7 @@ FROM
 ,
 gene_rif_pub_agg_source as (
 select 
-count(distinct(annotation)) as feature_count,
+count(*) as feature_count,
 (select d.id from dataset d where d.name = 'GeneRIF' limit 1) dataset_id
 from generif gr
 join
@@ -148,11 +147,11 @@ g.organismid = o.id and o.taxonid = 3702
 
 ncbi_pub_agg_source as (
 select 
-count(*) feature_count,
+feature_count,
 dataset_id
 from 
 gene_pub_source gs 
-group by dataset_id )
+)
 ,
 gene_agg_source as (
 select 
@@ -173,7 +172,7 @@ join
 organism o
 on 
 o.id = g.organismid
-where o.taxonid = 3702 and d.name not in  ('BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
+where o.taxonid = 3702 and g.isobsolete = false and d.name not in  ('IntAct', 'BioGRID', 'Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 group by d.id
 )
 ,
@@ -192,33 +191,6 @@ ncbi_pub_agg_source
  )
 , 
 
-homolog_agg_feature_source as (
-select 
-count(h.homologueid) as feature_count
-,
-d.id dataset_id
-from dataset d
-join
-bioentitiesdatasets bds
-on 
-d.id = bds.datasets
-join
-datasource ds 
-ON
-ds.id = d.datasourceid
-join gene g
-on g.id = bds.bioentities
-join 
-organism o
-on 
-o.id = g.organismid
-join homologue h 
-on g.id = h.geneid
-where o.taxonid = 3702 and d.name = 'Panther data set'
-group by d.id
-
-)
-,
 protein_agg_source as (
 
 select 
@@ -246,36 +218,12 @@ where o.taxonid = 3702 and ds.name = 'UniProt'
 and p.uniprotname IS NOT NULL
 group by d.id
 )
-
 ,
-go_agg_source as (
-SELECT
-	count(*) feature_count,
-	d.id dataset_id
-	from dataset d
-join
-bioentitiesdatasets bds
-on 
-d.id = bds.datasets
-join
-datasource ds 
-ON
-ds.id = d.datasourceid
-join gene g
-on g.id = bds.bioentities
-join
-genegoannotation go
-on go.gene = g.id
-join organism o
-on o.id = g.organismid
-where o.taxonid = 3702 and ds.name = 'GO'
-group by d.id )
 
-,
-po_agg_source as (
-
+po_summary_helper as(
 SELECT
-	count(*) feature_count,
+	cast(count(distinct g.primaryidentifier) as text) as gene_count, 
+	cast(count(*) as text) feature_count,
 	d.id dataset_id
 	from dataset d
 join
@@ -295,9 +243,98 @@ join organism o
 on o.id = g.organismid
 where o.taxonid = 3702 and d.name = 'PO Annotation from TAIR'
 group by d.id
+
+),
+
+po_summary_source as (
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Plant Ontology' as text) as category_name,
+6 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+d.name dataset_description,
+gh.dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+gh.gene_count, 
+gh.feature_count
+from 
+po_summary_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds 
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
 )
 ,
 
+interactions_summary_helper as (
+select
+cast(count(distinct g.primaryidentifier) as text) as gene_count, 
+	cast(count(*) as text) feature_count,
+	d.id dataset_id
+from dataset d
+join
+datasetsinteractiondetail dl
+on d.id = dl.datasets
+join
+interactiondetail ind on
+ind.id = dl.interactiondetail
+join
+interaction i
+on i.id = ind.interactionid
+join
+gene g
+on g.id = i.gene1id
+group by d.id
+),
+
+interactions_summary_source as (
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Interactions' as text) as category_name,
+7 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+d.name dataset_description,
+gh.dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+gh.gene_count, 
+gh.feature_count
+from 
+interactions_summary_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds 
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
+
+)
+,
 generif_agg_source as (
 SELECT
 	count(distinct(annotation)) feature_count,
@@ -319,20 +356,6 @@ on g.id = gr.geneid
 join organism o
 on o.id = g.organismid
 where o.taxonid = 3702 and d.name = 'GeneRIF'
-group by d.id
-
-)
-,
-
-agg_interactions_source as (
-
-select
-count(distinct(interactiondetail)) feature_count,
-d.id dataset_id
-from dataset d
-join
-datasetsinteractiondetail dl
-on d.id = dl.datasets
 group by d.id
 
 )
@@ -418,37 +441,7 @@ select
 feature_count,
 dataset_id
 from
-homolog_agg_feature_source
-UNION
-select
-feature_count,
-dataset_id
-from
 protein_agg_source
-UNION
-select
-feature_count,
-dataset_id
-from
-go_agg_source
-UNION
-select
-feature_count,
-dataset_id
-from
-po_agg_source
-UNION
-select
-feature_count,
-dataset_id
-from
-generif_agg_source
-UNION
-select
-feature_count,
-dataset_id
-from
-agg_interactions_source
 UNION
 select
 feature_count,
@@ -503,7 +496,7 @@ join
 organism o
 on 
 o.id = g.organismid
-where o.taxonid = 3702
+where o.taxonid = 3702 and d.name not in ('IntAct', 'BioGRID', 'Panther data set') and ds.name not in ('IntAct', 'BioGRID')
 group by ds.id )
 ,
 data_summary_source as(
@@ -605,8 +598,8 @@ p.pubmed_id,
 p.author_list as authors,
 p.year,
 d.version dataset_version,
-count(distinct g.id) gene_count,
-count(distinct ptd.proteindomains) as feature_count
+count(distinct g.primaryidentifier)  gene_count,
+count (distinct ptd.proteindomains) as feature_count
 from
 genesproteins gp
 join
@@ -623,7 +616,7 @@ proteindomain pd
 on pd.id = ptd.proteindomains
 join
 bioentitiesdatasets bds
-on bds.bioentities = pd.id
+on bds.bioentities = pt.id
 join
 dataset d
 on d.id = bds.datasets
@@ -739,7 +732,125 @@ cast ('' as text) dataset_version,
 0 as feature_count
 
 )
+,
 
+homologs_summary_source as (
+select
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Homology' as text) as category_name,
+4 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+d.description dataset_description,
+d.id dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+cast(count(distinct abg.primaryidentifier) as text) as gene_count, 
+cast(count(distinct be.primaryidentifier) as text) as feature_count
+from 
+gene g
+join
+bioentitiesdatasets bds
+on bds.bioentities = g.id
+join
+dataset d
+on d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join homologue h 
+on g.id = h.geneid
+join bioentity be
+on be.id = h.homologueid
+join
+gene abg
+on 
+g.id = abg.id
+join
+bioentitiesdatasets bdsa
+on bdsa.bioentities = abg.id
+join dataset abda
+on abda.id = bdsa.datasets
+left join
+	publication_source p
+	on p.id = d.publicationid
+where d.name = 'Panther data set' and abda.name = 'Genome Annotation'
+group by d.id, ds.id, ds.name, d.name, d.description, ds.description, d.version, ds.url, d.url, p.pubmed_id, p.author_list, p.year )
+,
+
+gene_ontology_summary_helper as (
+SELECT
+(select d.id from dataset d join datasource ds on ds.id = d.datasourceid where ds.name = 'GO' limit 1)  as dataset_id,
+cast(count(distinct g.primaryidentifier) as text) as gene_count, 
+cast(count(*) as text) feature_count
+from 
+genegoannotation go
+join gene g
+on g.id = go.gene
+join organism o
+on o.id = g.organismid
+join
+goannotation goa
+on go.goannotation = goa.id
+join
+ontologyterm ot 
+on ot.id = goa.ontologytermid
+join
+bioentitiesdatasets bds
+on bds.bioentities = g.id
+join
+dataset d
+on d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+where o.taxonid = 3702 and ds.name = 'GO'
+
+),
+
+gene_ontology_summary as (
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Gene Ontology' as text) as category_name,
+5 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+ds.name dataset_description,
+(select d.id from dataset d join datasource ds on ds.id = d.datasourceid where ds.name = 'GO' limit 1)  as dataset_id,
+ds.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+gh.gene_count, 
+gh.feature_count
+from 
+gene_ontology_summary_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds 
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
+)
+, 
+data_summary_source_units as (
 select 
 distinct
 row_type,
@@ -853,4 +964,138 @@ cast('real-time' as text) as gene_count,
 cast('real-time' as text) as feature_count
 from
 atgen_express_summary
+UNION
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from 
+homologs_summary_source
+UNION
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from
+gene_ontology_summary
+UNION
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from
+po_summary_source
+UNION
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+FROM
+interactions_summary_source) 
+
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count,
+case 
+	when (category_name = 'Proteins')
+		then 'proteins'
+	when (category_name = 'Protein Domains')
+		then 'protein domains'
+	when (category_name = 'Homology')
+		then 'homologs'
+	when (category_name = 'Gene Ontology')
+		then 'GO annotations'
+	when (category_name = 'Plant Ontology')
+		then 'GO annotations'
+	when (category_name = 'Interactions')
+		then 'interactions'
+	when (category_name = 'Expression')
+		then 'experiments'
+	when (category_name = 'Publications')
+		then 'publications'
+	when (category_name = 'GeneRIF')
+		then 'GeneRIF Annotations'
+	when (category_name = 'Pathways')
+		then 'pathways'
+	else
+		NULL
+end as units
+from
+data_summary_source_units
 order by sort_order, datasource_id;

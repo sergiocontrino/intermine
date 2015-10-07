@@ -52,7 +52,8 @@
 							<b>${item.categoryName}</b>
 						</td>
 						<td>
-							<b>${item.featureCount}</b>
+							<b>${item.featureCount}
+							</b>
 						</td>
 						<td>
 							<a href="${item.dataSourceUrl}" target="_blank" class="extlink">${item.dataSourceName}</a>
@@ -127,19 +128,22 @@
 							<b>${item.geneCount}</b>
 						</td>
 						<td>
-							<b>${item.featureCount}</b>
+							<b>
+							<span>
+							${item.featureCount}
+							<c:if test="${!empty item.units}">
+							&nbsp; ${item.units}
+							</c:if>
+							</span>
+							</b>
 						</td>
 						<td>
 							<a href="${item.dataSourceUrl}" target="_blank" class="extlink">${item.dataSourceName}</a>
-							- 
-							${item.dataSourceDescription}
-																			
+																										
 							<c:forEach var="itemdetail" items="${item.categoryDetails}">
 								<br/>
 								<a href="${itemdetail.dataSourceUrl}" target="_blank" class="extlink">${itemdetail.dataSourceName}</a>
-							- 
-								${itemdetail.dataSourceDescription}
-								
+														
 							</c:forEach>
 							
 						</td>

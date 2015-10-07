@@ -24,6 +24,7 @@ public class DataSummaryVO {
 	private String geneCount;
 	private String featureCount;
 	private List <DataSummaryVO> categoryDetails = new ArrayList<DataSummaryVO>();
+	private String units;
 	
 	public DataSummaryVO(){
 		
@@ -160,6 +161,15 @@ public class DataSummaryVO {
 		this.categoryDetails = categoryDetails;
 	}
 
+	
+	public String getUnits() {
+		return units;
+	}
+
+	public void setUnits(String units) {
+		this.units = units;
+	}
+
 	@Override
 	public String toString() {
 		return "DataSummaryVO [dataSourceId=" + dataSourceId + ", dataSetId=" + dataSetId + ", sortOrderId="
@@ -169,8 +179,9 @@ public class DataSummaryVO {
 				+ ", dataSourceDescription=" + dataSourceDescription + ", dataSourceUrl=" + dataSourceUrl
 				+ ", dataSetUrl=" + dataSetUrl + ", pubMedId=" + pubMedId + ", author=" + author + ", year=" + year
 				+ ", geneCount=" + geneCount + ", featureCount=" + featureCount + ", categoryDetails="
-				+ categoryDetails + "]";
+				+ categoryDetails + ", units=" + units + "]";
 	}
+	
 	
 
 	

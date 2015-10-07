@@ -292,6 +292,14 @@
   </class>
 -->
 
+ <class className="org.intermine.model.bio.LocusHistory">
+     <fields>
+         <fieldconfig fieldExpr="source.name" label="Source" />
+         <fieldconfig fieldExpr="locusOperation" label="Type of Operation" />
+         <fieldconfig fieldExpr="datestamp" label="Operation Date (YYYYMMDD)" />
+     </fields>
+ </class>
+
  <class className="org.intermine.model.bio.Protein">
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
