@@ -680,8 +680,8 @@ p.pubmed_id,
 p.author_list as authors,
 p.year,
 d.version dataset_version,
-0 as gene_count,
-0 as feature_count
+cast('real-time' as text) as gene_count,
+cast('real-time' as text) as feature_count
 from dataset d
 join
 datasource ds
@@ -1198,4 +1198,4 @@ case
 end as units
 from
 data_summary_source_units
-order by sort_order, datasource_id;
+order by sort_order, datasource_id, gene_count
