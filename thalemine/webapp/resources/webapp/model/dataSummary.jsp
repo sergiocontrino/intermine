@@ -18,16 +18,12 @@
 --%>
 
 	<im:boxarea title="Data" stylename="yellbox">
-		<p>ThaleMine integrates data from a large number of sources into a
-			single data warehouse.</p>
-		<p>This page lists the data that are included in the current
-			release and it is manually curated; its contents are not indexed in
-			our keyword search.</p>
+		<p>ThaleMine integrates biological data from a wide array of public sources into a data warehouse.
+		 This page lists the datasets that are included in the current release.</p>
 		<p>
-			More data sets will be added in future releases, please <a
+			Please <a
 				href="mailto:araport@jcvi.org?Subject=Data request"> contact us
-			</a> if there are any particular data you would like to see included.
-		</p>
+			</a> if there are any particular data you would like to suggest.</p>
 	</im:boxarea>
 
 	<br />
