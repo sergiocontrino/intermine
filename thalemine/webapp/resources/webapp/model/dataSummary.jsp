@@ -94,6 +94,10 @@
 								<a href="http://www.ncbi.nlm.nih.gov/pubmed/${item.pubMedId}" target="_blank" class="extlink">PubMed: ${item.pubMedId}</a>
 								</br>
 							</c:if>
+							
+							<c:if test="${not empty item.pubTitle}">
+  									${item.pubTitle}
+  							</c:if>
 							</td>
 					</tr>
 				</c:forEach>

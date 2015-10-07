@@ -54,6 +54,8 @@ public class DataSummaryRowMapper implements RowMapper<DataSummaryVO> {
 		
 		
 		item.setUnits(rs.getString("units"));
+		
+		item.setPubTitle(rs.getString("pub_title"));
 
 		return item;
 	}
