@@ -53,5 +53,6 @@
 
 <action path="/displayProjectsSummary"
   type="org.thalemine.web.controller.DataCategoriesController" />
-  
+
+<action path="/dataCategories" forward="dataSummary.page" />
 <action path="/dataSummary" forward="dataSummary.page" />
