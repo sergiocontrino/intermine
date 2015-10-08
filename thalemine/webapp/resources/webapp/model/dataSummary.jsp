@@ -44,7 +44,7 @@
 			<tbody>
 				<c:forEach var="item" items="${generesults}">
 					<tr>
-						<td>
+						<td class="leftcol">
 							<b>${item.categoryName}</b>
 						</td>
 						<td>
@@ -121,7 +121,7 @@
 			<tbody>
 				<c:forEach var="item" items="${results}">
 					<tr>
-						<td>
+						<td class="leftcol">
 							<b>${item.categoryName}</b>
 						</td>
 						<td>

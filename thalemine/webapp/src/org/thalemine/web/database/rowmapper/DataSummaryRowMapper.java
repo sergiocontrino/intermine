@@ -66,19 +66,16 @@ public class DataSummaryRowMapper implements RowMapper<DataSummaryVO> {
 		if (!StringUtils.isBlank(name)) {
 			if (!(name.contains("Initiative") || name.contains("Consortium"))) {
 				String[] result1 = StringUtils.split(name, " ");
-				log.info("Result 1: " + result1);
-
+				
 				String result2 = "";
 				if (result1.length > 0) {
 					result2 = result1[0];
-					log.info("Result 2: " + result2);
 				}
 
 				if (!StringUtils.isBlank(result2)) {
 					result = result2;
-					log.info("Result 3: " + result + " et al");
 				}
-				result = result + " et al ";
+				result = result + " et al";
 
 				if (!StringUtils.isBlank(year)) {
 					result = result + "., ";
@@ -92,7 +89,6 @@ public class DataSummaryRowMapper implements RowMapper<DataSummaryVO> {
 				result = result + ", ";
 			}
 
-			log.info("Result:" + result);
 		}
 
 		return result;

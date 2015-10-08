@@ -836,12 +836,22 @@ cast('Homology' as text) as category_name,
 4 as sort_order,
 ds.id datasource_id,
 ds.name datasource_name,
-ds.url datasource_url,
+case 
+	when (d.url is not null)
+		then replace(ds.url, 'https', 'http')
+	else
+		ds.url
+end as datasource_url,
 ds.description as datasource_description,
 d.description dataset_description,
 d.id dataset_id,
 d.name dataset_name,
-d.url dataset_url,
+case 
+	when (d.url is not null)
+		then replace(d.url, 'https', 'http')
+	else
+		d.url
+end as dataset_url,
 p.pubmed_id,
 p.author_list as authors,
 p.year,
@@ -1199,4 +1209,3 @@ end as units
 from
 data_summary_source_units
 order by sort_order, datasource_id, gene_count
-
