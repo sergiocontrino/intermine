@@ -13,7 +13,7 @@
 <div id="plantOntology_displayer" class="collection-table">
 <div class="header">
 <h3>Plant Ontology</h3>
-<p>Data Source: <a target="_blank" href="${WEB_PROPERTIES['TAIR_url']}">TAIR</a></p>
+<p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=PO+Annotation+from+TAIR">TAIR</a></p>
 </div>
 
 

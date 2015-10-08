@@ -8,7 +8,7 @@
 <div id="phytomineOrtholog_displayer" class="collection-table">
 <div class="header">
 <h3>Phytozome Homologs</h3>
-<p>Data Source: <a target="_blank" href="http://phytozome.jgi.doe.gov/phytomine">Phytozome</a></p>
+<p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=Phytozome+Orthologs">Phytozome</a></p>
 </div>
 
 <c:set var="object" value="${reportObject.object}"/>
