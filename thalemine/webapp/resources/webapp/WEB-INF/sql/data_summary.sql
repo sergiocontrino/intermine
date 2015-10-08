@@ -99,7 +99,7 @@ select
 	end as sort_order
 from
 datacategory dc 
-where dataset_name not in  ('ATTED-II Co-expression', 'Phytozome Orthologs', 'Gene Summary', 'IntAct', 'BioGRID', 'PO Annotation from TAIR','Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
+where dataset_name not in  ('Genome Annotation', 'ATTED-II Co-expression', 'Phytozome Orthologs', 'Gene Summary', 'IntAct', 'BioGRID', 'PO Annotation from TAIR','Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 and dc.datasource_name not in ('BAR', 'InterPro', 'GO', 'IntAct', 'BioGRID') 
 )
 ,
@@ -174,6 +174,73 @@ on
 o.id = g.organismid
 where o.taxonid = 3702 and g.isobsolete = false and d.name not in  ('IntAct', 'BioGRID', 'Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 group by d.id
+)
+,
+gene_summary_helper as (
+select 
+d.id as dataset_id,
+cast(count(distinct g.primaryidentifier) as text) as gene_count,
+cast(NULL as text ) as feature_count 
+from gene g
+join
+organism o
+on o.id = g.organismid
+join
+ontologyterm sg
+on sg.id = g.sequenceontologytermid
+JOIN mrna m
+ON
+m.geneid = g.id
+join
+ontologyterm sm
+on sm.id = m.sequenceontologytermid
+join
+bioentitiesdatasets bds
+on g.id = bds.bioentities
+join
+dataset d
+on d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+where o.taxonid = 3702 
+and g.isobsolete = false
+and sg.name = 'gene' and sm.name = 'mRNA' and d.name = 'Genome Annotation'
+group by d.id
+),
+
+gene_summary_source as (
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Genes' as text) as category_name,
+2 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+cast('Araport11 protein coding genes' as text) as dataset_description,
+gh.dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+gh.gene_count, 
+gh.feature_count
+from 
+gene_summary_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds 
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
 )
 ,
 pub_agg_feature_source as (
@@ -515,6 +582,9 @@ SELECT
 		when (ds.name = 'GO' or ds.name = 'BAR') 
 			then
 				ds.description
+		when (dt.name = 'PubMed to gene mapping') 
+			then
+				'Curated associations between publications and genes'
 		 else dt.description
 	end as dataset_description,
 	case 
@@ -1155,7 +1225,30 @@ year,
 gene_count,
 feature_count
 FROM
-interactions_summary_source) 
+interactions_summary_source
+UNION
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from 
+gene_summary_source
+) 
 
 select
 row_type,
@@ -1174,7 +1267,7 @@ dataset_version,
 pubmed_id,
 case
 	 when (datasource_name = 'Araport')
-	 	then 'in preparation'
+	 	then 'Manuscript in preparation'
 	 	else
 	 	NULL
 end pub_title,
