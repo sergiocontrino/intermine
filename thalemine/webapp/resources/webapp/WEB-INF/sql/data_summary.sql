@@ -731,7 +731,7 @@ dataset_description,
 dataset_id,
 dataset_name,
 dataset_url,
-dataset_version,
+NULL as dataset_version,
 pubmed_id,
 authors,
 year,
@@ -1185,7 +1185,7 @@ case
 		then 'PO annotations'
 	when (category_name = 'Interactions')
 		then 'interactions'
-	when (category_name = 'Expression' and dataset_version <> 'real-time')
+	when (category_name = 'Expression' and dataset_description = 'The Bio-Analaytic Resource for Plant Biology')
 		then 'experiments'
 	when (category_name = 'Publications')
 		then 'publications'
@@ -1199,3 +1199,4 @@ end as units
 from
 data_summary_source_units
 order by sort_order, datasource_id, gene_count
+
