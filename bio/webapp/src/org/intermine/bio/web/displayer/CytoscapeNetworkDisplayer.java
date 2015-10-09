@@ -156,7 +156,7 @@ public class CytoscapeNetworkDisplayer extends ReportDisplayer
 //                "Gene.interactions.details.experiment.interactionDetectionMethods.name",
                 "Gene.interactions.details.dataSets.dataSource.name",
 //                "Gene.interactions.gene1.interactions.details.experiment.interactionDetectionMethods.name",
-                "Gene.interactions.details.experiment.publication.title",
+//                "Gene.interactions.details.experiment.publication.title",
                 "Gene.interactions.details.experiment.publication.pubMedId");
 
         q.setOuterJoinStatus("Gene.interactions.details.experiment.publication",
