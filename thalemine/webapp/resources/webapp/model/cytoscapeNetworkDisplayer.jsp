@@ -52,7 +52,7 @@
 <div id="cytoscapeNetwork_browser_displayer" class="collection-table">
 <div class="header">
     <h3>Interaction Network</h3>
-    <p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=BAR+Interactions+data+set">BAR</a></p>
+    <p>Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=BioGRID+interaction+data+set">BioGRID</a>,&nbsp;<a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=IntAct+interactions+data+set">IntAct</a></p>
 </div>
 </div>
 

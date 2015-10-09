@@ -99,7 +99,7 @@ select
 	end as sort_order
 from
 datacategory dc 
-where dataset_name not in  ('IntAct', 'BioGRID', 'PO Annotation from TAIR','Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
+where dataset_name not in  ('Genome Annotation', 'ATTED-II Co-expression', 'Phytozome Orthologs', 'Gene Summary', 'IntAct', 'BioGRID', 'PO Annotation from TAIR','Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 and dc.datasource_name not in ('BAR', 'InterPro', 'GO', 'IntAct', 'BioGRID') 
 )
 ,
@@ -174,6 +174,73 @@ on
 o.id = g.organismid
 where o.taxonid = 3702 and g.isobsolete = false and d.name not in  ('IntAct', 'BioGRID', 'Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 group by d.id
+)
+,
+gene_summary_helper as (
+select 
+d.id as dataset_id,
+cast(count(distinct g.primaryidentifier) as text) as gene_count,
+cast(NULL as text ) as feature_count 
+from gene g
+join
+organism o
+on o.id = g.organismid
+join
+ontologyterm sg
+on sg.id = g.sequenceontologytermid
+JOIN mrna m
+ON
+m.geneid = g.id
+join
+ontologyterm sm
+on sm.id = m.sequenceontologytermid
+join
+bioentitiesdatasets bds
+on g.id = bds.bioentities
+join
+dataset d
+on d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+where o.taxonid = 3702 
+and g.isobsolete = false
+and sg.name = 'gene' and sm.name = 'mRNA' and d.name = 'Genome Annotation'
+group by d.id
+),
+
+gene_summary_source as (
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Genes' as text) as category_name,
+2 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+cast('Araport11 protein coding genes' as text) as dataset_description,
+gh.dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+gh.gene_count, 
+gh.feature_count
+from 
+gene_summary_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds 
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
 )
 ,
 pub_agg_feature_source as (
@@ -312,7 +379,7 @@ ds.id datasource_id,
 ds.name datasource_name,
 ds.url datasource_url,
 ds.description as datasource_description,
-d.name dataset_description,
+d.description dataset_description,
 gh.dataset_id,
 d.name dataset_name,
 d.url dataset_url,
@@ -515,6 +582,9 @@ SELECT
 		when (ds.name = 'GO' or ds.name = 'BAR') 
 			then
 				ds.description
+		when (dt.name = 'PubMed to gene mapping') 
+			then
+				'Curated associations between publications and genes'
 		 else dt.description
 	end as dataset_description,
 	case 
@@ -661,7 +731,37 @@ on p.id = d.publicationid
 where ds.name = 'BAR'
 )
 ,
-expression_summary as (
+
+efp_summary as (
+select 
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Expression' as text) category_name,
+8 sort_order,
+ds.id datasource_id,
+ds.name as datasource_name,
+ds.url as datasource_url,
+ds.description as datasource_description,
+d.description dataset_description,
+d.id dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+cast('real-time' as text) as gene_count,
+cast('real-time' as text) as feature_count
+from dataset d
+join
+datasource ds
+on ds.id = d.datasourceid
+left join
+publication_source p
+on p.id = d.publicationid
+where d.name = 'Arabidopsis eFP')
+,
+expression_summary_helper as (
 select 
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
@@ -686,27 +786,83 @@ expression_datasource eds
 limit 1
 )
 ,
+expression_summary as (
+select
+distinct
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+NULL as dataset_version,
+pubmed_id,
+authors,
+year,
+cast(gene_count as text) as gene_count,
+cast(feature_count as text) as feature_count
+from 
+expression_summary_helper
+UNION
+select
+distinct
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+cast(gene_count as text) as gene_count,
+cast(feature_count as text) as feature_count
+from 
+efp_summary
+)
+
+,
 phytomozome_summary as (
 select 
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Homology' as text) as category_name,
 4 sort_order,
-999999999 datasource_id,
-cast('Phytozome' as text) as datasource_name,
-cast('http://phytozome.jgi.doe.gov/phytomine' as text) as datasource_url,
-cast('Phytozome Homologs Generated with InParanoid' as text) as datasource_description,
-cast('Phytozome Homologs Generated with InParanoid' as text)  dataset_description,
-999 dataset_id,
-cast('Phytozome' as text) dataset_name,
-cast('http://phytozome.jgi.doe.gov/phytomine' as text) dataset_url,
-cast('22110026' as text) pubmed_id,
-cast('Goodstein' as text) as authors,
-cast(2012 as int) as year,
-cast ('' as text) dataset_version,
+ds.id datasource_id,
+ds.name as datasource_name,
+ds.url as datasource_url,
+ds.description as datasource_description,
+d.description dataset_description,
+d.id dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
 0 as gene_count,
 0 as feature_count
-
+from dataset d
+join
+datasource ds
+on ds.id = d.datasourceid
+left join
+publication_source p
+on p.id = d.publicationid
+where d.name = 'Phytozome Orthologs'
 )
 ,
 
@@ -716,20 +872,28 @@ cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Co-Expression' as text) category_name,
 8 sort_order,
-999999999 datasource_id,
-cast('ATTED-II' as text) as datasource_name,
-cast('http://atted.jp/' as text) as datasource_url,
-cast('provides co-regulated gene relationships to estimate gene functions' as text) as datasource_description,
-cast('provides co-regulated gene relationships to estimate gene functions' as text)  dataset_description,
-9999999 dataset_id,
-cast('ATTED-II' as text) dataset_name,
-cast('http://atted.jp/' as text) dataset_url,
-cast('' as text) pubmed_id,
-cast('' as text) as authors,
-cast(2008 as int) as year,
-cast ('' as text) dataset_version,
+ds.id datasource_id,
+ds.name as datasource_name,
+ds.url as datasource_url,
+ds.description as datasource_description,
+d.description dataset_description,
+d.id dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
 0 as gene_count,
 0 as feature_count
+from dataset d
+join
+datasource ds
+on ds.id = d.datasourceid
+left join
+publication_source p
+on p.id = d.publicationid
+where d.name = 'ATTED-II Co-expression'
 
 )
 ,
@@ -742,12 +906,22 @@ cast('Homology' as text) as category_name,
 4 as sort_order,
 ds.id datasource_id,
 ds.name datasource_name,
-ds.url datasource_url,
+case 
+	when (d.url is not null)
+		then replace(ds.url, 'https', 'http')
+	else
+		ds.url
+end as datasource_url,
 ds.description as datasource_description,
 d.description dataset_description,
 d.id dataset_id,
 d.name dataset_name,
-d.url dataset_url,
+case 
+	when (d.url is not null)
+		then replace(d.url, 'https', 'http')
+	else
+		d.url
+end as dataset_url,
 p.pubmed_id,
 p.author_list as authors,
 p.year,
@@ -828,7 +1002,7 @@ ds.id datasource_id,
 ds.name datasource_name,
 ds.url datasource_url,
 ds.description as datasource_description,
-ds.name dataset_description,
+ds.description dataset_description,
 (select d.id from dataset d join datasource ds on ds.id = d.datasourceid where ds.name = 'GO' limit 1)  as dataset_id,
 ds.name dataset_name,
 d.url dataset_url,
@@ -1051,8 +1225,8 @@ year,
 gene_count,
 feature_count
 FROM
-interactions_summary_source) 
-
+interactions_summary_source
+UNION
 select
 row_type,
 parent_dataset_id,
@@ -1071,21 +1245,50 @@ pubmed_id,
 authors,
 year,
 gene_count,
+feature_count
+from 
+gene_summary_source
+) 
+
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+case
+	 when (datasource_name = 'Araport')
+	 	then 'Manuscript in preparation'
+	 	else
+	 	NULL
+end pub_title,
+authors,
+year,
+gene_count,
 feature_count,
 case 
 	when (category_name = 'Proteins')
 		then 'proteins'
 	when (category_name = 'Protein Domains')
 		then 'protein domains'
-	when (category_name = 'Homology')
+	when (category_name = 'Homology' and dataset_version <> 'real-time')
 		then 'homologs'
 	when (category_name = 'Gene Ontology')
 		then 'GO annotations'
 	when (category_name = 'Plant Ontology')
-		then 'GO annotations'
+		then 'PO annotations'
 	when (category_name = 'Interactions')
 		then 'interactions'
-	when (category_name = 'Expression')
+	when (category_name = 'Expression' and dataset_description = 'The Bio-Analaytic Resource for Plant Biology')
 		then 'experiments'
 	when (category_name = 'Publications')
 		then 'publications'
@@ -1098,4 +1301,4 @@ case
 end as units
 from
 data_summary_source_units
-order by sort_order, datasource_id;
+order by sort_order, datasource_id, gene_count

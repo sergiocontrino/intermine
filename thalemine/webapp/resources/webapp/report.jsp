@@ -123,6 +123,9 @@
 <c:when test="${fn:trim(fieldDisplayText) == 'Curator Summary' }" >
   <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</tr>
 </c:when>
+<c:when test="${fn:trim(fieldDisplayText) == 'Brief Description' }" >
+  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['araport.attribution']}</tr>
+</c:when>
 <c:otherwise>
   <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
 </c:otherwise>
