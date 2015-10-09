@@ -6,7 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,6 +32,7 @@ import org.intermine.web.logic.session.SessionMethods;
 
 
 public class LocusHistoryDisplayer extends ReportDisplayer {
+  private static final Map<String, String> OPERATIONS = new HashMap<String, String>();
 
   protected static final Logger LOG = Logger.getLogger(LocusHistoryDisplayer.class);
   PathQueryExecutor exec;
@@ -42,6 +45,20 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
   public LocusHistoryDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
       super(config, im);
   }
+
+  static {
+
+      OPERATIONS.put("merge", "the gene model has been merged with another one and retained its name");
+      OPERATIONS.put("delete", "the gene model has been eliminated");
+      OPERATIONS.put("mergedelete", "the gene model has been merged and its name has not been retained");
+      OPERATIONS.put("insert", "the gene model has been inserted from scratch");
+      OPERATIONS.put("split", "the gene model has been split and retained its name");
+      OPERATIONS.put("splitinsert", "the gene model has been split and has a new name");
+      OPERATIONS.put("new", "the gene model has been generated");
+      OPERATIONS.put("obsoleted", "the gene model has disappeared");
+
+  }
+
 
   @Override
   public void display(HttpServletRequest request, ReportObject reportObject) {
@@ -75,7 +92,7 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
       request.setAttribute("geneName",geneObj.getPrimaryIdentifier());
       request.setAttribute("list",proteinList);
       request.setAttribute("id",geneObj.getId());
-
+      request.setAttribute("ops", OPERATIONS);
   }
 
   private PathQuery getProteinTable(Integer id) {

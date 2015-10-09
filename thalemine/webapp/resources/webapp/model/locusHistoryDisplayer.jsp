@@ -28,7 +28,11 @@
     </thead>
     <tbody>
       <c:forEach var="protein" items="${list}">
-          <td>${protein.operation}</td>
+          <td><c:out value="${protein.operation}"/>
+              <c:if test="${!empty ops[protein.operation] }">
+               &nbsp;<im:helplink text="${ops[protein.operation]}"/>
+              </c:if>
+          </td>
           <td>${protein.date}</td>
           <td>${protein.source}</td>
           <td><html:link action="/report?id=${protein.id}">${protein.locus}</html:link></td>
