@@ -6,6 +6,29 @@
 
 <!-- dataSummary -->
 
+<style>
+table.summary {
+    padding:0px;
+  margin:10px 20px 10px 20px;}
+
+table.summary th  {
+  padding: 6px 6px 6px 12px;
+  text-align: left;
+  font-weight: bold;
+  border-right:1px solid #FFF;
+  color: white;
+  background-color: #6BC354;}
+
+table.summary td {
+  padding: 6px 6px 6px 12px;
+  border-right: 1px solid #6BC354;
+  border-bottom: 1px solid #6BC354;
+  background: #fff;}
+
+table.summary td.leftcol {
+  border-left: 1px solid #6BC354;}
+
+</style>
 
 <html:xhtml />
 
@@ -28,7 +51,7 @@
 
 	<br />
 	
-	<table cellpadding="0" cellspacing="0" border="0" class="dbsources">
+	<table cellpadding="0" cellspacing="0" border="0" class="summary">
 	<thead>
 		<tr>
 			<th>Data Category</th>
@@ -104,7 +127,7 @@
 
 	</table>
 	
-	<table cellpadding="0" cellspacing="0" border="0" class="dbsources">
+	<table cellpadding="0" cellspacing="0" border="0" class="summary">
 	<thead>
 		<tr>
 			<th>Data Category</th>
