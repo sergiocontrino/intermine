@@ -59,7 +59,7 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
         result = exec.execute(query);
       } catch (ObjectStoreException e) {
         // silently return
-        LOG.warn("Had an ObjectStoreException in LocusHistoryDisplayer.java: " +e.getMessage());
+        LOG.warn("ObjectStoreException in LocusHistoryDisplayer.java: " + e.getMessage());
         return;
       }
 
@@ -125,12 +125,10 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
   }
 
   private String formatDate (String yyyymmdd) {
-      //  String dateString1 = "16-04-2011";
+      //
       try {
-          Date date = new SimpleDateFormat("yyyymmdd").parse(yyyymmdd);
-          String dateString2 = new SimpleDateFormat("d MMM yyyy").format(date);
-          return dateString2;
-
+          Date date = new SimpleDateFormat("yyyyMMdd").parse(yyyymmdd);
+          return new SimpleDateFormat("dd MMM yyyy").format(date);
         } catch (ParseException e) {
           // silently return
           LOG.warn("Error in parsing date " + yyyymmdd + " -- " + e.getMessage());
