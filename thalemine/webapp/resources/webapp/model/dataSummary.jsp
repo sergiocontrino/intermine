@@ -6,30 +6,6 @@
 
 <!-- dataSummary -->
 
-<style>
-table.summary {
-    padding:0px;
-  margin:10px 20px 10px 20px;}
-
-table.summary th  {
-  padding: 6px 6px 6px 12px;
-  text-align: left;
-  font-weight: bold;
-  border-right:1px solid #FFF;
-  color: white;
-  background-color: #6BC354;}
-
-table.summary td {
-  padding: 6px 6px 6px 12px;
-  border-right: 1px solid #6BC354;
-  border-bottom: 1px solid #6BC354;
-  background: #fff;}
-
-table.summary td.leftcol {
-  border-left: 1px solid #6BC354;}
-
-</style>
-
 <html:xhtml />
 
 <div class="body">
@@ -51,7 +27,7 @@ table.summary td.leftcol {
 
 	<br />
 	
-	<table cellpadding="0" cellspacing="0" border="0" class="summary">
+	<table cellpadding="0" cellspacing="0" border="0" class="dbsources">
 	<thead>
 		<tr>
 			<th>Data Category</th>
@@ -59,7 +35,7 @@ table.summary td.leftcol {
 			<th>Data Source</th>
 			<th>Data Set</th>
 			<th>Data Set Description</th>
-			<th>PubMed</th>
+			<th class="rightcol">PubMed</th>
 		</tr>
 	<thead>
 		<c:choose>
@@ -127,7 +103,7 @@ table.summary td.leftcol {
 
 	</table>
 	
-	<table cellpadding="0" cellspacing="0" border="0" class="summary">
+	<table cellpadding="0" cellspacing="0" border="0" class="dbsources">
 	<thead>
 		<tr>
 			<th>Data Category</th>
@@ -136,7 +112,7 @@ table.summary td.leftcol {
 			<th>Data Source</th>
 			<th>Data Set</th>
 			<th>Data Set Description</th>
-			<th>PubMed</th>
+			<th class="rightcol">PubMed</th>
 		</tr>
 	<thead>
 		<c:choose>
@@ -155,7 +131,7 @@ table.summary td.leftcol {
 							<span>
 							${item.featureCount}
 							<c:if test="${!empty item.units}">
-							&nbsp; ${item.units}
+							&nbsp;${item.units}
 							</c:if>
 							</span>
 							</b>

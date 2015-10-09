@@ -185,25 +185,34 @@ div#filter_tool_bar {
   background-color:#F5F0FF;text-align:center;}
 
 table.dbsources {
-  padding:0px;
+    padding:0px;
   margin:10px 20px 10px 20px;}
 
 table.dbsources th  {
   padding: 6px 6px 6px 12px;
   text-align: left;
   font-weight: bold;
-  border-right:1px solid #FFF;
+  border-right:1px solid #fff;
   color: white;
-  background-color: #E82;}
+  background-color: #6BC354;}
 
 table.dbsources td {
   padding: 6px 6px 6px 12px;
-  border-right: 1px solid #000;
-  border-bottom: 1px solid #000;
+  border-right: 1px solid #6BC354;
+  border-bottom: 1px solid #6BC354;
   background: #fff;}
 
 table.dbsources td.leftcol {
-  border-left: 1px solid #000;}
+  border-left: 1px solid #6BC354;
+  }
+  
+table.dbsources td.rightcol {
+  border-right: 1px solid #6BC354;
+  }
+  
+table.dbsources th.rightcol {
+  border-right: 1px solid #6BC354;
+  }
 
 /*    .columnHeader {
       background: #353B40;
