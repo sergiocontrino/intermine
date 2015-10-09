@@ -2,37 +2,27 @@ package org.thalemine.web.displayer;
 
 //package org.intermine.bio.web.displayer;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.TreeSet;
-import java.util.TreeMap;
+import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-
 import org.intermine.api.InterMineAPI;
 import org.intermine.api.profile.Profile;
 import org.intermine.api.query.PathQueryExecutor;
 import org.intermine.api.results.ExportResultsIterator;
 import org.intermine.api.results.ResultElement;
-import org.intermine.bio.web.displayer.GeneSNPDisplayer.GenoSample;
-import org.intermine.bio.web.displayer.GeneSNPDisplayer.SNPList;
-import org.intermine.model.InterMineObject;
 import org.intermine.model.bio.Gene;
-import org.intermine.model.bio.Protein;
-import org.intermine.model.bio.MRNA;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.pathquery.Constraints;
 import org.intermine.pathquery.OrderDirection;
+import org.intermine.pathquery.OuterJoinStatus;
 import org.intermine.pathquery.PathQuery;
-import org.intermine.util.DynamicUtil;
 import org.intermine.web.displayer.ReportDisplayer;
 import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
@@ -43,7 +33,6 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
 
   protected static final Logger LOG = Logger.getLogger(LocusHistoryDisplayer.class);
   PathQueryExecutor exec;
-  private HashMap<Integer,String> organismMap = new HashMap<Integer,String>();
 
   /**
    * Construct with config and the InterMineAPI.
@@ -55,17 +44,13 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public void display(HttpServletRequest request, ReportObject reportObject) {
       HttpSession session = request.getSession();
       final InterMineAPI im = SessionMethods.getInterMineAPI(session);
 
       Gene geneObj = (Gene)reportObject.getObject();
 
-      LOG.info("Entering ProteinDisplayer.display for "+geneObj.getPrimaryIdentifier());
-      LOG.info("Id is "+geneObj.getId());
-
-      // query the proteins
+      // query
       PathQuery query = getProteinTable(geneObj.getId());
       Profile profile = SessionMethods.getProfile(session);
       exec = im.getPathQueryExecutor(profile);
@@ -74,7 +59,7 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
         result = exec.execute(query);
       } catch (ObjectStoreException e) {
         // silently return
-        LOG.warn("Had an ObjectStoreException in LocusHistoryDisplayer.java: "+e.getMessage());
+        LOG.warn("Had an ObjectStoreException in LocusHistoryDisplayer.java: " +e.getMessage());
         return;
       }
 
@@ -102,6 +87,8 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
             "Gene.locusHistory.lociInvolved.primaryIdentifier",
             "Gene.locusHistory.lociInvolved.id");
 
+    query.setOuterJoinStatus("Gene.locusHistory.lociInvolved", OuterJoinStatus.OUTER);
+
     // Add orderby
     query.addOrderBy("Gene.locusHistory.datestamp", OrderDirection.DESC);
 
@@ -121,7 +108,7 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
       operation = ((resElement.get(0)!=null) && (resElement.get(0).getField()!= null))?
                                  resElement.get(0).getField().toString():"&nbsp;";
       date = ((resElement.get(1)!=null) && (resElement.get(1).getField()!= null))?
-                                 resElement.get(1).getField().toString():"&nbsp;";
+              formatDate(resElement.get(1).getField().toString()):"&nbsp;";
       source = ((resElement.get(2)!=null) && (resElement.get(2).getField()!= null))?
                                  resElement.get(2).getField().toString():"&nbsp;";
       locus = ((resElement.get(3)!=null) && (resElement.get(3).getField()!= null))?
@@ -135,6 +122,20 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
     public String getDate() { return date; }
     public String getSource() { return source; }
     public String getLocus() { return locus; }
+  }
+
+  private String formatDate (String yyyymmdd) {
+      //  String dateString1 = "16-04-2011";
+      try {
+          Date date = new SimpleDateFormat("yyyymmdd").parse(yyyymmdd);
+          String dateString2 = new SimpleDateFormat("d MMM yyyy").format(date);
+          return dateString2;
+
+        } catch (ParseException e) {
+          // silently return
+          LOG.warn("Error in parsing date " + yyyymmdd + " -- " + e.getMessage());
+          return null;
+        }
   }
 
 }
