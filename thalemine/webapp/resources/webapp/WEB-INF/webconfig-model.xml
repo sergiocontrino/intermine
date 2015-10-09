@@ -295,8 +295,8 @@
  <class className="org.intermine.model.bio.LocusHistory" label="Gene History">
      <fields>
          <fieldconfig fieldExpr="source.name" label="Source" />
-         <fieldconfig fieldExpr="locusOperation" label="Type of Operation" />
-         <fieldconfig fieldExpr="datestamp" label="Operation Date (YYYYMMDD)" />
+         <fieldconfig fieldExpr="locusOperation" label="Operation" />
+         <fieldconfig fieldExpr="datestamp" label="Date" />
      </fields>
 <!--
     <inlinelist>
