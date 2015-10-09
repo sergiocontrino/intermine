@@ -1,7 +1,5 @@
 package org.thalemine.web.displayer;
 
-//package org.intermine.bio.web.displayer;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,7 +48,7 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
 
       OPERATIONS.put("merge", "the gene model has been merged with another one and retained its name");
       OPERATIONS.put("delete", "the gene model has been eliminated");
-      OPERATIONS.put("mergedelete", "the gene model has been merged and its name has not been retained");
+      OPERATIONS.put("mergeobsolete", "the gene model has been merged and its name has not been retained");
       OPERATIONS.put("insert", "the gene model has been inserted from scratch");
       OPERATIONS.put("split", "the gene model has been split and retained its name");
       OPERATIONS.put("splitinsert", "the gene model has been split and has a new name");
@@ -89,9 +87,9 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
       }
 
       // for accessing this within the jsp
-      request.setAttribute("geneName",geneObj.getPrimaryIdentifier());
+//      request.setAttribute("geneName",geneObj.getPrimaryIdentifier());
       request.setAttribute("list",proteinList);
-      request.setAttribute("id",geneObj.getId());
+//      request.setAttribute("id",geneObj.getId());
       request.setAttribute("ops", OPERATIONS);
   }
 

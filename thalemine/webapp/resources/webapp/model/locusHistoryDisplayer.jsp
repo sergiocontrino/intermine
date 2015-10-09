@@ -8,12 +8,12 @@
 <%@ taglib uri="http://jakarta.apache.org/taglibs/string-1.1" prefix="str" %>
 
 
-<!-- curatedProteinsDisplayer.jsp -->
+<!-- LocusHistoryDisplayer.jsp -->
 <div id="curated-proteins-displayer" class="collection-table">
 
   <div class="header">
     <h3>
-      Locus History
+      Gene History
     </h3>
   </div>
 
@@ -23,7 +23,7 @@
         <th>Operation</th>
         <th>Date</th>
         <th>Source</th>
-        <th>Loci Involved</th>
+        <th>Genes Involved</th>
       </tr>
     </thead>
     <tbody>
@@ -42,13 +42,6 @@
   </table>
 
 
-
-  <div class="show-in-table">
-    <html:link action="/collectionDetails?id=${reportObject.object.id}&amp;field=locusHistory">
-      Show all in a table &raquo;
-    </html:link>
-  </div>
-
   <script type="text/javascript">
   (function() {
     var t = jQuery('#curated-proteins-displayer');
@@ -59,4 +52,4 @@
   })();
   </script>
 </div>
-<!-- /curatedProteinsDisplayer.jsp -->
+<!-- /locusHistoryDisplayer.jsp -->
