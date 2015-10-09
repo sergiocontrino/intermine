@@ -96,6 +96,11 @@
     <inlinelist>
       <table path="synonyms.value" showInHeader="true" lineLength="100" />
     </inlinelist>
+<!--
+    <inlinelist>
+      <table path="locusHistory.lociInvolved.primaryIdentifier" showLinksToObjects="true" showInHeader="true" lineLength="100" label="related loci"/>
+    </inlinelist>
+-->
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier" label="Gene ID" />
       <fieldconfig fieldExpr="symbol"/>
@@ -298,6 +303,11 @@
          <fieldconfig fieldExpr="locusOperation" label="Type of Operation" />
          <fieldconfig fieldExpr="datestamp" label="Operation Date (YYYYMMDD)" />
      </fields>
+<!--
+    <inlinelist>
+      <table path="lociInvolved.primaryIdentifier" showLinksToObjects="true" showInHeader="true" lineLength="100" />
+    </inlinelist>
+-->
  </class>
 
  <class className="org.intermine.model.bio.Protein">
@@ -650,7 +660,15 @@
                      placement="Expression"
                      types="Gene"/>
 
+    <reportdisplayer javaClass="org.thalemine.web.displayer.LocusHistoryDisplayer"
+                     jspName="model/locusHistoryDisplayer.jsp"
+                     replacesFields=""
+                     placement="summary"
+                     types="Gene"/>
+
+
     <!-- this feature is not ready for production
+
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.EsynDisplayer"
                      jspName="model/esynDisplayer.jsp"
                      replacesFields=""
