@@ -185,7 +185,7 @@ div#filter_tool_bar {
   background-color:#F5F0FF;text-align:center;}
 
 table.dbsources {
-    padding:0px;
+  padding:0px;
   margin:10px 20px 10px 20px;}
 
 table.dbsources th  {
@@ -194,7 +194,7 @@ table.dbsources th  {
   font-weight: bold;
   border-right:1px solid #FFF;
   color: white;
-  background-color: #000;}
+  background-color: #E82;}
 
 table.dbsources td {
   padding: 6px 6px 6px 12px;
