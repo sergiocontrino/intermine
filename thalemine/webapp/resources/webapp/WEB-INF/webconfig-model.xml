@@ -96,11 +96,6 @@
     <inlinelist>
       <table path="synonyms.value" showInHeader="true" lineLength="100" />
     </inlinelist>
-<!--
-    <inlinelist>
-      <table path="locusHistory.lociInvolved.primaryIdentifier" showLinksToObjects="true" showInHeader="true" lineLength="100" label="related loci"/>
-    </inlinelist>
--->
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier" label="Gene ID" />
       <fieldconfig fieldExpr="symbol"/>
@@ -297,7 +292,7 @@
   </class>
 -->
 
- <class className="org.intermine.model.bio.LocusHistory">
+ <class className="org.intermine.model.bio.LocusHistory" label="Gene History">
      <fields>
          <fieldconfig fieldExpr="source.name" label="Source" />
          <fieldconfig fieldExpr="locusOperation" label="Type of Operation" />
@@ -305,9 +300,9 @@
      </fields>
 <!--
     <inlinelist>
-      <table path="lociInvolved.primaryIdentifier" showLinksToObjects="true" showInHeader="true" lineLength="100" />
+      <table path="lociInvolved.primaryIdentifier" showLinksToObjects="true" showInHeader="true" lineLength="100" label="Genes Involved"/>
     </inlinelist>
--->
+ -->
  </class>
 
  <class className="org.intermine.model.bio.Protein">
@@ -662,7 +657,7 @@
 
     <reportdisplayer javaClass="org.thalemine.web.displayer.LocusHistoryDisplayer"
                      jspName="model/locusHistoryDisplayer.jsp"
-                     replacesFields=""
+                     replacesFields="locusHistory"
                      placement="summary"
                      types="Gene"/>
 
