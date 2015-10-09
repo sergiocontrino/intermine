@@ -53,7 +53,7 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
       OPERATIONS.put("split", "the gene model has been split and retained its name");
       OPERATIONS.put("splitinsert", "the gene model has been split and has a new name");
       OPERATIONS.put("new", "the gene model has been generated");
-      OPERATIONS.put("obsoleted", "the gene model has disappeared");
+      OPERATIONS.put("obsolete", "the gene model has disappeared");
 
   }
 
@@ -66,7 +66,7 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
       Gene geneObj = (Gene)reportObject.getObject();
 
       // query
-      PathQuery query = getProteinTable(geneObj.getId());
+      PathQuery query = getHistoryTable(geneObj.getId());
       Profile profile = SessionMethods.getProfile(session);
       exec = im.getPathQueryExecutor(profile);
       ExportResultsIterator result;
@@ -78,22 +78,20 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
         return;
       }
 
-      ArrayList<ProteinRecord> proteinList = new ArrayList<ProteinRecord>();
+      ArrayList<HistoryRecord> historyList = new ArrayList<HistoryRecord>();
 
       while (result.hasNext()) {
         List<ResultElement> resElement = result.next();
-        ProteinRecord r = new ProteinRecord(resElement);
-        proteinList.add(r);
+        HistoryRecord r = new HistoryRecord(resElement);
+        historyList.add(r);
       }
 
       // for accessing this within the jsp
-//      request.setAttribute("geneName",geneObj.getPrimaryIdentifier());
-      request.setAttribute("list",proteinList);
-//      request.setAttribute("id",geneObj.getId());
+      request.setAttribute("list", historyList);
       request.setAttribute("ops", OPERATIONS);
   }
 
-  private PathQuery getProteinTable(Integer id) {
+  private PathQuery getHistoryTable(Integer id) {
     PathQuery query = new PathQuery(im.getModel());
 
     query.addViews("Gene.locusHistory.locusOperation",
@@ -111,14 +109,14 @@ public class LocusHistoryDisplayer extends ReportDisplayer {
     return query;
   }
 
-  public class ProteinRecord {
+  public class HistoryRecord {
     private String operation;
     private String date;
     private String source;
     private String locus;
     private String id;
 
-    public ProteinRecord(List<ResultElement> resElement) {
+    public HistoryRecord(List<ResultElement> resElement) {
       // the fields are a copy of the query results
       operation = ((resElement.get(0)!=null) && (resElement.get(0).getField()!= null))?
                                  resElement.get(0).getField().toString():"&nbsp;";
