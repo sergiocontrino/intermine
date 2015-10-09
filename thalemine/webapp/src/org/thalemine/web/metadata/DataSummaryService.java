@@ -83,7 +83,7 @@ public class DataSummaryService {
 
 				item = reader.read();
 
-				if (item.getCategoryName().equals("Genome Assembly") || item.getCategoryName().equals("Genes")) {
+				if (item.getCategoryName().equals("Chromosomes") || item.getCategoryName().equals("Genes")) {
 					geneResults.add(item);
 
 				} else {

@@ -16,16 +16,17 @@
 </im:boxarea>
 --%>
 
-	<im:boxarea title="Data" stylename="yellbox">
+	<div class="datasummarytitle">
+		<p class="pagetitle">Data</p>
 		<p>ThaleMine integrates biological data from a wide array of public sources into a data warehouse.
 		 This page lists the datasets that are included in the current release.</p>
 		<p>
 			Please <a
 				href="mailto:araport@jcvi.org?Subject=Data request"> contact us
 			</a> if there are any particular data you would like to suggest.</p>
-	</im:boxarea>
+	</div>
 
-	<br />
+	<p class="datasummarytabletitle"><i>Arabidopsis thaliana Col-0</i> genome</p>
 	
 	<table cellpadding="0" cellspacing="0" border="0" class="dbsources">
 	<thead>
@@ -102,6 +103,8 @@
 	</c:choose>
 
 	</table>
+	
+	<p class="datasummarytabletitle">Public datasets</p>
 	
 	<table cellpadding="0" cellspacing="0" border="0" class="dbsources">
 	<thead>

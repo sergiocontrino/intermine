@@ -184,8 +184,23 @@ div#filter_tool_bar {
   padding: 20px;margin:20px;width:350px;
   background-color:#F5F0FF;text-align:center;}
 
+div.datasummarytitle {
+  margin:10px 20px 10px 20px}
+
+.pagetitle{
+ font-size: 22px;
+ color: #2A65D2;
+ font-weight: bold;
+ }
+ 
+.datasummarytabletitle {
+  font-size: 16px;
+  color: #2A65D2;
+  font-weight: bold;
+  margin:10px 20px 10px 20px}
+  
 table.dbsources {
-    padding:0px;
+  padding:0px;
   margin:10px 20px 10px 20px;}
 
 table.dbsources th  {

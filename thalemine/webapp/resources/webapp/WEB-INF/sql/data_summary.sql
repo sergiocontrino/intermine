@@ -1253,7 +1253,12 @@ gene_summary_source
 select
 row_type,
 parent_dataset_id,
-category_name,
+case
+	when(category_name = 'Genome Assembly')
+		then 'Chromosomes'
+	else
+		category_name
+end as category_name,
 sort_order,
 datasource_id,
 datasource_name,
