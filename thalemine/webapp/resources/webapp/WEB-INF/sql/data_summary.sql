@@ -1266,7 +1266,12 @@ datasource_url,
 datasource_description,
 dataset_description,
 dataset_id,
-dataset_name,
+case
+	 when (dataset_name = 'PubMed to gene mapping')
+	 	then 'Gene to PubMed'
+	 	else
+	 	dataset_name
+end dataset_name,
 dataset_url,
 dataset_version,
 pubmed_id,

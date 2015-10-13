@@ -26,7 +26,7 @@
 			</a> if there are any particular data you would like to suggest.</p>
 	</div>
 
-	<p class="datasummarytabletitle"><i>Arabidopsis thaliana Col-0</i> genome</p>
+	<p class="datasummarytabletitle"><i>Arabidopsis thaliana</i> Col-0 genome</p>
 	
 	<table cellpadding="0" cellspacing="0" border="0" class="dbsources">
 	<thead>
