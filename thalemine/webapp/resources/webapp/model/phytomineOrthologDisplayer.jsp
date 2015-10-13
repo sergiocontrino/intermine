@@ -99,8 +99,13 @@
 
 
     // note: imtables.loadTable delivers a table without controls (only pagination)
+
+    // to fix quickly MINE-979
+    imtables.configure('DefaultPageSize', 10);
+    imtables.configure('TableCell.IndicateOffHostLinks', false);
+
     imtables.loadDash('#phytomine-homolog-container',
-        {start : 0, size : 25},
+        {start : 0, size : 10},
         {service : {root : options.url},
             query : options.query}
         ).then(
