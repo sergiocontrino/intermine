@@ -108,8 +108,6 @@ public class GoConverter extends BioFileConverter
     static {
         WITH_TYPES.put("FB", "Gene");
         WITH_TYPES.put("UniProt", "Protein");
-        WITH_TYPES.put("NCBI_gi", "Gene");
-        WITH_TYPES.put("SWISS-PROT", "Protein");
     }
 
     // read config file that has specific settings for each organism, key is taxon id
