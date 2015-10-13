@@ -36,7 +36,7 @@
     <c:if test="${offsetstart < 1}"><c:set var="offsetstart" value="1"/></c:if>
     <c:set var="offsetend" value="${end + offset}"/>
 
-    <c:set var="tracks" value="TAIR10_loci,TAIR10_genes"/>
+    <c:set var="tracks" value="Araport11_Loci,Araport11_gene_models"/>
     <c:set var="extraParams" value="tracklist=0&nav=0&overview=0&menu=0"/>
     <c:set var="loc" value="${chr}:${offsetstart}..${offsetend}"/>
 
