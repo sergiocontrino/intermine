@@ -44,7 +44,7 @@
       <attribute name="version" value="Araport11 Pre-release 2 (10/2015)" />
       <reference name="dataSource" ref_id="0_7" />
       <attribute name="name" value="Genome Annotation" />
-      <attribute name="description" value="Araport11 Genome annotation, consisting of protein coding genes, non-coding RNA and transposable elements" />
+      <attribute name="description" value="Araport11 protein coding genes supplemented with TAIR10 non-coding RNA and transposable elements" />
       <attribute name="url" value="https://www.araport.org/data/araport11" />
    </item>
    <item id="0_9" class="DataSet" implements="">

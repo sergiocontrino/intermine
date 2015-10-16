@@ -25,6 +25,15 @@ div#header h1 a:visited,
 div#header p {
     color:#000;
 }
+div#header p {
+    margin: 0 0 0 0 !important;
+}
+div#header {
+    height: 60px;
+}
+div#version {
+    margin-top: 5px;
+}
 
 /*div.title h1 {
     color: #000;}

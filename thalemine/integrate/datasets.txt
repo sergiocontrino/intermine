@@ -2,7 +2,7 @@ DataSource	TAIR	The Arabidopsis Information Resource	http://www.arabidopsis.org	
 DataSet	Genome Assembly	TAIR9 Genome assembly (5 chromosomes plus chloroplast and mitochondrial assemblies)	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	DataSource:TAIR,Publication:11130711	TAIR9
 DataSet	Gene Summary	TAIR-curated Arabidopsis gene symbol(s), curator summary and links between loci & publications	https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/Public_Data_Releases/TAIR_Data_20140930	DataSource:TAIR,Publication:26201819	09/30/2014
 DataSource	Araport	Arabidopsis Information Portal	https://www.araport.org	Publication:25414324
-DataSet	Genome Annotation	Araport11 Genome annotation, consisting of protein coding genes, non-coding RNA and transposable elements	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 Pre-release 2 (10/2015)
+DataSet	Genome Annotation	Araport11 protein coding genes supplemented with TAIR10 non-coding RNA and transposable elements	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 Pre-release 2 (10/2015)
 DataSet	Coding Sequence FASTA	Araport11 coding sequences	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 Pre-release 2 (10/2015)
 DataSet	Protein Sequence FASTA	Araport11 protein sequences	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 Pre-release 2 (10/2015)
 DataSet	PO Annotation from TAIR	Literature-based annotations of genes to Plant Ontology (PO) terms	https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/GO_and_PO_Annotations/Plant_Ontology_Annotations	DataSource:TAIR,Publication:26201819	09/30/2014
