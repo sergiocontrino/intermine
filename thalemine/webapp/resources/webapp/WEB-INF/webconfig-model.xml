@@ -688,7 +688,14 @@
                      types="Gene"/>
     -->
 
-   <!--    comment out the stock, polymorphisms, genotypes, phenotypes, alleles displayers
+    <!--  this takes rather long to load, commented for now
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.MinePathwaysDisplayer"
+                     jspName="model/minePathwaysDisplayer.jsp"
+                     replacesFields="pathways"
+                     placement="summary"
+                     types="Gene"/>
+   -->
+
    <reportdisplayer javaClass="org.thalemine.web.displayer.GeneModelDisplayer"
                      jspName="model/alleleGeneModelDisplayer.jsp"
                      replacesFields="affectedGenes"
@@ -778,7 +785,6 @@
                      replacesFields="backgroundStocks,stocks,organism,type"
                      placement="Stocks"
                      types="Strain"/>
-          -->
 
   </reportdisplayers>
 

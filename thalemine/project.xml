@@ -227,7 +227,6 @@
           <property name="biogrid.organisms" value="3702"/>
         </source>
 
-        <!--
         <source name="araport-chado-stock" type="araport-chado-db">
             <property name="source.db.name" value="araport"/>
             <property name="organisms" value="3702"/>
@@ -238,7 +237,6 @@
                  <property name="converter.class"
                   value="org.intermine.bio.dataconversion.ChadoDBConverter"/>
         </source>
-        -->
 
         <source name="entrez-organism" type="entrez-organism">
             <property name="src.data.file" location="build/organisms.xml"/>
