@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
@@ -53,6 +54,8 @@
     <fmt:message key="query.filterValue" /><%--Filter query results on this field having a specific value.--%>
     </a>
     </LEGEND>
+
+
     <!--
        ATTRIBUTE CONSTRAINT
     -->
@@ -75,6 +78,7 @@
         </c:when>
       </c:choose>
     </c:if>
+
 
     <!-- input or radio buttons -->
      <c:set var="selectedValue" value="" />
@@ -138,6 +142,7 @@
                     <option value="${option}" <c:if test="${dec.selectedValue == option}">selected</c:if>>
                       <c:out value="${option}" />
                     </option>
+
                   </c:forEach>
                 </html:select>
 
@@ -319,6 +324,7 @@
    NULL OR NOT NULL CONSTRAINT
 -->
   <c:if test="${(dec.path.attribute && !dec.path.primitive) || dec.path.reference || dec.path.collection}">
+
   <br/>
   <FIELDSET class="constraintFieldset">
     <LEGEND>
