@@ -202,6 +202,7 @@
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
       <fieldconfig fieldExpr="length" displayer="/model/sequenceShortDisplayerWithField.jsp" />
+      <fieldconfig fieldExpr="sequenceOntologyTerm.name" label="Feature Type" showInInlineCollection="false" showInSummary="false"/>
       <fieldconfig fieldExpr="chromosomeLocation" displayer="/model/chromosomeLocDisplayer.jsp" showInResults="false" />
       <fieldconfig fieldExpr="chromosome.primaryIdentifier" showInInlineCollection="false" showInSummary="false" />
       <fieldconfig fieldExpr="chromosomeLocation.start" showInInlineCollection="false" showInSummary="false" />
@@ -572,14 +573,6 @@
                      placement="summary"
                      types="Pathway"/>
 
-    <!--  this takes rather long to load, commented for now
-    <reportdisplayer javaClass="org.intermine.bio.web.displayer.MinePathwaysDisplayer"
-                     jspName="model/minePathwaysDisplayer.jsp"
-                     replacesFields="pathways"
-                     placement="summary"
-                     types="Gene"/>
-   -->
-
 <!-- GENOMICS -->
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.SequenceFeatureDisplayer"
                      jspName="model/sequenceFeatureDisplayer.jsp"
@@ -589,7 +582,7 @@
 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneStructureDisplayer"
                      jspName="model/geneStructureDisplayer.jsp"
-                     replacesFields="transcripts,exons,CDSs,introns,fivePrimeUTR,threePrimeUTR,childFeatures,overlappingFeatures"
+                     replacesFields="transcripts,exons,CDSs,introns,fivePrimeUTR,threePrimeUTR,childFeatures"
                      placement="Genomics"
                      types="Gene,Transcript,Exon,UTR,TransposableElementGene"/>
 
@@ -599,13 +592,11 @@
                      placement="Genomics"
                      types="Gene,Exon,Intron,MRNA,MiRNA,NcRNA,RRNA,SnRNA,SnoRNA,TRNA,Pseudogene,PseudogenicTranscript,TransposableElementGene"/>
 
-<!-- removed as per MINE-976
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.OverlappingFeaturesDisplayer"
                      jspName="model/overlappingFeaturesDisplayer.jsp"
                      replacesFields="overlappingFeatures"
                      placement="Genomics"
                      types="SequenceFeature"/>
--->
 
 <!-- PROTEINS -->
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.ProteinDisplayer"
