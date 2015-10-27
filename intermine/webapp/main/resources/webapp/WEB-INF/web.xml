@@ -14,6 +14,10 @@
     <listener-class>org.intermine.web.logic.session.SessionListener</listener-class>
   </listener>
 
+  <listener>
+    <listener-class>org.thalemine.web.context.AppContextListener</listener-class>
+  </listener>
+
 <!-- Main webapp mapping -->
 <!-- ================================================================================ -->
   <servlet>
@@ -3158,6 +3162,18 @@ The different token types are:
   <url-pattern>/*</url-pattern>
  </filter-mapping>
 
+  <!-- Initializing Filter -->
+  <filter>
+    <filter-name>contextInitializer</filter-name>
+    <filter-class>org.thalemine.web.context.ContextLoaderInitializer</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>contextInitializer</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- end Initializing Filter -->
+
   <error-page>
     <error-code>500</error-code>
     <location>/static/flymine-offline/</location>
@@ -3181,5 +3197,14 @@ The different token types are:
       <trim-directive-whitespaces>true</trim-directive-whitespaces>
     </jsp-property-group>
   </jsp-config>
+
+<servlet>
+  <servlet-name>ws-gff3-query</servlet-name>
+  <servlet-class>org.intermine.bio.webservice.GFF3QueryServlet</servlet-class>
+  <init-param>
+     <param-name>debug</param-name>
+     <param-value>true</param-value>
+  </init-param>
+</servlet>
 
 </web-app>
