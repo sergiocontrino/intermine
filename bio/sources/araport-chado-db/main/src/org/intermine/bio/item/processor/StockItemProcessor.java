@@ -1,5 +1,7 @@
 package org.intermine.bio.item.processor;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
@@ -45,6 +47,8 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 
 		Item item = null;
 		ItemHolder itemHolder = null;
+		
+		Item stockAnnotationItem = null;
 		
 		int itemId = -1;
 
@@ -134,7 +138,7 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 				item.setReference("organism", organismItem);
 			}
 
-			Item stockAnnotationItem = createStockAnnotation(source, item);
+			stockAnnotationItem = createStockAnnotation(source, item);
 
 			item.setReference("stockAnnotation", stockAnnotationItem);
 			
@@ -180,6 +184,7 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 			}
 			
 			itemId = super.getService().store(item);
+			//stockAnnotationItem
 
 		} catch (ObjectStoreException e) {
 			exception = e;
@@ -200,6 +205,9 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 					StockService.addStockItem(source.getGermplasmTairAccession(), itemHolder);
 				}
 				
+				if (stockAnnotationItem!=null){
+					super.getService().store(stockAnnotationItem);
+				}
 			}
 		}
 		
@@ -211,6 +219,20 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		return item;
 	}
 
+	private boolean storeComponents(Item holderItem, List<Item> components){
+		
+		boolean result = true;
+		Exception exception = null;
+				
+		return result;
+	}
+	
+	private boolean storeComponents(Item holderItem, Item componentItem){
+		boolean result = true;
+				
+		return result;
+	}
+	
 	public void setTargetClassName(String name) {
 		this.targetClassName = name;
 	}
@@ -277,7 +299,7 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 				stockAnnotationItem.setReference("growthCondition", growthCondition);
 			}
 
-			super.getService().store(stockAnnotationItem);
+			//super.getService().store(stockAnnotationItem);
 
 		} catch (ObjectStoreException e) {
 			exception = e;
