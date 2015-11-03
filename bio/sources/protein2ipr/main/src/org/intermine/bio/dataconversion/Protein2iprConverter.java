@@ -1,5 +1,16 @@
 package org.intermine.bio.dataconversion;
 
+/*
+ * Copyright (C) 2002-2015 FlyMine
+ *
+ * This code may be freely distributed and modified under the
+ * terms of the GNU Lesser General Public Licence.  This should
+ * be distributed with the code.  See the LICENSE file for more
+ * information or http://www.gnu.org/copyleft/lesser.html.
+ *
+ */
+
+
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,8 +20,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.BuildException;
 import org.intermine.dataconversion.ItemWriter;
 import org.intermine.metadata.ConstraintOp;
 import org.intermine.metadata.Model;
@@ -38,36 +51,45 @@ import org.intermine.xml.full.Item;
  * ftp://ftp.ebi.ac.uk/pub/databases/interpro/Current/protein2ipr.dat.gz
  * <p>
  * Because the file includes proteins in all species,
- * the parser will only load the proteins of the specified species which are already
- * loaded into the mine.
+ * the parser will only load the proteins of the specified species which are already loaded into
+ *  the mine.
  * Thus, better to run after the unirpot data source.
  * In addition, protein domain information are loaded by the interpro data source.
  * (both are kindly shared by InterMine.) </p>
  *
  * @author chenyian
  */
-
-
 public class Protein2iprConverter extends BioFileConverter
 {
+
     private static final Logger LOG = Logger.getLogger(Protein2iprConverter.class);
-    //
     private static final String DATASET_TITLE = "InterPro data set";
     private static final String DATA_SOURCE_NAME = "InterPro";
 
     private Collection<Integer> taxonIds = new ArrayList<Integer>();
 
     private Set<String> proteinIds = new HashSet<String>();
-
+    private Set<MultiKey> xrefs = new HashSet<MultiKey>();
     private Map<String, String> proteinMap = new HashMap<String, String>();
     private Map<String, String> proteinDomainMap = new HashMap<String, String>();
 
-    public void setOrganisms(String taxonIds) {
+    /**
+     * @param taxonIds set valid taxonIds to process
+     */
+    public void setProtein2iprOrganisms(String taxonIds) {
         String[] taxonStringIds = StringUtils.split(taxonIds, " ");
         for (String string : taxonStringIds) {
             this.taxonIds.add(Integer.valueOf(string));
         }
         LOG.info("Setting list of organisms to " + this.taxonIds);
+    }
+
+    /**
+     * Set the ObjectStore alias.
+     * @param osAlias The ObjectStore alias
+     */
+    public void setOsAlias(String osAlias) {
+        this.osAlias = osAlias;
     }
 
     /**
@@ -83,11 +105,14 @@ public class Protein2iprConverter extends BioFileConverter
     }
 
     /**
-     *
-     *
      * {@inheritDoc}
      */
     public void process(Reader reader) throws Exception {
+
+        if (osAlias == null) {
+            throw new BuildException("osAlias attribute is not set");
+        }
+
         getProteinIds();
         LOG.info("Found " + proteinIds.size() + " protein ids.");
 
@@ -97,50 +122,59 @@ public class Protein2iprConverter extends BioFileConverter
         while (iterator.hasNext()) {
             String[] cols = iterator.next();
             if (proteinIds.contains(cols[0])) {
-                Item item = createItem("ProteinDomainRegion");
 
-                item.setAttribute("start", cols[4]);
-                item.setAttribute("end", cols[5]);
-                item.setAttribute("originalId", cols[3]);
-                item.setAttribute("originalDb", getDatabaseName(cols[3]));
-                item.setReference("proteinDomain", getProteinDomain(cols[1]));
-                item.setReference("protein", getProtein(cols[0]));
+                String proteinAccession = cols[0];
+                String interproIdentifier = cols[1];
+                String proteinDomainIdentifier = cols[3];
+                String start = cols[4];
+                String end = cols[5];
 
-                store(item);
+                String proteinRefId = getProtein(proteinAccession);
+                String proteinDomainRefId = getProteinDomain(interproIdentifier);
+                Item proteinDomainRegion = createItem("ProteinDomainRegion");
+
+                proteinDomainRegion.setAttribute("identifier", proteinDomainIdentifier);
+                proteinDomainRegion.setAttribute("database", getSource(proteinDomainIdentifier));
+                proteinDomainRegion.setAttribute("start", start);
+                proteinDomainRegion.setAttribute("end", end);
+                proteinDomainRegion.setReference("protein", proteinRefId);
+                proteinDomainRegion.setReference("proteinDomain", proteinDomainRefId);
+                store(proteinDomainRegion);
                 count++;
             } else {
                 skipped++;
             }
         }
+
         LOG.info("Number of processed lines: " + count);
         LOG.info("Number of skipped lines: " + skipped);
     }
 
     private String getProtein(String identifier) throws ObjectStoreException {
-        String ret = proteinMap.get(identifier);
-        if (ret == null) {
-            Item item = createItem("Protein");
-            item.setAttribute("primaryAccession", identifier);
-            ret = item.getIdentifier();
-            store(item);
-            proteinMap.put(identifier, ret);
+        String refId = proteinMap.get(identifier);
+        if (refId == null) {
+            Item protein = createItem("Protein");
+            protein.setAttribute("primaryAccession", identifier);
+            store(protein);
+            refId = protein.getIdentifier();
+            proteinMap.put(identifier, refId);
         }
-        return ret;
+        return refId;
     }
 
     private String getProteinDomain(String identifier) throws ObjectStoreException {
-        String ret = proteinDomainMap.get(identifier);
-        if (ret == null) {
-            Item item = createItem("ProteinDomain");
-            item.setAttribute("primaryIdentifier", identifier);
-            ret = item.getIdentifier();
-            store(item);
-            proteinDomainMap.put(identifier, ret);
+        String refId = proteinDomainMap.get(identifier);
+        if (refId == null) {
+            Item proteinDomain = createItem("ProteinDomain");
+            proteinDomain.setAttribute("primaryIdentifier", identifier);
+            store(proteinDomain);
+            refId = proteinDomain.getIdentifier();
+            proteinDomainMap.put(identifier, refId);
         }
-        return ret;
+        return refId;
     }
 
-    private String getDatabaseName(String dbId) {
+    private String getSource(String dbId) {
         String dbName = null;
         if (dbId.startsWith("PF")) {
             dbName = "Pfam";
@@ -167,24 +201,13 @@ public class Protein2iprConverter extends BioFileConverter
         } else {
             throw new RuntimeException("Unknown DB found. ID: " + dbId);
         }
-
         return dbName;
     }
 
     private String osAlias = null;
 
-    public void setOsAlias(String osAlias) {
-        this.osAlias = osAlias;
-    }
-
     @SuppressWarnings("unchecked")
     private void getProteinIds() throws Exception {
-
-        //ClassLoader cl = Thread.currentThread().getContextClassLoader();
-
-        //Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-
-
         Query q = new Query();
         QueryClass qcProtein = new QueryClass(Protein.class);
         QueryClass qcOrganism = new QueryClass(Organism.class);
