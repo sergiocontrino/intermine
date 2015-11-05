@@ -298,7 +298,7 @@
 				
 	</class>
 
-	<class name="Region" is-interface="true">
+	<class name="GeographicalRegion" is-interface="true">
 	
 		<attribute name="identifier" type="java.lang.String" />
 		<attribute name="name" type="java.lang.String" />
