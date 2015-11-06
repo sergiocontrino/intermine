@@ -199,8 +199,7 @@
             <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/interpro/current"/>
             <property name="src.data.dir.includes" value="protein2ipr.dat"/>
-            <property name="organisms" value="3702"/>
-            <property name="osAlias" value="os.production"/>
+            <property name="protein2ipr.organisms" value="3702"/>
         </source>
 
         <source name="kegg-pathway" type="kegg-pathway">
