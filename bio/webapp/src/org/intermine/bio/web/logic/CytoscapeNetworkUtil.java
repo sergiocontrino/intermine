@@ -70,13 +70,14 @@ public final class CytoscapeNetworkUtil
     private static void queryInteractionInfo(Model model, PathQueryExecutor executor)
         throws ObjectStoreException {
         interactionInfoMap = new LinkedHashMap<String, Set<String>>();
+/*
 
         PathQuery query = new PathQuery(model);
 
-        query.addViews("Interaction.gene1.organism.name",
+        query.addViews("Interaction.participant1id.organism.name",
                 "Interaction.details.dataSets.dataSource.name");
 
-        query.addOrderBy("Interaction.gene1.organism.name", OrderDirection.ASC);
+//        query.addOrderBy("Interaction.gene1.organism.name", OrderDirection.ASC);
 
         ExportResultsIterator result = executor.execute(query);
 
@@ -100,5 +101,7 @@ public final class CytoscapeNetworkUtil
                 }
             }
         }
+
+    */
     }
 }
