@@ -53,7 +53,7 @@ import org.intermine.xml.full.Item;
  * Because the file includes proteins in all species,
  * the parser will only load the proteins of the specified species which are already loaded into
  *  the mine.
- * Thus, better to run after the unirpot data source.
+ * Thus, better to run after the uniprot data source.
  * In addition, protein domain information are loaded by the interpro data source.
  * (both are kindly shared by InterMine.) </p>
  *
