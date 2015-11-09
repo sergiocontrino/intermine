@@ -116,6 +116,14 @@
     </fields>
   </class>
 
+ <class className="org.intermine.model.bio.LocusHistory" label="Gene History">
+     <fields>
+         <fieldconfig fieldExpr="source.name" label="Source" />
+         <fieldconfig fieldExpr="locusOperation" label="Operation" />
+         <fieldconfig fieldExpr="datestamp" label="Date" />
+     </fields>
+ </class>
+
   <class className="org.intermine.model.bio.Generif" label="GeneRIF (Gene Reference into Function)" >
     <fields>
       <fieldconfig fieldExpr="annotation" />
@@ -162,8 +170,8 @@
 
   <class className="org.intermine.model.bio.Interaction">
     <fields>
-      <fieldconfig fieldExpr="gene1.symbol" />
-      <fieldconfig fieldExpr="gene2.symbol" />
+      <fieldconfig fieldExpr="participant1.primaryIdentifier" />
+      <fieldconfig fieldExpr="participant2.primaryIdentifier" />
     </fields>
   </class>
 
@@ -292,19 +300,6 @@
   </class>
 -->
 
- <class className="org.intermine.model.bio.LocusHistory" label="Gene History">
-     <fields>
-         <fieldconfig fieldExpr="source.name" label="Source" />
-         <fieldconfig fieldExpr="locusOperation" label="Operation" />
-         <fieldconfig fieldExpr="datestamp" label="Date" />
-     </fields>
-<!--
-    <inlinelist>
-      <table path="lociInvolved.primaryIdentifier" showLinksToObjects="true" showInHeader="true" lineLength="100" label="Genes Involved"/>
-    </inlinelist>
- -->
- </class>
-
  <class className="org.intermine.model.bio.Protein">
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier"/>
@@ -328,6 +323,16 @@
       <fieldconfig fieldExpr="description" />
     </fields>
   </class>
+
+ <class className="org.intermine.model.bio.ProteinDomainRegion">
+    <fields>
+      <fieldconfig fieldExpr="identifier"/>
+      <fieldconfig fieldExpr="start"/>
+      <fieldconfig fieldExpr="end" />
+      <fieldconfig fieldExpr="database" />
+    </fields>
+  </class>
+
 
   <class className="org.intermine.model.bio.Publication">
     <headerconfig>
@@ -878,14 +883,13 @@
                                  label="Protein Domain"
                                  startClass="Gene"
                                  startClassDisplay="primaryIdentifier"
-                                 enrich="proteins.proteinDomains.name"
-                                 enrichIdentifier="proteins.proteinDomains.primaryIdentifier"
+                                 enrich="proteins.proteinDomainRegions.proteinDomain.name"
+                                 enrichIdentifier="proteins.proteinDomainRegions.proteinDomain.primaryIdentifier"
                                  constraints="organism.name=[list]"
                                  typeClass="Gene"
                                  views="secondaryIdentifier,symbol,primaryIdentifier,organism.name,
-                                       proteins.proteinDomains.primaryIdentifier,proteins.proteinDomains.name"
+                                       proteins.proteinDomainRegions.proteinDomain.primaryIdentifier,proteins.proteinDomainRegions.proteinDomain.name"
                                  externalLink="http://www.ebi.ac.uk/interpro/IEntry?ac="/>
-
 
       <enrichmentwidgetdisplayer id="prot_dom_enrichment_for_protein"
                                  title="Protein Domain Enrichment"
@@ -893,12 +897,12 @@
                                  label="Protein Domain"
                                  startClass="Protein"
                                  startClassDisplay="primaryIdentifier"
-                                 enrich="proteinDomains.name"
-                                 enrichIdentifier="proteinDomains.primaryIdentifier"
+                                 enrich="proteinDomainRegions.proteinDomain.name"
+                                 enrichIdentifier="proteinDomainRegions.proteinDomain.primaryIdentifier"
                                  constraints="organism.name=[list]"
                                  typeClass="Protein"
-                                 views="primaryIdentifier,organism.name,proteinDomains.primaryIdentifier,
-                                       proteinDomains.name"
+                                 views="primaryIdentifier,organism.name,proteinDomainRegions.proteinDomain.primaryIdentifier,
+                                       proteinDomainRegions.proteinDomain.name"
                                  externalLink="http://www.ebi.ac.uk/interpro/entry/"/>
 
 
