@@ -111,6 +111,7 @@
 		is-interface="true">
 		<attribute name="displayName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
+		<attribute name="type" type="java.lang.String" />
 		<collection name="stocks" referenced-type="Stock"
 			reverse-reference="genotypes" />
 		<collection name="alleles" referenced-type="Allele"

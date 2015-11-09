@@ -28,8 +28,8 @@ public class AlleleRowMapper implements RowMapper<SourceAllele> {
 		item.setSequenceAlterationType(rs.getString("sequence_alteration_type"));
 		
 		item.setWildType(rs.getString("wild_type"));
-		item.setGenotypeName(rs.getString("genotype_name"));
-		item.setGenotypeUniqueName(rs.getString("genotype_unique_name"));
+		//item.setGenotypeName(rs.getString("genotype_name"));
+		//item.setGenotypeUniqueName(rs.getString("genotype_unique_name"));
 		
 
 		

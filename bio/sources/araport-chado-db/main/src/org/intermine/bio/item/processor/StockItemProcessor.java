@@ -1,5 +1,6 @@
 package org.intermine.bio.item.processor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,9 +48,11 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 
 		Item item = null;
 		ItemHolder itemHolder = null;
-		
+
+		List<Item> components = new ArrayList<Item>();
+
 		Item stockAnnotationItem = null;
-		
+
 		int itemId = -1;
 
 		try {
@@ -59,11 +62,13 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 
 			log.info("Item place holder has been created: " + item);
 
+			if (StringUtils.isBlank(source.getName())) {
+				Exception e = new Exception("Germplasm Name cannot be null! Skipping Source Record:" + source);
+				throw e;
+			}
+
 			log.info("Germplasm Name " + source.getName());
 			item.setAttribute("primaryIdentifier", source.getName());
-
-			log.info("Germplasm Accession " + source.getGermplasmTairAccession());
-			item.setAttribute("secondaryIdentifier", source.getGermplasmTairAccession());
 
 			log.info("Name   " + source.getName());
 			item.setAttribute("name", source.getName());
@@ -71,8 +76,18 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 			log.info("Germplasm Name   " + source.getName());
 			item.setAttribute("germplasmName", source.getName());
 
-			log.info("Display Name " + source.getDisplayName());
-			item.setAttribute("displayName", source.getDisplayName());
+			if (StringUtils.isBlank(source.getGermplasmTairAccession())) {
+				Exception e = new Exception("Germplasm Tair Accession cannot be null! Skipping Source Record:" + source);
+				throw e;
+			}
+
+			log.info("Germplasm Accession " + source.getGermplasmTairAccession());
+			item.setAttribute("secondaryIdentifier", source.getGermplasmTairAccession());
+
+			if (!StringUtils.isBlank(source.getDisplayName())) {
+				log.info("Display Name " + source.getDisplayName());
+				item.setAttribute("displayName", source.getDisplayName());
+			}
 
 			if (!StringUtils.isBlank(source.getStockName())) {
 				log.info("Stock Name " + source.getStockName());
@@ -90,17 +105,17 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 			Item stockType = CVService.getCVTermItem("germplasm_type", source.getStockType());
 			log.info("Referenced Stock Type: " + stockType);
 
-			if (stockType == null){
+			if (stockType == null) {
 				stockType = CVService.getCVTermItem("germplasm_type", ApplicationContext.UNKNOWN);
 			}
 
 			if (stockType != null) {
 				item.setReference("type", stockType);
 			}
-			
+
 			Item stockCategory = CVService.getCVTermItem("stock_category", source.getStockCategory());
-			
-			if (stockCategory == null){
+
+			if (stockCategory == null) {
 				stockCategory = CVService.getCVTermItem("mutagen_type", ApplicationContext.UNKNOWN);
 			}
 			log.info("Referenced Stock Category: " + stockCategory);
@@ -108,7 +123,7 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 			if (stockCategory != null) {
 				item.setReference("stockCategory", stockCategory);
 			}
-			
+
 			if (!StringUtils.isBlank(source.getMutagen())) {
 				Item mutagen = CVService.getCVTermItem("mutagen_type", source.getMutagen());
 				log.info("Referenced Mutagen: " + mutagen);
@@ -116,16 +131,15 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 					item.setReference("mutagen", mutagen);
 				}
 
-			}else{
+			} else {
 				Item mutagen = CVService.getCVTermItem("mutagen_type", ApplicationContext.UNKNOWN);
-				
+
 				log.info("Referenced Mutagen: " + mutagen);
 				if (mutagen != null) {
 					item.setReference("mutagen", mutagen);
 				}
-				
+
 			}
-				
 
 			log.info("Stock Center Comment: " + source.getStockCenterComment());
 			if (!StringUtils.isBlank(source.getStockCenterComment())) {
@@ -140,51 +154,50 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 
 			stockAnnotationItem = createStockAnnotation(source, item);
 
-			item.setReference("stockAnnotation", stockAnnotationItem);
-			
-			Item accessionRef = null;
-			
-			log.info("Strain Accession: " + source.getAcessionName());
-			
-			if (!StringUtils.isBlank(source.getAcessionName())){
-				log.info("Strain Accession Map: " + OrganismService.getStrainMap().get(source.getAcessionName()).getItem());
+			if (stockAnnotationItem != null) {
+				item.setReference("stockAnnotation", stockAnnotationItem);
 			}
-			
-			
+
+			Item accessionRef = null;
+
+			log.info("Strain Accession: " + source.getAcessionName());
+
 			if (!StringUtils.isBlank(source.getAcessionName())) {
-				
+				log.info("Strain Accession Map: "
+						+ OrganismService.getStrainMap().get(source.getAcessionName()).getItem());
+			}
+
+			if (!StringUtils.isBlank(source.getAcessionName())) {
+
 				accessionRef = OrganismService.getStrainMap().get(source.getAcessionName()).getItem();
-				
+
 				String referenceName = "accession";
-				
-				log.info("Setting Strain Accession for Stock: " + accessionRef + " ; " + source.getAcessionName() + ";" + source.getName());
-				
-				if (accessionRef!=null){
+
+				log.info("Setting Strain Accession for Stock: " + accessionRef + " ; " + source.getAcessionName() + ";"
+						+ source.getName());
+
+				if (accessionRef != null) {
 					item.setReference(referenceName, accessionRef);
 				}
-				
-				
-				if (item!=null && (accessionRef!=null)){
+
+				if (item != null && (accessionRef != null)) {
 					OrganismService.addStockItem(source.getAcessionName(), source.getGermplasmTairAccession(), item);
 				}
-				
+
 			}
-					
 
 			log.info("Primary Accession: " + source.getPrimaryAccessionNumber());
 			if (!StringUtils.isBlank(source.getPrimaryAccessionNumber())) {
 				item.setAttribute("primaryAccession", source.getPrimaryAccessionNumber());
 			}
 
-
 			log.info("Stock Accession: " + source.getStockAccessionNumber());
-			
+
 			if (!StringUtils.isBlank(source.getStockAccessionNumber())) {
 				item.setAttribute("stockAccession", source.getStockAccessionNumber());
 			}
-			
+
 			itemId = super.getService().store(item);
-			//stockAnnotationItem
 
 		} catch (ObjectStoreException e) {
 			exception = e;
@@ -193,46 +206,61 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source);
+				log.error("Error storing item for source record:" + source + "; Message:" + exception.getMessage() + "; Cause:" + exception.getCause());
 			} else {
 				log.info("Target Item has been created. Target Object:" + item);
 
 				getStockItems().put(source.getGermplasmTairAccession(), item);
-				
+
 				itemHolder = new ItemHolder(item, itemId);
 
-				if (itemHolder!=null && itemId !=1){
+				if (itemHolder != null && itemId != -1) {
 					StockService.addStockItem(source.getGermplasmTairAccession(), itemHolder);
-				}
-				
-				if (stockAnnotationItem!=null){
-					super.getService().store(stockAnnotationItem);
 				}
 			}
 		}
-		
-		if (itemHolder!=null) {
-			
+
+		if (itemHolder != null) {
+
 			setDataSetItem(itemHolder);
-			
+
 		}
 		return item;
 	}
 
-	private boolean storeComponents(Item holderItem, List<Item> components){
-		
+	private boolean storeComponents(SourceStock source, Item holderItem, List<Item> components) {
+
 		boolean result = true;
+
+		for (Item item : components) {
+			storeComponent(source, holderItem, item);
+		}
+
+		return result;
+	}
+
+	private void storeComponent(SourceStock source, Item holderItem, Item componentItem) {
+
 		Exception exception = null;
-				
-		return result;
+		try {
+			if (holderItem == null || componentItem == null) {
+				super.getService().store(componentItem);
+			} else {
+				throw new Exception("Item Holder or Item Component cannot not be null!");
+			}
+		} catch (Exception e) {
+			exception = e;
+		} finally {
+			if (exception != null) {
+				log.error("Error to store Stock Component. Source Record: " + source + ";Error: "
+						+ exception.getMessage() + "Cause: " + exception.getCause() + "; Component: " + componentItem);
+			} else {
+				log.info("Stock Item Component has been successfully stored. " + componentItem);
+			}
+		}
+
 	}
-	
-	private boolean storeComponents(Item holderItem, Item componentItem){
-		boolean result = true;
-				
-		return result;
-	}
-	
+
 	public void setTargetClassName(String name) {
 		this.targetClassName = name;
 	}
@@ -249,21 +277,19 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		try {
 			stockAnnotationItem = super.getService().createItem(STOCK_ANNOTATION_CLASS_NAME);
 
-			log.info("Stock Mutant: "  + "Stock: " + source.getName() + " ; " + source.getIsMutant());
-			
+			log.info("Stock Mutant: " + "Stock: " + source.getName() + " ; " + source.getIsMutant());
+
 			log.info("Stock: " + source.getName() + " ; Mathches: " + source.getIsMutant().matches("true"));
-			
+
 			if (!StringUtils.isBlank(source.getIsMutant())) {
-				
+
 				log.info("Mutant: " + source.getName() + " ; " + source.getIsMutant());
-				
-				
+
 				if (source.getIsMutant().equals("true")) {
-					
+
 					log.info("Setting Mutant to True");
 					stockAnnotationItem.setAttribute("mutant", "Yes");
-				}else
-				{
+				} else {
 					log.info("Setting Mutant to False");
 					stockAnnotationItem.setAttribute("mutant", "No");
 				}
@@ -285,8 +311,6 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 				}
 			}
 
-			stockAnnotationItem.setReference("stock", stockItem);
-
 			Item chromosomalAnnotation = createChromosomalAnnotation(source, stockAnnotationItem);
 
 			if (chromosomalAnnotation != null) {
@@ -299,7 +323,7 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 				stockAnnotationItem.setReference("growthCondition", growthCondition);
 			}
 
-			//super.getService().store(stockAnnotationItem);
+			super.getService().store(stockAnnotationItem);
 
 		} catch (ObjectStoreException e) {
 			exception = e;
@@ -308,9 +332,11 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing stock annotation item for source record:" + source);
+				log.error("Error storing stock annotation item for source record:" + source + " ;Error: "
+						+ exception.getMessage() + " ;Cause: " + exception.getCause());
 			} else {
-				log.info("Stock Annotation Item has been created. Target Object:" + stockAnnotationItem);
+				log.info("Stock Annotation Item has been created. Source Record: " + source + "; Stock Annotation: "
+						+ stockAnnotationItem);
 
 			}
 		}
@@ -340,9 +366,6 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 				chromosomalAnnotationItem.setAttribute("ploidy", source.getPloidy());
 
 			}
-
-			chromosomalAnnotationItem.setReference("stockAnnotation", annotationItem);
-
 			super.getService().store(chromosomalAnnotationItem);
 		} catch (ObjectStoreException e) {
 			exception = e;
@@ -351,9 +374,13 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing Chromosomal Annotation item for source record:" + source);
+
+				log.error("Error storing Chromosomal Annotation item for source record:" + source + " ;Error: "
+						+ exception.getMessage() + " ;Cause: " + exception.getCause());
 			} else {
-				log.info("Chromosomal Annotation Item has been created. Target Object:" + chromosomalAnnotationItem);
+
+				log.info("Chromosomal Annotation Item has been created. Source Record: " + source
+						+ "; Chromosomal Annotation Item: " + chromosomalAnnotationItem);
 
 			}
 		}
@@ -385,7 +412,6 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 
 			}
 
-			growthAnnotationItem.setReference("stockAnnotation", annotationItem);
 			super.getService().store(growthAnnotationItem);
 		} catch (ObjectStoreException e) {
 			exception = e;
@@ -394,30 +420,33 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		} finally {
 
 			if (exception != null) {
-				log.error("Growth Condition Annotation Item item for source record:" + source);
+				log.error("Error storing Condition Annotation Item for source record:" + source + " ;Error: "
+						+ exception.getMessage() + " ;Cause: " + exception.getCause());
 			} else {
-				log.info("Growth Condition Annotation Item has been created. Target Object:" + growthAnnotationItem);
+
+				log.info("Growth Condition Annotation Item has been created. Source Record: " + source
+						+ "; Chromosomal Annotation Item: " + growthAnnotationItem);
 
 			}
 		}
 
 		return growthAnnotationItem;
 	}
-	
-	
-	private void setDataSetItem(ItemHolder item){
-		
+
+	private void setDataSetItem(ItemHolder item) {
+
 		Item dataSetItem = getDataSet();
-		
-		if (dataSetItem!=null && item!=null){
+
+		if (dataSetItem != null && item != null) {
 			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
-			
-			log.info("Stock has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"+ item.getItem());
+
+			log.info("Stock has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
+					+ item.getItem());
 		}
-		
+
 	}
 
-	private Item getDataSet(){
+	private Item getDataSet() {
 		return DataSetService.getDataSetItem(DATASET_NAME).getItem();
 	}
 }

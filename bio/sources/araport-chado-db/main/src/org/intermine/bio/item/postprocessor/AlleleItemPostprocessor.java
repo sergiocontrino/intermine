@@ -83,7 +83,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 	@Override
 	protected void doExecute(StepExecution stepExecution) throws Exception {
 
-		log.info("Running Task Let Step!  AleleItemPostprocessor " + getName());
+		log.debug("Running Task Let Step!  AleleItemPostprocessor " + getName());
 
 		taskExecutor.execute(new Runnable() {
 
@@ -119,7 +119,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 			String allele = item.getKey();
 
-			log.info("Processing Allele: " + allele);
+			log.debug("Processing Allele: " + allele);
 
 			Collection<Item> collection = (Collection<Item>) item.getValue();
 
@@ -133,11 +133,11 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
 
-				log.info("Genotype Collection successfully stored." + itemHolder.getItem() + ";" + "Collection size:"
+				log.debug("Genotype Collection successfully stored." + itemHolder.getItem() + ";" + "Collection size:"
 						+ collection.size());
 
 			} catch (ObjectStoreException e) {
-				log.error("Error storing genotypes collection for allele:" + allele);
+				log.error("Error storing genotypes collection for allele:" + allele + "; Error:" + e.getMessage());
 			}
 
 		}
@@ -146,7 +146,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 	private void createAlleleGeneCollection() {
 
-		log.info("Gene/Allele Collection processing has started...");
+		log.debug("Gene/Allele Collection processing has started...");
 
 		DatabaseItemReader<SourceFeatureRelationship> reader = new GeneAlleleCollectionReader().getReader(service
 				.getConnection());
@@ -159,18 +159,18 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 		try {
 
-			log.info("Opening Reader: Gene/Allele Collection ... ");
+			log.debug("Opening Reader: Gene/Allele Collection ... ");
 
 			reader.open();
 
-			log.info("Reader: Gene/Allele Collection successfully opened. ");
+			log.debug("Reader: Gene/Allele Collection successfully opened. ");
 
 			while (reader.hasNext()) {
 
 				currentItem = reader.read();
-				log.info("SQL" + reader.getSql());
-				log.info("Current Item = " + currentItem);
-				log.info("Parameter values:" + reader.getParameterMap());
+				log.debug("SQL" + reader.getSql());
+				log.debug("Current Item = " + currentItem);
+				log.debug("Parameter values:" + reader.getParameterMap());
 
 				ItemHolder alleleItem = AlleleService.getAlleleItem(currentItem.getObjectUniqueAccession());
 
@@ -179,9 +179,9 @@ public class AlleleItemPostprocessor extends AbstractStep {
 				if (lastItem != null
 						&& !currentItem.getSubjectUniqueAccession().equals(lastItem.getSubjectUniqueAccession())) {
 
-					log.info("Storing allele/gene collection: " + lastItem);
+					log.debug("Storing allele/gene collection: " + lastItem);
 
-					log.info("Current Gene/Allele Collection Size:" + alleleGeneItemSet.size());
+					log.debug("Current Gene/Allele Collection Size:" + alleleGeneItemSet.size());
 
 					saveGenesCollection(lastItem);
 				}
@@ -191,7 +191,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 			if (lastItem != null) {
 
-				log.info("Storing last item allele/gene collection: " + lastItem);
+				log.debug("Storing last item allele/gene collection: " + lastItem);
 
 				saveGenesCollection(lastItem);
 			}
@@ -202,7 +202,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 			if (exception != null) {
 				log.error("Error occured during Gene/Allele Collection processing");
 			} else {
-				log.info("Creation of Gene/Allele Collection has successfully completed.");
+				log.debug("Creation of Gene/Allele Collection has successfully completed.");
 			}
 		}
 
@@ -216,7 +216,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 		String itemName = item.getSubjectUniqueAccession();
 
-		log.info("Gene Item Name:" + itemName);
+		log.debug("Gene Item Name:" + itemName);
 
 		Map<String, SourceFeatureRelationship> items = alleleGeneItemSet;
 
@@ -224,16 +224,16 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 		Collection<Item> collection1 = null;
 
-		log.info("Processing Allele/Gene Collection: Gene:" + itemName + ";" + item.getSubjectUniqueName());
+		log.debug("Processing Allele/Gene Collection: Gene:" + itemName + ";" + item.getSubjectUniqueName());
 
 		if (alleleGeneItemSet.containsKey(itemName)) {
 
 			collection = (Collection<SourceFeatureRelationship>) alleleGeneItemSet.get(itemName);
 			collection1 = (Collection<Item>) alleleGeneItemSet.get(itemName);
 
-			log.info("Collection Size:" + collection.size());
+			log.debug("Collection Size:" + collection.size());
 
-			log.info("Allele Collection Size:" + collection1.size());
+			log.debug("Allele Collection Size:" + collection1.size());
 		}
 
 		Set genes = new HashSet();
@@ -243,20 +243,20 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 			InterMineObject objectGene = null;
 
-			log.info("Affected Gene: " + item.getSubjectUniqueName());
+			log.debug("Affected Gene: " + item.getSubjectUniqueName());
 
 			try {
-				log.info("Gene Service using Service Locator:" + "ATMG00030");
+				log.debug("Gene Service using Service Locator:" + "ATMG00030");
 				objectGene = geneService.findbyObjectbyId("ATMG00030");
 
 				int objectGeneId = objectGene.getId();
-				log.info("Object Gene Id:" + objectGeneId);
+				log.debug("Object Gene Id:" + objectGeneId);
 
 				// InterMineObject testGene =
 				// StoreService.getObjectStoreWriter().getObjectById(objectGene.getId());
 
 			} catch (Exception e) {
-				log.info("Error:" + e.getMessage());
+				log.debug("Error:" + e.getMessage());
 			}
 
 			int itemId = objectGene.getId();
@@ -268,7 +268,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 				StoreService.storeCollection(collection1, itemId, referenceList.getName());
 
-				log.info("Affected Alleles Collection successfully stored." + objectGene + ";" + "Collection size:"
+				log.debug("Affected Alleles Collection successfully stored." + objectGene + ";" + "Collection size:"
 						+ collection1.size());
 
 			} catch (ObjectStoreException e) {
@@ -287,9 +287,9 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 			item = StoreService.getService().createItem("Gene");
 
-			log.info("Item place holder has been created: " + item);
+			log.debug("Item place holder has been created: " + item);
 
-			log.info("Gene Unique Name " + source.getSubjectUniqueName());
+			log.debug("Gene Unique Name " + source.getSubjectUniqueName());
 			item.setAttribute("primaryIdentifier", source.getSubjectUniqueName());
 
 			int itemId = StoreService.getService().store(item);
@@ -314,7 +314,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 		Item item = null;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			Item geneItem = createGene(source);
 			ItemHolder alleleItemHolder = AlleleService.getAlleleItem(source.getObjectUniqueAccession());
@@ -331,9 +331,9 @@ public class AlleleItemPostprocessor extends AbstractStep {
 		} finally {
 
 			if (exception != null) {
-				log.error("Error adding allele to the gene/allele item set" + source);
+				log.error("Error adding allele to the gene/allele item set" + source + ";Error:" + exception.getMessage());
 			} else {
-				log.info("Gene has been successfully added to the gene/allele item set." + " Allele:"
+				log.debug("Gene has been successfully added to the gene/allele item set." + " Allele:"
 						+ source.getObjectUniqueAccession() + "/" + source.getObjectUniqueName() + " Gene:"
 						+ source.getSubjectUniqueAccession() + "/" + source.getSubjectUniqueName());
 
@@ -344,7 +344,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 	
 	private void processAlleleGeneCollection() {
 
-		log.info("Gene/Allele Collection processing has started...");
+		log.debug("Gene/Allele Collection processing has started...");
 
 		DatabaseItemReader<SourceFeatureRelationship> reader = new GeneAlleleCollectionReader().getReader(service
 				.getConnection());
@@ -357,18 +357,18 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 		try {
 
-			log.info("Opening Reader: Gene/Allele Collection ... ");
+			log.debug("Opening Reader: Gene/Allele Collection ... ");
 
 			reader.open();
 
-			log.info("Reader: Gene/Allele Collection successfully opened. ");
+			log.debug("Reader: Gene/Allele Collection successfully opened. ");
 
 			while (reader.hasNext()) {
 
 				currentItem = reader.read();
-				log.info("SQL" + reader.getSql());
-				log.info("Current Item = " + currentItem);
-				log.info("Parameter values:" + reader.getParameterMap());
+				log.debug("SQL" + reader.getSql());
+				log.debug("Current Item = " + currentItem);
+				log.debug("Parameter values:" + reader.getParameterMap());
 
 				createGeneAlleleCollection(currentItem);
 				
@@ -380,7 +380,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 			if (exception != null) {
 				log.error("Error occured during Gene/Allele Collection processing");
 			} else {
-				log.info("Creation of Gene/Allele Collection has successfully completed.");
+				log.debug("Creation of Gene/Allele Collection has successfully completed.");
 			}
 		}
 
@@ -394,7 +394,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 			String allele = item.getKey();
 
-			log.info("Processing Allele: " + allele);
+			log.debug("Processing Allele: " + allele);
 
 			Collection<Item> collection = (Collection<Item>) item.getValue();
 
@@ -408,7 +408,7 @@ public class AlleleItemPostprocessor extends AbstractStep {
 
 				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
 
-				log.info("Gene Collection successfully stored." + itemHolder.getItem() + ";" + "Collection size:"
+				log.debug("Gene Collection successfully stored." + itemHolder.getItem() + ";" + "Collection size:"
 						+ collection.size());
 
 			} catch (ObjectStoreException e) {

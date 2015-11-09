@@ -328,26 +328,26 @@ public class AppLauncher {
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
-		steps.add(stockStep);
-		steps.add(bgAccessionStockStep);
+		//steps.add(stockStep);
+		//steps.add(bgAccessionStockStep);
 		steps.add(alleleStep);
 		steps.add(genotypeStep);
 		steps.add(genotypeAlleleCollectionStep);
-		steps.add(stockGenotypeCollectionStep);
-		steps.add(phenotypeStep);
-		steps.add(phenotypeGeneticContextCollectionStep);
-		steps.add(publicationStep);
-		steps.add(publicationFeaturesStep);
+		//steps.add(stockGenotypeCollectionStep);
+		//steps.add(phenotypeStep);
+		//steps.add(phenotypeGeneticContextCollectionStep);
+		//steps.add(publicationStep);
+		//steps.add(publicationFeaturesStep);
 		
-		steps.add(dataSetPostProcessor);
+		//steps.add(dataSetPostProcessor);
 		
-		steps.add(stockSynonymsStep);
+		//steps.add(stockSynonymsStep);
 		
-		steps.add(stockCenterStep);
+		//steps.add(stockCenterStep);
 		
-		steps.add(stockAvailabilityStep);
+		//steps.add(stockAvailabilityStep);
 		
-		steps.add(alleleGeneZygosityStep);
+		//steps.add(alleleGeneZygosityStep);
 		
 		
 	}

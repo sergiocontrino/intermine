@@ -1,5 +1,6 @@
 SELECT
 	distinct f.uniquename as subject_unique_name,
+	fc.name subject_feature_type,
 	fo.uniquename as object_unique_name,
 	cfp.name relationship,
 	'Polyallele:' || dbx.accession object_unique_accession,
@@ -22,6 +23,10 @@ FROM
 		cfp.cvterm_id = fp.type_id JOIN dbxref dbx
 		ON
 		dbx.dbxref_id = fo.dbxref_id
+		JOIN
+		thalemine_stg.allele_dataset ad
+		on 
+		fo.feature_id = ad.feature_id
 		LEFT JOIN
 		(
 SELECT
@@ -43,5 +48,5 @@ WHERE
 		la.feature_id = f.feature_id
 WHERE
 	fco.name = 'allele' AND
-	fc.name = 'gene' AND
-	cfp.name = 'allele_of' order by f.uniquename, fo.uniquename;
+	fc.name  in ('gene', 'transposable_element_gene', 'pseudogene')  and
+	cfp.name = 'allele_of' order by f.uniquename, fo.uniquename ;
