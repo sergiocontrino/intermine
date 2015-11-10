@@ -1616,12 +1616,22 @@ public class ObjectStoreWriterInterMineImpl extends ObjectStoreInterMineImpl
     @Override
     public void batchCommitTransaction() throws ObjectStoreException {
         Connection c = null;
+        Exception exception = null;
         try {
+        	LOG.info("Transaction Commit has started...");
+        	
             c = getConnection();
             batchCommitTransactionWithConnection(c);
+                 
         } catch (SQLException e) {
+        	
+        	LOG.error("Error occured during database transaction commit.");
+        	
             throw new ObjectStoreException("Could not get connection to database", e);
         } finally {
+        	if (exception == null){
+        		LOG.info("Transaction Commit successfully completed!");
+        	}
             releaseConnection(c);
         }
     }
