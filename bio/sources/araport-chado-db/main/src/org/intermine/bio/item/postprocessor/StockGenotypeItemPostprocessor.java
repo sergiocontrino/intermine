@@ -111,7 +111,10 @@ public class StockGenotypeItemPostprocessor extends AbstractStep {
 						+ collection.size());
 
 			} catch (ObjectStoreException e) {
-				log.error("Error storing stock collection for genotype:" + genotype);
+				log.error("Error storing stock collection for genotype:" + genotype + "; Error:" + e.getMessage());
+			}
+			catch (Exception e){
+				log.error("Error storing stock collection for genotype:" + genotype + "; Error:" + e.getMessage());
 			}
 
 		}

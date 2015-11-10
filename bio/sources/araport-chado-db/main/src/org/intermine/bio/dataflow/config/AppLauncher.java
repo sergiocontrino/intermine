@@ -328,12 +328,12 @@ public class AppLauncher {
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
-		//steps.add(stockStep);
+		steps.add(stockStep);
 		//steps.add(bgAccessionStockStep);
-		steps.add(alleleStep);
+		//steps.add(alleleStep);
 		steps.add(genotypeStep);
-		steps.add(genotypeAlleleCollectionStep);
-		//steps.add(stockGenotypeCollectionStep);
+		//steps.add(genotypeAlleleCollectionStep);
+		steps.add(stockGenotypeCollectionStep);
 		//steps.add(phenotypeStep);
 		//steps.add(phenotypeGeneticContextCollectionStep);
 		//steps.add(publicationStep);
