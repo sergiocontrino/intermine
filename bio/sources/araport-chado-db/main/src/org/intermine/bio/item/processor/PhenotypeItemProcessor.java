@@ -41,7 +41,7 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 		Exception exception = null;
 
 		Item item = null;
-		
+
 		ItemHolder itemHolder = null;
 
 		int itemId = -1;
@@ -53,8 +53,19 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 
 			log.info("Item place holder has been created: " + item);
 
+			if (StringUtils.isBlank(source.getUniqueAccession())) {
+				Exception e = new Exception("Phenotype Unique Accession cannot be null! Skipping Source Record:"
+						+ source);
+				throw e;
+			}
+
 			log.info("Phenotype Unique Accession: " + source.getUniqueAccession());
 			item.setAttribute("primaryIdentifier", source.getUniqueAccession());
+
+			if (StringUtils.isBlank(source.getName())) {
+				Exception e = new Exception("Phenotype Name cannot be null! Skipping Source Record:" + source);
+				throw e;
+			}
 
 			if (!StringUtils.isBlank(source.getName())) {
 				log.info("Phenotype Name/Secondary Identifier: " + source.getName());
@@ -75,7 +86,8 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source);
+				log.error("Error storing item for source record:" + source + "; Message:" + exception.getMessage()
+						+ "; Cause:" + exception.getCause());
 			} else {
 				log.info("Target Item has been created. Target Object:" + item);
 
@@ -87,11 +99,11 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 
 			}
 		}
-		
-		if (itemHolder!=null) {
-			
+
+		if (itemHolder != null) {
+
 			setDataSetItem(itemHolder);
-			
+
 		}
 		return item;
 	}
@@ -103,20 +115,21 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 	public String getTargetClassName() {
 		return this.targetClassName;
 	}
-	
-	private void setDataSetItem(ItemHolder item){
-		
+
+	private void setDataSetItem(ItemHolder item) {
+
 		Item dataSetItem = getDataSet();
-		
-		if (dataSetItem!=null && item!=null){
+
+		if (dataSetItem != null && item != null) {
 			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
-			
-			log.info("Phenotype has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"+ item.getItem());
+
+			log.info("Phenotype has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
+					+ item.getItem());
 		}
-		
+
 	}
 
-	private Item getDataSet(){
+	private Item getDataSet() {
 		return DataSetService.getDataSetItem(DATASET_NAME).getItem();
 	}
 

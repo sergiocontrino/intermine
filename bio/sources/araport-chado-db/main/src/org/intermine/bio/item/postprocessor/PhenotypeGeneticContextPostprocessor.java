@@ -59,7 +59,7 @@ public class PhenotypeGeneticContextPostprocessor extends AbstractStep {
 		taskExecutor.execute(new Runnable() {
 
 			public void run() {
-				createAllelePhenotypeCollection();
+				//createAllelePhenotypeCollection();
 				createGenotypePhenotypeCollection();
 			}
 		});
