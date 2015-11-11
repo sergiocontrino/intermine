@@ -6,6 +6,7 @@ import org.intermine.bio.chado.AlleleService;
 import org.intermine.bio.chado.CVService;
 import org.intermine.bio.chado.DataSetService;
 import org.intermine.bio.chado.DataSourceService;
+import org.intermine.bio.chado.GenotypeService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.chado.StockCenterService;
 import org.intermine.bio.chado.StockService;
@@ -18,69 +19,97 @@ import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
 import org.intermine.bio.domain.source.*;
 
-public class AlleleGeneZygosityItemProcessor extends DataSourceProcessor implements ItemProcessor<SourceFeatureRelationshipAnnotation, Item> {
+public class GenotypeZygosityItemProcessor extends DataSourceProcessor implements ItemProcessor<SourceGenotypeZygosity, Item> {
 
-	protected static final Logger log = Logger.getLogger(AlleleGeneZygosityItemProcessor.class);
+	protected static final Logger log = Logger.getLogger(GenotypeZygosityItemProcessor.class);
 
 	private String targetClassName;
 
 	private static final String ITEM_CLASSNAME = "GenotypeZygosity";
 	
 
-	public AlleleGeneZygosityItemProcessor(ChadoDBConverter chadoDBConverter) {
+	public GenotypeZygosityItemProcessor(ChadoDBConverter chadoDBConverter) {
 		super(chadoDBConverter);
 	}
 
 	@Override
-	public Item process(SourceFeatureRelationshipAnnotation item) throws Exception {
+	public Item process(SourceGenotypeZygosity item) throws Exception {
 
 		return createItem(item);
 
 	}
 
-	private Item createItem(SourceFeatureRelationshipAnnotation source) throws ObjectStoreException {
+	private Item createItem(SourceGenotypeZygosity source) throws ObjectStoreException {
 
 		Exception exception = null;
 
 		Item item = null;
 		ItemHolder itemHolder = null;
 		
+		ItemHolder alleleItemHolder = null;
+		Item alleleItem = null;
+		
+		ItemHolder genotypeItemHolder = null;
+		Item genotypeItem = null;
+		
+		ItemHolder germpalsmItemHolder = null;
+		Item germpalsmItem = null;
+		
 		int itemId = -1;
 
 		try {
 			log.info("Creating Item has started. Source Object:" + source);
 
-			log.info("Gene Unique Accession: " + source.getSubjectUniqueAccession());
-			log.info("Gene Name: " + source.getSubjectUniqueName());
+			log.info("Genotype Unique Accession: " + source.getGenotypeUniqueAccession());
+						
+			log.info("Allele Unique Accession: " + source.getAlleleUniqueAccession());
 			
-			log.info("Allele Name: " + source.getObjectUniqueName());
-			log.info("Allele Unique Accession: " + source.getObjectUniqueAccession());
+			log.info("Germplasm Unique Accession: " + source.getGermplasmUniqueAccession());
 			
-			log.info("Zygosity: " + source.getPropertyValue());
+			log.info("Zygosity: " + source.getZygosity());
 			
-			Item geneItem = AlleleService.getGeneItem(source.getSubjectUniqueName()).getItem();
-			log.info("Gene Item: " + geneItem);
-			
-			Item alleleItem = AlleleService.getAlleleItem(source.getObjectUniqueAccession()).getItem();
-			log.info("Allele Item: " + alleleItem);
+			alleleItemHolder = AlleleService.getAlleleItem(source.getAlleleUniqueAccession());
 					
+			if (alleleItemHolder!=null){
+				alleleItem = alleleItemHolder.getItem();
+			}
+						
+			log.info("Allele Item: " + alleleItem);
+			
+			genotypeItemHolder =GenotypeService.getGenotypeItem(source.getGenotypeUniqueAccession());
+			
+			if (genotypeItemHolder!=null){
+				genotypeItem = genotypeItemHolder.getItem();
+			}
+			
+			germpalsmItemHolder =StockService.getStockItem(source.getGermplasmUniqueAccession());
+			
+			if (germpalsmItemHolder!=null){
+				germpalsmItem = germpalsmItemHolder.getItem();
+			}
+										
 			Item zygosityType = CVService.getCVTermItem("genotype_type",
-					source.getPropertyValue());
+					source.getZygosity());
+			
+			
 			log.info("Zygosity Item: " + zygosityType);
 			
-			if (geneItem!=null && alleleItem!=null && zygosityType!=null){
+			if (genotypeItem!=null && alleleItem!=null && zygosityType!=null && germpalsmItem!=null){
 				
-				log.info("Gene Item: " + geneItem);
+				log.info("Genotype Item: " + genotypeItem);
 				log.info("Allele Item: " + alleleItem);
+				log.info("Germplasm Item: " + germpalsmItem);
+							
 				log.info("Zygosity Item: " + zygosityType);
 				
 				item = super.getService().createItem(ITEM_CLASSNAME);
 				log.info("Item place holder has been created: " + item);
 				
 				item.setReference("allele", alleleItem);
-				item.setReference("gene", geneItem);
-				item.setReference("zygosity", zygosityType);	
+				item.setReference("genotype", genotypeItem);
+				item.setReference("stock", germpalsmItem);
 				
+				item.setReference("zygosity", zygosityType);	
 				itemId = super.getService().store(item);
 				
 			}else{

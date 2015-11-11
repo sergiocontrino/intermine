@@ -27,6 +27,7 @@ import org.intermine.bio.domain.source.SourceCVTerm;
 import org.intermine.bio.domain.source.SourceFeatureGenotype;
 import org.intermine.bio.domain.source.SourceFeatureRelationshipAnnotation;
 import org.intermine.bio.domain.source.SourceGenotype;
+import org.intermine.bio.domain.source.SourceGenotypeZygosity;
 import org.intermine.bio.domain.source.SourcePhenotype;
 import org.intermine.bio.domain.source.SourcePhenotypeGeneticContext;
 import org.intermine.bio.domain.source.SourcePublication;
@@ -54,6 +55,7 @@ import org.intermine.bio.item.processor.CVTermProcessor;
 import org.intermine.bio.item.processor.DataSourceItemProcessor;
 import org.intermine.bio.item.processor.GenotypeAlleleItemProcessor;
 import org.intermine.bio.item.processor.GenotypeItemProcessor;
+import org.intermine.bio.item.processor.GenotypeZygosityItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeGeneticContextItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeItemProcessor;
 import org.intermine.bio.item.processor.PublicationsFeaturesItemProcessor;
@@ -72,6 +74,7 @@ import org.intermine.bio.reader.CVReader;
 import org.intermine.bio.reader.CVTermReader;
 import org.intermine.bio.reader.GenotypeAlleleReader;
 import org.intermine.bio.reader.GenotypeReader;
+import org.intermine.bio.reader.GenotypeZygosityReader;
 import org.intermine.bio.reader.PhenotypeGeneticContextReader;
 import org.intermine.bio.reader.PhenotypeReader;
 import org.intermine.bio.reader.PublicationFeaturesReader;
@@ -324,30 +327,43 @@ public class AppLauncher {
 				new FlowStepBuilder<SourceFeatureRelationshipAnnotation, Item>()
 				.build(stepName19, reader19, processor19, taskExecutor);
 	
+		GenotypeZygosityItemProcessor processor20 = new GenotypeZygosityItemProcessor(service);
+		DatabaseItemReader<SourceGenotypeZygosity> reader20 = new GenotypeZygosityReader().getReader(service.getConnection());
+		String stepName20 = "Genotype ZygosityLoading Step";
+		
+		FlowStep<SourceGenotypeZygosity, Item> genotypeZygosityStep =
+				new FlowStepBuilder<SourceGenotypeZygosity, Item>()
+				.build(stepName20, reader20, processor20, taskExecutor);
+		
+		//FlowStep<SourceFeatureRelationshipAnnotation, Item> alleleGeneZygosityStep =
+		//		new FlowStepBuilder<SourceFeatureRelationshipAnnotation, Item>()
+		//		.build(stepName19, reader19, processor19, taskExecutor);
 		
 		steps.add(cvStep);
 		steps.add(cvTermStep);
-		//steps.add(strainStep);
-		//steps.add(stockStep);
-		//steps.add(bgAccessionStockStep);
-		//steps.add(alleleStep);
+		steps.add(strainStep);
+		steps.add(stockStep);
+		steps.add(bgAccessionStockStep);
+		steps.add(alleleStep);
 		steps.add(genotypeStep);
-		//steps.add(genotypeAlleleCollectionStep);
-		//steps.add(stockGenotypeCollectionStep);
+		steps.add(genotypeAlleleCollectionStep);
+		steps.add(stockGenotypeCollectionStep);
 		steps.add(phenotypeStep);
 		steps.add(phenotypeGeneticContextCollectionStep);
-		//steps.add(publicationStep);
-		//steps.add(publicationFeaturesStep);
+		steps.add(publicationStep);
+		steps.add(publicationFeaturesStep);
 		
-		//steps.add(dataSetPostProcessor);
+		steps.add(dataSetPostProcessor);
 		
-		//steps.add(stockSynonymsStep);
+		steps.add(stockSynonymsStep);
 		
-		//steps.add(stockCenterStep);
+		steps.add(stockCenterStep);
 		
-		//steps.add(stockAvailabilityStep);
+		steps.add(stockAvailabilityStep);
 		
 		//steps.add(alleleGeneZygosityStep);
+		
+		steps.add( genotypeZygosityStep);
 		
 		
 	}

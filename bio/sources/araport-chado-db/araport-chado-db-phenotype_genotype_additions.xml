@@ -40,7 +40,7 @@
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="alleles" />
 			
-		<collection name="alleleGeneZygosities" referenced-type="AlleleGeneZygosity"
+		<collection name="alleleZygosities" referenced-type="GenotypeZygosity"
 			reverse-reference="allele" />
 
 	</class>
@@ -99,14 +99,14 @@
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="stocks" />
 	</class>
+	
 	<class name="Gene" is-interface="true">
 		<collection name="affectedAlleles" referenced-type="Allele"
 			reverse-reference="affectedGenes" />
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="genes" />
-		<collection name="alleleGeneZygosities" referenced-type="AlleleGeneZygosity"
-			reverse-reference="gene" />
 	</class>
+	
 	<class name="Genotype" extends="BioEntity"
 		is-interface="true">
 		<attribute name="displayName" type="java.lang.String" />
@@ -118,13 +118,16 @@
 			reverse-reference="genotypes" />
 		<collection name="genes" referenced-type="Gene"
 			reverse-reference="genotypes" />
-	</class>
+	 </class>
 
-	<class name="AlleleGeneZygosity" is-interface="true">
+	<class name="GenotypeZygosity" is-interface="true">
+	
 		<reference name="allele" referenced-type="Allele"
-			reverse-reference="alleleGeneZygosities" />
-		<reference name="gene" referenced-type="Gene"
-			reverse-reference="alleleGeneZygosities" />
+			reverse-reference="alleleZygosities"
+			/>
+		<reference name="stock" referenced-type="Stock"
+			/>
+		<reference name="genotype" referenced-type="Genotype" />
 		<reference name="zygosity" referenced-type="ZygosityType"/>
 	</class>
 	

@@ -91,7 +91,7 @@ public class StockCenterItemProcessor extends DataSourceProcessor implements Ite
 				
 				itemHolder = new ItemHolder(item, itemId);
 
-				if (itemHolder!=null && itemId !=1){
+				if (itemHolder!=null && itemId !=-1){
 							
 					StockCenterService.addStockCenterItem(source.getName(), itemHolder);
 				}
