@@ -486,8 +486,8 @@ var mineUrl="${MINEURL}/";
 </script>
 
 <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
-<link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/protein-domain/1.1.0/protein-domain.css">
-<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/protein-domain/1.1.0/protein-domain.js"></script>
+<link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/protein-domain/1.2.0/protein-domain.css">
+<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/protein-domain/1.2.0/protein-domain.js"></script>
 
 </c:if>
 

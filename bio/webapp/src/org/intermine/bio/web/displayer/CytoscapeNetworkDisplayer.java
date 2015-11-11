@@ -144,17 +144,18 @@ public class CytoscapeNetworkDisplayer extends ReportDisplayer
         request.setAttribute("fullInteractingGeneSet",
                 StringUtil.join(fullInteractingGeneSet, ","));
 
+
         // === Create inline table query ===
         PathQuery q = new PathQuery(model);
         q.addViews("Gene.symbol",
                 "Gene.primaryIdentifier",
-                "Gene.interactions.details.role1",
-                "Gene.interactions.details.type",
-                "Gene.interactions.gene2.symbol",
-                "Gene.interactions.gene2.primaryIdentifier",
-                "Gene.interactions.details.role2",
+//                "Gene.interactions.details.role1",
+//                "Gene.interactions.details.type",
+//                "Gene.interactions.gene2.symbol",
+//                "Gene.interactions.gene2.primaryIdentifier",
+                //"Gene.interactions.details.role2",
 //                "Gene.interactions.details.experiment.interactionDetectionMethods.name",
-                "Gene.interactions.details.dataSets.dataSource.name",
+                //"Gene.interactions.details.dataSets.dataSource.name",
 //                "Gene.interactions.gene1.interactions.details.experiment.interactionDetectionMethods.name",
 //                "Gene.interactions.details.experiment.publication.title",
                 "Gene.interactions.details.experiment.publication.pubMedId");
