@@ -330,9 +330,9 @@ public class AppLauncher {
 		steps.add(strainStep);
 		steps.add(stockStep);
 		//steps.add(bgAccessionStockStep);
-		//steps.add(alleleStep);
+		steps.add(alleleStep);
 		steps.add(genotypeStep);
-		//steps.add(genotypeAlleleCollectionStep);
+		steps.add(genotypeAlleleCollectionStep);
 		steps.add(stockGenotypeCollectionStep);
 		//steps.add(phenotypeStep);
 		//steps.add(phenotypeGeneticContextCollectionStep);
