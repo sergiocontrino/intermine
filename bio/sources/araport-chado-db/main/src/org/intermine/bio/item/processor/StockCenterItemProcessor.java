@@ -47,30 +47,30 @@ public class StockCenterItemProcessor extends DataSourceProcessor implements Ite
 		int itemId = -1;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			item = super.getService().createItem(ITEM_CLASSNAME);
 
-			log.info("Item place holder has been created: " + item);
+			log.debug("Item place holder has been created: " + item);
 
-			log.info("Stock Center Name: " + source.getName());
+			log.debug("Stock Center Name: " + source.getName());
 			item.setAttribute("name", source.getName());
 
-			log.info("Stock Center Display Name: " + source.getDisplayName());
+			log.debug("Stock Center Display Name: " + source.getDisplayName());
 			item.setAttribute("displayName", source.getDisplayName());
 
 			if (!StringUtils.isBlank(source.getType())) {
-				log.info("Type: " + source.getType());
+				log.debug("Type: " + source.getType());
 				item.setAttribute("type", source.getType());
 			}
 	
 			if (!StringUtils.isBlank(source.getUrl())) {
-				log.info("URL: " + source.getUrl());
+				log.debug("URL: " + source.getUrl());
 				item.setAttribute("url", source.getUrl());
 			}
 			
 			if (!StringUtils.isBlank(source.getStockObjectUrl())) {
-				log.info("Stock Object URL: " + source.getStockObjectUrl());
+				log.debug("Stock Object URL: " + source.getStockObjectUrl());
 				item.setAttribute("stockObjectUrlPrefix", source.getStockObjectUrl());
 			}
 			
@@ -85,7 +85,7 @@ public class StockCenterItemProcessor extends DataSourceProcessor implements Ite
 			if (exception != null) {
 				log.error("Error storing item for source record:" + source + ";" +exception.getMessage());
 			} else {
-				log.info("Target Item has been created. Target Object:" + item);
+				log.debug("Target Item has been created. Target Object:" + item);
 
 				
 				

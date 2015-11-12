@@ -117,7 +117,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 			}
 
 			if (!StringUtils.isBlank(source.getAbstractText())) {
-				log.debug("First Author: " + source.getAbstractText());
+				log.debug("Abstract Text: " + source.getAbstractText());
 				item.setAttribute("firstAuthor", source.getAbstractText());
 			}
 
@@ -144,7 +144,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 		}
 		
 		if (itemHolder!=null) {
-			processAuthorsCollection(source, itemHolder);
+			//processAuthorsCollection(source, itemHolder);
 			setDataSourceItem(itemHolder);
 		}
 		
