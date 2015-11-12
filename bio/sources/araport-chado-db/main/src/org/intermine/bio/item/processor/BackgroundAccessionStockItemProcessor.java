@@ -57,7 +57,7 @@ public class BackgroundAccessionStockItemProcessor extends DataSourceProcessor i
 		} finally {
 
 			if (exception != null) {
-				log.error("Error creating background accession record:" + source);
+				log.error("Error creating background accession record:" + source + "; Error:" + exception.getMessage());
 			} else {
 				log.info("Target Item has been mapped.");
 			}

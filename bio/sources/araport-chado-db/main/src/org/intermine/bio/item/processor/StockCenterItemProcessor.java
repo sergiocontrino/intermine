@@ -83,7 +83,7 @@ public class StockCenterItemProcessor extends DataSourceProcessor implements Ite
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source);
+				log.error("Error storing item for source record:" + source + ";" +exception.getMessage());
 			} else {
 				log.info("Target Item has been created. Target Object:" + item);
 

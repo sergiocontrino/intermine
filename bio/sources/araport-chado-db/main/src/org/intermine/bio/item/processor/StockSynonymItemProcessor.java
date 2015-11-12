@@ -47,7 +47,7 @@ public class StockSynonymItemProcessor extends DataSourceProcessor implements It
 		int itemId = -1;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			Item subjectItem = StockService.getStockItem(source.getGermplasmTairAccession()).getItem();
 			
@@ -55,9 +55,9 @@ public class StockSynonymItemProcessor extends DataSourceProcessor implements It
 				
 				item = super.getService().createItem(ITEM_CLASSNAME);
 				
-				log.info("Item place holder has been created: " + item);
+				log.debug("Item place holder has been created: " + item);
 				
-				log.info("Stock Synonym: " + source.getSynonymName());
+				log.debug("Stock Synonym: " + source.getSynonymName());
 				item.setAttribute("value", source.getSynonymName());
 										
 				if (subjectItem != null) {
@@ -65,12 +65,12 @@ public class StockSynonymItemProcessor extends DataSourceProcessor implements It
 				}
 				
 				if (!StringUtils.isBlank(source.getSynonymType())) {
-					log.info("Synonym Type: " + source.getSynonymType());
+					log.debug("Synonym Type: " + source.getSynonymType());
 					item.setAttribute("type", source.getSynonymType());
 				}
 				
 			}else{
-				log.info("Skipping source record. Invalid entry:" + source);
+				log.debug("Skipping source record. Invalid entry:" + source);
 			}
 					
 			itemId = super.getService().store(item);
@@ -84,7 +84,7 @@ public class StockSynonymItemProcessor extends DataSourceProcessor implements It
 			if (exception != null) {
 				log.error("Error storing item for source record:" + source);
 			} else {
-				log.info("Target Item has been created. Target Object:" + item);
+				log.debug("Target Item has been created. Target Object:" + item);
 					
 				itemHolder = new ItemHolder(item, itemId);
 			}
@@ -115,7 +115,6 @@ public class StockSynonymItemProcessor extends DataSourceProcessor implements It
 		if (dataSetItem!=null && item!=null){
 			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
 			
-			log.info("Stock Synonym has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"+ item.getItem());
 		}
 		
 	}

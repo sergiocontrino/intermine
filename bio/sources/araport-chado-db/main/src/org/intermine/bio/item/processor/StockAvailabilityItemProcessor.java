@@ -48,7 +48,7 @@ public class StockAvailabilityItemProcessor extends DataSourceProcessor implemen
 		int itemId = -1;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			Item stockItem = StockService.getStockItem(source.getStockAccession()).getItem();
 			
@@ -58,9 +58,9 @@ public class StockAvailabilityItemProcessor extends DataSourceProcessor implemen
 				
 				item = super.getService().createItem(ITEM_CLASSNAME);
 				
-				log.info("Item place holder has been created: " + item);
+				log.debug("Item place holder has been created: " + item);
 				
-				log.info("Stock Display Number: " + source.getStockNumberDisplayName());
+				log.debug("Stock Display Number: " + source.getStockNumberDisplayName());
 				item.setAttribute("stockDisplayNumber", source.getStockNumberDisplayName());
 										
 				if (stockItem != null) {
@@ -72,19 +72,19 @@ public class StockAvailabilityItemProcessor extends DataSourceProcessor implemen
 				}
 				
 				if (!StringUtils.isBlank(source.getStockAccessionNumber())) {
-					log.info("Stock Number: " + source.getStockAccessionNumber());
+					log.debug("Stock Number: " + source.getStockAccessionNumber());
 					item.setAttribute("stockNumber", source.getStockAccessionNumber());
 				}
 				
 				if (!StringUtils.isBlank(source.getAvailability())) {
-					log.info("Stock Availability: " + source.getAvailability());
+					log.debug("Stock Availability: " + source.getAvailability());
 					item.setAttribute("availability", source.getAvailability());
 				}
 				
 				itemId = super.getService().store(item);
 				
 			}else{
-				log.info("Skipping source record. Invalid entry:" + source);
+				log.debug("Skipping source record. Invalid entry:" + source);
 			}
 					
 			
@@ -98,7 +98,7 @@ public class StockAvailabilityItemProcessor extends DataSourceProcessor implemen
 			if (exception != null) {
 				log.error("Error storing item for source record:" + source + ";Message:" + exception.getMessage() + ";Cause:" + exception.getCause());
 			} else {
-				log.info("Target Item has been created. Target Object:" + item);
+				log.debug("Target Item has been created. Target Object:" + item);
 					
 				itemHolder = new ItemHolder(item, itemId);
 			}
@@ -129,7 +129,7 @@ public class StockAvailabilityItemProcessor extends DataSourceProcessor implemen
 		if (dataSetItem!=null && item!=null){
 			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
 			
-			log.info("Stock Availability has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"+ item.getItem());
+			log.debug("Stock Availability has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"+ item.getItem());
 		}
 		
 	}

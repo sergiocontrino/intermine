@@ -41,7 +41,7 @@ public class StockGenotypeItemProcessor extends DataSourceProcessor implements
 		Item item = null;
 		Item stockItem = null;
 		try {
-			log.info("Creating Stock/Genotype Collection has started. Source Object:" + source);
+			log.debug("Creating Stock/Genotype Collection has started. Source Object:" + source);
 
 			ItemHolder stockItemHolder = StockService.getStockItem(source.getStockUniqueAccession());
 			
@@ -62,7 +62,7 @@ public class StockGenotypeItemProcessor extends DataSourceProcessor implements
 			if (exception != null) {
 				log.error("Error adding stock to the stock/genotype item set" + source + ";Error:" + exception.getMessage());
 			} else {
-				log.info("Stock has been successfully added to the stock/genotype item set." + " Genotype:"
+				log.debug("Stock has been successfully added to the stock/genotype item set." + " Genotype:"
 						+ source.getGenotypeUniqueAccession() + "/" + source.getGenotypeName() + " Stock:"
 						+ source.getStockUniqueAccession() + "/" + source.getStockUniqueName());
 

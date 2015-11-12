@@ -43,13 +43,13 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 		Item item = null;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			item = getItembyGeneticFeatureType(source);
 
-			log.info("Publication Unique Accession: " + source.getPubAccessionNumber());
+			log.debug("Publication Unique Accession: " + source.getPubAccessionNumber());
 			
-			log.info("Item obtained for Publication Collection:" + item);
+			log.debug("Item obtained for Publication Collection:" + item);
 			
 
 			if (item != null) {
@@ -66,7 +66,7 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 						+ ";Error occured:" + exception.getMessage());
 			} else {
 
-				log.info("Source Record has been successfully added to a publication/feature context collection: "
+				log.debug("Source Record has been successfully added to a publication/feature context collection: "
 						+ item);
 
 			}
@@ -102,13 +102,13 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 		else
 		{
 
-			log.info("Phenotype Unique Accession:" + source.getEntityUniqueAccession());
+			log.debug("Phenotype Unique Accession:" + source.getEntityUniqueAccession());
 			item = PhenotypeService.getPhenotypeItem(source.getEntityUniqueAccession()).getItem();
 			
 		}
 
 		if (item!=null) {
-			log.info("Item place holder has been obtained: " + item + "; Source record:" + source);
+			log.debug("Item place holder has been obtained: " + item + "; Source record:" + source);
 		} else {
 			log.error("Unknown feature type to associate with a publication. Skipping row." + " Source Record:" + source);
 		}
@@ -125,7 +125,7 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 		}
 		
 		if (status == true) {
-			log.info("Item has been added to a publication/feature collection " + item);
+			log.debug("Item has been added to a publication/feature collection " + item);
 		} else {
 			log.error("Unknown feature type to associate with a publication. Skipping row." + " Source Record:" + source);
 		}

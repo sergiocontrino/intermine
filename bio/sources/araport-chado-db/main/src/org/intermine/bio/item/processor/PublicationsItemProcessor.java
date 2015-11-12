@@ -65,59 +65,59 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 		Item dataSourceItem = DataSourceService.getDataSourceItem(DATASOURCE_NAME).getItem();
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			item = super.getService().createItem(ITEM_CLASSNAME);
 
-			log.info("Item place holder has been created: " + item);
+			log.debug("Item place holder has been created: " + item);
 
 			if (!StringUtils.isBlank(source.getPubAccessionNumber())) {
-				log.info("PubMed Id: " + source.getPubAccessionNumber());
+				log.debug("PubMed Id: " + source.getPubAccessionNumber());
 				item.setAttribute("pubMedId", source.getPubAccessionNumber());
 			}
 
 			if (!StringUtils.isBlank(source.getPubDOI())) {
-				log.info("DOI: " + source.getPubDOI());
+				log.debug("DOI: " + source.getPubDOI());
 				item.setAttribute("doi", source.getPubDOI());
 			}
 
 			if (!StringUtils.isBlank(source.getPubTitle())) {
-				log.info("Title: " + source.getPubTitle());
+				log.debug("Title: " + source.getPubTitle());
 				item.setAttribute("title", source.getPubTitle());
 			}
 
 			if (!StringUtils.isBlank(source.getPubTitle())) {
-				log.info("Journal: " + source.getPubSource());
+				log.debug("Journal: " + source.getPubSource());
 				item.setAttribute("journal", source.getPubSource());
 			}
 
 			if (!StringUtils.isBlank(source.getPubIssue())) {
-				log.info("Issue: " + source.getPubIssue());
+				log.debug("Issue: " + source.getPubIssue());
 				item.setAttribute("issue", source.getPubIssue());
 			}
 
 			if (!StringUtils.isBlank(source.getPubYear())) {
-				log.info("Year: " + source.getPubYear());
+				log.debug("Year: " + source.getPubYear());
 				item.setAttribute("year", source.getPubYear());
 			}
 
 			if (!StringUtils.isBlank(source.getPubPages())) {
-				log.info("Pages: " + source.getPubPages());
+				log.debug("Pages: " + source.getPubPages());
 				item.setAttribute("pages", source.getPubPages());
 			}
 
 			if (!StringUtils.isBlank(source.getPubVolume())) {
-				log.info("Volume: " + source.getPubVolume());
+				log.debug("Volume: " + source.getPubVolume());
 				item.setAttribute("volume", source.getPubVolume());
 			}
 
 			if (!StringUtils.isBlank(source.getPubFirstAuthor())) {
-				log.info("First Author: " + source.getPubFirstAuthor());
+				log.debug("First Author: " + source.getPubFirstAuthor());
 				item.setAttribute("firstAuthor", source.getPubFirstAuthor());
 			}
 
 			if (!StringUtils.isBlank(source.getAbstractText())) {
-				log.info("First Author: " + source.getAbstractText());
+				log.debug("First Author: " + source.getAbstractText());
 				item.setAttribute("firstAuthor", source.getAbstractText());
 			}
 
@@ -130,9 +130,9 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source);
+				log.error("Error storing item for source record:" + source + ";Error:" + exception.getMessage());
 			} else {
-				log.info("Target Item has been created. Target Object:" + item);
+				log.debug("Target Item has been created. Target Object:" + item);
 
 				itemHolder = new ItemHolder(item, itemId);
 
@@ -158,7 +158,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 		if (dataSourceItem!=null && item!=null){
 			DataSourceService.addPublicationItem(DATASOURCE_NAME, item.getItem());
 			
-			log.info("Publication has been successfully added to the datasource. DataSource:" + dataSourceItem + " Item:"+ item.getItem());
+			log.debug("Publication has been successfully added to the datasource. DataSource:" + dataSourceItem + " Item:"+ item.getItem());
 		}
 		
 	}
@@ -188,23 +188,23 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 
 				authorsReader.open();
 				
-				log.info("Publications Authors Reader: Reader has been successfully opened. ");
-				log.info("Publications Authors Reader: Reading dataset has started ... ");
+				log.debug("Publications Authors Reader: Reader has been successfully opened. ");
+				log.debug("Publications Authors Reader: Reading dataset has started ... ");
 
 				while (authorsReader.hasNext()) {
 
 					currentItem = authorsReader.read();
-					log.info("SQL" + authorsReader.getSql());
-					log.info("Current Item = " + currentItem);
-					log.info("Parameter values:" + authorsReader.getParameterMap());
+					log.debug("SQL" + authorsReader.getSql());
+					log.debug("Current Item = " + currentItem);
+					log.debug("Parameter values:" + authorsReader.getParameterMap());
 
 					Item authorItem = null;
 					
-					log.info("Author Full Name:" + currentItem.getFullName());
+					log.debug("Author Full Name:" + currentItem.getFullName());
 					
 					ItemHolder authorHolder = PublicationService.getPublicationAuthorItem(currentItem.getFullName());
 					
-					log.info("Author Holder: " + authorHolder);
+					log.debug("Author Holder: " + authorHolder);
 					
 					if (authorHolder==null){
 					
@@ -214,7 +214,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 						authorItem = authorHolder.getItem();
 					}
 
-					log.info("Adding to Authors Publication Collection: " + authorItem);
+					log.debug("Adding to Authors Publication Collection: " + authorItem);
 					
 					if (authorItem!=null) {
 						
@@ -235,7 +235,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 					log.error("Error processing Authors Publication Collection. Source:" + source);
 				} else {
 
-					log.info("Authors Publication Collection has been successufully processed. Source:" + source);
+					log.debug("Authors Publication Collection has been successufully processed. Source:" + source);
 
 				}
 			}
@@ -261,9 +261,9 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 				
 				item = StoreService.getService().createItem("Author");
 				
-				log.info("Item place holder has been created: " + item);
+				log.debug("Item place holder has been created: " + item);
 				
-				log.info("Author Name: " + source.getFullName());
+				log.debug("Author Name: " + source.getFullName());
 				item.setAttribute("name", source.getFullName());
 				
 			
@@ -277,7 +277,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 			
 			if (item != null && !StringUtils.isBlank(source.getAuthorGivenName())) {
 
-				log.info("Author Initials: " + source.getAuthorGivenName());
+				log.debug("Author Initials: " + source.getAuthorGivenName());
 				item.setAttribute("initials", source.getAuthorGivenName());
 
 			}
@@ -295,7 +295,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 			if (exception != null) {
 				log.error("Error storing item for source record:" + source + ";" +exception.getMessage());
 			} else {
-				log.info("Target Item has been created. Target Object:" + item);
+				log.debug("Target Item has been created. Target Object:" + item);
 				
 				itemHolder = new ItemHolder(item, itemId);
 
@@ -323,7 +323,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 
 		boolean result = false;
 
-		log.info("Authors Collection Size:"  + collection.size());
+		log.debug("Authors Collection Size:"  + collection.size());
 		
 		if (item != null && collection!=null) {
 			collection.add(item);
@@ -343,7 +343,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 
 				StoreService.storeCollection(collection, itemId, referenceList.getName());
 
-				log.info("Authors Collection successfully stored: " + itemHolder.getItem() + ";" + "Collection size:"
+				log.debug("Authors Collection successfully stored: " + itemHolder.getItem() + ";" + "Collection size:"
 						+ collection.size());
 
 			} catch (ObjectStoreException e) {
