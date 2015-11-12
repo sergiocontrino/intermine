@@ -134,7 +134,7 @@ public class DataSourceItemProcessor extends AbstractStep {
 
 				itemHolder = new ItemHolder(dataSourceItem, itemId);
 
-				if (itemHolder != null && itemId != 1) {
+				if (itemHolder != null && itemId != -1) {
 
 					DataSourceService.addDataSourceItem(dataSourceName, itemHolder);
 
@@ -197,7 +197,7 @@ public class DataSourceItemProcessor extends AbstractStep {
 
 				itemHolder = new ItemHolder(dataSetItem, itemId);
 
-				if (itemHolder != null && itemId != 1) {
+				if (itemHolder != null && itemId != -1) {
 
 					DataSetService.addDataSetItem(dataSetName, itemHolder);
 

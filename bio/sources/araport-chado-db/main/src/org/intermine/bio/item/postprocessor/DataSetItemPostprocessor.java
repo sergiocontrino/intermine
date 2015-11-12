@@ -86,6 +86,8 @@ public class DataSetItemPostprocessor extends AbstractStep {
 
 		Map<String, Item> items = DataSetService.getBionEntitiesItemSet();
 
+		log.debug("Total Count of DataSets to Process:" + items.size());
+
 		for (Map.Entry<String, Item> item : items.entrySet()) {
 
 			String dataSet = item.getKey();
@@ -100,23 +102,42 @@ public class DataSetItemPostprocessor extends AbstractStep {
 
 			log.info("Collection Holder: " + dataSet);
 
+			log.debug("Total Count of Entities to Process:" + collectionItems.size());
+
+			int currentItemCount = 0;
+
+			/*
 			for (Item member : collectionItems) {
 
 				log.info("Member of Collection: " + member + "; " + " Collection Holder:" + dataSet);
+
+				currentItemCount++;
+
+				log.debug("Current Collection Count:" + currentItemCount);
 			}
+			*/
 
 			ReferenceList referenceList = new ReferenceList();
 			referenceList.setName("bioEntities");
+
+			Exception exception = null;
 
 			try {
 
 				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
 
-				log.info("Bioentities/DataSet Collection successfully stored." + itemHolder.getItem() + ";"
-						+ "Collection size:" + collection.size());
-
 			} catch (ObjectStoreException e) {
-				log.error("Error storing Bioentities/DataSet Collection for a dataset:" + dataSet);
+				exception = e;
+			} catch (Exception e) {
+				exception = e;
+			} finally {
+				if (exception != null) {
+					log.error("Error storing Bioentities/DataSet Collection for a dataset:" + dataSet + "; Error:"
+							+ exception.getMessage());
+				} else {
+					log.debug("Bioentities/DataSet Collection successfully stored." + itemHolder.getItem() + ";"
+							+ "Collection size:" + collection.size());
+				}
 			}
 
 		}

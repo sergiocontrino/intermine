@@ -363,7 +363,7 @@ public class AppLauncher {
 		
 		//steps.add(alleleGeneZygosityStep);
 		
-		steps.add( genotypeZygosityStep);
+		steps.add(genotypeZygosityStep);
 		
 		
 	}

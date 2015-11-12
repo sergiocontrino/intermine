@@ -95,6 +95,7 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 
 		if (source.getGeneticFeatureType().equals("germplasm")) {
 			
+			log.debug("Germlasm Unique Accession:" + source.getEntityUniqueAccession());
 			item = StockService.getStockItem(source.getEntityUniqueAccession()).getItem();
 				
 

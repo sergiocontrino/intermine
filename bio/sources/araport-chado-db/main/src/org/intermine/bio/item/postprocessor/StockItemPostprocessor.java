@@ -75,43 +75,57 @@ public class StockItemPostprocessor extends AbstractStep {
 	protected TaskExecutor getTaskExecutor() {
 		return taskExecutor;
 	}
-	
-	private void createStockStrainCollection(){
+
+	private void createStockStrainCollection() {
 		Map<String, Item> items = OrganismService.getStrainItemSet();
+
+		log.debug("Total Count of Entities to Process:" + items.size());
 
 		for (Map.Entry<String, Item> item : items.entrySet()) {
 
 			String strain = item.getKey();
-			
+
 			log.info("Processing Strain: " + strain);
 
 			Collection<Item> collection = (Collection<Item>) item.getValue();
-			
+
 			List terms = new ArrayList(collection);
 
 			Item strainItem = OrganismService.getStrainMap().get(strain).getItem();
 			ItemHolder itemHolder = OrganismService.getStrainMap().get(strain);
 
+			log.debug("Total Count of Entities to Process:" + collection.size());
+
+			Exception exception = null;
+
 			ReferenceList referenceList = new ReferenceList();
 			referenceList.setName("stocks");
-						
+
 			try {
-				
-				StoreService.storeCollection(collection,itemHolder, referenceList.getName());
-				
-				log.info("Collection successfully stored." + itemHolder.getItem() + ";" + "Collection size:" + collection.size());
-				
+
+				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
+
 			} catch (ObjectStoreException e) {
-				log.error("Error storing stocks collection for strain:" + strain);
+				exception = e;
+			} catch (Exception e) {
+				exception = e;
+
+			} finally {
+				if (exception != null) {
+					log.error("Error storing stock/strain collection for strain:" + strain + "; Error:"
+							+ exception.getMessage());
+				} else {
+					log.debug("Stock/Strain Collection successfully stored." + itemHolder.getItem() + ";"
+							+ "Collection size:" + collection.size());
+				}
 			}
-			
+
 		}
-		
 
-		log.info("Strain Map Item Size =" + items.size());
+		log.debug("Strain Map Item Size =" + items.size());
 
-		log.info("Tasklet Task has Completed! " + getName());
-	
+		log.debug("Tasklet Task has Completed! " + getName());
+
 	}
 
 }

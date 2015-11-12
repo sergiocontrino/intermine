@@ -1,3 +1,4 @@
+
 WITH SOURCE as (SELECT
 distinct 
     pub.pub_id,
@@ -20,10 +21,10 @@ distinct
 	pub_abs.abstract_text,
 	pub_doi.doi,
 	s.name entity_name,
-	'Germplasm:' || dbx.accession entity_unique_accession,
+	s.germplasm_accession entity_unique_accession,
 	'germplasm' as genetic_feature_type
 FROM
-	stock s
+	thalemine_stg.stock_dataset s
 		JOIN stock_pub sp
 		ON
 		s.stock_id = sp.stock_id
@@ -31,13 +32,11 @@ FROM
 		pub 
 		on
 		pub.pub_id = sp.pub_id
-		JOIN dbxref dbx
-		ON
-		s.dbxref_id = dbx.dbxref_id JOIN db
-		ON
-		db.db_id = dbx.db_id
 		join cvterm cp
 		on cp.cvterm_id = pub.type_id
+		join
+		organism o
+		on s.organism_id = o.organism_id
 		LEFT JOIN
 		(
 SELECT
@@ -112,6 +111,10 @@ WHERE
 	pub_doi
 		ON
 		pub_doi.pub_id = pub.pub_id
+		where 
+		o.abbreviation = 'A.thaliana'
+		and
+		o.infraspecific_name is NULL
 UNION
 SELECT
 	pub.pub_id,

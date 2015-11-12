@@ -125,6 +125,8 @@ public class PhenotypeGeneticContextPostprocessor extends AbstractStep {
 
 		Map<String, Item> items = PhenotypeService.getPhenotypeGenotypeItemSet();
 
+		log.debug("Total Count of Phenotype/Genotype Collections to Process:" + items.size());
+		
 		for (Map.Entry<String, Item> item : items.entrySet()) {
 
 			String phenotype = item.getKey();
@@ -137,24 +139,39 @@ public class PhenotypeGeneticContextPostprocessor extends AbstractStep {
 
 			ItemHolder itemHolder = PhenotypeService.getPhenotypeMap().get(phenotype);
 
-			log.info("Collection Holder: " + phenotype);
+			log.debug("Collection Holder: " + phenotype);
+			
+			log.debug("Total Count of Entities to Process:" + collectionItems.size());
 
+			int currentItemCount = 0;
+
+			/*
 			for (Item member : collectionItems) {
 
 				log.info("Member of Collection: " + member + "; " + " Collection Holder:" + phenotype);
 			}
-
+			*/
+			
+			Exception exception = null;
+			
 			ReferenceList referenceList = new ReferenceList();
 			referenceList.setName("observedIn");
 			try {
 
 				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
 
-				log.info("Phenotype/Genotype Collection successfully stored." + itemHolder.getItem() + ";"
-						+ "Collection size:" + collection.size());
-
 			} catch (ObjectStoreException e) {
-				log.error("Error storing genotype collection for a phenotype:" + phenotype);
+				exception = e;
+			} catch (Exception e) {
+				exception = e;
+			} finally {
+				if (exception != null) {
+					log.error("Error storing Phenotype/Genotype Collection for a phenotype:" + phenotype + "; Error:"
+							+ exception.getMessage());
+				} else {
+					log.debug("Phenotype/Genotype Collection successfully stored." + itemHolder.getItem() + ";"
+							+ "Collection size:" + collection.size());
+				}
 			}
 
 		}
