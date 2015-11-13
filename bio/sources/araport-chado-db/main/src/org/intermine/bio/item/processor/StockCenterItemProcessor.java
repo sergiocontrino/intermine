@@ -52,6 +52,16 @@ public class StockCenterItemProcessor extends DataSourceProcessor implements Ite
 			item = super.getService().createItem(ITEM_CLASSNAME);
 
 			log.debug("Item place holder has been created: " + item);
+			
+			if (StringUtils.isBlank(source.getName())){
+				exception = new Exception("Stock Center Name Cannot Be Null!");
+				throw exception;
+			}
+			
+			if (StringUtils.isBlank(source.getDisplayName())){
+				exception = new Exception("Stock Center Display Name Cannot Be Null!");
+				throw exception;
+			}
 
 			log.debug("Stock Center Name: " + source.getName());
 			item.setAttribute("name", source.getName());
@@ -86,9 +96,7 @@ public class StockCenterItemProcessor extends DataSourceProcessor implements Ite
 				log.error("Error storing item for source record:" + source + ";" +exception.getMessage());
 			} else {
 				log.debug("Target Item has been created. Target Object:" + item);
-
-				
-				
+			
 				itemHolder = new ItemHolder(item, itemId);
 
 				if (itemHolder!=null && itemId !=-1){

@@ -45,11 +45,22 @@ public class StrainItemProcessor extends DataSourceProcessor implements ItemProc
 			item = super.getService().createItem(ITEM_CLASSNAME);
 
 			log.info("Item place holder has been created: " + item);
+			
+			if (StringUtils.isBlank(source.getAccessionAbbreviation())) {
+				Exception e = new Exception("Strain Accession Primary Identifier cannot be null! Skipping Source Record:" + source);
+				throw e;
+			}
 
+			if (StringUtils.isBlank(source.getOrganismType())) {
+				Exception e = new Exception("Strain Accession OrganismType cannot be null! Skipping Source Record:" + source);
+				throw e;
+			}
+			
 			log.info("Strain Accession: " + source.getAccessionAbbreviation());
 			item.setAttribute("primaryIdentifier", source.getAccessionAbbreviation());
 
 			log.info("Organism Id: " + source.getOrganismId() + " Id:" + source.getOrganismId());
+			
 			item.setAttribute("secondaryIdentifier",
 					StringUtils.capitalize(source.getOrganismType()) + " Id:" + source.getOrganismId());
 
@@ -128,7 +139,7 @@ public class StrainItemProcessor extends DataSourceProcessor implements ItemProc
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source);
+				log.error("Error storing item for source record:" + source + "Error:" + exception.getMessage());
 			} else {
 				log.info("Target Item has been created. Target Object:" + item);
 

@@ -84,24 +84,46 @@ public class StockItemPostprocessor extends AbstractStep {
 		for (Map.Entry<String, Item> item : items.entrySet()) {
 
 			String strain = item.getKey();
+			
+			Exception exception = null;
+			ItemHolder itemHolder = null;
+			Item strainItem = null;
+			
+			int collectionSize = 0;
+			
+			try {
 
-			log.info("Processing Strain: " + strain);
+			log.info("Processing Strain/Stock Collection: " + strain);
 
 			Collection<Item> collection = (Collection<Item>) item.getValue();
+			
+			collectionSize = collection.size();
 
 			List terms = new ArrayList(collection);
 
-			Item strainItem = OrganismService.getStrainMap().get(strain).getItem();
-			ItemHolder itemHolder = OrganismService.getStrainMap().get(strain);
+			if (OrganismService.getStrainMap().containsKey(strain)){
+				
+				itemHolder = OrganismService.getStrainMap().get(strain);
+			
+			}
+			
+			if (itemHolder==null){
+				Exception e = new Exception ("StrainItemHolder Cannot be Null!");
+				throw e;
+			}
+			
+			strainItem = itemHolder.getItem();
+			
+			if (strainItem ==null){
+				Exception e = new Exception ("StrainItem Cannot be Null!");
+				throw e;
+			}
+			
 
 			log.debug("Total Count of Entities to Process:" + collection.size());
-
-			Exception exception = null;
-
+			
 			ReferenceList referenceList = new ReferenceList();
 			referenceList.setName("stocks");
-
-			try {
 
 				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
 
@@ -116,7 +138,7 @@ public class StockItemPostprocessor extends AbstractStep {
 							+ exception.getMessage());
 				} else {
 					log.debug("Stock/Strain Collection successfully stored." + itemHolder.getItem() + ";"
-							+ "Collection size:" + collection.size());
+							+ "Collection size:" + collectionSize);
 				}
 			}
 

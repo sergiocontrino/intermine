@@ -10,6 +10,7 @@ import org.intermine.bio.chado.DataSetService;
 import org.intermine.bio.chado.DataSourceService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.chado.StockService;
+import org.intermine.bio.dataconversion.BioStoreHook;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataconversion.DataSourceProcessor;
 import org.intermine.bio.dataflow.config.ApplicationContext;
@@ -173,8 +174,8 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 
 				String referenceName = "accession";
 
-				log.debug("Setting Strain Accession for Stock: " + accessionRef + " ; " + source.getAcessionName() + ";"
-						+ source.getName());
+				log.debug("Setting Strain Accession for Stock: " + accessionRef + " ; " + source.getAcessionName()
+						+ ";" + source.getName());
 
 				if (accessionRef != null) {
 					item.setReference(referenceName, accessionRef);
@@ -206,7 +207,8 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source + "; Message:" + exception.getMessage() + "; Cause:" + exception.getCause());
+				log.error("Error storing item for source record:" + source + "; Message:" + exception.getMessage()
+						+ "; Cause:" + exception.getCause());
 			} else {
 				log.debug("Target Item has been created. Target Object:" + item);
 
@@ -217,14 +219,16 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 				if (itemHolder != null && itemId != -1) {
 					StockService.addStockItem(source.getGermplasmTairAccession(), itemHolder);
 				}
+				
+				if (itemHolder != null) {
+
+					setDataSetItem(itemHolder, source);
+
+				}
 			}
 		}
 
-		if (itemHolder != null) {
-
-			setDataSetItem(itemHolder);
-
-		}
+		
 		return item;
 	}
 
@@ -433,16 +437,44 @@ public class StockItemProcessor extends DataSourceProcessor implements ItemProce
 		return growthAnnotationItem;
 	}
 
-	private void setDataSetItem(ItemHolder item) {
+	private void setDataSetItem(ItemHolder item, SourceStock source) {
 
-		Item dataSetItem = getDataSet();
-
-		if (dataSetItem != null && item != null) {
-			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
-
-			log.debug("Stock has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
-					+ item.getItem());
+		Exception exception = null;
+		
+		Item dataSetItem = null;
+		Item dataSourceItem = null;
+		
+		try {
+		
+		dataSetItem = getDataSet();
+		dataSourceItem = DataSourceService.getDataSourceItem("TAIR").getItem();
+		
+		if (dataSetItem == null){
+			Exception e = new Exception("DataSet Item Cannot be Null!");
+			throw e;
 		}
+		
+		if (dataSourceItem == null){
+			Exception e = new Exception("DataSource Item Cannot be Null!");
+			throw e;
+		}
+
+		BioStoreHook.setDataSets(getModel(), item.getItem(),  dataSetItem.getIdentifier(),
+				DataSourceService.getDataSourceItem("TAIR").getItem().getIdentifier());
+		
+		} catch (Exception e){
+			exception = e;
+		}finally{
+			
+			if (exception!=null){
+				log.error("Error adding source record to the dataset. Source" + source + "Error:" + exception.getMessage());
+			}else{
+				log.debug("Stock has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
+						+ item.getItem());
+			}
+		}
+
+	
 
 	}
 

@@ -92,10 +92,18 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 	private Item getItembyGeneticFeatureType(SourcePublicationFeatures source) {
 
 		Item item = null;
+		Exception exception = null;
 
+		try {
 		if (source.getGeneticFeatureType().equals("germplasm")) {
 			
 			log.debug("Germlasm Unique Accession:" + source.getEntityUniqueAccession());
+			
+			if (StringUtils.isBlank(source.getEntityUniqueAccession())){
+				exception = new Exception("Entity Unique Accession Cannot Null!");
+				throw exception;
+			}
+			
 			item = StockService.getStockItem(source.getEntityUniqueAccession()).getItem();
 				
 
@@ -107,11 +115,24 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 			item = PhenotypeService.getPhenotypeItem(source.getEntityUniqueAccession()).getItem();
 			
 		}
+		
 
-		if (item!=null) {
-			log.debug("Item place holder has been obtained: " + item + "; Source record:" + source);
-		} else {
-			log.error("Unknown feature type to associate with a publication. Skipping row." + " Source Record:" + source);
+		if (item==null) {
+			
+			exception = new Exception("Source Feature Item Cannot be null! Source Feature Item does not exists in the Service Lookup!");
+			throw exception;
+		}
+		
+		}
+		catch (Exception e){
+			exception = e;
+		} finally {
+			if (exception != null) {
+				log.error("Error obtaining source feature item for a source record:" + source + "; Error:"
+						+ exception.getMessage());
+			} else {
+				log.debug("Item place holder has been obtained: " + item + "; Source record:" + source);
+			}
 		}
 
 		return item;

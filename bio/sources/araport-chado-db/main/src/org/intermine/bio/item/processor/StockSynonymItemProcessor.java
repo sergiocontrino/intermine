@@ -43,13 +43,37 @@ public class StockSynonymItemProcessor extends DataSourceProcessor implements It
 
 		Item item = null;
 		ItemHolder itemHolder = null;
+		ItemHolder subjectItemHolder = null;
+		
 		
 		int itemId = -1;
 
 		try {
 			log.debug("Creating Item has started. Source Object:" + source);
 
-			Item subjectItem = StockService.getStockItem(source.getGermplasmTairAccession()).getItem();
+			subjectItemHolder = StockService.getStockItem(source.getGermplasmTairAccession());
+			
+			if (subjectItemHolder==null){
+				exception = new Exception("SubjectItemHolder is Null! Source Record does not exists in the Service Lookup!");
+				throw exception;
+			}
+								
+			Item subjectItem = subjectItemHolder.getItem();
+			
+			if (subjectItem==null){
+				exception = new Exception("Subject Item is Null! Source Record does not exists in the Service Lookup!");
+				throw exception;
+			}
+			
+			if (StringUtils.isBlank(source.getSynonymName())){
+				exception = new Exception("Source Synonym Cannot Be Null!");
+				throw exception;
+			}
+			
+			if (StringUtils.isBlank(source.getSynonymType())){
+				exception = new Exception("Source Synonym Type Cannot Be Null!");
+				throw exception;
+			}
 			
 			if (subjectItem!=null && !StringUtils.isBlank(source.getSynonymName())) {
 				
@@ -82,19 +106,21 @@ public class StockSynonymItemProcessor extends DataSourceProcessor implements It
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source);
+				log.error("Error storing item for source record:" + source + "Error:" + exception.getMessage());
 			} else {
 				log.debug("Target Item has been created. Target Object:" + item);
 					
 				itemHolder = new ItemHolder(item, itemId);
+				
 			}
 		}
 		
-		if (itemHolder!=null) {
+		if (itemHolder!=null && itemId!=-1) {
 			
 			setDataSetItem(itemHolder);
 			
 		}
+		
 		return item;
 	}
 

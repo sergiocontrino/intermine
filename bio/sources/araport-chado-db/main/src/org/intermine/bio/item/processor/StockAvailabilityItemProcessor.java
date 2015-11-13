@@ -44,16 +44,49 @@ public class StockAvailabilityItemProcessor extends DataSourceProcessor implemen
 
 		Item item = null;
 		ItemHolder itemHolder = null;
+		ItemHolder stockItemHolder = null;
+		ItemHolder stockCenterItemHolder = null;
+		
+		Item stockItem = null;
 		
 		int itemId = -1;
 
 		try {
 			log.debug("Creating Item has started. Source Object:" + source);
 
-			Item stockItem = StockService.getStockItem(source.getStockAccession()).getItem();
+			stockItemHolder = StockService.getStockItem(source.getStockAccession());
 			
-			Item stockCenterItem = StockCenterService.getStockCenterItem(source.getStockCenterName()).getItem();
+			if (stockItemHolder==null){
+				exception = new Exception("StockItemHolder is Null! Source Record does not exists in the Service Lookup!");
+				throw exception;
+			}
+				
+			stockItem = stockItemHolder.getItem();
 			
+			if (stockItem==null){
+				exception = new Exception("StockItem is Null! Source Record does not exists in the Service Lookup!");
+				throw exception;
+			}
+			
+			stockCenterItemHolder = StockCenterService.getStockCenterItem(source.getStockCenterName());
+			
+			if (stockCenterItemHolder==null){
+				exception = new Exception("StockCenterItemHolder is Null! Source Record does not exists in the Service Lookup!");
+				throw exception;
+			}
+			
+			Item stockCenterItem = stockCenterItemHolder.getItem();
+			
+			if (stockCenterItem==null){
+				exception = new Exception("StockCenterItem is Null! Source Record does not exists in the Service Lookup!");
+				throw exception;
+			}
+			
+			if (StringUtils.isBlank(source.getStockNumberDisplayName())){
+				exception = new Exception("StockNumberDisplayName Cannot be Null!");
+				throw exception;
+			}
+									
 			if (stockItem!=null && stockCenterItem!=null &&!StringUtils.isBlank(source.getStockNumberDisplayName())) {
 				
 				item = super.getService().createItem(ITEM_CLASSNAME);
@@ -61,6 +94,8 @@ public class StockAvailabilityItemProcessor extends DataSourceProcessor implemen
 				log.debug("Item place holder has been created: " + item);
 				
 				log.debug("Stock Display Number: " + source.getStockNumberDisplayName());
+				
+				
 				item.setAttribute("stockDisplayNumber", source.getStockNumberDisplayName());
 										
 				if (stockItem != null) {
@@ -104,11 +139,12 @@ public class StockAvailabilityItemProcessor extends DataSourceProcessor implemen
 			}
 		}
 		
-		if (itemHolder!=null) {
+		if (itemHolder!=null && itemId!=-1) {
 			
 			setDataSetItem(itemHolder);
 			
 		}
+
 		return item;
 	}
 
