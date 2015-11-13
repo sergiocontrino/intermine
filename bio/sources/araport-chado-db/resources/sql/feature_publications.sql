@@ -1,4 +1,3 @@
-
 SELECT
 distinct 
     pub.pub_id,
