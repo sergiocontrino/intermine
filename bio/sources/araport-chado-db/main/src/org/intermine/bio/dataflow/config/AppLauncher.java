@@ -288,7 +288,7 @@ public class AppLauncher {
 		Step dataSetPostProcessor = new DataSetItemPostprocessor(service).getPostProcessor("DataSet PostProcessor", service,
 				taskExecutor);
 		
-		steps.add(dataSourceProcessor);
+		//steps.add(dataSourceProcessor);
 		
 		StockSynonymItemProcessor processor15 = new StockSynonymItemProcessor(service);
 		DatabaseItemReader<SourceStockSynonym> reader15 = new StockSynonymReader().getReader(service.getConnection());
@@ -353,7 +353,7 @@ public class AppLauncher {
 		steps.add(publicationStep);
 		steps.add(publicationFeaturesStep);
 		
-		steps.add(dataSetPostProcessor);
+		//steps.add(dataSetPostProcessor);
 		
 		steps.add(stockSynonymsStep);
 		

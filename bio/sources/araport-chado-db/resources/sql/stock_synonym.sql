@@ -13,4 +13,11 @@ SELECT
 		sn.synonym_id = st.synonym_id JOIN cvterm c
 		ON
 		c.cvterm_id = sn.type_id
+		join
+	organism o
+	on s.organism_id = o.organism_id
+	where 
+	o.abbreviation = 'A.thaliana'
+	and
+	o.infraspecific_name is NULL
 	order by s.stock_id;
