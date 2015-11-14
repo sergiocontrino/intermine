@@ -54,7 +54,7 @@ public class PhenotypeGeneticContextPostprocessor extends AbstractStep {
 	@Override
 	protected void doExecute(StepExecution stepExecution) throws Exception {
 
-		log.info("Running Task Let Step!  PhenotypeGeneticContextPostprocessor " + getName());
+		log.debug("Running Task Let Step!  PhenotypeGeneticContextPostprocessor " + getName());
 
 		taskExecutor.execute(new Runnable() {
 
@@ -89,7 +89,7 @@ public class PhenotypeGeneticContextPostprocessor extends AbstractStep {
 
 			String phenotype = item.getKey();
 
-			log.info("Processing Phenotype: " + phenotype);
+			log.debug("Processing Phenotype: " + phenotype);
 
 			Collection<Item> collection = (Collection<Item>) item.getValue();
 
@@ -97,11 +97,11 @@ public class PhenotypeGeneticContextPostprocessor extends AbstractStep {
 
 			ItemHolder itemHolder = PhenotypeService.getPhenotypeMap().get(phenotype);
 
-			log.info("Collection Holder: " + phenotype);
+			log.debug("Collection Holder: " + phenotype);
 
 			for (Item member : collectionItems) {
 
-				log.info("Member of Collection: " + member + "; " + " Collection Holder:" + phenotype);
+				log.debug("Member of Collection: " + member + "; " + " Collection Holder:" + phenotype);
 			}
 
 			ReferenceList referenceList = new ReferenceList();
@@ -110,7 +110,7 @@ public class PhenotypeGeneticContextPostprocessor extends AbstractStep {
 
 				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
 
-				log.info("Phenotype/Allele Collection successfully stored." + itemHolder.getItem() + ";"
+				log.debug("Phenotype/Allele Collection successfully stored." + itemHolder.getItem() + ";"
 						+ "Collection size:" + collection.size());
 
 			} catch (ObjectStoreException e) {
@@ -131,7 +131,7 @@ public class PhenotypeGeneticContextPostprocessor extends AbstractStep {
 
 			String phenotype = item.getKey();
 
-			log.info("Processing Phenotype: " + phenotype);
+			log.debug("Processing Phenotype: " + phenotype);
 
 			Collection<Item> collection = (Collection<Item>) item.getValue();
 
@@ -148,7 +148,7 @@ public class PhenotypeGeneticContextPostprocessor extends AbstractStep {
 			/*
 			for (Item member : collectionItems) {
 
-				log.info("Member of Collection: " + member + "; " + " Collection Holder:" + phenotype);
+				log.debug("Member of Collection: " + member + "; " + " Collection Holder:" + phenotype);
 			}
 			*/
 			

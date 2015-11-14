@@ -107,7 +107,7 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 			item = StockService.getStockItem(source.getEntityUniqueAccession()).getItem();
 				
 
-		} //else if (source.getGeneticFeatureType().equals("phenotype"))
+		} 
 		else
 		{
 
@@ -143,13 +143,16 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 		boolean status = false;
 
 		if (!StringUtils.isBlank(source.getPubAccessionNumber())){
+			
 			addPublicationBionEntityItem(source, item);
+			
+			status = true;
 		}
 		
 		if (status == true) {
 			log.debug("Item has been added to a publication/feature collection " + item);
 		} else {
-			log.error("Unknown feature type to associate with a publication. Skipping row." + " Source Record:" + source);
+			log.error("Publication Accession Number is Null. Skipping row." + " Source Record:" + source);
 		}
 
 	}

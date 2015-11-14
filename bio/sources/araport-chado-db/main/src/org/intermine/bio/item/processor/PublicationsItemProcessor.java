@@ -145,7 +145,7 @@ public class PublicationsItemProcessor extends DataSourceProcessor implements It
 		
 		if (itemHolder!=null) {
 			//processAuthorsCollection(source, itemHolder);
-			setDataSourceItem(itemHolder);
+			//setDataSourceItem(itemHolder);
 		}
 		
 		return item;

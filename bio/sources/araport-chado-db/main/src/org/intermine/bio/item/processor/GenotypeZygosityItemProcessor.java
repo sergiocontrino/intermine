@@ -110,11 +110,11 @@ public class GenotypeZygosityItemProcessor extends DataSourceProcessor implement
 				item.setReference("stock", germpalsmItem);
 				
 				item.setReference("zygosity", zygosityType);	
+				
 				itemId = super.getService().store(item);
 				
 			}else{
-				exception = new Exception("Invalid Source Entry");
-				log.error("Invalid entry.Skipping Source Record:" + source);
+				exception = new Exception("Invalid Genotype Zygosity Entry.Skipping Source Record!");
 				throw exception;
 			}
 

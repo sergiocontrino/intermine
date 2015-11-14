@@ -117,7 +117,7 @@ public class StockSynonymItemProcessor extends DataSourceProcessor implements It
 		
 		if (itemHolder!=null && itemId!=-1) {
 			
-			setDataSetItem(itemHolder);
+			//setDataSetItem(itemHolder);
 			
 		}
 		

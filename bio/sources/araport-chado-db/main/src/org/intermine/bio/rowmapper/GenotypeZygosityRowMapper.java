@@ -14,8 +14,8 @@ public class GenotypeZygosityRowMapper implements RowMapper<SourceGenotypeZygosi
 		SourceGenotypeZygosity item = new SourceGenotypeZygosity();
 		
 		item.setGenotypeUniqueAccession(rs.getString("genotype_unique_accession"));
-		item.setAlleleUniqueAccession(rs.getString("genotype_name"));
-		item.setGermplasmUniqueAccession(rs.getString("germplasm_unique_accession"));
+		item.setAlleleUniqueAccession(rs.getString("allele_unique_accession"));
+		item.setGermplasmUniqueAccession(rs.getString("germplasm_accession"));
 		item.setZygosity(rs.getString("zygosity"));
 					
 		return item;

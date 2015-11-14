@@ -48,34 +48,34 @@ public class AlleleGeneZygosityItemProcessor extends DataSourceProcessor impleme
 		int itemId = -1;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
-			log.info("Gene Unique Accession: " + source.getSubjectUniqueAccession());
-			log.info("Gene Name: " + source.getSubjectUniqueName());
+			log.debug("Gene Unique Accession: " + source.getSubjectUniqueAccession());
+			log.debug("Gene Name: " + source.getSubjectUniqueName());
 			
-			log.info("Allele Name: " + source.getObjectUniqueName());
-			log.info("Allele Unique Accession: " + source.getObjectUniqueAccession());
+			log.debug("Allele Name: " + source.getObjectUniqueName());
+			log.debug("Allele Unique Accession: " + source.getObjectUniqueAccession());
 			
-			log.info("Zygosity: " + source.getPropertyValue());
+			log.debug("Zygosity: " + source.getPropertyValue());
 			
 			Item geneItem = AlleleService.getGeneItem(source.getSubjectUniqueName()).getItem();
-			log.info("Gene Item: " + geneItem);
+			log.debug("Gene Item: " + geneItem);
 			
 			Item alleleItem = AlleleService.getAlleleItem(source.getObjectUniqueAccession()).getItem();
-			log.info("Allele Item: " + alleleItem);
+			log.debug("Allele Item: " + alleleItem);
 					
 			Item zygosityType = CVService.getCVTermItem("genotype_type",
 					source.getPropertyValue());
-			log.info("Zygosity Item: " + zygosityType);
+			log.debug("Zygosity Item: " + zygosityType);
 			
 			if (geneItem!=null && alleleItem!=null && zygosityType!=null){
 				
-				log.info("Gene Item: " + geneItem);
-				log.info("Allele Item: " + alleleItem);
-				log.info("Zygosity Item: " + zygosityType);
+				log.debug("Gene Item: " + geneItem);
+				log.debug("Allele Item: " + alleleItem);
+				log.debug("Zygosity Item: " + zygosityType);
 				
 				item = super.getService().createItem(ITEM_CLASSNAME);
-				log.info("Item place holder has been created: " + item);
+				log.debug("Item place holder has been created: " + item);
 				
 				item.setReference("allele", alleleItem);
 				item.setReference("gene", geneItem);
@@ -100,7 +100,7 @@ public class AlleleGeneZygosityItemProcessor extends DataSourceProcessor impleme
 				log.error("Error storing item for source record:" + source + ";Message:" + exception.getMessage() + ";Cause:" + exception.getCause());
 			} else {
 				
-				log.info("Target Item has been created. Target Object:" + item);
+				log.debug("Target Item has been created. Target Object:" + item);
 			
 			}
 		}

@@ -82,7 +82,7 @@ public class PhenotypeService {
 
 	public static void addPhenotypeGenotypeItem(String phenotypeName, Item item) {
 
-		phenotypeAlleleItemSet.put(phenotypeName, item);
+		phenotypeGenotypeItemSet.put(phenotypeName, item);
 	}
 
 	public static MultiMap getPhenotypeGenotypeItemSet() {

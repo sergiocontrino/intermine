@@ -12,4 +12,5 @@ SELECT
 	s.mutaton_site,
 	s.wild_type
 FROM
-	thalemine_stg.allele_dataset s
+	thalemine_stg.allele_dataset s;
+	

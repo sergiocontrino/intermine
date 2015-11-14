@@ -40,7 +40,7 @@
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="alleles" />
 			
-		<collection name="alleleZygosities" referenced-type="GenotypeZygosity"
+		<collection name="alleleGenotypeZygosities" referenced-type="GenotypeZygosity"
 			reverse-reference="allele" />
 
 	</class>
@@ -123,7 +123,7 @@
 	<class name="GenotypeZygosity" is-interface="true">
 	
 		<reference name="allele" referenced-type="Allele"
-			reverse-reference="alleleZygosities"
+			reverse-reference="alleleGenotypeZygosities"
 			/>
 		<reference name="stock" referenced-type="Stock"
 			/>
