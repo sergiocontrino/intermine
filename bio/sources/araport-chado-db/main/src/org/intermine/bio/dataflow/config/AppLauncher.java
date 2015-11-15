@@ -355,13 +355,13 @@ public class AppLauncher {
 		
 		//steps.add(dataSetPostProcessor);
 		
-		//steps.add(stockSynonymsStep);
+		steps.add(stockSynonymsStep);
 		
-		//steps.add(stockCenterStep);
+		steps.add(stockCenterStep);
 		
-		//steps.add(stockAvailabilityStep);
+		steps.add(stockAvailabilityStep);
 		
-		//steps.add(alleleGeneZygosityStep);
+		steps.add(alleleGeneZygosityStep);
 		
 		steps.add(genotypeZygosityStep);
 		
