@@ -6,6 +6,7 @@ public class GenotypeFormatter {
 
 	protected static final Logger log = Logger.getLogger(GenotypeFormatter.class);
 
+	private static final String PATTERN = "unspecified_genetic_context";
 	String genotypeName;
 
 	public GenotypeFormatter() {
@@ -18,24 +19,28 @@ public class GenotypeFormatter {
 
 	public static String getAllelesNames(final String name) {
 
+		log.debug("Genotype Original Name:" + name);
+		
 		String result = null;
 		Exception exception = null;
 
 		try {
 			if (name != null) {
-				int beginIndex = name.indexOf("(");
-				int endIndex = name.indexOf(")");
 
-				if ((beginIndex > 0) && (endIndex > 0)) {
-					result = name.substring(beginIndex + 1, endIndex);
-				}
+				int beginIndex = 0;
+				int endIndex = name.indexOf("(");
 
-				if (result != null) {
-					result = result.replaceAll(",", "");
-				}
+				if (name.matches(PATTERN)) {
+					result = name;
+				} else if ((endIndex > 0)) {
 
-				if (result != null) {
-					result = result.toLowerCase();
+					result = name.substring(beginIndex, endIndex);
+
+					if (result != null) {
+						result = result.toLowerCase();
+					}
+				} else {
+					result = name;
 				}
 
 			}
@@ -46,7 +51,7 @@ public class GenotypeFormatter {
 				log.error("Error ocurred while retriveing allele names for a genotype." + "Genotype Name:" + name);
 			}
 		}
-		
+
 		log.debug("Genotype Alleles Name:" + result);
 		return result;
 
@@ -56,25 +61,17 @@ public class GenotypeFormatter {
 
 		String result = null;
 		Exception exception = null;
+		
+		log.debug("Genotype Original Name:" + name);
 
 		try {
 			if (name != null) {
-				int endIndex = name.indexOf(";");
 
-				if (endIndex > 0) {
-					result = name.substring(0, endIndex);
-				}
+				int beginIndex = name.indexOf("(");
+				int endIndex = name.indexOf(")");
 
-				if (result != null) {
-					result = result.replaceAll(",", " ");
-				}
-
-				if (result != null) {
-					result = result.replaceAll("  ", " ");
-				}
-
-				if (result != null) {
-					result = "(" + result + ")";
+				if ((beginIndex > 0) && (endIndex > 0)) {
+					result = name.substring(beginIndex + 1, endIndex);
 				}
 
 			}
@@ -87,7 +84,7 @@ public class GenotypeFormatter {
 		}
 
 		log.debug("Genotype Genes Name:" + result);
-		
+
 		return result;
 
 	}

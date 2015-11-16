@@ -58,15 +58,15 @@ public class GenotypeZygosityItemProcessor extends DataSourceProcessor implement
 		int itemId = -1;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
-			log.info("Genotype Unique Accession: " + source.getGenotypeUniqueAccession());
+			log.debug("Genotype Unique Accession: " + source.getGenotypeUniqueAccession());
 						
-			log.info("Allele Unique Accession: " + source.getAlleleUniqueAccession());
+			log.debug("Allele Unique Accession: " + source.getAlleleUniqueAccession());
 			
-			log.info("Germplasm Unique Accession: " + source.getGermplasmUniqueAccession());
+			log.debug("Germplasm Unique Accession: " + source.getGermplasmUniqueAccession());
 			
-			log.info("Zygosity: " + source.getZygosity());
+			log.debug("Zygosity: " + source.getZygosity());
 			
 			alleleItemHolder = AlleleService.getAlleleItem(source.getAlleleUniqueAccession());
 					
@@ -74,7 +74,7 @@ public class GenotypeZygosityItemProcessor extends DataSourceProcessor implement
 				alleleItem = alleleItemHolder.getItem();
 			}
 						
-			log.info("Allele Item: " + alleleItem);
+			log.debug("Allele Item: " + alleleItem);
 			
 			genotypeItemHolder =GenotypeService.getGenotypeItem(source.getGenotypeUniqueAccession());
 			
@@ -92,18 +92,18 @@ public class GenotypeZygosityItemProcessor extends DataSourceProcessor implement
 					source.getZygosity());
 			
 			
-			log.info("Zygosity Item: " + zygosityType);
+			log.debug("Zygosity Item: " + zygosityType);
 			
 			if (genotypeItem!=null && alleleItem!=null && zygosityType!=null && germpalsmItem!=null){
 				
-				log.info("Genotype Item: " + genotypeItem);
-				log.info("Allele Item: " + alleleItem);
-				log.info("Germplasm Item: " + germpalsmItem);
+				log.debug("Genotype Item: " + genotypeItem);
+				log.debug("Allele Item: " + alleleItem);
+				log.debug("Germplasm Item: " + germpalsmItem);
 							
-				log.info("Zygosity Item: " + zygosityType);
+				log.debug("Zygosity Item: " + zygosityType);
 				
 				item = super.getService().createItem(ITEM_CLASSNAME);
-				log.info("Item place holder has been created: " + item);
+				log.debug("Item place holder has been created: " + item);
 				
 				item.setReference("allele", alleleItem);
 				item.setReference("genotype", genotypeItem);
@@ -129,7 +129,7 @@ public class GenotypeZygosityItemProcessor extends DataSourceProcessor implement
 				log.error("Error storing item for source record:" + source + ";Message:" + exception.getMessage() + ";Cause:" + exception.getCause());
 			} else {
 				
-				log.info("Target Item has been created. Target Object:" + item);
+				log.debug("Target Item has been created. Target Object:" + item);
 			
 			}
 		}
