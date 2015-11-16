@@ -68,6 +68,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 
     private Map<String, String> pubItems = new HashMap<String, String>();
     private Map<String, String> geneItems = new HashMap<String, String>();
+    private Map<String, String> MIcodes = new HashMap<String, String>();
 
     private static final String PROP_FILE = "psi-intact_config.properties";
     private Map<String, String> pubs = new HashMap<String, String>();
@@ -211,20 +212,24 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 //            pidA = athResolver.resolveId(taxidA, geneIdA).iterator().next();
             pidA = geneIdA;
 
-            LOG.info("READING " + pidA + "<->" + geneIdA + "|" + pubMedId + "|"
-                    + protIdA + "--" + type + "|" + detectionMethod + "|" + db);
+//            LOG.info("READING " + pidA + "<->" + geneIdA + "|" + pubMedId + "|"
+//                    + protIdA + "--" + type + "|" + detectionMethod + "|" + db);
 
 //            createBioEntity(pidA, "Gene");
-            if (StringUtils.isNotBlank(pubMedId)) {
-                createPublication(pubMedId);
-            }
 
             String refIdA = createBioEntity(pidA, "Gene");
             String refIdB = createBioEntity(geneIdB,"Gene");
 
             Item interaction = getInteraction(refIdA, refIdB);
             Item interactionDetail =  createItem("InteractionDetail");
-//            String shortName = h.shortName;
+
+            if (StringUtils.isNotBlank(pubMedId)) {
+                Item exp = createPublication(pubMedId, interactionDetail);
+//                interactionDetail.setReference("experiment", exp);
+            }
+
+
+            //            String shortName = h.shortName;
 //            interactionDetail.setAttribute("name", shortName);
 //            interactionDetail.setAttribute("role1", role1);
 //            interactionDetail.setAttribute("role2", role2);
@@ -279,6 +284,15 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         }
         // 6,11,12
         if (token.startsWith(PSI)) {
+            // fill map with definitions
+            String miCode = token.replace(PSI, "").substring(1, 8);
+            if (!MIcodes.containsKey(miCode)) {
+//                String description = StringUtils.substringAfterLast(token, "(").replace(')','');
+                String description = StringUtils.substringAfterLast(token, "(");
+                        //.replaceFirst(")","");
+                MIcodes.put(miCode, description);
+                LOG.info("MI CODES:" + miCode + "|" + description);
+            }
             return token.replace(PSI, "").substring(1, 8);
         }
         // 8
@@ -357,14 +371,22 @@ public class BarPsiInteractionsConverter extends BioFileConverter
      * @param type gene or exon
      * @throws ObjectStoreException
      */
-    private void createPublication(String primaryId) throws ObjectStoreException {
+    private Item createPublication(String primaryId, Item interaction) throws ObjectStoreException {
         Item pub = null;
+        Item exp = null;
         if (!pubItems.containsKey(primaryId)) {
             pub = createItem("Publication");
             pub.setAttribute("pubMedId", primaryId);
             store(pub);
             pubItems.put(primaryId, pub.getIdentifier());
+            exp = createItem("InteractionExperiment");
+            exp.setAttribute("name", "Exp-" + primaryId);
+            exp.setReference("publication", pub);
+            interaction.setReference("experiment", exp);
+//            exp.addToCollection("interactions", interactionDetail);
+            store(exp);
         }
+        return exp;
     }
 
 
