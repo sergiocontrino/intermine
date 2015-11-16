@@ -361,7 +361,7 @@ public class AppLauncher {
 		
 		steps.add(stockAvailabilityStep);
 		
-		steps.add(alleleGeneZygosityStep);
+		//steps.add(alleleGeneZygosityStep);
 		
 		steps.add(genotypeZygosityStep);
 		
