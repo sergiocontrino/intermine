@@ -198,7 +198,7 @@ public class StockDAOImpl implements QueryRepository, StockDAO {
 		query.setOuterJoinStatus("Genotype.alleles.alleleGenotypeZygosities.zygosity", OuterJoinStatus.OUTER);
 		query.setOuterJoinStatus("Genotype.alleles.mutagen", OuterJoinStatus.OUTER);
 		query.setOuterJoinStatus("Genotype.alleles.inheritanceMode", OuterJoinStatus.OUTER);
-		query.setOuterJoinStatus("Genotype.alleles.alleles.alleleClass", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Genotype.alleles.alleleClass", OuterJoinStatus.OUTER);
 
 		query.addConstraint(Constraints.eq("Genotype.stocks.id", stockId));
 		query.addConstraint(Constraints.eq("Genotype.id", genotypeId));
