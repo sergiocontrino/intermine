@@ -398,10 +398,11 @@
     </fields>
   </class>
     
-    <class className="org.intermine.model.bio.AlleleGeneZygosity">
+    <class className="org.intermine.model.bio.GenotypeZygosity">
      <fields>
       <fieldconfig fieldExpr="allele.name" label="Allele"/>
-      <fieldconfig fieldExpr="gene.primaryIdentifier" label="Gene"/>
+      <fieldconfig fieldExpr="genotype.primaryIdentifier" label="Genotype"/>
+      <fieldconfig fieldExpr="stock.displayName" label="Stock"/>
       <fieldconfig fieldExpr="zygosity.name" label="Zygosity"/>
      </fields>
    </class>
@@ -516,6 +517,7 @@
  	    <fieldconfig fieldExpr="accessionNumber" label="" showInSummary="false" displayer="model/nullDisplayer.jsp"/>
  	 </fields>
 </class>
+
 <!-- exporters -->
   <tableExportConfig id="sequence" className="org.intermine.bio.web.export.SequenceHttpExporter"/>
   <tableExportConfig id="gff3" className="org.intermine.bio.web.export.GFF3HttpExporter"/>
@@ -530,6 +532,7 @@
                      types="Gene"/>
  -->
 
+<!-- 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.CytoscapeNetworkDisplayer"
                      jspName="model/cytoscapeNetworkDisplayer.jsp"
                      replacesFields="interactions"
@@ -555,14 +558,18 @@
                      parameters="{'dataSets': ['Panther data set']}"
                      types="Gene"/>
 
+-->
 
-    <!--<reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneHomologDisplayer"
+    <!--
+    <reportdisplayer javaClass="org.intermine.bio.web.displayer.GeneHomologDisplayer"
                      jspName="model/geneHomologDisplayer.jsp"
                      replacesFields=""
                      placement="Homology"
                      parameters="{'dataSets': ['Phytozome Homologs']}"
-                     types="Gene"/>-->
-
+                     types="Gene"/>
+                     
+                     -->
+<!-- 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.PhytomineOrthologDisplayer"
                      jspName="model/phytomineOrthologDisplayer.jsp"
                      replacesFields=""
@@ -581,6 +588,9 @@
                      placement="Genomics"
                      types="Gene,Exon,Intron,MRNA,MiRNA,NcRNA,RRNA,SnRNA,SnoRNA,TRNA,Pseudogene,PseudogenicTranscript,TransposableElementGene"/>
 
+-->
+
+<!-- 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.OverlappingFeaturesDisplayer"
                      jspName="model/overlappingFeaturesDisplayer.jsp"
                      replacesFields="overlappingFeatures"
@@ -597,8 +607,9 @@
                      jspName="model/uniProtCommentsDisplayer.jsp"
                      replacesFields="md5checksum"
                      placement="Proteins"
-                     types="Genomics,Protein"/>
+                     types="Genomics,Protein"/> -->
 
+<!-- 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.ProteinSequenceDisplayer"
                      jspName="model/proteinSequenceDisplayer.jsp"
                      replacesFields="sequence"
@@ -610,9 +621,10 @@
                      replacesFields=""
                      placement="summary"
                      parameters="Gene,Protein,InteractionDetail.experiment,GOAnnotation.evidence"
-                     types="Publication"/>
+                     types="Publication"/> -->
 
-    <!-- works with classes with publications collection -->
+   
+    <!-- 
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.PublicationCountsDisplayer"
                      jspName="model/publicationCountsDisplayer.jsp"
                      replacesFields="publications"
@@ -631,7 +643,7 @@
                      replacesFields=""
                      placement="Expression"
                      types="Gene"/>
-    <!-- this feature is not ready for production
+    
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.EsynDisplayer"
                      jspName="model/esynDisplayer.jsp"
                      replacesFields=""
@@ -640,7 +652,7 @@
     -->
 
 
-    <!--  this takes rather long to load, commented for now
+    <!--  
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.MinePathwaysDisplayer"
                      jspName="model/minePathwaysDisplayer.jsp"
                      replacesFields="pathways"
@@ -674,9 +686,9 @@
                      
        <reportdisplayer javaClass="org.thalemine.web.displayer.AlleleGeneZygosityDisplayer"
                      jspName="model/alleleZygosity.jsp"
-                     replacesFields="alleleGeneZygosities"
+                     replacesFields="alleleGenotypeZygosities"
                      placement=""
-                     types="Gene,Allele"/>
+                     types="Allele,Stock,Genotype"/>
                      
        <reportdisplayer javaClass="org.thalemine.web.displayer.StockAccessionDisplayer"
                      jspName="model/stockAccessionDisplayer.jsp"
@@ -741,8 +753,11 @@
      
   </reportdisplayers>
 
-<!-- widgets -->
+
+
 <widgets>
+
+<!--  
       <graphdisplayer id="chromosome_distribution_for_gene"
                       title="Chromosome Distribution"
                       description="Actual: number of items in this list found on each chromosome.  Expected: given the total number of items on the chromosome and the number of items in this list, the number of items expected to be found on each chromosome."
@@ -884,6 +899,8 @@
                                 homologues.homologue.symbol,
                                 homologues.homologue.organism.shortName,
                                 homologues.type"/> 
+                                
+                                -->
 
 </widgets>
 </webconfig>

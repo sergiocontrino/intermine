@@ -256,19 +256,29 @@ public class StockServiceImpl extends AbstractService implements StockService {
 		AlleleService alleleService = (AlleleService) ServiceManager.getInstance().getService(
 				ServiceConfig.ALLELE_SERVICE);
 
+		int stockGenotypeCount = 0;
+		int alleleCount = 0;
+		
 		while (iterator.hasNext()) {
 
 			List<Object> currentItem = iterator.next();
 
 			StockGenotypeVO resultItem = new StockGenotypeVO(currentItem);
+			
+			stockGenotypeCount++;
 
+			log.info("Current Stock/Genotype Item Count:" + stockGenotypeCount);
+			
 			List<AlleleVO> alleles = new ArrayList<AlleleVO>();
 
 			if (resultItem.getStockObjectId() != null && resultItem.getGenotypeObjectId() != null) {
 
+				// Error is here
 				alleles = getStockGenotypeGeneticContext(resultItem.getStockObjectId(),
 						resultItem.getGenotypeObjectId());
 			}
+			
+			log.info("Current Stock/Genotype Allele Item Count:" + alleles.size());
 
 			for (AlleleVO alleleItem : alleles) {
 
@@ -276,6 +286,8 @@ public class StockServiceImpl extends AbstractService implements StockService {
 				List<GeneVO> genes = new ArrayList<GeneVO>();
 
 				genes = alleleService.getGenes(alleleItem.getObjectId());
+				log.info("Genes Size:" + genes);
+				
 				alleleItem.setGeneList(genes);
 
 				log.debug("Allele Item:" + alleleItem + "Genes List Size:" + alleleItem.getGeneList().size());
@@ -300,6 +312,7 @@ public class StockServiceImpl extends AbstractService implements StockService {
 	public List<AlleleVO> getStockGenotypeGeneticContext(String stockId, String genotypeId) throws Exception {
 
 		List<AlleleVO> result = new ArrayList<AlleleVO>();
+		result.clear();
 		
 		if (stockId == null || genotypeId == null) {
 			log.error("Stock/Genotype Id cannot be null.");
@@ -307,15 +320,21 @@ public class StockServiceImpl extends AbstractService implements StockService {
 		}
 
 		QueryResult queryResult = this.stockDao.getStockGenotypeGeneticContext(stockId, genotypeId);
-
+		
 		Iterator<List<Object>> iterator = queryResult.getResultItems();
 
 		log.debug("Getting Allele Item for: " + ";StockId:" + stockId + " ;GenotypeId:" + genotypeId);
 
+		int alleleCount = 0;
+		
 		while (iterator.hasNext()) {
 
 			List<Object> currentItem = iterator.next();
 
+			alleleCount = alleleCount + 1;
+			
+			log.info("Current Count getStockGenotypeGeneticContext:" + alleleCount);
+			
 			String alleleId = null;
 			String alleleName = null;
 			String zygosity = null;
@@ -368,7 +387,7 @@ public class StockServiceImpl extends AbstractService implements StockService {
 				AlleleVO resultItem = new AlleleVO(alleleId, alleleName, zygosity, mutagen, inheritanceType,
 						alleleClass);
 
-				log.debug("Allele Item:" + resultItem);
+				log.info("Allele Item:" + resultItem);
 
 				result.add(resultItem);
 
@@ -376,6 +395,9 @@ public class StockServiceImpl extends AbstractService implements StockService {
 
 		}
 
+		
+		log.info("getStockGenotypeGeneticContext: Allele Result Set Size:" + result.size());
+		
 		return result;
 
 	}

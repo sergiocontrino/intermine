@@ -177,11 +177,11 @@ public class StockDAOImpl implements QueryRepository, StockDAO {
 		PathQuery query = new PathQuery(getModel());
 
 		query.addViews("Stock.genotypes.alleles.id", "Stock.genotypes.alleles.primaryIdentifier",
-				"Stock.genotypes.alleles.alleleGeneZygosities.zygosity.name", "Stock.genotypes.alleles.mutagen.name",
+				"Stock.genotypes.alleles.alleleGenotypeZygosities.zygosity.name", "Stock.genotypes.alleles.mutagen.name",
 				"Stock.genotypes.alleles.inheritanceMode.name", "Stock.genotypes.alleles.alleleClass.name");
 
-		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleGeneZygosities", OuterJoinStatus.OUTER);
-		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleGeneZygosities.zygosity", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleGenotypeZygosities", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleGenotypeZygosities.zygosity", OuterJoinStatus.OUTER);
 		query.setOuterJoinStatus("Stock.genotypes.alleles.mutagen", OuterJoinStatus.OUTER);
 		query.setOuterJoinStatus("Stock.genotypes.alleles.inheritanceMode", OuterJoinStatus.OUTER);
 		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleClass", OuterJoinStatus.OUTER);

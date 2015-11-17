@@ -74,6 +74,7 @@ public class StockGeneticContextDisplayer extends ReportDisplayer {
 				
 				resultList = businesservice.getStockGenotypes(object);
 				
+				log.info("Stock Geneteic Context/Result List Size:"+ resultList.size());
 				log.info("Genetic Context VO:" + resultList);
 				
 			}
