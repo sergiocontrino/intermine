@@ -1,8 +1,10 @@
 package org.thalemine.web.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.intermine.pathquery.PathQuery;
@@ -314,6 +316,9 @@ public class StockServiceImpl extends AbstractService implements StockService {
 		List<AlleleVO> result = new ArrayList<AlleleVO>();
 		result.clear();
 		
+		Set<String> alleleSet = new HashSet<String>();
+		alleleSet.clear();
+		
 		if (stockId == null || genotypeId == null) {
 			log.error("Stock/Genotype Id cannot be null.");
 			throw new Exception("Stock/Genotype Id cannot be null.");
@@ -387,9 +392,14 @@ public class StockServiceImpl extends AbstractService implements StockService {
 				AlleleVO resultItem = new AlleleVO(alleleId, alleleName, zygosity, mutagen, inheritanceType,
 						alleleClass);
 
+				boolean canAdd = alleleSet.add(alleleId);
+				log.info("Can Add Allele Item:" + canAdd);
+				
 				log.info("Allele Item:" + resultItem);
-
-				result.add(resultItem);
+				
+				if (canAdd) {
+					result.add(resultItem);
+				}
 
 			}
 
