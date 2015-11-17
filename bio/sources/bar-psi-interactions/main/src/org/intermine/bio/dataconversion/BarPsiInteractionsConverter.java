@@ -28,6 +28,7 @@ import org.intermine.metadata.Model;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.util.FormattedTextParser;
 import org.intermine.xml.full.Item;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -68,13 +69,15 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 
     private Map<String, String> pubItems = new HashMap<String, String>();
     private Map<String, String> geneItems = new HashMap<String, String>();
-    private Map<String, String> expItems = new HashMap<String, String>();
+//    private Map<String, String> expItems = new HashMap<String, String>();
+    private Map<String, Item> expItems = new HashMap<String, Item>();
     private Map<String, String> miCodes = new HashMap<String, String>();
 
     private static final String PROP_FILE = "psi-intact_config.properties";
     private Map<String, String> pubs = new HashMap<String, String>();
     private Map<String, Object> experimentNames = new HashMap<String, Object>();
     private Map<String, String> terms = new HashMap<String, String>();
+
     private Map<String, String> regions = new HashMap<String, String>();
     private String termId = null;
 //    private static final String INTERACTION_TYPE = "physical";
@@ -98,6 +101,8 @@ public class BarPsiInteractionsConverter extends BioFileConverter
      * Constructor
      * @param writer the ItemWriter used to handle the resultant items
      * @param model the Model
+     * @throws ObjectStoreException
+     *
      */
     public BarPsiInteractionsConverter(ItemWriter writer, Model model)
         throws ObjectStoreException {
@@ -156,10 +161,10 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         } catch (Exception e) {
             throw new BuildException("cannot parse file: " + getCurrentFile(), e);
         }
-        IdResolver athResolver = IdResolverService.getIdResolverByOrganism("3702");
-        String pidA = null;
-
+//        IdResolver athResolver = IdResolverService.getIdResolverByOrganism("3702");
+//        String pidA = null;
 //        String [] headers = null;
+
         int lineNumber = 0;
 
         while (tsvIter.hasNext()) {
@@ -168,15 +173,16 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 
             String geneIdA = parseToken(line [0]);
             String geneIdB = parseToken(line [1]);
-            String protIdA = parseToken(line [2]);
-            String protIdB = parseToken(line [3]);
+            // Not processing protein info for now
+            // String protIdA = parseToken(line [2]);
+            // String protIdB = parseToken(line [3]);
             String geneSynA = parseToken(line [4]);
             String geneSynB = parseToken(line [5]);
             String detectionMethod = parseToken(line [6]);
-//            String FirstAuthor = line [7];
+            // String FirstAuthor = line [7];
             String pubMedId = parseToken(line [8]);
             String taxidA = parseToken(line[9]);
-            String taxidB = parseToken(line[10]);
+            // String taxidB = parseToken(line[10]);
             String type = parseToken(line[11]);
             String db = parseToken(line [12]);
             String ids = line [13];
@@ -193,47 +199,63 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 //                        + geneIdA + " count: " + resCount);
 //                continue;
 //            }
-
-
-            // NOT WORKING!? see
-            // http://intermine.readthedocs.org/en/latest/database/data-sources/id-resolvers
-            //          if (pid == null) {
-            //              LOG.info("MISSING ID: " + geneId);
-            //              continue;
-            //          }
-
-
 //            pidA = athResolver.resolveId(taxidA, geneIdA).iterator().next();
-            pidA = geneIdA;
-
+//            pidA = geneIdA;
 //            LOG.info("READING " + pidA + "<->" + geneIdA + "|" + pubMedId + "|"
 //                    + protIdA + "--" + type + "|" + detectionMethod + "|" + db);
 
-//            createBioEntity(pidA, "Gene");
 
-            String refIdA = createBioEntity(pidA, "Gene");
-            String refIdB = createBioEntity(geneIdB,"Gene");
+            String refIdA = createBioEntity(geneIdA, "Gene");
+            String refIdB = createBioEntity(geneIdB, "Gene");
 
             Item interaction = getInteraction(refIdA, refIdB);
             Item interactionDetail =  createItem("InteractionDetail");
-
+/*
             if (StringUtils.isNotBlank(pubMedId)) {
                 Item exp = createPublication(pubMedId, interactionDetail);
 //                interactionDetail.setReference("experiment", exp);
-            }
 
+                if (miCodes.get(detectionMethod) != null) {
+                    String termItemId = getTerm(detectionMethod);
+                    LOG.info("DDD " + lineNumber + ": " + detectionMethod + " | " + termItemId);
+                    if (exp.getCollection("interactionDetectionMethods") == null) {
+                        exp.addToCollection("interactionDetectionMethods", termItemId);
+                        store(exp);
+                    } else {
+                        if (!exp.getCollection("interactionDetectionMethods").getRefIds().contains(termItemId)) {
+                            exp.addToCollection("interactionDetectionMethods", termItemId);
+                            store(exp);
+                        }
+                    }
+//                        exp.addToCollection("interactionDetectionMethods", termItemId);
+//                        store(exp);
+//                    }
+                }
+            }
+*/
+            if (StringUtils.isNotBlank(pubMedId)) {
+                Item exp = createPublication(pubMedId, interactionDetail);
+
+                if (miCodes.get(detectionMethod) != null) {
+                    String termItemId = getTerm(detectionMethod);
+                    LOG.info("DDD " + lineNumber + ": " + detectionMethod + " | " + termItemId);
+                    exp.addToCollection("interactionDetectionMethods", termItemId);
+                    //store(exp);
+                }
+            }
 
             //            String shortName = h.shortName;
 //            interactionDetail.setAttribute("name", shortName);
 //            interactionDetail.setAttribute("role1", role1);
 //            interactionDetail.setAttribute("role2", role2);
-            interactionDetail.setAttribute("type", type);
+
             if (StringUtils.isNumeric(score)) {
                 interactionDetail.setAttribute("confidence", score);
             }
-//                interactionDetail.setAttribute("relationshipType", h.relationshipType);
+
             if (miCodes.get(type) != null) {
                 interactionDetail.setAttribute("relationshipType", miCodes.get(type));
+                interactionDetail.setAttribute("type", type);
             }
 //            interactionDetail.setReference("experiment", experiment.getIdentifier());
             interactionDetail.setReference("interaction", interaction);
@@ -270,6 +292,10 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         } else {
             token = value;
         }
+        if (token.startsWith("-")) {
+            return null;
+        }
+
         // 0,1,4,5
         if (token.startsWith(TAIR)) {
             return token.replace(TAIR, "").toUpperCase();
@@ -284,15 +310,12 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             // fill map with definitions
             String miCode = token.replace(PSI, "").substring(1, 8);
             if (!miCodes.containsKey(miCode)) {
-//                String description = StringUtils.substringAfterLast(token, "(").replace(')','');
                 String description = StringUtils.substringAfterLast(token, "(");
                 String newDescription = StringUtils.substringBeforeLast(description, ")");
-                        //.replaceFirst(")","");
                 miCodes.put(miCode, newDescription);
                 LOG.info("MI CODES:" + miCode + "|" + newDescription);
             }
             return miCode;
-//            return token.replace(PSI, "").substring(1, 8);
         }
         // 8
         if (token.startsWith(PUBMED)) {
@@ -326,20 +349,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     }
 
 
-    /**
-     * Create and store a GeneRIF item on the first time called.
-     *
-     * @param annotation the RIF note
-     * @param timeStamp
-     * @return an Item representing the geneRIF
-     */
-    private Item createGeneRIF(String annotation, String timeStamp) throws ObjectStoreException {
-        Item generif = createItem("Generif");
-        generif.setAttribute("annotation", annotation);
-        generif.setAttribute("timeStamp", timeStamp);
-
-        return generif;
-    }
 
 
     /**
@@ -380,7 +389,8 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             pubItems.put(primaryId, pub.getIdentifier());
             exp = createExperiment(primaryId, interaction, pub);
         } else {
-            interaction.setReference("experiment", expItems.get(primaryId));
+            exp = expItems.get(primaryId);
+            interaction.setReference("experiment", exp.getIdentifier());
         }
         return exp;
     }
@@ -400,8 +410,31 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         exp.setReference("publication", pub);
         interaction.setReference("experiment", exp);
         store(exp);
-        expItems.put(primaryId, exp.getIdentifier());
+//        expItems.put(primaryId, exp.getIdentifier());
+        expItems.put(primaryId, exp);
         return exp;
+    }
+
+    /**
+     * create and store protein interaction terms
+     * @param identifier identifier for interaction term
+     * @return id representing term object
+     *
+     */
+    private String getTerm(String identifier) throws ObjectStoreException {
+        if (identifier.length() < 2) {
+            // it could be '-'
+            return null;
+        }
+        String itemId = terms.get(identifier);
+        if (itemId == null) {
+            Item term = createItem("InteractionTerm");
+            term.setAttribute("identifier", identifier);
+            itemId = term.getIdentifier();
+            terms.put(identifier, itemId);
+            store(term);
+        }
+        return itemId;
     }
 
 
