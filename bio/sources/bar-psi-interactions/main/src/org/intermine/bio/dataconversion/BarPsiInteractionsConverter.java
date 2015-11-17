@@ -68,7 +68,8 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 
     private Map<String, String> pubItems = new HashMap<String, String>();
     private Map<String, String> geneItems = new HashMap<String, String>();
-    private Map<String, String> MIcodes = new HashMap<String, String>();
+    private Map<String, String> expItems = new HashMap<String, String>();
+    private Map<String, String> miCodes = new HashMap<String, String>();
 
     private static final String PROP_FILE = "psi-intact_config.properties";
     private Map<String, String> pubs = new HashMap<String, String>();
@@ -115,9 +116,9 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         if ("mitabOut.txt".equals(currentFile.getName())) {
             processFile(reader, org);
         } else {
-            LOG.warn("WWSS skipping file: " + currentFile.getName());
-            //            throw new IllegalArgumentException("Unexpected file: "
-            //          + currentFile.getName());
+//            LOG.warn("WWSS skipping file: " + currentFile.getName());
+            throw new IllegalArgumentException("Unexpected file: "
+                    + currentFile.getName());
         }
     }
 
@@ -158,18 +159,11 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         IdResolver athResolver = IdResolverService.getIdResolverByOrganism("3702");
         String pidA = null;
 
-        String [] headers = null;
+//        String [] headers = null;
         int lineNumber = 0;
 
         while (tsvIter.hasNext()) {
             String[] line = (String[]) tsvIter.next();
-
-//            // this can be omitted
-//            if (lineNumber == 0) {
-//                checkHeader(line);
-//                lineNumber++;
-//                continue;
-//            }
 
 
             String geneIdA = parseToken(line [0]);
@@ -179,7 +173,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             String geneSynA = parseToken(line [4]);
             String geneSynB = parseToken(line [5]);
             String detectionMethod = parseToken(line [6]);
-            String FirstAuthor = line [7];
+//            String FirstAuthor = line [7];
             String pubMedId = parseToken(line [8]);
             String taxidA = parseToken(line[9]);
             String taxidB = parseToken(line[10]);
@@ -238,6 +232,9 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                 interactionDetail.setAttribute("confidence", score);
             }
 //                interactionDetail.setAttribute("relationshipType", h.relationshipType);
+            if (miCodes.get(type) != null) {
+                interactionDetail.setAttribute("relationshipType", miCodes.get(type));
+            }
 //            interactionDetail.setReference("experiment", experiment.getIdentifier());
             interactionDetail.setReference("interaction", interaction);
 //            processRegions(h, interactionDetail, gene1Interactor, shortName, gene1RefId);
@@ -286,14 +283,16 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         if (token.startsWith(PSI)) {
             // fill map with definitions
             String miCode = token.replace(PSI, "").substring(1, 8);
-            if (!MIcodes.containsKey(miCode)) {
+            if (!miCodes.containsKey(miCode)) {
 //                String description = StringUtils.substringAfterLast(token, "(").replace(')','');
                 String description = StringUtils.substringAfterLast(token, "(");
+                String newDescription = StringUtils.substringBeforeLast(description, ")");
                         //.replaceFirst(")","");
-                MIcodes.put(miCode, description);
-                LOG.info("MI CODES:" + miCode + "|" + description);
+                miCodes.put(miCode, newDescription);
+                LOG.info("MI CODES:" + miCode + "|" + newDescription);
             }
-            return token.replace(PSI, "").substring(1, 8);
+            return miCode;
+//            return token.replace(PSI, "").substring(1, 8);
         }
         // 8
         if (token.startsWith(PUBMED)) {
@@ -379,13 +378,29 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             pub.setAttribute("pubMedId", primaryId);
             store(pub);
             pubItems.put(primaryId, pub.getIdentifier());
-            exp = createItem("InteractionExperiment");
-            exp.setAttribute("name", "Exp-" + primaryId);
-            exp.setReference("publication", pub);
-            interaction.setReference("experiment", exp);
-//            exp.addToCollection("interactions", interactionDetail);
-            store(exp);
+            exp = createExperiment(primaryId, interaction, pub);
+        } else {
+            interaction.setReference("experiment", expItems.get(primaryId));
         }
+        return exp;
+    }
+
+    /**
+     * @param primaryId
+     * @param interaction
+     * @param pub
+     * @return
+     * @throws ObjectStoreException
+     */
+    private Item createExperiment(String primaryId, Item interaction, Item pub)
+        throws ObjectStoreException {
+        Item exp;
+        exp = createItem("InteractionExperiment");
+        exp.setAttribute("name", "Exp-" + primaryId);
+        exp.setReference("publication", pub);
+        interaction.setReference("experiment", exp);
+        store(exp);
+        expItems.put(primaryId, exp.getIdentifier());
         return exp;
     }
 
