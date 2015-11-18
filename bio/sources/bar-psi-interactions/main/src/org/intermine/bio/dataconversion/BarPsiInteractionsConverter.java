@@ -66,31 +66,24 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private static final String PUBMED = "pubmed:";
     private static final String TAXID = "taxid:";
 
-    private Map<String, String> pubItems = new HashMap<String, String>();
-    private Map<String, String> geneItems = new HashMap<String, String>();
-//    private Map<String, String> expItems = new HashMap<String, String>();
-    private Map<String, Item> expItems = new HashMap<String, Item>();
-    private Map<String, String> miCodes = new HashMap<String, String>();
-    private Map<String, String> expTerms = new HashMap<String, String>();
-
-    private static final String PROP_FILE = "psi-intact_config.properties";
+    // maps with <identifier, item identifier>
     private Map<String, String> pubs = new HashMap<String, String>();
-    private Map<String, Object> experimentNames = new HashMap<String, Object>();
+    private Map<String, String> genes = new HashMap<String, String>();
     private Map<String, String> terms = new HashMap<String, String>();
 
-    private Map<String, String> regions = new HashMap<String, String>();
+    private Map<String, Item> expItems = new HashMap<String, Item>();
+    private Map<String, String> miCodes = new HashMap<String, String>();
+
+    private static final String PROP_FILE = "psi-intact_config.properties";
+
     private String termId = null;
-//    private static final String INTERACTION_TYPE = "physical";
     private Map<String, String[]> config = new HashMap<String, String[]>();
 //    private Set<String> taxonIds = null;
-    private Map<String, String> genes = new HashMap<String, String>();
     private Map<MultiKey, Item> interactions = new HashMap<MultiKey, Item>();
     private String ALIAS_TYPE = "gene name";
-    private static final String SPOKE_MODEL = "prey";   // don't store if all roles prey
-    private static final String DEFAULT_IDENTIFIER = "symbol";
-    private static final String DEFAULT_DATASOURCE = "";
-//    private static final String BINDING_SITE = "MI:0117";
-//    private static final Set<String> INTERESTING_COMMENTS = new HashSet<String>();
+//    private static final String SPOKE_MODEL = "prey";   // don't store if all roles prey
+//    private static final String DEFAULT_IDENTIFIER = "symbol";
+//    private static final String DEFAULT_DATASOURCE = "";
 
 //    protected IdResolver rslv;
 
@@ -216,14 +209,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                 if (miCodes.get(detectionMethod) != null) {
                     String termItemId = getTerm(detectionMethod);
                     exp.addToCollection("interactionDetectionMethods", termItemId);
-
-//                    if (!expTerms.containsKey(pubMedId.concat(termItemId))) {
-//                        expTerms.put(pubMedId.concat(termItemId), termItemId);
-//                        exp.addToCollection("interactionDetectionMethods", termItemId);
-//                    }
-
-//                    LOG.info("DDD " + lineNumber + ": " + detectionMethod + " | " + termItemId);
-                    //store(exp);
                 }
             }
 
@@ -299,6 +284,12 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                 String newDescription = StringUtils.substringBeforeLast(description, ")");
                 miCodes.put(miCode, newDescription);
                 LOG.info("MI CODES:" + miCode + "|" + newDescription);
+                try {
+                    createTerm (miCode, newDescription);
+                } catch (ObjectStoreException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
             return miCode;
         }
@@ -317,7 +308,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
      * @param line
      */
     private void checkHeader(String[] line) {
-        // column headers - strip off any extra columns - FlyAtlas
+        // column headers - strip off any extra columns
         // not necessary
         String[] headers;
         int end = 0;
@@ -334,8 +325,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     }
 
 
-
-
     /**
      * Create and store a BioEntity item on the first time called.
      *
@@ -348,14 +337,14 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         Item bioentity = null;
 
         if ("Gene".equals(type)) {
-            if (!geneItems.containsKey(primaryId)) {
+            if (!genes.containsKey(primaryId)) {
                 bioentity = createItem("Gene");
                 bioentity.setAttribute("primaryIdentifier", primaryId);
                 store(bioentity);
-                geneItems.put(primaryId, bioentity.getIdentifier());
+                genes.put(primaryId, bioentity.getIdentifier());
             }
         }
-        return geneItems.get(primaryId);
+        return genes.get(primaryId);
     }
     /**
      * Create and store a Publication item on the first time called.
@@ -367,11 +356,11 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private Item createPublication(String primaryId, Item interaction) throws ObjectStoreException {
         Item pub = null;
         Item exp = null;
-        if (!pubItems.containsKey(primaryId)) {
+        if (!pubs.containsKey(primaryId)) {
             pub = createItem("Publication");
             pub.setAttribute("pubMedId", primaryId);
             store(pub);
-            pubItems.put(primaryId, pub.getIdentifier());
+            pubs.put(primaryId, pub.getIdentifier());
             exp = createExperiment(primaryId, interaction, pub);
         } else {
             exp = expItems.get(primaryId);
@@ -417,10 +406,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
      *
      */
     private String getTerm(String identifier) throws ObjectStoreException {
-        if (identifier.length() < 2) {
-            // it could be '-'
-            return null;
-        }
         String itemId = terms.get(identifier);
         if (itemId == null) {
             Item term = createItem("InteractionTerm");
@@ -432,6 +417,18 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         return itemId;
     }
 
+    private String createTerm (String identifier, String name) throws ObjectStoreException {
+        String itemId = terms.get(identifier);
+        if (itemId == null) {
+            Item term = createItem("InteractionTerm");
+            term.setAttribute("identifier", identifier);
+            term.setAttribute("name", name);
+            itemId = term.getIdentifier();
+            terms.put(identifier, itemId);
+            store(term);
+        }
+        return itemId;
+    }
 
     /**
      * Create and store a organism item on the first time called.
