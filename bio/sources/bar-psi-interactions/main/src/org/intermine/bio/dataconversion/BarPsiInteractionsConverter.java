@@ -28,7 +28,6 @@ import org.intermine.metadata.Model;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.util.FormattedTextParser;
 import org.intermine.xml.full.Item;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -72,6 +71,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 //    private Map<String, String> expItems = new HashMap<String, String>();
     private Map<String, Item> expItems = new HashMap<String, Item>();
     private Map<String, String> miCodes = new HashMap<String, String>();
+    private Map<String, String> expTerms = new HashMap<String, String>();
 
     private static final String PROP_FILE = "psi-intact_config.properties";
     private Map<String, String> pubs = new HashMap<String, String>();
@@ -91,7 +91,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private static final String DEFAULT_DATASOURCE = "";
 //    private static final String BINDING_SITE = "MI:0117";
 //    private static final Set<String> INTERESTING_COMMENTS = new HashSet<String>();
-//    private static final String ATH_TAXONID = "3702";
 
 //    protected IdResolver rslv;
 
@@ -210,36 +209,20 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 
             Item interaction = getInteraction(refIdA, refIdB);
             Item interactionDetail =  createItem("InteractionDetail");
-/*
-            if (StringUtils.isNotBlank(pubMedId)) {
-                Item exp = createPublication(pubMedId, interactionDetail);
-//                interactionDetail.setReference("experiment", exp);
 
-                if (miCodes.get(detectionMethod) != null) {
-                    String termItemId = getTerm(detectionMethod);
-                    LOG.info("DDD " + lineNumber + ": " + detectionMethod + " | " + termItemId);
-                    if (exp.getCollection("interactionDetectionMethods") == null) {
-                        exp.addToCollection("interactionDetectionMethods", termItemId);
-                        store(exp);
-                    } else {
-                        if (!exp.getCollection("interactionDetectionMethods").getRefIds().contains(termItemId)) {
-                            exp.addToCollection("interactionDetectionMethods", termItemId);
-                            store(exp);
-                        }
-                    }
-//                        exp.addToCollection("interactionDetectionMethods", termItemId);
-//                        store(exp);
-//                    }
-                }
-            }
-*/
             if (StringUtils.isNotBlank(pubMedId)) {
                 Item exp = createPublication(pubMedId, interactionDetail);
 
                 if (miCodes.get(detectionMethod) != null) {
                     String termItemId = getTerm(detectionMethod);
-                    LOG.info("DDD " + lineNumber + ": " + detectionMethod + " | " + termItemId);
                     exp.addToCollection("interactionDetectionMethods", termItemId);
+
+//                    if (!expTerms.containsKey(pubMedId.concat(termItemId))) {
+//                        expTerms.put(pubMedId.concat(termItemId), termItemId);
+//                        exp.addToCollection("interactionDetectionMethods", termItemId);
+//                    }
+
+//                    LOG.info("DDD " + lineNumber + ": " + detectionMethod + " | " + termItemId);
                     //store(exp);
                 }
             }
@@ -263,9 +246,11 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 //            interactionDetail.addCollection(allInteractors);
             store(interactionDetail);
 
-
             lineNumber++;
         }
+        LOG.info("MI CODES FINAL:" + miCodes.keySet());
+        int expNr = storeAllExperiments();
+        LOG.info("Created " + expNr + " experiments.");
     }
 
     private Item getInteraction(String refId, String gene2RefId) throws ObjectStoreException {
@@ -409,11 +394,21 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         exp.setAttribute("name", "Exp-" + primaryId);
         exp.setReference("publication", pub);
         interaction.setReference("experiment", exp);
-        store(exp);
+//        store(exp);
 //        expItems.put(primaryId, exp.getIdentifier());
         expItems.put(primaryId, exp);
         return exp;
     }
+
+    private Integer storeAllExperiments () throws ObjectStoreException{
+        int tot = 0;
+        for (Item exp : expItems.values()) {
+            store(exp);
+            tot ++;
+        }
+        return tot;
+    }
+
 
     /**
      * create and store protein interaction terms
