@@ -100,14 +100,14 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 			log.debug("Germlasm Unique Accession:" + source.getEntityUniqueAccession());
 			
 			if (StringUtils.isBlank(source.getEntityUniqueAccession())){
-				exception = new Exception("Entity Unique Accession Cannot Null!");
+				exception = new Exception("Entity Unique Accession Cannot Be Null!");
 				throw exception;
 			}
 			
 			item = StockService.getStockItem(source.getEntityUniqueAccession()).getItem();
 				
 
-		} 
+		} /*
 		else
 		{
 
@@ -122,7 +122,7 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 			exception = new Exception("Source Feature Item Cannot be null! Source Feature Item does not exists in the Service Lookup!");
 			throw exception;
 		}
-		
+		 */
 		}
 		catch (Exception e){
 			exception = e;

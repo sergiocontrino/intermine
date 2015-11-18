@@ -1,25 +1,13 @@
-select 
-    pub_id,
-	pub_type,
-	pub_title,
-	pub_uniquename,
-	pub_source,
-	pub_volume,
-	pub_volume_title,
-	pub_issue,
-	pub_pages,
-	pub_year,
-	pub_unique_accession,
-	pub_accession_number,
-	pub_db_name,
-	pub_db_url,
-	pub_db_urlprefix,
-	first_pub_author,
-	publication_date,
-	abstract_text,
-	pub_doi,
-	entity_name,
-	entity_unique_accession,
-	genetic_feature_type
-	from thalemine_stg.pub_features p
-where p.pub_db_name = 'PMID'
+SELECT
+distinct 
+    p.pub_id,
+	p.pub_type,
+	p.pub_title,
+	p.pub_uniquename,
+	p.pub_unique_accession,
+	p.pub_accession_number,
+	p.pub_db_name,
+	s.uniquename entity_name,
+	s.germplasm_accession entity_unique_accession,
+	'germplasm' as genetic_feature_type
+	from thalemine_stg.publication_features p

@@ -19,5 +19,4 @@ first_pub_author,
 publication_date,
 abstract_text,
 pub_doi
-from thalemine_stg.publications p
-where pub_db_name = 'PMID'
+from thalemine_stg.pub_source p
