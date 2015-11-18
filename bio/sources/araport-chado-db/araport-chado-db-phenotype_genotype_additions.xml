@@ -12,6 +12,8 @@
 			reverse-reference="phenotypesObserved" />
 		<reference name="anatomyTerm" referenced-type="AnatomyTerm" />
 		<reference name="developmentTerm" referenced-type="DevelopmentTerm" />
+		<collection name="phenotypeAnnotations" referenced-type="PhenotypeAnnotation"
+			reverse-reference="phenotype" />
 	</class>
 
 	<class name="AnatomyTerm" extends="OntologyTerm" is-interface="true">
@@ -98,6 +100,8 @@
 	<class name="Stock" is-interface="true">
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="stocks" />
+		<collection name="stockphenotypeAnnotations" referenced-type="PhenotypeAnnotation"
+			reverse-reference="stock" />
 	</class>
 	
 	<class name="Gene" is-interface="true">
@@ -118,6 +122,21 @@
 			reverse-reference="genotypes" />
 		<collection name="genes" referenced-type="Gene"
 			reverse-reference="genotypes" />
+		<collection name="genotypephenotypeAnnotations" referenced-type="PhenotypeAnnotation"
+			reverse-reference="genotype" />
+	 </class>
+	 
+	 
+	 <class name="PhenotypeAnnotation" extends="BioEntity"
+		is-interface="true">
+		<reference name="phenotype" referenced-type="Phenotype"
+			reverse-reference="phenotypeAnnotations" />
+		<reference name="genotype" referenced-type="Genotype"
+			reverse-reference="genotypephenotypeAnnotations" />
+		<reference name="stock" referenced-type="Stock"
+			reverse-reference="stockphenotypeAnnotations" />
+		<reference name="publication" referenced-type="Publication"
+			 />
 	 </class>
 
 	<class name="GenotypeZygosity" is-interface="true">
