@@ -1,4 +1,6 @@
-	select s.name stock_name,
+select
+	distinct 
+    s.name stock_name,
 	s.uniquename stock_unique_name,
 	'Germplasm:' || dbx.accession stock_unique_accession,
 	 g.name genotype_name, 
@@ -12,4 +14,7 @@
 		ON
 		gdbx.dbxref_id = g.dbxref_id
 		join 
-		dbxref dbx on dbx.dbxref_id = s.dbxref_id;
+		dbxref dbx on dbx.dbxref_id = s.dbxref_id
+		join
+		thalemine_stg.stock_dataset st 
+		on st.stock_id = s.stock_id;

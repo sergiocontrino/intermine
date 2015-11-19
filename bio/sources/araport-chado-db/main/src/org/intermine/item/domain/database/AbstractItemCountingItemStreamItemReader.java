@@ -81,15 +81,15 @@ public abstract class AbstractItemCountingItemStreamItemReader<T> extends Abstra
 	@Override
 	public T read() throws Exception, UnexpectedInputException, ParseException {
 		
-		log.info("Current Item Count:" + currentItemCount);
-		log.info("MaxItemCount:" + maxItemCount);
+		log.debug("Current Item Count:" + currentItemCount);
+		log.debug("MaxItemCount:" + maxItemCount);
 		
 		if (currentItemCount >= maxItemCount) {
 			return null;
 		}
 		currentItemCount++;
 		T item = doRead();
-		log.info("Item:" + item);
+		log.debug("Item:" + item);
 		if(item instanceof ItemCountAware) {
 			((ItemCountAware) item).setItemCount(currentItemCount);
 		}

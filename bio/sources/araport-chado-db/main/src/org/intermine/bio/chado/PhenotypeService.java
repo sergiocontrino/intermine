@@ -21,6 +21,8 @@ public class PhenotypeService {
 	private static MultiMap phenotypeGenotypeItemSet = new MultiValueMap();
 	
 	private static MultiMap publicationItemSet = new MultiValueMap();
+	
+	private static MultiMap phenotypeAnnotationItemSet = new MultiValueMap();
 
 	private PhenotypeService() {
 
@@ -82,11 +84,20 @@ public class PhenotypeService {
 
 	public static void addPhenotypeGenotypeItem(String phenotypeName, Item item) {
 
-		phenotypeAlleleItemSet.put(phenotypeName, item);
+		phenotypeGenotypeItemSet.put(phenotypeName, item);
 	}
 
 	public static MultiMap getPhenotypeGenotypeItemSet() {
 		return phenotypeGenotypeItemSet;
 	}
 
+	public static MultiMap getPhenotypeAnnotationItemSet() {
+		return phenotypeAnnotationItemSet;
+	}
+
+	public static void addPhenotypeAnnotation(String phenotypeName, Item item) {
+
+		phenotypeAnnotationItemSet.put(phenotypeName, item);
+		
+	}
 }

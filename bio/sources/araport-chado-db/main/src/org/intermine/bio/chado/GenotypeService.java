@@ -23,7 +23,7 @@ public class GenotypeService {
 	private static MultiMap genotypeStockItemSet = new MultiValueMap();
 	
 	private static MultiKeyMap genotypeStockItemMap = new MultiKeyMap();
-
+	private static MultiMap phenotypeAnnotationItemSet = new MultiValueMap();
 		
 	private GenotypeService() {
 
@@ -83,4 +83,13 @@ public class GenotypeService {
 		 return genotypeStockItemSet;
 	 }
 
+	 public static MultiMap getPhenotypeAnnotationItemSet() {
+			return phenotypeAnnotationItemSet;
+		}
+
+		public static void addPhenotypeAnnotation(String genotypeItem, Item item) {
+
+			phenotypeAnnotationItemSet.put(genotypeItem, item);
+			
+		}
 }

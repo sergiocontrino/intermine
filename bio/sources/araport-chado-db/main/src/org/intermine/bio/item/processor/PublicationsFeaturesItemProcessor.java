@@ -43,13 +43,13 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 		Item item = null;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			item = getItembyGeneticFeatureType(source);
 
-			log.info("Publication Unique Accession: " + source.getPubAccessionNumber());
+			log.debug("Publication Unique Accession: " + source.getPubAccessionNumber());
 			
-			log.info("Item obtained for Publication Collection:" + item);
+			log.debug("Item obtained for Publication Collection:" + item);
 			
 
 			if (item != null) {
@@ -66,7 +66,7 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 						+ ";Error occured:" + exception.getMessage());
 			} else {
 
-				log.info("Source Record has been successfully added to a publication/feature context collection: "
+				log.debug("Source Record has been successfully added to a publication/feature context collection: "
 						+ item);
 
 			}
@@ -92,25 +92,47 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 	private Item getItembyGeneticFeatureType(SourcePublicationFeatures source) {
 
 		Item item = null;
+		Exception exception = null;
 
+		try {
 		if (source.getGeneticFeatureType().equals("germplasm")) {
+			
+			log.debug("Germlasm Unique Accession:" + source.getEntityUniqueAccession());
+			
+			if (StringUtils.isBlank(source.getEntityUniqueAccession())){
+				exception = new Exception("Entity Unique Accession Cannot Be Null!");
+				throw exception;
+			}
 			
 			item = StockService.getStockItem(source.getEntityUniqueAccession()).getItem();
 				
 
-		} //else if (source.getGeneticFeatureType().equals("phenotype"))
+		} /*
 		else
 		{
 
-			log.info("Phenotype Unique Accession:" + source.getEntityUniqueAccession());
+			log.debug("Phenotype Unique Accession:" + source.getEntityUniqueAccession());
 			item = PhenotypeService.getPhenotypeItem(source.getEntityUniqueAccession()).getItem();
 			
 		}
+		
 
-		if (item!=null) {
-			log.info("Item place holder has been obtained: " + item + "; Source record:" + source);
-		} else {
-			log.error("Unknown feature type to associate with a publication. Skipping row." + " Source Record:" + source);
+		if (item==null) {
+			
+			exception = new Exception("Source Feature Item Cannot be null! Source Feature Item does not exists in the Service Lookup!");
+			throw exception;
+		}
+		 */
+		}
+		catch (Exception e){
+			exception = e;
+		} finally {
+			if (exception != null) {
+				log.error("Error obtaining source feature item for a source record:" + source + "; Error:"
+						+ exception.getMessage());
+			} else {
+				log.debug("Item place holder has been obtained: " + item + "; Source record:" + source);
+			}
 		}
 
 		return item;
@@ -121,13 +143,16 @@ public class PublicationsFeaturesItemProcessor extends DataSourceProcessor imple
 		boolean status = false;
 
 		if (!StringUtils.isBlank(source.getPubAccessionNumber())){
+			
 			addPublicationBionEntityItem(source, item);
+			
+			status = true;
 		}
 		
 		if (status == true) {
-			log.info("Item has been added to a publication/feature collection " + item);
+			log.debug("Item has been added to a publication/feature collection " + item);
 		} else {
-			log.error("Unknown feature type to associate with a publication. Skipping row." + " Source Record:" + source);
+			log.error("Publication Accession Number is Null. Skipping row." + " Source Record:" + source);
 		}
 
 	}

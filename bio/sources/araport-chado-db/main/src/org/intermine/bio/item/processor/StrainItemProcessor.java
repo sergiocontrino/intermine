@@ -3,7 +3,10 @@ package org.intermine.bio.item.processor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
+import org.intermine.bio.chado.DataSetService;
+import org.intermine.bio.chado.DataSourceService;
 import org.intermine.bio.chado.OrganismService;
+import org.intermine.bio.dataconversion.BioStoreHook;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataconversion.DataSourceProcessor;
 import org.intermine.bio.dataflow.config.ApplicationContext;
@@ -21,6 +24,7 @@ public class StrainItemProcessor extends DataSourceProcessor implements ItemProc
 
 	private static final String ITEM_CLASSNAME = "Strain";
 	private static final String STRAIN_TYPE_CLASS_NAME = "organism_type";
+	private static final String DATASET_NAME = "TAIR Ecotypes";
 
 	public StrainItemProcessor(ChadoDBConverter chadoDBConverter) {
 		super(chadoDBConverter);
@@ -45,11 +49,22 @@ public class StrainItemProcessor extends DataSourceProcessor implements ItemProc
 			item = super.getService().createItem(ITEM_CLASSNAME);
 
 			log.info("Item place holder has been created: " + item);
+			
+			if (StringUtils.isBlank(source.getAccessionAbbreviation())) {
+				Exception e = new Exception("Strain Accession Primary Identifier cannot be null! Skipping Source Record:" + source);
+				throw e;
+			}
 
+			if (StringUtils.isBlank(source.getOrganismType())) {
+				Exception e = new Exception("Strain Accession OrganismType cannot be null! Skipping Source Record:" + source);
+				throw e;
+			}
+			
 			log.info("Strain Accession: " + source.getAccessionAbbreviation());
 			item.setAttribute("primaryIdentifier", source.getAccessionAbbreviation());
 
 			log.info("Organism Id: " + source.getOrganismId() + " Id:" + source.getOrganismId());
+			
 			item.setAttribute("secondaryIdentifier",
 					StringUtils.capitalize(source.getOrganismType()) + " Id:" + source.getOrganismId());
 
@@ -118,6 +133,12 @@ public class StrainItemProcessor extends DataSourceProcessor implements ItemProc
 
 			if (itemHolder!=null){
 				OrganismService.addStrainItem(source.getAccessionAbbreviation(), itemHolder);
+				
+				if (itemHolder != null) {
+
+					setDataSetItem(itemHolder, source);
+
+				}
 			}
 
 
@@ -128,7 +149,7 @@ public class StrainItemProcessor extends DataSourceProcessor implements ItemProc
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source);
+				log.error("Error storing item for source record:" + source + "Error:" + exception.getMessage());
 			} else {
 				log.info("Target Item has been created. Target Object:" + item);
 
@@ -138,6 +159,51 @@ public class StrainItemProcessor extends DataSourceProcessor implements ItemProc
 		return item;
 	}
 
+	private void setDataSetItem(ItemHolder item, SourceStrain source) {
+
+		Exception exception = null;
+		
+		Item dataSetItem = null;
+		Item dataSourceItem = null;
+		
+		try {
+		
+		dataSetItem = getDataSet();
+		dataSourceItem = DataSourceService.getDataSourceItem("TAIR").getItem();
+		
+		if (dataSetItem == null){
+			Exception e = new Exception("DataSet Item Cannot be Null!");
+			throw e;
+		}
+		
+		if (dataSourceItem == null){
+			Exception e = new Exception("DataSource Item Cannot be Null!");
+			throw e;
+		}
+
+		BioStoreHook.setDataSets(getModel(), item.getItem(),  dataSetItem.getIdentifier(),
+				DataSourceService.getDataSourceItem("TAIR").getItem().getIdentifier());
+		
+		} catch (Exception e){
+			exception = e;
+		}finally{
+			
+			if (exception!=null){
+				log.error("Error adding source record to the dataset. Source" + source + "Error:" + exception.getMessage());
+			}else{
+				log.debug("Ecotype has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
+						+ item.getItem());
+			}
+		}
+
+	
+
+	}
+	
+	private Item getDataSet() {
+		return DataSetService.getDataSetItem(DATASET_NAME).getItem();
+	}
+	
 	public void setTargetClassName(String name) {
 		this.targetClassName = name;
 	}

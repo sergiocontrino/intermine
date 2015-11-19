@@ -176,18 +176,69 @@ public class StockDAOImpl implements QueryRepository, StockDAO {
 	private PathQuery getStockGenotypeGeneticContextQuery(String stockId, String genotypeId) throws Exception {
 		PathQuery query = new PathQuery(getModel());
 
-		query.addViews("Stock.genotypes.alleles.id", "Stock.genotypes.alleles.primaryIdentifier",
-				"Stock.genotypes.alleles.alleleGeneZygosities.zygosity.name", "Stock.genotypes.alleles.mutagen.name",
-				"Stock.genotypes.alleles.inheritanceMode.name", "Stock.genotypes.alleles.alleleClass.name");
+		/*
+		query.addViews("Stock.genotypes.alleles.id",
+				"Stock.genotypes.alleles.primaryIdentifier",
+				"Stock.genotypes.alleles.alleleGenotypeZygosities.zygosity.name", 
+				"Stock.genotypes.alleles.mutagen.name",
+				"Stock.genotypes.alleles.inheritanceMode.name", 
+				"Stock.genotypes.alleles.alleleClass.name");
+				*/
 
-		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleGeneZygosities", OuterJoinStatus.OUTER);
-		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleGeneZygosities.zygosity", OuterJoinStatus.OUTER);
-		query.setOuterJoinStatus("Stock.genotypes.alleles.mutagen", OuterJoinStatus.OUTER);
-		query.setOuterJoinStatus("Stock.genotypes.alleles.inheritanceMode", OuterJoinStatus.OUTER);
-		query.setOuterJoinStatus("Stock.genotypes.alleles.alleleClass", OuterJoinStatus.OUTER);
+		query.addViews(
+				"Genotype.alleles.id",
+				"Genotype.alleles.primaryIdentifier",
+                "Genotype.alleles.alleleGenotypeZygosities.zygosity.name",
+                "Genotype.alleles.mutagen.name",
+                "Genotype.alleles.inheritanceMode.name",
+                "Genotype.alleles.alleleClass.name"
+				);
+		
+		query.setOuterJoinStatus("Genotype.alleles.alleleGenotypeZygosities", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Genotype.alleles.alleleGenotypeZygosities.zygosity", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Genotype.alleles.mutagen", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Genotype.alleles.inheritanceMode", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Genotype.alleles.alleleClass", OuterJoinStatus.OUTER);
 
-		query.addConstraint(Constraints.eq("Stock.id", stockId));
-		query.addConstraint(Constraints.eq("Stock.genotypes.id", genotypeId));
+		query.addConstraint(Constraints.eq("Genotype.stocks.id", stockId));
+		query.addConstraint(Constraints.eq("Genotype.id", genotypeId));
+		
+		//query.addConstraint(Constraints.eq("Genotype.stocks.primaryIdentifier", "CS16631"));
+
+		return query;
+	}
+	
+	private PathQuery getStockGenotypeGeneticContextQueryByPrimaryId(String stockId, String genotypeId, String primaryStockId) throws Exception {
+		PathQuery query = new PathQuery(getModel());
+
+		/*
+		query.addViews("Stock.genotypes.alleles.id",
+				"Stock.genotypes.alleles.primaryIdentifier",
+				"Stock.genotypes.alleles.alleleGenotypeZygosities.zygosity.name", 
+				"Stock.genotypes.alleles.mutagen.name",
+				"Stock.genotypes.alleles.inheritanceMode.name", 
+				"Stock.genotypes.alleles.alleleClass.name");
+				*/
+
+		query.addViews(
+				"Genotype.alleles.id",
+				"Genotype.alleles.primaryIdentifier",
+                "Genotype.alleles.alleleGenotypeZygosities.zygosity.name",
+                "Genotype.alleles.mutagen.name",
+                "Genotype.alleles.inheritanceMode.name",
+                "Genotype.alleles.alleleClass.name"
+				);
+		
+		query.setOuterJoinStatus("Genotype.alleles.alleleGenotypeZygosities", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Genotype.alleles.alleleGenotypeZygosities.zygosity", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Genotype.alleles.mutagen", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Genotype.alleles.inheritanceMode", OuterJoinStatus.OUTER);
+		query.setOuterJoinStatus("Genotype.alleles.alleleClass", OuterJoinStatus.OUTER);
+
+		query.addConstraint(Constraints.eq("Genotype.stocks.id", stockId));
+		query.addConstraint(Constraints.eq("Genotype.id", genotypeId));
+		
+		//query.addConstraint(Constraints.eq("Genotype.stocks.primaryIdentifier", "CS16631"));
 
 		return query;
 	}

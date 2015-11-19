@@ -79,39 +79,68 @@ public class BackgroundAccessionStockItemPostprocessor extends AbstractStep {
 
 	private void createStockStrainCollection() {
 		Map<String, Item> items = OrganismService.getStrainItemSet();
-
+		
+		log.debug("Total Count of Entities to Process:" + items.size());
+		
+				
 		for (Map.Entry<String, Item> item : items.entrySet()) {
 
+			Exception exception = null;
+			ItemHolder itemHolder = null;
+			Item strainItem = null;
+			
 			String strain = item.getKey();
 
-			log.info("Processing Strain: " + strain);
+			log.info("Processing BackGround Strain/Stock Collection: " + strain);
 
 			Collection<Item> collection = (Collection<Item>) item.getValue();
 
 			List terms = new ArrayList(collection);
 
-			Item strainItem = OrganismService.getStrainMap().get(strain).getItem();
-			ItemHolder itemHolder = OrganismService.getStrainMap().get(strain);
+			itemHolder = OrganismService.getStrainMap().get(strain);
+			
+			try {
+				
+			if (itemHolder==null){
+				exception = new Exception("StrainItemHolder is Null! Source Record does not exists in the Service Lookup!");
+				throw exception;
+			}
+						
+			strainItem = itemHolder.getItem();
+			
+			if (strainItem==null){
+				exception = new Exception("StrainItem is Null! Source Record does not exists in the Service Lookup!");
+				throw exception;
+			}
+			
 
+			log.debug("Total Count of Entities to Process:" + collection.size());
+							
 			ReferenceList referenceList = new ReferenceList();
 			referenceList.setName("stocks");
 
-			try {
-
-				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
-
-				log.info("Collection successfully stored." + itemHolder.getItem() + ";" + "Collection size:"
-						+ collection.size());
-
+			StoreService.storeCollection(collection, itemHolder, referenceList.getName());
+			
 			} catch (ObjectStoreException e) {
-				log.error("Error storing stocks collection for strain:" + strain);
+				exception  = e;
+			} catch (Exception e) {
+				exception  = e;
+
+			} finally {
+				if (exception  != null) {
+					log.error("Error storing Stock/Background Strain Collection collection for strain:" + strain + "; Error:"
+							+ exception .getMessage());
+				} else {
+					log.debug("Stock/Background Strain Collection successfully stored." + itemHolder.getItem() + ";"
+							+ "Collection size:" + collection.size());
+				}
 			}
 
 		}
 
-		log.info("Strain Map Item Size =" + items.size());
+		log.debug("Strain Map Item Size =" + items.size());
 
-		log.info("Tasklet Task has Completed! " + getName());
+		log.debug("Tasklet Task has Completed! " + getName());
 
 	}
 

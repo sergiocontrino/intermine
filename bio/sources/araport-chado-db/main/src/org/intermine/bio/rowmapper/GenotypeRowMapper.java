@@ -17,6 +17,7 @@ public class GenotypeRowMapper implements RowMapper<SourceGenotype> {
 		item.setName(rs.getString("genotype_name"));
 		item.setUniqueAccession(rs.getString("genotype_unique_accession"));
 		item.setDescription(rs.getString("genotype_description"));
+		item.setType(rs.getString("genotype_type"));
 			
 		return item;
 	}

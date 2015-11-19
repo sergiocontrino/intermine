@@ -105,6 +105,11 @@ public class DataSourceItemProcessor extends AbstractStep {
 		String urlPheno = "https://www.arabidopsis.org/";
 		String descriptionPheno = "TAIR Phenotypes";
 		Item phenoDataSet = createDataSet(tairDataSourceItem, "TAIR Phenotypes", versionPheno, urlPheno, descriptionPheno);
+		
+		String versionEcotypes = "TAIR Ecotypes, October 2013";
+		String urlEcotypes = "https://www.arabidopsis.org/";
+		String descriptionEcotypes = "TAIR Ecotypes";
+		Item ecotyTypesDataSet = createDataSet(tairDataSourceItem, "TAIR Ecotypes", versionPheno, urlPheno, descriptionPheno);
 
 	}
 
@@ -134,7 +139,7 @@ public class DataSourceItemProcessor extends AbstractStep {
 
 				itemHolder = new ItemHolder(dataSourceItem, itemId);
 
-				if (itemHolder != null && itemId != 1) {
+				if (itemHolder != null && itemId != -1) {
 
 					DataSourceService.addDataSourceItem(dataSourceName, itemHolder);
 
@@ -197,7 +202,7 @@ public class DataSourceItemProcessor extends AbstractStep {
 
 				itemHolder = new ItemHolder(dataSetItem, itemId);
 
-				if (itemHolder != null && itemId != 1) {
+				if (itemHolder != null && itemId != -1) {
 
 					DataSetService.addDataSetItem(dataSetName, itemHolder);
 

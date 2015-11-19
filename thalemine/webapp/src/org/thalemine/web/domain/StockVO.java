@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 public class StockVO {
 
 	protected static final Logger LOG = Logger.getLogger(StockVO.class);
+	private static final String PATTERN = "unspecified_genetic_context";
 
 	private String stockObjectId;
 	private String genotypeObjectId;
@@ -192,24 +193,24 @@ public class StockVO {
 		String result = "&nbsp;";
 
 		if (genotypeName != null) {
-			int beginIndex = genotypeName.indexOf("(");
-			int endIndex = genotypeName.indexOf(")");
+			
+			int beginIndex = 0;
+			int endIndex = genotypeName.indexOf("(");
 
-			if ((beginIndex > 0) && (endIndex > 0)) {
-				result = genotypeName.substring(beginIndex + 1, endIndex);
-			}
-			
+			if (genotypeName.matches(PATTERN)) {
+				result = genotypeName;
+			} else if ((endIndex > 0)) {
 
-			if (result!=null){
-				result = result.replaceAll(",", "");
-			}
-			
-			if (result!=null){
-				result = result.toLowerCase();
-			}
-			
-			
+				result = genotypeName.substring(beginIndex, endIndex);
 
+				if (result != null) {
+					result = result.toLowerCase();
+				}
+			} else {
+				result = genotypeName;
+			}
+
+	
 		}
 		return result;
 
@@ -221,22 +222,12 @@ public class StockVO {
 		
 
 		if (genotypeName != null) {
-			int endIndex = genotypeName.indexOf(";");
+			
+			int beginIndex = genotypeName.indexOf("(");
+			int endIndex = genotypeName.indexOf(")");
 
-			if (endIndex > 0) {
-				result = genotypeName.substring(0, endIndex);
-			}
-			
-			if (result!=null){
-				result = result.replaceAll(",", " ");
-			}
-			
-			if (result!=null){
-				result = result.replaceAll("  ", " ");
-			}
-			
-			if (result!=null){
-				result = "(" + result + ")";
+			if ((beginIndex > 0) && (endIndex > 0)) {
+				result = genotypeName.substring(beginIndex + 1, endIndex);
 			}
 			
 		}

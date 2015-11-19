@@ -190,15 +190,19 @@ public class ObjectStoreDataLoader extends DataLoader
                     }
                     time = now;
                     times[(int) ((opCount / 10000) % 20)] = now;
+                    LOG.info("Before Batch Commit Transaction. OpCount = " + opCount);
                     if (opCount % 500000 == 0) {
                         getIntegrationWriter().batchCommitTransaction();
                     }
+                    LOG.info("After Batch Commit Transaction.");
                 }
                 time4 = System.currentTimeMillis();
                 timeSpentCommit += time4 - time3;
             }
             time3 = System.currentTimeMillis();
+            LOG.info("Before Last Batch Commit Transaction. OpCount = " + opCount);
             getIntegrationWriter().commitTransaction();
+            LOG.info("After Last Batch Commit Transaction.");
             getIntegrationWriter().close();
             long now = System.currentTimeMillis();
             timeSpentCommit += now - time3;

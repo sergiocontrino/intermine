@@ -58,7 +58,7 @@ public class PhenotypeGeneticContextItemProcessor extends DataSourceProcessor im
 			if (item != null) {
 				addToCollection(source, item);
 			}else
-				new Exception("Phenotype/Genetic Feature Item is Null. Skipping source record.");
+				new Exception("Phenotype/Genetic Feature Item is Null. Skipping source record." + source);
 
 		} catch (Exception e) {
 			exception = e;
@@ -112,7 +112,12 @@ public class PhenotypeGeneticContextItemProcessor extends DataSourceProcessor im
 
 		{
 
-			item = GenotypeService.getGenotypeItem(source.getEntityUniqueAccession()).getItem();	
+			ItemHolder itemHolder = null;
+			itemHolder = GenotypeService.getGenotypeItem(source.getEntityUniqueAccession());
+			
+			if (itemHolder!=null){
+				item = GenotypeService.getGenotypeItem(source.getEntityUniqueAccession()).getItem();	
+			}
 			status = true;
 
 		}

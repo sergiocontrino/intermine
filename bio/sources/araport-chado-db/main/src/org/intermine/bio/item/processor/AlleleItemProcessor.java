@@ -5,9 +5,11 @@ import org.apache.log4j.Logger;
 import org.intermine.bio.chado.AlleleService;
 import org.intermine.bio.chado.CVService;
 import org.intermine.bio.chado.DataSetService;
+import org.intermine.bio.chado.DataSourceService;
 import org.intermine.bio.chado.GenotypeService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.chado.StockService;
+import org.intermine.bio.dataconversion.BioStoreHook;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataconversion.DataSourceProcessor;
 import org.intermine.bio.dataflow.config.ApplicationContext;
@@ -49,29 +51,45 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 		int itemId = -1;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			item = super.getService().createItem(ITEM_CLASSNAME);
 
-			log.info("Item place holder has been created: " + item);
+			log.debug("Item place holder has been created: " + item);
 
-			log.info("Allele Unique Name " + source.getAlleleUniqueName());
+			log.debug("Allele Unique Name " + source.getAlleleUniqueName());
+			
+			if (StringUtils.isBlank(source.getAlleleUniqueName())){
+				exception = new Exception("Allele Unique Name Cannot be Null!");
+				throw exception;
+			}
+					
 			item.setAttribute("primaryIdentifier", source.getAlleleUniqueName());
 
-			log.info("Allele Accession " + source.getAlleleUniqueAccession());
+			if (StringUtils.isBlank(source.getAlleleUniqueAccession())){
+				exception = new Exception("Allele Unique Accession Cannot be Null!");
+				throw exception;
+			}
+			
+			log.debug("Allele Accession " + source.getAlleleUniqueAccession());
 			item.setAttribute("secondaryIdentifier", source.getAlleleUniqueAccession());
 
-			log.info("Name   " + source.getAlleleName());
+			if (StringUtils.isBlank(source.getAlleleName())){
+				exception = new Exception("Allele Name Cannot be Null!");
+				throw exception;
+			}
+			
+			log.debug("Name   " + source.getAlleleName());
 			item.setAttribute("name", source.getAlleleName());
 
 			Item sequenceAlterationType = null;
 
 			if (!StringUtils.isBlank(source.getSequenceAlterationType())) {
-				log.info("Sequence Altreation Type: " + source.getSequenceAlterationType());
+				log.debug("Sequence Alteration Type: " + source.getSequenceAlterationType());
 
 				sequenceAlterationType = CVService.getCVTermItem("polymorphism_type",
 						source.getSequenceAlterationType());
-				log.info("Referenced Sequence Alteration Type: " + sequenceAlterationType);
+				log.debug("Referenced Sequence Alteration Type: " + sequenceAlterationType);
 			}
 
 			if (sequenceAlterationType == null) {
@@ -83,7 +101,7 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 			}
 
 			if (!StringUtils.isBlank(source.getDescription())) {
-				log.info("Allele Description " + source.getDescription());
+				log.debug("Allele Description " + source.getDescription());
 				item.setAttribute("description", source.getDescription());
 			}
 
@@ -92,11 +110,11 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 			alleleClass = CVService.getCVTermItem("allele_mode_type", source.getAlleleClass());
 
 			if (!StringUtils.isBlank(source.getAlleleClass())) {
-				log.info("Allele Class: " + source.getAlleleClass());
+				log.debug("Allele Class: " + source.getAlleleClass());
 
 				alleleClass = CVService.getCVTermItem("alleleClass", source.getAlleleClass());
 
-				log.info("Referenced Allele Class: " + alleleClass);
+				log.debug("Referenced Allele Class: " + alleleClass);
 			}
 
 			if (alleleClass == null) {
@@ -112,7 +130,7 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 			if (!StringUtils.isBlank(source.getMutagen())) {
 
 				mutagen = CVService.getCVTermItem("mutagen_type", source.getMutagen());
-				log.info("Referenced Mutagen: " + mutagen);
+				log.debug("Referenced Mutagen: " + mutagen);
 
 			}
 
@@ -129,7 +147,7 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 			if (!StringUtils.isBlank(source.getInheritanceType())) {
 
 				inheritanceMode = CVService.getCVTermItem("inheritance_type", source.getInheritanceType());
-				log.info("Referenced Inheritance Mode: " + inheritanceMode);
+				log.debug("Referenced Inheritance Mode: " + inheritanceMode);
 			}
 
 			if (inheritanceMode == null) {
@@ -145,7 +163,7 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 			if (!StringUtils.isBlank(source.getMutationSite())) {
 
 				mutationSite = CVService.getCVTermItem("mutation_site_type", source.getMutationSite());
-				log.info("Referenced Mutation Site: " + mutationSite);
+				log.debug("Referenced Mutation Site: " + mutationSite);
 			}
 
 			if (mutationSite != null) {
@@ -159,7 +177,7 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 			}
 
 			if (!StringUtils.isBlank(source.getWildType())) {
-				log.info("Wild Type: " + source.getWildType());
+				log.debug("Wild Type: " + source.getWildType());
 				item.setAttribute("wildType", source.getWildType());
 			}
 
@@ -173,9 +191,9 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source);
+				log.error("Error storing item for source record:" + source + "; Message:" + exception.getMessage() + "; Cause:" + exception.getCause());
 			} else {
-				log.info("Target Item has been created. Target Object:" + item);
+				log.debug("Target Item has been created. Target Object:" + item);
 
 				itemHolder = new ItemHolder(item, itemId);
 
@@ -188,7 +206,7 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 		
 		if (itemHolder!=null) {
 			
-			setDataSetItem(itemHolder);
+			setDataSetItem(itemHolder, source);
 			
 		}
 		return item;
@@ -202,16 +220,45 @@ public class AlleleItemProcessor extends DataSourceProcessor implements ItemProc
 		return this.targetClassName;
 	}
 
-	private void setDataSetItem(ItemHolder item){
+	private void setDataSetItem(ItemHolder item,SourceAllele source) {
+
+		Exception exception = null;
 		
-		Item dataSetItem = getDataSet();
+		Item dataSetItem = null;
+		Item dataSourceItem = null;
 		
-		if (dataSetItem!=null && item!=null){
-			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
-			
-			log.info("Allele has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"+ item.getItem());
+		try {
+		
+		dataSetItem = getDataSet();
+		dataSourceItem = DataSourceService.getDataSourceItem("TAIR").getItem();
+		
+		if (dataSetItem == null){
+			Exception e = new Exception("DataSet Item Cannot be Null!");
+			throw e;
 		}
 		
+		if (dataSourceItem == null){
+			Exception e = new Exception("DataSource Item Cannot be Null!");
+			throw e;
+		}
+
+		BioStoreHook.setDataSets(getModel(), item.getItem(),  dataSetItem.getIdentifier(),
+				DataSourceService.getDataSourceItem("TAIR").getItem().getIdentifier());
+		
+		} catch (Exception e){
+			exception = e;
+		}finally{
+			
+			if (exception!=null){
+				log.error("Error adding source record to the dataset. Source" + source + "Error:" + exception.getMessage());
+			}else{
+				log.debug("Allele has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
+						+ item.getItem());
+			}
+		}
+
+	
+
 	}
 
 	private Item getDataSet(){

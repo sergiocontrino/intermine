@@ -43,7 +43,7 @@ public class GenotypeAlleleItemProcessor extends DataSourceProcessor implements
 		Item item = null;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			Item genotypeItem = GenotypeService.getGenotypeItem(source.getGenotypeUniqueAccession()).getItem();
 			ItemHolder alleleItemHolder = AlleleService.getAlleleItem(source.getFeatureUniqueAccession());
@@ -60,7 +60,7 @@ public class GenotypeAlleleItemProcessor extends DataSourceProcessor implements
 			if (exception != null) {
 				log.error("Error adding allele to the genotype/allele item set" + source);
 			} else {
-				log.info("Allele has been successfully added to the genotype/allele item set." + " Genotype:"
+				log.debug("Allele has been successfully added to the genotype/allele item set." + " Genotype:"
 						+ source.getGenotypeUniqueAccession() + "/" + source.getGenotypeName() + " Allele:"
 						+ source.getFeatureUniqueAccession() + "/" + source.getFeatureUniqueName());
 
