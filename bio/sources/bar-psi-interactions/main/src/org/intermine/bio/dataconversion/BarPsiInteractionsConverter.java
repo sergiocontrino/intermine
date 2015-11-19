@@ -13,6 +13,7 @@ package org.intermine.bio.dataconversion;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -56,6 +57,11 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private static final String DATASET_TITLE = "BAR interactions";
     private static final String DATA_SOURCE_NAME = "BAR";
 
+    private String dataSetName = null;
+    private String dataSourceName = null;
+    private String dataSetVersion = null;
+
+
     // for the moment dealing only with ath
     private Item org;
     private static final String ATH_TAXID = "3702";
@@ -65,6 +71,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private static final String PSI = "psi-mi:";
     private static final String PUBMED = "pubmed:";
     private static final String TAXID = "taxid:";
+    private static final String DOI = "digital object identifier:";
 
     // maps with <identifier, item identifier>
     private Map<String, String> pubs = new HashMap<String, String>();
@@ -74,19 +81,34 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private Map<String, Item> expItems = new HashMap<String, Item>();
     private Map<String, String> miCodes = new HashMap<String, String>();
 
-    private static final String PROP_FILE = "psi-intact_config.properties";
-
     private String termId = null;
     private Map<String, String[]> config = new HashMap<String, String[]>();
-//    private Set<String> taxonIds = null;
     private Map<MultiKey, Item> interactions = new HashMap<MultiKey, Item>();
     private String ALIAS_TYPE = "gene name";
+
+//    private Set<String> taxonIds = null;
+//    private static final String PROP_FILE = "psi-intact_config.properties";
 //    private static final String SPOKE_MODEL = "prey";   // don't store if all roles prey
 //    private static final String DEFAULT_IDENTIFIER = "symbol";
 //    private static final String DEFAULT_DATASOURCE = "";
 
 //    protected IdResolver rslv;
 
+    //
+    private static final Map<String, String> pubLookup;
+    static {
+        Map<String, String> aMap = new HashMap<String, String>();;
+        aMap.put("10.1126/science.1203877", "21798944");
+        aMap.put("10.1126/science.1203659", "21798943");
+        aMap.put("10.1016/j.devcel.2014.04.004", "24823379");
+        aMap.put("10.1371/journal.pone.0027364", "22096563");
+        aMap.put("10.1038/msb.2011.66", "21952135");
+        aMap.put("10.1126/science.1251358", "24833385");
+        aMap.put("10.1074/jbc.M110.157008", "20870712");
+        aMap.put("10.3390/ijms13066582", "22837651");
+        aMap.put("10.1371/journal.pone.0108344", "25295873");
+        pubLookup = Collections.unmodifiableMap(aMap);
+    }
 
 
     /**
@@ -98,7 +120,8 @@ public class BarPsiInteractionsConverter extends BioFileConverter
      */
     public BarPsiInteractionsConverter(ItemWriter writer, Model model)
         throws ObjectStoreException {
-        super(writer, model, DATA_SOURCE_NAME, DATASET_TITLE);
+//        super(writer, model, DATA_SOURCE_NAME, DATASET_TITLE);
+        super(writer, model);
         createOrganismItem();
     }
 
@@ -111,6 +134,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         File currentFile = getCurrentFile();
 
         if ("mitabOut.txt".equals(currentFile.getName())) {
+            createDataSource();
             processFile(reader, org);
         } else {
 //            LOG.warn("WWSS skipping file: " + currentFile.getName());
@@ -118,6 +142,62 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                     + currentFile.getName());
         }
     }
+
+
+    /**
+     * Set the name of the DataSource Item to create for this converter.
+     * @param name the name
+     */
+    public void setDataSetName(String name) {
+        this.dataSetName = name;
+    }
+
+    /**
+     * Return the data source name set by setDataSourceName().
+     * @return the data source name
+     */
+    public String getDataSetName() {
+        return dataSetName;
+    }
+
+    /**
+     * Set the name of the DataSource Item to create for this converter.
+     * @param name the name
+     */
+    public void setDataSetVersion(String name) {
+        this.dataSetVersion = name;
+    }
+
+    /**
+     * Return the data source name set by setDataSourceName().
+     * @return the data source name
+     */
+    public String getDataSetVersion() {
+        return dataSetVersion;
+    }
+
+
+    /**
+     * create datasource and dataset
+     *
+     */
+    private void createDataSource()
+        throws ObjectStoreException {
+
+        Item dataSource = createItem("DataSource");
+        dataSource.setAttribute("name", DATA_SOURCE_NAME);
+
+        Item dataSet = createItem("DataSet");
+        dataSet.setAttribute("name", getDataSetName());
+        dataSet.setAttribute("version", getDataSetVersion());
+
+        store(dataSource);
+
+        dataSet.setReference("dataSource", dataSource.getIdentifier());
+        store(dataSet);
+   }
+
+
 
     /**
      * Process all rows of the mitab file, available at
@@ -297,6 +377,15 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         if (token.startsWith(PUBMED)) {
             return token.replace(PUBMED, "");
         }
+        if (token.startsWith(DOI)) {
+            String doiId = token.replace(DOI, "");
+            if (pubLookup.containsKey(doiId)) {
+                return pubLookup.get(doiId);
+            }
+            LOG.warn("MISSING PubMedID for publication: " + doiId);
+            return DOI;
+        }
+
         // 9,10
         if (token.startsWith(TAXID)) {
             return token.replace(TAXID, "");
@@ -366,6 +455,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             exp = expItems.get(primaryId);
             interaction.setReference("experiment", exp.getIdentifier());
         }
+//        interaction.setReference("experiment", exp.getIdentifier());
         return exp;
     }
 
