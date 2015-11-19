@@ -138,6 +138,10 @@ public interface SourceDataFlowTaskContainer {
 	static final String BG_ACCESSION_SQL_PATH = "/sql/stock_background_accessions.sql";
 
 	static final String BG_ACCESSION_SQL = FileUtils.getSqlFileContents( BG_ACCESSION_SQL_PATH);
+	
+	static final String PHENOTYPE_ANNOTATION_SQL_PATH = "/sql/phenotype_annotation.sql";
+	
+	static final String PHENOTYPE_ANNOTATION_SQL = FileUtils.getSqlFileContents(PHENOTYPE_ANNOTATION_SQL_PATH);
 
 	
 }

@@ -29,6 +29,7 @@ import org.intermine.bio.domain.source.SourceFeatureRelationshipAnnotation;
 import org.intermine.bio.domain.source.SourceGenotype;
 import org.intermine.bio.domain.source.SourceGenotypeZygosity;
 import org.intermine.bio.domain.source.SourcePhenotype;
+import org.intermine.bio.domain.source.SourcePhenotypeAnnotation;
 import org.intermine.bio.domain.source.SourcePhenotypeGeneticContext;
 import org.intermine.bio.domain.source.SourcePublication;
 import org.intermine.bio.domain.source.SourcePublicationFeatures;
@@ -43,6 +44,7 @@ import org.intermine.bio.item.postprocessor.BackgroundAccessionStockItemPostproc
 import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
 import org.intermine.bio.item.postprocessor.DataSetItemPostprocessor;
 import org.intermine.bio.item.postprocessor.DataSourceItemPostprocessor;
+import org.intermine.bio.item.postprocessor.PhenotypeAnnotationPostProcessor;
 import org.intermine.bio.item.postprocessor.PhenotypeGeneticContextPostprocessor;
 import org.intermine.bio.item.postprocessor.PublicationFeaturePostprocessor;
 import org.intermine.bio.item.postprocessor.StockGenotypeItemPostprocessor;
@@ -56,6 +58,7 @@ import org.intermine.bio.item.processor.DataSourceItemProcessor;
 import org.intermine.bio.item.processor.GenotypeAlleleItemProcessor;
 import org.intermine.bio.item.processor.GenotypeItemProcessor;
 import org.intermine.bio.item.processor.GenotypeZygosityItemProcessor;
+import org.intermine.bio.item.processor.PhenotypeAnnotationItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeGeneticContextItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeItemProcessor;
 import org.intermine.bio.item.processor.PublicationsFeaturesItemProcessor;
@@ -75,6 +78,7 @@ import org.intermine.bio.reader.CVTermReader;
 import org.intermine.bio.reader.GenotypeAlleleReader;
 import org.intermine.bio.reader.GenotypeReader;
 import org.intermine.bio.reader.GenotypeZygosityReader;
+import org.intermine.bio.reader.PhenotypeAnnotationReader;
 import org.intermine.bio.reader.PhenotypeGeneticContextReader;
 import org.intermine.bio.reader.PhenotypeReader;
 import org.intermine.bio.reader.PublicationFeaturesReader;
@@ -339,32 +343,48 @@ public class AppLauncher {
 		//		new FlowStepBuilder<SourceFeatureRelationshipAnnotation, Item>()
 		//		.build(stepName19, reader19, processor19, taskExecutor);
 		
+		//Phenotype Annotation
+		
+		PhenotypeAnnotationItemProcessor processor21 = new PhenotypeAnnotationItemProcessor(service);
+		DatabaseItemReader<SourcePhenotypeAnnotation> reader21 = new PhenotypeAnnotationReader().getReader(service.getConnection());
+		String stepName21 = "Phenotype Annotation Loading Step";
+		
+		Step phenotypeAnnotationPostProcessor = new PhenotypeAnnotationPostProcessor(service).getPostProcessor("Phenotype Annotation PostProcessor",
+				service, taskExecutor);
+		
+		FlowStep<SourcePhenotypeAnnotation, Item> phenotypeAnnotationStep =
+				new FlowStepBuilder<SourcePhenotypeAnnotation, Item>()
+				.build(stepName21, reader21, processor21, taskExecutor);
+		
+		phenotypeAnnotationStep.setStepPostProcessor(phenotypeAnnotationPostProcessor);
+		
 		steps.add(cvStep);
 		steps.add(cvTermStep);
 		steps.add(strainStep);
 		steps.add(stockStep);
-		//steps.add(bgAccessionStockStep);
-		//steps.add(alleleStep);
-		//steps.add(genotypeStep);
-		//steps.add(genotypeAlleleCollectionStep);
-		//steps.add(stockGenotypeCollectionStep);
-		//steps.add(phenotypeStep);
-		//steps.add(phenotypeGeneticContextCollectionStep);
+		steps.add(bgAccessionStockStep);
+		steps.add(alleleStep);
+		steps.add(genotypeStep);
+		steps.add(genotypeAlleleCollectionStep);
+		steps.add(stockGenotypeCollectionStep);
+		steps.add(phenotypeStep);
+		steps.add(phenotypeGeneticContextCollectionStep);
 		steps.add(publicationStep);
 		steps.add(publicationFeaturesStep);
 		
 		//steps.add(dataSetPostProcessor);
 		
-		//steps.add(stockSynonymsStep);
+		steps.add(stockSynonymsStep);
 		
-		//steps.add(stockCenterStep);
+		steps.add(stockCenterStep);
 		
-		//steps.add(stockAvailabilityStep);
+		steps.add(stockAvailabilityStep);
 		
 		//steps.add(alleleGeneZygosityStep);
 		
-		//steps.add(genotypeZygosityStep);
+		steps.add(genotypeZygosityStep);
 		
+		steps.add(phenotypeAnnotationStep);
 		
 	}
 

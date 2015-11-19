@@ -127,8 +127,8 @@
 	 </class>
 	 
 	 
-	 <class name="PhenotypeAnnotation" extends="BioEntity"
-		is-interface="true">
+	 <class name="PhenotypeAnnotation" is-interface="true">
+		
 		<reference name="phenotype" referenced-type="Phenotype"
 			reverse-reference="phenotypeAnnotations" />
 		<reference name="genotype" referenced-type="Genotype"

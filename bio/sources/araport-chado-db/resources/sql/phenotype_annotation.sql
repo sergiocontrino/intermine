@@ -41,5 +41,4 @@ FROM
 		and
 		o.infraspecific_name is NULL 
 		and
-		ps.pub_type <> 'unattributed' 
-		
+		ps.pub_type <> 'unattributed'
