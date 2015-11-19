@@ -15,10 +15,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.commons.lang.StringUtils;
@@ -83,18 +81,9 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private Map<String, Item> expItems = new HashMap<String, Item>();
     private Map<String, String> miCodes = new HashMap<String, String>();
 
-    private String termId = null;
-    private Map<String, String[]> config = new HashMap<String, String[]>();
     private Map<MultiKey, Item> interactions = new HashMap<MultiKey, Item>();
-    private String ALIAS_TYPE = "gene name";
 
     private String dataSetRef = null;
-
-//    private Set<String> taxonIds = null;
-//    private static final String PROP_FILE = "psi-intact_config.properties";
-//    private static final String SPOKE_MODEL = "prey";   // don't store if all roles prey
-//    private static final String DEFAULT_IDENTIFIER = "symbol";
-//    private static final String DEFAULT_DATASOURCE = "";
 
 //    protected IdResolver rslv;
 
@@ -148,90 +137,27 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     }
 
 
-    /**
-     * Set the name of the DataSource Item to create for this converter.
-     * @param name the name
-     */
-    public void setDataSourceName(String name) {
-        this.dataSourceName = name;
-    }
-
-    /**
-     * Return the data source name set by setDataSourceName().
-     * @return the data source name
-     */
-    public String getDataSourceName() {
-        if (dataSourceName == null) {
-            return DATASOURCE_NAME;
-        } else {
-            return dataSourceName;
-        }
-    }
-
-    /**
-     * Set the name of the DataSource Item to create for this converter.
-     * @param name the name
-     */
-    public void setDataSetName(String name) {
-        this.dataSetName = name;
-    }
-
-    /**
-     * Return the data source name set by setDataSourceName().
-     * @return the data source name
-     */
-    public String getDataSetName() {
-        if (dataSetName == null) {
-            return DATASET_NAME;
-        } else {
-            return dataSetName;
-        }
-    }
-
-    /**
-     * Set the name of the DataSource Item to create for this converter.
-     * @param name the name
-     */
-    public void setDataSetVersion(String name) {
-            this.dataSetVersion = name;
-    }
-
-    /**
-     * Return the data source name set by setDataSourceName().
-     * @return the data source name
-     */
-    public String getDataSetVersion() {
-        if (dataSetVersion == null) {
-            return DATASET_VERSION;
-        } else {
-            return dataSetVersion;
-        }
-    }
 
 
     /**
      * create datasource and dataset
      *
      */
-    private void createDataSource()
-        throws ObjectStoreException {
+    private void createDataSource() throws ObjectStoreException {
 
         Item dataSource = createItem("DataSource");
         dataSource.setAttribute("name", getDataSourceName());
+        store(dataSource);
 
         Item dataSet = createItem("DataSet");
         dataSet.setAttribute("name", getDataSetName());
         dataSet.setAttribute("version", getDataSetVersion());
 
-        store(dataSource);
-
         dataSet.setReference("dataSource", dataSource.getIdentifier());
         store(dataSet);
 
         dataSetRef = dataSet.getIdentifier(); // used in experiment
-   }
-
-
+    }
 
     /**
      * Process all rows of the mitab file, available at
@@ -260,22 +186,18 @@ public class BarPsiInteractionsConverter extends BioFileConverter
      *
      */
     private void processFile(Reader reader, Item organism)
-            throws IOException, ObjectStoreException {
+        throws IOException, ObjectStoreException {
         Iterator<?> tsvIter;
         try {
             tsvIter = FormattedTextParser.parseTabDelimitedReader(reader);
         } catch (Exception e) {
             throw new BuildException("cannot parse file: " + getCurrentFile(), e);
         }
-//        IdResolver athResolver = IdResolverService.getIdResolverByOrganism("3702");
-//        String pidA = null;
-//        String [] headers = null;
 
         int lineNumber = 0;
 
         while (tsvIter.hasNext()) {
             String[] line = (String[]) tsvIter.next();
-
 
             String geneIdA = parseToken(line [0]);
             String geneIdB = parseToken(line [1]);
@@ -299,18 +221,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                 continue;
             }
 
-//            int resCount = athResolver.countResolutions(taxidA, geneIdA);
-//            if (resCount != 1) {
-//                LOG.info("RESOLVER: failed to resolve gene to one identifier, ignoring gene: "
-//                        + geneIdA + " count: " + resCount);
-//                continue;
-//            }
-//            pidA = athResolver.resolveId(taxidA, geneIdA).iterator().next();
-//            pidA = geneIdA;
-//            LOG.info("READING " + pidA + "<->" + geneIdA + "|" + pubMedId + "|"
-//                    + protIdA + "--" + type + "|" + detectionMethod + "|" + db);
-
-
             String refIdA = createBioEntity(geneIdA, "Gene");
             String refIdB = createBioEntity(geneIdB, "Gene");
 
@@ -326,7 +236,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                 }
             }
 
-            //            String shortName = h.shortName;
 //            interactionDetail.setAttribute("name", shortName);
 //            interactionDetail.setAttribute("role1", role1);
 //            interactionDetail.setAttribute("role2", role2);
@@ -341,7 +250,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             }
 //            interactionDetail.setReference("experiment", experiment.getIdentifier());
             interactionDetail.setReference("interaction", interaction);
-//            processRegions(h, interactionDetail, gene1Interactor, shortName, gene1RefId);
 //            interactionDetail.addCollection(allInteractors);
 
             interactionDetail.addToCollection("dataSets", dataSetRef);
@@ -366,8 +274,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         }
         return interaction;
     }
-
-
 
 
     // just get first element for now
@@ -430,27 +336,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     }
 
     /**
-     * @param line
-     */
-    private void checkHeader(String[] line) {
-        // column headers - strip off any extra columns
-        // not necessary
-        String[] headers;
-        int end = 0;
-        for (int i = 0; i < line.length; i++) {
-            // if (StringUtils.isEmpty(line[i])) {
-            if (line[i].isEmpty()) {
-                break;
-            }
-            end++;
-        }
-        headers = new String[end];
-        System.arraycopy(line, 0, headers, 0, end);
-        LOG.info("WW header lenght " + headers.length);
-    }
-
-
-    /**
      * Create and store a BioEntity item on the first time called.
      *
      * @param primaryId the primaryIdentifier
@@ -471,6 +356,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         }
         return genes.get(primaryId);
     }
+
     /**
      * Create and store a Publication item on the first time called.
      *
@@ -519,7 +405,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         int tot = 0;
         for (Item exp : expItems.values()) {
             store(exp);
-            tot ++;
+            tot++;
         }
         return tot;
     }
@@ -567,5 +453,64 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         store(org);
     }
 
-}
+    /**
+     * Set the name of the DataSource Item to create for this converter.
+     * @param name the name
+     */
+    public void setDataSourceName(String name) {
+        this.dataSourceName = name;
+    }
 
+    /**
+     * Return the data source name set by setDataSourceName().
+     * @return the data source name
+     */
+    public String getDataSourceName() {
+        if (dataSourceName == null) {
+            return DATASOURCE_NAME;
+        } else {
+            return dataSourceName;
+        }
+    }
+
+    /**
+     * Set the name of the DataSource Item to create for this converter.
+     * @param name the name
+     */
+    public void setDataSetName(String name) {
+        this.dataSetName = name;
+    }
+
+    /**
+     * Return the data source name set by setDataSourceName().
+     * @return the data source name
+     */
+    public String getDataSetName() {
+        if (dataSetName == null) {
+            return DATASET_NAME;
+        } else {
+            return dataSetName;
+        }
+    }
+
+    /**
+     * Set the name of the DataSource Item to create for this converter.
+     * @param name the name
+     */
+    public void setDataSetVersion(String name) {
+        this.dataSetVersion = name;
+    }
+
+    /**
+     * Return the data source name set by setDataSourceName().
+     * @return the data source name
+     */
+    public String getDataSetVersion() {
+        if (dataSetVersion == null) {
+            return DATASET_VERSION;
+        } else {
+            return dataSetVersion;
+        }
+    }
+
+}
