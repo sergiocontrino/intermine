@@ -34,20 +34,6 @@ import org.intermine.xml.full.Item;
  * @author  sc
  */
 public class BarPsiInteractionsConverter extends BioFileConverter
-/*
-{
-    //
-    private static final String DATASET_TITLE = "Add DataSet.title here";
-    private static final String DATA_SOURCE_NAME = "Add DataSource.name here";
-
-    public BarPsiInteractionsConverter(ItemWriter writer, Model model) {
-        super(writer, model, DATA_SOURCE_NAME, DATASET_TITLE);
-    }
-
-    public void process(Reader reader) throws Exception {
-    }
-}
-*/
 
 {
     private static final Logger LOG = Logger.getLogger(BarPsiInteractionsConverter.class);
@@ -61,17 +47,18 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private String dataSetName = null;
     private String dataSetVersion = null;
 
-
     // for the moment dealing only with ath
     private Item org;
     private static final String ATH_TAXID = "3702";
 
+    // Some constants
     private static final String UNIPROT = "uniprotkb:";
     private static final String TAIR = "tair:";
     private static final String PSI = "psi-mi:";
     private static final String PUBMED = "pubmed:";
     private static final String TAXID = "taxid:";
     private static final String DOI = "digital object identifier:";
+    private static final String SEP = "-";
 
     // maps with <identifier, item identifier>
     private Map<String, String> pubs = new HashMap<String, String>();
@@ -80,14 +67,10 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 
     private Map<String, Item> expItems = new HashMap<String, Item>();
     private Map<String, String> miCodes = new HashMap<String, String>();
-
     private Map<MultiKey, Item> interactions = new HashMap<MultiKey, Item>();
-
     private String dataSetRef = null;
 
-//    protected IdResolver rslv;
-
-    //
+    // PUBMED LOOKUP
     private static final Map<String, String> pubLookup;
     static {
         Map<String, String> aMap = new HashMap<String, String>();;
@@ -102,7 +85,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         aMap.put("10.1371/journal.pone.0108344", "25295873");
         pubLookup = Collections.unmodifiableMap(aMap);
     }
-
 
     /**
      * Constructor
@@ -135,9 +117,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                     + currentFile.getName());
         }
     }
-
-
-
 
     /**
      * create datasource and dataset
@@ -201,20 +180,24 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 
             String geneIdA = parseToken(line [0]);
             String geneIdB = parseToken(line [1]);
-            // Not processing protein info for now
-            // String protIdA = parseToken(line [2]);
-            // String protIdB = parseToken(line [3]);
-            String geneSynA = parseToken(line [4]);
-            String geneSynB = parseToken(line [5]);
             String detectionMethod = parseToken(line [6]);
-            // String FirstAuthor = line [7];
             String pubMedId = parseToken(line [8]);
             String taxidA = parseToken(line[9]);
-            // String taxidB = parseToken(line[10]);
             String type = parseToken(line[11]);
-            String db = parseToken(line [12]);
-            String ids = line [13];
             String score = line [14];
+
+            // Not processing the following fields
+            //
+            // String protIdA = parseToken(line [2]);
+            // String protIdB = parseToken(line [3]);
+            // String geneSynA = parseToken(line [4]);
+            // String geneSynB = parseToken(line [5]);
+            // String FirstAuthor = line [7];
+            // String db = parseToken(line [12]);
+            // String taxidB = parseToken(line[10]);
+            //
+            // no data in file
+            // String ids = line [13];
 
             // dealing only with ATH for now
             if (!taxidA.equalsIgnoreCase(ATH_TAXID)) {
@@ -236,9 +219,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                 }
             }
 
-//            interactionDetail.setAttribute("name", shortName);
-//            interactionDetail.setAttribute("role1", role1);
-//            interactionDetail.setAttribute("role2", role2);
+            interactionDetail.setAttribute("name", geneIdA.concat(SEP.concat(geneIdB)));
 
             if (StringUtils.isNumeric(score)) {
                 interactionDetail.setAttribute("confidence", score);
@@ -248,18 +229,19 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                 interactionDetail.setAttribute("relationshipType", miCodes.get(type));
                 interactionDetail.setAttribute("type", type);
             }
-//            interactionDetail.setReference("experiment", experiment.getIdentifier());
             interactionDetail.setReference("interaction", interaction);
-//            interactionDetail.addCollection(allInteractors);
-
             interactionDetail.addToCollection("dataSets", dataSetRef);
-            store(interactionDetail);
+            // interactionDetail.setAttribute("role1", role1);
+            // interactionDetail.setAttribute("role2", role2);
+            // interactionDetail.addCollection(allInteractors);
 
+            store(interactionDetail);
             lineNumber++;
         }
         LOG.info("MI CODES FINAL:" + miCodes.keySet());
         int expNr = storeAllExperiments();
-        LOG.info("Created " + expNr + " experiments.");
+        LOG.info("Created " + expNr + " experiments after parsing " + lineNumber
+                + " interactions records.");
     }
 
     private Item getInteraction(String refId, String gene2RefId) throws ObjectStoreException {
@@ -275,10 +257,14 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         return interaction;
     }
 
-
-    // just get first element for now
+    /**
+    * Parse the various fields of the record
+    * @param value the field
+    *
+    **/
     private String parseToken(String value) {
         String token;
+        // getting only the first element (fields with multiple values are not in use
         if (value.contains("|")) {
             token = value.split("|")[0];
         } else {
@@ -291,7 +277,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         // 0,1,4,5
         if (token.startsWith(TAIR)) {
             return token.replace(TAIR, "").toUpperCase();
-            //return StringUtils.remove(token, "tair:");
         }
         // 2,3
         if (token.startsWith(UNIPROT)) {
@@ -372,31 +357,26 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             pub.setAttribute("pubMedId", primaryId);
             store(pub);
             pubs.put(primaryId, pub.getIdentifier());
-            exp = createExperiment(primaryId, interaction, pub);
+            exp = createExperiment(primaryId, pub);
         } else {
             exp = expItems.get(primaryId);
-            interaction.setReference("experiment", exp.getIdentifier());
         }
-//        interaction.setReference("experiment", exp.getIdentifier());
+        interaction.setReference("experiment", exp.getIdentifier());
         return exp;
     }
 
     /**
      * @param primaryId
-     * @param interaction
      * @param pub
      * @return
      * @throws ObjectStoreException
      */
-    private Item createExperiment(String primaryId, Item interaction, Item pub)
+    private Item createExperiment(String primaryId, Item pub)
         throws ObjectStoreException {
         Item exp;
         exp = createItem("InteractionExperiment");
         exp.setAttribute("name", "Exp-" + primaryId);
         exp.setReference("publication", pub);
-        interaction.setReference("experiment", exp);
-//        store(exp);
-//        expItems.put(primaryId, exp.getIdentifier());
         expItems.put(primaryId, exp);
         return exp;
     }
@@ -409,7 +389,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
         }
         return tot;
     }
-
 
     /**
      * create and store protein interaction terms
