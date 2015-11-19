@@ -287,12 +287,10 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             // fill map with definitions
             String miCode = token.replace(PSI, "").substring(1, 8);
             if (!miCodes.containsKey(miCode)) {
-                String description = StringUtils.substringAfterLast(token, "(");
-                String newDescription = StringUtils.substringBeforeLast(description, ")");
-                miCodes.put(miCode, newDescription);
-                LOG.info("MI CODES:" + miCode + "|" + newDescription);
+                String description = getDescription(token);
+                miCodes.put(miCode, description);
                 try {
-                    createTerm (miCode, newDescription);
+                    createTerm (miCode, description);
                 } catch (ObjectStoreException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -312,12 +310,27 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             LOG.warn("MISSING PubMedID for publication: " + doiId);
             return DOI;
         }
-
         // 9,10
         if (token.startsWith(TAXID)) {
             return token.replace(TAXID, "");
         }
         return token;
+    }
+
+    /**
+     * @param token
+     * @return
+     */
+    private String getDescription(String token) {
+        String a = StringUtils.substringAfterLast(token, "(");
+        String description = StringUtils.substringBeforeLast(a, ")");
+        if (description.startsWith("physical association")) {
+            return "physical";
+        }
+        if (description.startsWith("predicted interaction")) {
+            return "predicted";
+        }
+        return description;
     }
 
     /**
