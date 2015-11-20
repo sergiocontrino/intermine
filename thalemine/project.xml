@@ -10,7 +10,6 @@
         </source>
 
         <source name="aip-gff" type="aip-gff">
-            <!-- source last updated: 2015-04-20 15:30:00 -->
             <property name="gff3.taxonId" value="3702"/>
             <property name="gff3.seqDataSourceName" value="TAIR"/>
             <property name="gff3.dataSourceName" value="Araport"/>
@@ -24,7 +23,6 @@
         </source>
 
         <source name="pubmed-gene" type="pubmed-gene" >
-            <!-- source last updated: 2015-04-20 14:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/pubmed"/>
             <property name="pubmed.organisms" value="3702"/>
             <property name="src.data.dir.includes" value="gene2pubmed"/>
@@ -104,7 +102,6 @@
         </source>
 
         <source name="go-annotation" type="go-annotation">
-            <!-- source last updated: 2015-04-20 15:30:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/go_annotation/" />
             <property name="dataSourceName" value="GO Annotation from TAIR"/>
             <property name="ontologyPrefix" value="GO"/>
@@ -121,13 +118,11 @@
         </source>
 
         <source name="uniprot" type="uniprot">
-            <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="uniprot.organisms" value="3702"/>
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
         </source>
 
         <source name="uniprot-fasta" type="fasta">
-            <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="fasta.taxonId" value="3702"/>
             <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
             <property name="fasta.classAttribute" value="primaryAccession"/>
@@ -141,7 +136,6 @@
         </source>
 
         <source name="uniprot-keywords" type="uniprot-keywords">
-            <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
             <property name="src.data.dir.includes" value="keywlist.xml"/>
         </source>
@@ -181,19 +175,16 @@
         </source>
 
         <source name="panther" type="panther">
-            <!-- source last updated: 2015-05-18 11:30:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/orthologs/panther"/>
             <property name="panther.organisms" value="3702 7227 4932 10116 7955 10090 6239 9606"/>
         </source>
 
         <source name="interpro" type="interpro">
-            <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/interpro/current"/>
             <property name="src.data.dir.includes" value="interpro.xml"/>
         </source>
 
         <source name="protein2ipr" type="protein2ipr">
-            <!-- source last updated: 2015-05-12 15:00:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/interpro/current"/>
             <property name="src.data.dir.includes" value="protein2ipr.dat"/>
             <property name="protein2ipr.organisms" value="3702"/>
@@ -205,7 +196,6 @@
         </source>
 
         <source name="generif" type="generif">
-            <!-- source last updated: 2015-04-20 13:30:00 -->
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/generif/current"/>
             <property name="generif.organisms" value="3702"/>
             <property name="generif.datasourcename" value="GeneRIF"/>
@@ -213,12 +203,10 @@
         </source>
 
         <source name="bar-psi-interactions" type="bar-psi-interactions">
-            <!-- source last updated: 2015-04-20 13:30:00 -->
-            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/bar-interactions/"/>
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/bar-interactions/current"/>
             <property name="bar.organisms" value="3702"/>
             <property name="dataSourceName" value="BAR"/>
-            <property name="dataSetName" value="New BAR interactions data set"/>
-            <property name="dataSetVersion" value="November 2015"/>
+            <property name="dataSetName" value="BAR interactions data set"/>
         </source>
 
         <source name="psi-intact" type="psi" >
@@ -265,14 +253,14 @@
         <post-process name="create-intron-features">
             <property name="organisms" value="3702"/>
         </post-process>
-	<post-process name="create-intergenic-region-features"/>
+        <post-process name="create-intergenic-region-features"/>
         <post-process name="transfer-sequences"/>
         <post-process name="populate-child-features"/>
         <post-process name="create-overlap-view" />
         <post-process name="create-location-overlap-index"/>
         <post-process name="create-attribute-indexes"/>
         <post-process name="summarise-objectstore"/>
-	<post-process name="create-autocomplete-index"/>
+        <post-process name="create-autocomplete-index"/>
         <post-process name="create-search-index"/>
     </post-processing>
 </project>

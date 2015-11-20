@@ -39,13 +39,11 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private static final Logger LOG = Logger.getLogger(BarPsiInteractionsConverter.class);
 
     // default values
-    private static final String DATASET_NAME = "BAR interactions";
-    private static final String DATASET_VERSION = "November 2015";
+    private static final String DATASET_NAME = "BAR interactions data set";
     private static final String DATASOURCE_NAME = "BAR";
 
     private String dataSourceName = null;
     private String dataSetName = null;
-    private String dataSetVersion = null;
 
     // for the moment dealing only with ath
     private Item org;
@@ -130,8 +128,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 
         Item dataSet = createItem("DataSet");
         dataSet.setAttribute("name", getDataSetName());
-        dataSet.setAttribute("version", getDataSetVersion());
-
         dataSet.setReference("dataSource", dataSource.getIdentifier());
         store(dataSet);
 
@@ -482,26 +478,6 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             return DATASET_NAME;
         } else {
             return dataSetName;
-        }
-    }
-
-    /**
-     * Set the name of the DataSource Item to create for this converter.
-     * @param name the name
-     */
-    public void setDataSetVersion(String name) {
-        this.dataSetVersion = name;
-    }
-
-    /**
-     * Return the data source name set by setDataSourceName().
-     * @return the data source name
-     */
-    public String getDataSetVersion() {
-        if (dataSetVersion == null) {
-            return DATASET_VERSION;
-        } else {
-            return dataSetVersion;
         }
     }
 

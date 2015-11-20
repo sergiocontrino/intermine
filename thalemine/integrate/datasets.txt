@@ -25,6 +25,7 @@ DataSet	Panther data set	PANTHER paralogs from Arabidopsis and orthologs from Ye
 DataSource	BAR	The Bio-Analaytic Resource for Plant Biology	http://bar.utoronto.ca	Publication:19401381
 DataSet	BAR Annotations Lookup	Mapping(s) between AGI locus and Affy Probeset identifier	http://bar.urotonto.ca	DataSource:BAR	10/08/2013
 DataSet	Arabidopsis eFP	Electronic Fluorescent Pictographic representations of gene expression patterns via BAR web services	http://bar.utoronto.ca/webservices/	DataSource:BAR,Publication:17684564	real-time
+DataSet	BAR interactions data set	Predicted and experimentally-determined protein-protein interactions (PPIs) in Arabidopsis	http://bar.utoronto.ca/interactions/	DataSource:BAR,Publication:17675552	11/9/2015
 DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840
 DataSet	PubMed to gene mapping	Curated associations between publications and NCBI Gene records	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	10/2/2015
 DataSet	GeneRIF	Concise phrase describing gene function and publication associated with NCBI Gene records	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	10/2/2015
