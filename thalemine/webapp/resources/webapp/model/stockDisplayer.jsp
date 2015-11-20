@@ -123,28 +123,33 @@ a.button:active {
 									
 									<a href="report.do?id=${item.genotypeObjectId}"><i>${item.allelesNames}</i>&nbsp;${item.genesNames}</a>
 								</td>
-								<td><c:forEach var="bgitem" items="${item.backgrounds}">
+								<td>
+									<c:forEach var="bgitem" items="${item.backgrounds}">
 										<a href="report.do?id=${bgitem.objectId}">${bgitem.abbreviationName}</a>
-									</c:forEach></td>
-								<td><a class="button" href="report.do?id=${item.stockObjectId}#StockAvailabilityDisplayer">Order</a></td>
+									</c:forEach>
+								</td>
+								<td><a class="button" href="report.do?id=${item.stockObjectId}#StockAvailabilityDisplayer">Order</a>
+								</td>
 
 								<c:choose>
 									<c:when test="${!empty item.phenotypes}">
+									<tr>
+										<td colspan="4">
+											<table>
 
-										<table>
-
-											<thead>
-												<tr>
-													
-													<th>Phenotypes</th>
-
-												</tr>
-											</thead>
-											<tbody>
-												<c:forEach var="phenotypeItem" items="${item.phenotypes}">
+												<thead>
 													<tr>
-														<td>														
-														<a href="report.do?id=${phenotypeItem.objectId}">${phenotypeItem.description}</a>
+													
+														<th>Phenotypes</th>
+
+													</tr>
+												</thead>
+												<tbody>
+											
+													<c:forEach var="phenotypeItem" items="${item.phenotypes}">
+														<tr>
+															<td>														
+															<a href="report.do?id=${phenotypeItem.objectId}">${phenotypeItem.description}</a>
 														<!--  
 														<c:choose>
 															<c:when test="${!empty phenotypeItem.publications}">
@@ -155,21 +160,34 @@ a.button:active {
 															</c:when>
 														</c:choose> -->
 														
-														</td>
-													</tr>
-									
-												</c:forEach>
-
-											</tbody>
-										</table>
+															</td>
+														</tr>
+												 	</c:forEach>
+												</tbody>
+											</table>
+										</td>
+									</tr>
 									</c:when>
 									<c:otherwise>
-									<tr>
-									<td>
-											No phenotype information available at this time
-									</td>
-									</tr>
-  									</c:otherwise>
+										<tr>
+											<td colspan="4">
+												<table>
+													<thead>
+														<tr>
+															<th>Phenotypes</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>
+																No phenotype information available at this time
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+									</c:otherwise>
 								</c:choose>
 
 							</tr>

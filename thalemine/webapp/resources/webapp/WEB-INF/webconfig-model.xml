@@ -418,10 +418,11 @@
     </fields>
   </class>
 
-    <class className="org.intermine.model.bio.AlleleGeneZygosity">
+   <class className="org.intermine.model.bio.GenotypeZygosity">
      <fields>
       <fieldconfig fieldExpr="allele.name" label="Allele"/>
-      <fieldconfig fieldExpr="gene.primaryIdentifier" label="Gene"/>
+      <fieldconfig fieldExpr="genotype.primaryIdentifier" label="Genotype"/>
+      <fieldconfig fieldExpr="stock.displayName" label="Stock"/>
       <fieldconfig fieldExpr="zygosity.name" label="Zygosity"/>
      </fields>
    </class>
@@ -716,11 +717,11 @@
                      placement="Stocks"
                      types="Gene,Allele"/>
 
-       <reportdisplayer javaClass="org.thalemine.web.displayer.AlleleGeneZygosityDisplayer"
+   		<reportdisplayer javaClass="org.thalemine.web.displayer.AlleleGeneZygosityDisplayer"
                      jspName="model/alleleZygosity.jsp"
-                     replacesFields="alleleGeneZygosities"
+                     replacesFields="alleleGenotypeZygosities"
                      placement=""
-                     types="Gene,Allele"/>
+                     types="Allele,Stock,Genotype"/>
 
        <reportdisplayer javaClass="org.thalemine.web.displayer.StockAccessionDisplayer"
                      jspName="model/stockAccessionDisplayer.jsp"

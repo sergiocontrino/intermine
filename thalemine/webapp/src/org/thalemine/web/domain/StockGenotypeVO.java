@@ -9,11 +9,10 @@ public class StockGenotypeVO extends DomainVO {
 	private String stockName;
 	private String genotypeObjectId;
 	private String genotypeName;
-	private List<AlleleVO> alleles;
+	private List<AlleleVO> alleles = new ArrayList<AlleleVO>();;
 	private List<GeneVO> genes;
 	private List<GeneModelVO> geneModels = new ArrayList<GeneModelVO>();
-	
-	
+		
 	public StockGenotypeVO(){
 		
 	}

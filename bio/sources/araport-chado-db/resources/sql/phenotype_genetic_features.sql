@@ -17,24 +17,4 @@ FROM
 		phd.genotype_id = phst.genotype_id JOIN dbxref dbx
 		ON
 		dbx.dbxref_id = g.dbxref_id
-UNION
-SELECT
-	f.name entity_name,
-	f.uniquename entity_unique_name,
-	'Polyallele:' || dbx.accession entity_unique_accession,
-	p.value as phenotype_description,
-	p.name phenotype_name,
-	p.uniquename phenotype_unique_accession,
-	p.phenotype_id,
-	'allele' as genetic_feature_type
-FROM
-	phenotype p JOIN feature_phenotype fp
-		ON
-		fp.phenotype_id = p.phenotype_id JOIN feature f
-		ON
-		f.feature_id = fp.feature_id JOIN dbxref dbx
-		ON
-		dbx.dbxref_id = f.dbxref_id JOIN cvterm c
-		ON
-		c.cvterm_id = f.type_id
-order by entity_name, phenotype_id
+		order by entity_name, phenotype_id;

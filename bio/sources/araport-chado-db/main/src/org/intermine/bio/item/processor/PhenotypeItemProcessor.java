@@ -4,9 +4,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.CVService;
 import org.intermine.bio.chado.DataSetService;
+import org.intermine.bio.chado.DataSourceService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.chado.PhenotypeService;
 import org.intermine.bio.chado.StockService;
+import org.intermine.bio.dataconversion.BioStoreHook;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataconversion.DataSourceProcessor;
 import org.intermine.bio.dataflow.config.ApplicationContext;
@@ -41,28 +43,39 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 		Exception exception = null;
 
 		Item item = null;
-		
+
 		ItemHolder itemHolder = null;
 
 		int itemId = -1;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			item = super.getService().createItem(ITEM_CLASSNAME);
 
-			log.info("Item place holder has been created: " + item);
+			log.debug("Item place holder has been created: " + item);
 
-			log.info("Phenotype Unique Accession: " + source.getUniqueAccession());
+			if (StringUtils.isBlank(source.getUniqueAccession())) {
+				Exception e = new Exception("Phenotype Unique Accession cannot be null! Skipping Source Record:"
+						+ source);
+				throw e;
+			}
+
+			log.debug("Phenotype Unique Accession: " + source.getUniqueAccession());
 			item.setAttribute("primaryIdentifier", source.getUniqueAccession());
 
+			if (StringUtils.isBlank(source.getName())) {
+				Exception e = new Exception("Phenotype Name cannot be null! Skipping Source Record:" + source);
+				throw e;
+			}
+
 			if (!StringUtils.isBlank(source.getName())) {
-				log.info("Phenotype Name/Secondary Identifier: " + source.getName());
+				log.debug("Phenotype Name/Secondary Identifier: " + source.getName());
 				item.setAttribute("secondaryIdentifier", source.getName());
 			}
 
 			if (!StringUtils.isBlank(source.getDescription())) {
-				log.info("Phenotype Description:" + source.getDescription());
+				log.debug("Phenotype Description:" + source.getDescription());
 				item.setAttribute("description", source.getDescription());
 			}
 
@@ -75,9 +88,10 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source);
+				log.error("Error storing item for source record:" + source + "; Message:" + exception.getMessage()
+						+ "; Cause:" + exception.getCause());
 			} else {
-				log.info("Target Item has been created. Target Object:" + item);
+				log.debug("Target Item has been created. Target Object:" + item);
 
 				itemHolder = new ItemHolder(item, itemId);
 
@@ -87,11 +101,11 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 
 			}
 		}
-		
-		if (itemHolder!=null) {
-			
-			setDataSetItem(itemHolder);
-			
+
+		if (itemHolder != null) {
+
+			setDataSetItem(itemHolder, source);
+
 		}
 		return item;
 	}
@@ -103,20 +117,50 @@ public class PhenotypeItemProcessor extends DataSourceProcessor implements ItemP
 	public String getTargetClassName() {
 		return this.targetClassName;
 	}
-	
-	private void setDataSetItem(ItemHolder item){
+
+	private void setDataSetItem(ItemHolder item,SourcePhenotype source) {
+
+		Exception exception = null;
 		
-		Item dataSetItem = getDataSet();
+		Item dataSetItem = null;
+		Item dataSourceItem = null;
 		
-		if (dataSetItem!=null && item!=null){
-			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
-			
-			log.info("Phenotype has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"+ item.getItem());
+		try {
+		
+		dataSetItem = getDataSet();
+		dataSourceItem = DataSourceService.getDataSourceItem("TAIR").getItem();
+		
+		if (dataSetItem == null){
+			Exception e = new Exception("DataSet Item Cannot be Null!");
+			throw e;
 		}
 		
+		if (dataSourceItem == null){
+			Exception e = new Exception("DataSource Item Cannot be Null!");
+			throw e;
+		}
+
+		BioStoreHook.setDataSets(getModel(), item.getItem(),  dataSetItem.getIdentifier(),
+				DataSourceService.getDataSourceItem("TAIR").getItem().getIdentifier());
+		
+		} catch (Exception e){
+			exception = e;
+		}finally{
+			
+			if (exception!=null){
+				log.error("Error adding source record to the dataset. Source" + source + "Error:" + exception.getMessage());
+			}else{
+				log.debug("Phenotype has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
+						+ item.getItem());
+			}
+		}
+
+	
+
 	}
 
-	private Item getDataSet(){
+
+	private Item getDataSet() {
 		return DataSetService.getDataSetItem(DATASET_NAME).getItem();
 	}
 

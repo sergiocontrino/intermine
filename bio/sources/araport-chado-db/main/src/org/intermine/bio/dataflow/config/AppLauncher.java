@@ -27,7 +27,9 @@ import org.intermine.bio.domain.source.SourceCVTerm;
 import org.intermine.bio.domain.source.SourceFeatureGenotype;
 import org.intermine.bio.domain.source.SourceFeatureRelationshipAnnotation;
 import org.intermine.bio.domain.source.SourceGenotype;
+import org.intermine.bio.domain.source.SourceGenotypeZygosity;
 import org.intermine.bio.domain.source.SourcePhenotype;
+import org.intermine.bio.domain.source.SourcePhenotypeAnnotation;
 import org.intermine.bio.domain.source.SourcePhenotypeGeneticContext;
 import org.intermine.bio.domain.source.SourcePublication;
 import org.intermine.bio.domain.source.SourcePublicationFeatures;
@@ -42,6 +44,7 @@ import org.intermine.bio.item.postprocessor.BackgroundAccessionStockItemPostproc
 import org.intermine.bio.item.postprocessor.CVTermPostprocessor;
 import org.intermine.bio.item.postprocessor.DataSetItemPostprocessor;
 import org.intermine.bio.item.postprocessor.DataSourceItemPostprocessor;
+import org.intermine.bio.item.postprocessor.PhenotypeAnnotationPostProcessor;
 import org.intermine.bio.item.postprocessor.PhenotypeGeneticContextPostprocessor;
 import org.intermine.bio.item.postprocessor.PublicationFeaturePostprocessor;
 import org.intermine.bio.item.postprocessor.StockGenotypeItemPostprocessor;
@@ -54,6 +57,8 @@ import org.intermine.bio.item.processor.CVTermProcessor;
 import org.intermine.bio.item.processor.DataSourceItemProcessor;
 import org.intermine.bio.item.processor.GenotypeAlleleItemProcessor;
 import org.intermine.bio.item.processor.GenotypeItemProcessor;
+import org.intermine.bio.item.processor.GenotypeZygosityItemProcessor;
+import org.intermine.bio.item.processor.PhenotypeAnnotationItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeGeneticContextItemProcessor;
 import org.intermine.bio.item.processor.PhenotypeItemProcessor;
 import org.intermine.bio.item.processor.PublicationsFeaturesItemProcessor;
@@ -72,6 +77,8 @@ import org.intermine.bio.reader.CVReader;
 import org.intermine.bio.reader.CVTermReader;
 import org.intermine.bio.reader.GenotypeAlleleReader;
 import org.intermine.bio.reader.GenotypeReader;
+import org.intermine.bio.reader.GenotypeZygosityReader;
+import org.intermine.bio.reader.PhenotypeAnnotationReader;
 import org.intermine.bio.reader.PhenotypeGeneticContextReader;
 import org.intermine.bio.reader.PhenotypeReader;
 import org.intermine.bio.reader.PublicationFeaturesReader;
@@ -324,6 +331,32 @@ public class AppLauncher {
 				new FlowStepBuilder<SourceFeatureRelationshipAnnotation, Item>()
 				.build(stepName19, reader19, processor19, taskExecutor);
 	
+		GenotypeZygosityItemProcessor processor20 = new GenotypeZygosityItemProcessor(service);
+		DatabaseItemReader<SourceGenotypeZygosity> reader20 = new GenotypeZygosityReader().getReader(service.getConnection());
+		String stepName20 = "Genotype ZygosityLoading Step";
+		
+		FlowStep<SourceGenotypeZygosity, Item> genotypeZygosityStep =
+				new FlowStepBuilder<SourceGenotypeZygosity, Item>()
+				.build(stepName20, reader20, processor20, taskExecutor);
+		
+		//FlowStep<SourceFeatureRelationshipAnnotation, Item> alleleGeneZygosityStep =
+		//		new FlowStepBuilder<SourceFeatureRelationshipAnnotation, Item>()
+		//		.build(stepName19, reader19, processor19, taskExecutor);
+		
+		//Phenotype Annotation
+		
+		PhenotypeAnnotationItemProcessor processor21 = new PhenotypeAnnotationItemProcessor(service);
+		DatabaseItemReader<SourcePhenotypeAnnotation> reader21 = new PhenotypeAnnotationReader().getReader(service.getConnection());
+		String stepName21 = "Phenotype Annotation Loading Step";
+		
+		Step phenotypeAnnotationPostProcessor = new PhenotypeAnnotationPostProcessor(service).getPostProcessor("Phenotype Annotation PostProcessor",
+				service, taskExecutor);
+		
+		FlowStep<SourcePhenotypeAnnotation, Item> phenotypeAnnotationStep =
+				new FlowStepBuilder<SourcePhenotypeAnnotation, Item>()
+				.build(stepName21, reader21, processor21, taskExecutor);
+		
+		phenotypeAnnotationStep.setStepPostProcessor(phenotypeAnnotationPostProcessor);
 		
 		steps.add(cvStep);
 		steps.add(cvTermStep);
@@ -339,7 +372,7 @@ public class AppLauncher {
 		steps.add(publicationStep);
 		steps.add(publicationFeaturesStep);
 		
-		steps.add(dataSetPostProcessor);
+		//steps.add(dataSetPostProcessor);
 		
 		steps.add(stockSynonymsStep);
 		
@@ -347,8 +380,11 @@ public class AppLauncher {
 		
 		steps.add(stockAvailabilityStep);
 		
-		steps.add(alleleGeneZygosityStep);
+		//steps.add(alleleGeneZygosityStep);
 		
+		steps.add(genotypeZygosityStep);
+		
+		steps.add(phenotypeAnnotationStep);
 		
 	}
 

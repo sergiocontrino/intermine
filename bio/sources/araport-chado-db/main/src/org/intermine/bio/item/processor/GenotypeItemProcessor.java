@@ -47,29 +47,50 @@ public class GenotypeItemProcessor extends DataSourceProcessor implements ItemPr
 		int itemId = -1;
 
 		try {
-			log.info("Creating Item has started. Source Object:" + source);
+			log.debug("Creating Item has started. Source Object:" + source);
 
 			item = super.getService().createItem(ITEM_CLASSNAME);
 
-			log.info("Item place holder has been created: " + item);
+			log.debug("Item place holder has been created: " + item);
 
-			log.info("Genotype Primary Identifier " + source.getName());
+			if (StringUtils.isBlank(source.getName())) {
+				exception = new Exception("Genotype Name cannot be null! Skipping Source Record Processing.");
+				throw exception;
+			}
+
+			log.debug("Genotype Primary Identifier " + source.getName());
 			item.setAttribute("primaryIdentifier", source.getName());
 
-			log.info("Genotype Unique Accession: " + source.getUniqueAccession());
+			if (StringUtils.isBlank(source.getUniqueAccession())) {
+				exception = new Exception(
+						"Genotype Unique Accession cannot be null! Skipping Source Record Processing.");
+				throw exception;
+			}
+
+			log.debug("Genotype Unique Accession: " + source.getUniqueAccession());
 			item.setAttribute("secondaryIdentifier", source.getUniqueAccession());
 
-			log.info("Name   " + source.getName());
+			log.debug("Name   " + source.getName());
 			item.setAttribute("name", source.getName());
 
 			if (!StringUtils.isBlank(source.getDescription())) {
-				log.info("Genotype Description " + source.getDescription());
+				log.debug("Genotype Description " + source.getDescription());
 				item.setAttribute("description", source.getDescription());
 			}
 
+			if (StringUtils.isBlank(source.getUniqueName())) {
+				exception = new Exception("Genotype Unique Name cannot be null! Skipping Source Record Processing.");
+				throw exception;
+			}
+
 			if (!StringUtils.isBlank(source.getUniqueName())) {
-				log.info("Genotype Display Name " + source.getUniqueName());
+				log.debug("Genotype Display Name " + source.getUniqueName());
 				item.setAttribute("displayName", source.getUniqueName());
+			}
+
+			if (!StringUtils.isBlank(source.getType())) {
+				log.debug("Genotype Type " + source.getType());
+				item.setAttribute("type", source.getType());
 			}
 
 			Item organismItem = super.getService().getOrganismItem(super.getService().getOrganism().getTaxonId());
@@ -87,23 +108,24 @@ public class GenotypeItemProcessor extends DataSourceProcessor implements ItemPr
 		} finally {
 
 			if (exception != null) {
-				log.error("Error storing item for source record:" + source);
+				log.error("Error storing item for source record:" + source + "; Message:" + exception.getMessage()
+						+ "; Cause:" + exception.getCause());
 			} else {
-				log.info("Target Item has been created. Target Object:" + item);
+				log.debug("Target Item has been created. Target Object:" + item);
 
 				itemHolder = new ItemHolder(item, itemId);
 
-				if (itemHolder != null && itemId != 1) {
+				if (itemHolder != null && itemId != -1) {
 					GenotypeService.addGenotypeItem(source.getUniqueAccession(), itemHolder);
 				}
 
 			}
 		}
-		
-		if (itemHolder!=null) {
-			
+
+		if (itemHolder != null) {
+
 			setDataSetItem(itemHolder);
-			
+
 		}
 		return item;
 	}
@@ -123,7 +145,7 @@ public class GenotypeItemProcessor extends DataSourceProcessor implements ItemPr
 		if (dataSetItem != null && item != null) {
 			DataSetService.addBionEntityItem(DATASET_NAME, item.getItem());
 
-			log.info("Genotype has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
+			log.debug("Genotype has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
 					+ item.getItem());
 		}
 

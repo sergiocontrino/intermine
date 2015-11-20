@@ -26,7 +26,7 @@
 		<attribute name="stockCenterComment" type="java.lang.String" />
 		<reference name="mutagen" referenced-type="Mutagen" reverse-reference="stocks" />
 		<reference name="stockAnnotation" referenced-type="StockAnnotation"
-			reverse-reference="stock" />
+		 />
 						
 		<collection name="stockAvailabilities" referenced-type="StockAvailabilityInfo" reverse-reference="stock"/>
 		
@@ -82,19 +82,16 @@
 		<attribute name="transgene" type="java.lang.String" />
 		<attribute name="mutant" type="java.lang.String" />
 		<attribute name="naturalVariant" type="java.lang.String" />
-		<reference name="stock" referenced-type="Stock"
-			reverse-reference="stockAnnotation" />
 		<reference name="chromosomalConstitution" referenced-type="ChromosomalConstitutionAnnotation"
-			reverse-reference="stockAnnotation" />
+			 />
 		<reference name="growthCondition" referenced-type="GrowthConditionAnnotation"
-			reverse-reference="stockAnnotation" />
+			/>
 	</class>
 
 	<class name="ChromosomalConstitutionAnnotation" is-interface="true">
 		<attribute name="aneploidChromosome" type="java.lang.String" />
 		<attribute name="ploidy" type="java.lang.String" />
-		<reference name="stockAnnotation" referenced-type="StockAnnotation"
-			reverse-reference="chromosomalConstitution" />
+		
 	</class>
 
 	<class name="GrowthConditionAnnotation" is-interface="true">
@@ -102,7 +99,7 @@
 		<attribute name="growthTemperature" type="java.lang.String" />
 		<attribute name="durationOfGrowth" type="java.lang.String" />
 		<reference name="stockAnnotation" referenced-type="StockAnnotation"
-			reverse-reference="growthCondition" />
+			/>
 	</class>
 
 	<class name="GeoLocation" extends="DataLineage" is-interface="true">

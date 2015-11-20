@@ -28,4 +28,5 @@ public interface StockService extends BusinessService,  Verifiable {
 	public List<StockGenotypeVO> getPhenotypeGeneticContext(String itemId) throws Exception;
 	
 	
+	
 }

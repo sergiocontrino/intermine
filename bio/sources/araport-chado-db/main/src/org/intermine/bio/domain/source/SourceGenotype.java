@@ -6,6 +6,7 @@ public class SourceGenotype {
 	private String uniqueName;
 	private String uniqueAccession;
 	private String description;
+	private String type;
 
 	public SourceGenotype() {
 
@@ -43,10 +44,20 @@ public class SourceGenotype {
 		this.description = description;
 	}
 
-	@Override
-	public String toString() {
-		return "SourceGenotype [name=" + name + ", uniquename=" + uniqueName + ", uniqueAccession=" + uniqueAccession
-				+ ", description=" + description + "]";
+
+	public String getType() {
+		return type;
 	}
 
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	@Override
+	public String toString() {
+		return "SourceGenotype [name=" + name + ", uniqueName=" + uniqueName + ", uniqueAccession=" + uniqueAccession
+				+ ", description=" + description + ", type=" + type + "]";
+	}
+	
+	
 }

@@ -81,6 +81,7 @@ public class StockGenotypeItemPostprocessor extends AbstractStep {
 	private void createStockGenotypeCollection() {
 
 		Map<String, Item> items = GenotypeService.getGenotypeStockItemSet();
+		log.debug("Total Count of Stock/Genotype Collections to Process:" + items.size());
 
 		for (Map.Entry<String, Item> item : items.entrySet()) {
 
@@ -90,28 +91,43 @@ public class StockGenotypeItemPostprocessor extends AbstractStep {
 
 			Collection<Item> collection = (Collection<Item>) item.getValue();
 
-			List<Item>collectionItems = new ArrayList<Item>(collection);
+			List<Item> collectionItems = new ArrayList<Item>(collection);
 
 			ItemHolder itemHolder = GenotypeService.getGenotypeMap().get(genotype);
-			
-			log.info("Collection Holder: " + genotype);
-			
-			for (Item member: collectionItems){
-				
-				log.info("Member of Collection: " + member + "; " + " Collection Holder:" + genotype);
-			}
+
+			log.debug("Collection Holder: " + genotype);
+
+			log.debug("Total Count of Entities to Process:" + collectionItems.size());
+
+			/*
+			 * for (Item member: collectionItems){
+			 * 
+			 * log.info("Member of Collection: " + member + "; " +
+			 * " Collection Holder:" + genotype); }
+			 * 
+			 * /*
+			 */
+
+			Exception exception = null;
 
 			ReferenceList referenceList = new ReferenceList();
 			referenceList.setName("stocks");
 			try {
 
 				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
-
-				log.info("Stock/Genotype Collection successfully stored." + itemHolder.getItem() + ";" + "Collection size:"
-						+ collection.size());
-
 			} catch (ObjectStoreException e) {
-				log.error("Error storing stock collection for genotype:" + genotype);
+				exception = e;
+			} catch (Exception e) {
+				exception = e;
+
+			} finally {
+				if (exception != null) {
+					log.error("Error storing stock collection for genotype:" + genotype + "; Error:"
+							+ exception.getMessage());
+				} else {
+					log.debug("Stock/Genotype Collection successfully stored." + itemHolder.getItem() + ";"
+							+ "Collection size:" + collection.size());
+				}
 			}
 
 		}

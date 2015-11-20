@@ -8,6 +8,7 @@ import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataconversion.DataSourceProcessor;
 import org.intermine.bio.dataflow.config.ApplicationContext;
 import org.intermine.bio.item.ItemProcessor;
+import org.intermine.bio.item.util.ItemHolder;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
 import org.intermine.bio.domain.source.*;
@@ -35,12 +36,33 @@ public class BackgroundAccessionStockItemProcessor extends DataSourceProcessor i
 
 		Item item = null;
 		Item itemStock = null;
+		ItemHolder itemHolder = null;
+		ItemHolder itemStockHolder = null;
 
 		try {
 			log.info("Creating Mapping for background Accession has started. Source Object:" + source);
 			
+			if (StringUtils.isBlank(source.getBackgroundAccessionName())){
+				Exception e = new Exception("Stock Background Accession Cannot Be Null!");
+				throw e;
+			}
+								
 			if (OrganismService.getStrainMap().containsKey(source.getBackgroundAccessionName())){
-				item = OrganismService.getStrainMap().get(source.getBackgroundAccessionName()).getItem();
+				
+				itemHolder = OrganismService.getStrainMap().get(source.getBackgroundAccessionName());
+				
+			}
+			
+			if (itemHolder == null){
+				Exception e = new Exception("Stock Background Accession ItemHolder Cannot Be Null!");
+				throw e;
+			}
+			
+			item = itemHolder.getItem();
+			
+			if (item == null){
+				Exception e = new Exception("Stock Background Accession Item Cannot Be Null!");
+				throw e;
 			}
 			
 			if (item!=null){
@@ -57,7 +79,7 @@ public class BackgroundAccessionStockItemProcessor extends DataSourceProcessor i
 		} finally {
 
 			if (exception != null) {
-				log.error("Error creating background accession record:" + source);
+				log.error("Error creating background accession record:" + source + "; Error:" + exception.getMessage());
 			} else {
 				log.info("Target Item has been mapped.");
 			}

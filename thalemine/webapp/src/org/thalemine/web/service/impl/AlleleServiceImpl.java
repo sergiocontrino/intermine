@@ -43,7 +43,10 @@ public class AlleleServiceImpl extends AbstractService implements AlleleService 
 		}
 
 		QueryResult queryResult = this.alleleDao.getGenes(item);
+		
 		Iterator<List<Object>> iterator = queryResult.getResultItems();
+		
+		int rowCount = 0;
 
 		while (iterator.hasNext()) {
 
@@ -59,8 +62,14 @@ public class AlleleServiceImpl extends AbstractService implements AlleleService 
 			resultList.add(resultItem);
 
 			log.debug("Gene Result Item:" + resultItem);
+			
+			rowCount++;
+			
+			log.info("getGenes:Current Row Count:" + rowCount);
 
 		}
+		
+		log.info("getGenes:" + resultList.size());
 
 		return resultList;
 

@@ -56,7 +56,7 @@ public class DataSourceItemPostprocessor extends AbstractStep {
 	@Override
 	protected void doExecute(StepExecution stepExecution) throws Exception {
 
-		log.info("Running Task Let Step!  PublicationFeaturePostprocessor " + getName());
+		log.info("Running Task Let Step!  DataSourceItem Postprocessor " + getName());
 
 		taskExecutor.execute(new Runnable() {
 
@@ -81,46 +81,65 @@ public class DataSourceItemPostprocessor extends AbstractStep {
 		return taskExecutor;
 	}
 
-	private void createPublicationsCollection(){
-		
+	private void createPublicationsCollection() {
+
 		Map<String, Item> items = DataSourceService.getPublicationItemSet();
-		
+
+		log.debug("Total Count of DataSources to Process:" + items.size());
+
 		for (Map.Entry<String, Item> item : items.entrySet()) {
-			
+
 			String dataSource = item.getKey();
 
 			log.info("Processing DataSource: " + dataSource);
-			
+
 			Collection<Item> collection = (Collection<Item>) item.getValue();
 
 			List<Item> collectionItems = new ArrayList<Item>(collection);
-			
+
 			ItemHolder itemHolder = DataSourceService.getDataSourceMap().get(dataSource);
 
 			log.info("Collection Holder: " + dataSource);
-			
+
+			log.debug("Total Count of Entities to Process:" + collectionItems.size());
+			int currentItemCount = 0;
+
+			/*
 			for (Item member : collectionItems) {
 
 				log.info("Member of Collection: " + member + "; " + " Collection Holder:" + dataSource);
+
+				currentItemCount++;
+
+				log.debug("Current Collection Count:" + currentItemCount);
 			}
-			
-			
+			*/
+
 			ReferenceList referenceList = new ReferenceList();
 			referenceList.setName("publications");
-			
+
+			Exception exception = null;
+
 			try {
 
 				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
-
-				log.info("Publication/DataSource Collection successfully stored." + itemHolder.getItem() + ";"
-						+ "Collection size:" + collection.size());
-
-			} catch (ObjectStoreException e) {
-				log.error("Error storing publication collection for a datasource:" +  dataSource);
-			}
 			
+			} catch (ObjectStoreException e) {
+				exception = e;
+			} catch (Exception e) {
+				exception = e;
+			} finally {
+				if (exception != null) {
+					log.error("Error storing Bioentities/DataSet Collection for a dataset:" + dataSource + "; Error:"
+							+ exception.getMessage());
+				} else {
+					log.debug("Bioentities/DataSet Collection successfully stored." + itemHolder.getItem() + ";"
+							+ "Collection size:" + collection.size());
+				}
+			}
+
 		}
-		
+
 	}
-	
+
 }

@@ -6,6 +6,7 @@ import org.intermine.bio.chado.AlleleService;
 import org.intermine.bio.chado.CVService;
 import org.intermine.bio.chado.DataSetService;
 import org.intermine.bio.chado.DataSourceService;
+import org.intermine.bio.chado.GenotypeService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.chado.StockCenterService;
 import org.intermine.bio.chado.StockService;
@@ -18,74 +19,102 @@ import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
 import org.intermine.bio.domain.source.*;
 
-public class AlleleGeneZygosityItemProcessor extends DataSourceProcessor implements ItemProcessor<SourceFeatureRelationshipAnnotation, Item> {
+public class GenotypeZygosityItemProcessor extends DataSourceProcessor implements ItemProcessor<SourceGenotypeZygosity, Item> {
 
-	protected static final Logger log = Logger.getLogger(AlleleGeneZygosityItemProcessor.class);
+	protected static final Logger log = Logger.getLogger(GenotypeZygosityItemProcessor.class);
 
 	private String targetClassName;
 
 	private static final String ITEM_CLASSNAME = "GenotypeZygosity";
 	
 
-	public AlleleGeneZygosityItemProcessor(ChadoDBConverter chadoDBConverter) {
+	public GenotypeZygosityItemProcessor(ChadoDBConverter chadoDBConverter) {
 		super(chadoDBConverter);
 	}
 
 	@Override
-	public Item process(SourceFeatureRelationshipAnnotation item) throws Exception {
+	public Item process(SourceGenotypeZygosity item) throws Exception {
 
 		return createItem(item);
 
 	}
 
-	private Item createItem(SourceFeatureRelationshipAnnotation source) throws ObjectStoreException {
+	private Item createItem(SourceGenotypeZygosity source) throws ObjectStoreException {
 
 		Exception exception = null;
 
 		Item item = null;
 		ItemHolder itemHolder = null;
 		
+		ItemHolder alleleItemHolder = null;
+		Item alleleItem = null;
+		
+		ItemHolder genotypeItemHolder = null;
+		Item genotypeItem = null;
+		
+		ItemHolder germpalsmItemHolder = null;
+		Item germpalsmItem = null;
+		
 		int itemId = -1;
 
 		try {
 			log.debug("Creating Item has started. Source Object:" + source);
 
-			log.debug("Gene Unique Accession: " + source.getSubjectUniqueAccession());
-			log.debug("Gene Name: " + source.getSubjectUniqueName());
+			log.debug("Genotype Unique Accession: " + source.getGenotypeUniqueAccession());
+						
+			log.debug("Allele Unique Accession: " + source.getAlleleUniqueAccession());
 			
-			log.debug("Allele Name: " + source.getObjectUniqueName());
-			log.debug("Allele Unique Accession: " + source.getObjectUniqueAccession());
+			log.debug("Germplasm Unique Accession: " + source.getGermplasmUniqueAccession());
 			
-			log.debug("Zygosity: " + source.getPropertyValue());
+			log.debug("Zygosity: " + source.getZygosity());
 			
-			Item geneItem = AlleleService.getGeneItem(source.getSubjectUniqueName()).getItem();
-			log.debug("Gene Item: " + geneItem);
-			
-			Item alleleItem = AlleleService.getAlleleItem(source.getObjectUniqueAccession()).getItem();
-			log.debug("Allele Item: " + alleleItem);
+			alleleItemHolder = AlleleService.getAlleleItem(source.getAlleleUniqueAccession());
 					
+			if (alleleItemHolder!=null){
+				alleleItem = alleleItemHolder.getItem();
+			}
+						
+			log.debug("Allele Item: " + alleleItem);
+			
+			genotypeItemHolder =GenotypeService.getGenotypeItem(source.getGenotypeUniqueAccession());
+			
+			if (genotypeItemHolder!=null){
+				genotypeItem = genotypeItemHolder.getItem();
+			}
+			
+			germpalsmItemHolder =StockService.getStockItem(source.getGermplasmUniqueAccession());
+			
+			if (germpalsmItemHolder!=null){
+				germpalsmItem = germpalsmItemHolder.getItem();
+			}
+										
 			Item zygosityType = CVService.getCVTermItem("genotype_type",
-					source.getPropertyValue());
+					source.getZygosity());
+			
+			
 			log.debug("Zygosity Item: " + zygosityType);
 			
-			if (geneItem!=null && alleleItem!=null && zygosityType!=null){
+			if (genotypeItem!=null && alleleItem!=null && zygosityType!=null && germpalsmItem!=null){
 				
-				log.debug("Gene Item: " + geneItem);
+				log.debug("Genotype Item: " + genotypeItem);
 				log.debug("Allele Item: " + alleleItem);
+				log.debug("Germplasm Item: " + germpalsmItem);
+							
 				log.debug("Zygosity Item: " + zygosityType);
 				
 				item = super.getService().createItem(ITEM_CLASSNAME);
 				log.debug("Item place holder has been created: " + item);
 				
 				item.setReference("allele", alleleItem);
-				item.setReference("gene", geneItem);
+				item.setReference("genotype", genotypeItem);
+				item.setReference("stock", germpalsmItem);
+				
 				item.setReference("zygosity", zygosityType);	
 				
 				itemId = super.getService().store(item);
 				
 			}else{
-				exception = new Exception("Invalid Source Entry");
-				log.error("Invalid entry.Skipping Source Record:" + source);
+				exception = new Exception("Invalid Genotype Zygosity Entry.Skipping Source Record!");
 				throw exception;
 			}
 

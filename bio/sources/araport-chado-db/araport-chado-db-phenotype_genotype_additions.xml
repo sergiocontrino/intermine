@@ -12,6 +12,8 @@
 			reverse-reference="phenotypesObserved" />
 		<reference name="anatomyTerm" referenced-type="AnatomyTerm" />
 		<reference name="developmentTerm" referenced-type="DevelopmentTerm" />
+		<collection name="phenotypeAnnotations" referenced-type="PhenotypeAnnotation"
+			reverse-reference="phenotype" />
 	</class>
 
 	<class name="AnatomyTerm" extends="OntologyTerm" is-interface="true">
@@ -40,7 +42,7 @@
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="alleles" />
 			
-		<collection name="alleleGeneZygosities" referenced-type="AlleleGeneZygosity"
+		<collection name="alleleGenotypeZygosities" referenced-type="GenotypeZygosity"
 			reverse-reference="allele" />
 
 	</class>
@@ -98,32 +100,53 @@
 	<class name="Stock" is-interface="true">
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="stocks" />
+		<collection name="stockphenotypeAnnotations" referenced-type="PhenotypeAnnotation"
+			reverse-reference="stock" />
 	</class>
+	
 	<class name="Gene" is-interface="true">
 		<collection name="affectedAlleles" referenced-type="Allele"
 			reverse-reference="affectedGenes" />
 		<collection name="genotypes" referenced-type="Genotype"
 			reverse-reference="genes" />
-		<collection name="alleleGeneZygosities" referenced-type="AlleleGeneZygosity"
-			reverse-reference="gene" />
 	</class>
+	
 	<class name="Genotype" extends="BioEntity"
 		is-interface="true">
 		<attribute name="displayName" type="java.lang.String" />
 		<attribute name="description" type="java.lang.String" />
+		<attribute name="type" type="java.lang.String" />
 		<collection name="stocks" referenced-type="Stock"
 			reverse-reference="genotypes" />
 		<collection name="alleles" referenced-type="Allele"
 			reverse-reference="genotypes" />
 		<collection name="genes" referenced-type="Gene"
 			reverse-reference="genotypes" />
-	</class>
+		<collection name="genotypephenotypeAnnotations" referenced-type="PhenotypeAnnotation"
+			reverse-reference="genotype" />
+	 </class>
+	 
+	 
+	 <class name="PhenotypeAnnotation" is-interface="true">
+		
+		<reference name="phenotype" referenced-type="Phenotype"
+			reverse-reference="phenotypeAnnotations" />
+		<reference name="genotype" referenced-type="Genotype"
+			reverse-reference="genotypephenotypeAnnotations" />
+		<reference name="stock" referenced-type="Stock"
+			reverse-reference="stockphenotypeAnnotations" />
+		<reference name="publication" referenced-type="Publication"
+			 />
+	 </class>
 
-	<class name="AlleleGeneZygosity" is-interface="true">
+	<class name="GenotypeZygosity" is-interface="true">
+	
 		<reference name="allele" referenced-type="Allele"
-			reverse-reference="alleleGeneZygosities" />
-		<reference name="gene" referenced-type="Gene"
-			reverse-reference="alleleGeneZygosities" />
+			reverse-reference="alleleGenotypeZygosities"
+			/>
+		<reference name="stock" referenced-type="Stock"
+			/>
+		<reference name="genotype" referenced-type="Genotype" />
 		<reference name="zygosity" referenced-type="ZygosityType"/>
 	</class>
 	

@@ -83,7 +83,9 @@ public class PublicationFeaturePostprocessor extends AbstractStep {
 	private void createBioEntitiesPublicationCollection(){
 		
 		Map<String, Item> items = PublicationService.getPublicationBionEntitiesItemSet();
-
+		
+		log.debug("Total Count of Publications/BioEntities Collections to Process:" + items.size());
+		
 		for (Map.Entry<String, Item> item : items.entrySet()) {
 
 			String publication = item.getKey();
@@ -98,23 +100,39 @@ public class PublicationFeaturePostprocessor extends AbstractStep {
 
 			log.info("Collection Holder: " + publication);
 			
+			log.debug("Total Count of Entities to Process:" + collectionItems.size());
+			
+			/*
 			for (Item member : collectionItems) {
 
 				log.info("Member of Collection: " + member + "; " + " Collection Holder:" + publication);
 			}
+			*/
 
+			Exception exception = null;
+			
 			ReferenceList referenceList = new ReferenceList();
 			referenceList.setName("bioEntities");
 			
 			try {
 
 				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
+				
+			}
 
-				log.info("Publication/Feature Collection successfully stored." + itemHolder.getItem() + ";"
-						+ "Collection size:" + collection.size());
-
-			} catch (ObjectStoreException e) {
-				log.error("Error storing bioentity collection for a publication:" +  publication);
+			 catch (ObjectStoreException e) {
+				exception = e;
+			 }
+			catch (Exception e) {
+				exception = e;
+			} finally {
+				if (exception != null) {
+					log.error("Error storing Publication/Feature Collection for a publication:" + publication + "; Error:"
+							+ exception.getMessage());
+				} else {
+					log.debug("Publication/Feature Collection successfully stored." + itemHolder.getItem() + ";"
+							+ "Collection size:" + collection.size());
+				}
 			}
 			
 		}
