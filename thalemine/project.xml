@@ -212,6 +212,15 @@
             <property name="generif.datasetname" value="GeneRIF data set"/>
         </source>
 
+        <source name="bar-psi-interactions" type="bar-psi-interactions">
+            <!-- source last updated: 2015-04-20 13:30:00 -->
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/bar-interactions/"/>
+            <property name="bar.organisms" value="3702"/>
+            <property name="dataSourceName" value="BAR"/>
+            <property name="dataSetName" value="New BAR interactions data set"/>
+            <property name="dataSetVersion" value="November 2015"/>
+        </source>
+
         <source name="psi-intact" type="psi" >
           <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/psi/intact/current"/>
           <property name="intact.organisms" value="3702"/>
