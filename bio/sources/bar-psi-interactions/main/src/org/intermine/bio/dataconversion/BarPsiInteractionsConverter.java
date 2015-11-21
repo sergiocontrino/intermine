@@ -286,7 +286,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                 String description = getDescription(token);
                 miCodes.put(miCode, description);
                 try {
-                    createTerm (miCode, description);
+                    getTerm(miCode);
                 } catch (ObjectStoreException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -408,24 +408,16 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private String getTerm(String identifier) throws ObjectStoreException {
         String itemId = terms.get(identifier);
         if (itemId == null) {
-            Item term = createItem("InteractionTerm");
-            term.setAttribute("identifier", identifier);
-            itemId = term.getIdentifier();
-            terms.put(identifier, itemId);
-            store(term);
-        }
-        return itemId;
-    }
-
-    private String createTerm (String identifier, String name) throws ObjectStoreException {
-        String itemId = terms.get(identifier);
-        if (itemId == null) {
-            Item term = createItem("InteractionTerm");
-            term.setAttribute("identifier", identifier);
-            term.setAttribute("name", name);
-            itemId = term.getIdentifier();
-            terms.put(identifier, itemId);
-            store(term);
+            try {
+                Item term = createItem("InteractionTerm");
+                term.setAttribute("identifier", identifier);
+                itemId = term.getIdentifier();
+                terms.put(identifier, itemId);
+                store(term);
+            } catch (ObjectStoreException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         return itemId;
     }
