@@ -7,7 +7,7 @@ import org.thalemine.web.service.Verifiable;
 public interface PhenotypeDAO extends GeneralDAO{
 
 	public QueryResult getGenotype(Object item) throws Exception;
-	public QueryResult getPublications(String objectId) throws Exception;
+	public QueryResult getPublications(String phenotypeId, String stockId) throws Exception;
 	
 	
 	

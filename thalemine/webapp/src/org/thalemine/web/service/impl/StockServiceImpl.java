@@ -32,6 +32,7 @@ import org.thalemine.web.service.AlleleService;
 import org.thalemine.web.service.StockService;
 import org.thalemine.web.service.core.ServiceConfig;
 import org.thalemine.web.service.core.ServiceManager;
+import org.thalemine.web.utils.UtilService;
 
 public class StockServiceImpl extends AbstractService implements StockService {
 
@@ -202,7 +203,9 @@ public class StockServiceImpl extends AbstractService implements StockService {
 			try {
 				if (resultItem.getObjectId() != null) {
 
-					publications = getPhenotypePublications(objectId);
+					String stockIdentifier = UtilService.getObjectIdentifier(item);
+					
+					publications = getPhenotypePublications(objectId, stockIdentifier);
 
 					if (publications.size() > 0) {
 						resultItem.setPublications(publications);
@@ -584,11 +587,11 @@ public class StockServiceImpl extends AbstractService implements StockService {
 	}
 
 	@Override
-	public List<PublicationVO> getPhenotypePublications(String primaryIdentifier) throws Exception {
+	public List<PublicationVO> getPhenotypePublications(String primaryIdentifier, String stockIdentifier) throws Exception {
 
 		List<PublicationVO> result = new ArrayList<PublicationVO>();
 
-		QueryResult queryResult = this.phenotypeDao.getPublications(primaryIdentifier);
+		QueryResult queryResult = this.phenotypeDao.getPublications(primaryIdentifier, stockIdentifier);
 		Iterator<List<Object>> iterator = queryResult.getResultItems();
 
 		if (primaryIdentifier == null) {

@@ -40,7 +40,7 @@ public class PhenotypeDAOImpl implements QueryRepository, PhenotypeDAO, Verifiab
 	}
 	
 	@Override
-	public QueryResult getPublications(String objectId) throws Exception {
+	public QueryResult getPublications(String objectId, String stockId) throws Exception {
 		
 		Exception exception = null;
 		PathQuery query = null;
@@ -49,7 +49,7 @@ public class PhenotypeDAOImpl implements QueryRepository, PhenotypeDAO, Verifiab
 		validateState();
 
 		try {
-			query = getPublicationsQuery(objectId);
+			query = getPublicationsQuery(objectId, stockId);
 			queryResult = new QueryResultImpl(this.repository, query);
 		} catch (Exception e) {
 			exception = e;
@@ -69,22 +69,26 @@ public class PhenotypeDAOImpl implements QueryRepository, PhenotypeDAO, Verifiab
 		return queryResult;
 	}
 
-	private PathQuery getPublicationsQuery(String objectId) throws Exception {
+	private PathQuery getPublicationsQuery(String phenotypeId, String stockId) throws Exception {
 
 		PathQuery query = new PathQuery(getModel());
         
-        query.addViews(
-    		    "Phenotype.publications.id",
-                "Phenotype.publications.pubMedId",
-                "Phenotype.publications.title",
-                "Phenotype.publications.year",
-                "Phenotype.publications.firstAuthor"
-                );
+		   // Select the output columns:
+        query.addViews("Phenotype.phenotypeAnnotations.publication.id",
+                "Phenotype.phenotypeAnnotations.publication.pubMedId",
+                "Phenotype.phenotypeAnnotations.publication.title",
+                "Phenotype.phenotypeAnnotations.publication.year",
+                "Phenotype.phenotypeAnnotations.publication.firstAuthor");
              
        // Add orderby
    	    query.addOrderBy("Phenotype.publications.title", OrderDirection.ASC);
    	  
-   	    query.addConstraint(Constraints.eq(PHENOTYPE_OBJECT_IDENTIFIER_CONSTRAINT, objectId));
+   	// Filter the results with the following constraints:
+        query.addConstraint(Constraints.eq("Phenotype.phenotypeAnnotations.stock.id", stockId), "A");
+              
+   	    query.addConstraint(Constraints.eq(PHENOTYPE_OBJECT_IDENTIFIER_CONSTRAINT, phenotypeId), "B");
+   	    
+   	    query.setConstraintLogic("A and B");
 
 		return query;
 	}

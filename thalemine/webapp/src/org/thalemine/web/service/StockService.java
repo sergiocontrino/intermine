@@ -27,7 +27,7 @@ public interface StockService extends BusinessService,  Verifiable {
 	public List<StrainVO> getBackgroundAccessions(String itemId) throws Exception;
 	public List<PhenotypeVO> getPhenotypesbyGeneticItem(String itemId, String stockId, String itemClass) throws Exception;
 	public List<StockGenotypeVO> getPhenotypeGeneticContext(String itemId) throws Exception;
-	public List<PublicationVO> getPhenotypePublications(String primaryIdentifier) throws Exception;
+	public List<PublicationVO> getPhenotypePublications(String primaryIdentifier, String stockIdentifier) throws Exception;
 	
 	
 	
