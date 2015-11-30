@@ -297,7 +297,7 @@
       <attribute name="pubMedId" value="24214961" />
    </item>
    <item id="0_48" class="DataSet" implements="">
-      <attribute name="version" value="72.0" />
+      <attribute name="version" value="76.0" />
       <reference name="dataSource" ref_id="0_46" />
       <attribute name="name" value="KEGG pathways data set" />
       <attribute name="description" value="Wiring diagrams of molecular interactions, reactions, and relations" />
