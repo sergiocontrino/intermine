@@ -80,10 +80,7 @@ public class PhenotypeDAOImpl implements QueryRepository, PhenotypeDAO, Verifiab
                 "Phenotype.phenotypeAnnotations.publication.year",
                 "Phenotype.phenotypeAnnotations.publication.firstAuthor");
              
-       // Add orderby
-   	    query.addOrderBy("Phenotype.publications.title", OrderDirection.ASC);
-   	  
-   	// Filter the results with the following constraints:
+       	// Filter the results with the following constraints:
         query.addConstraint(Constraints.eq("Phenotype.phenotypeAnnotations.stock.id", stockId), "A");
               
    	    query.addConstraint(Constraints.eq(PHENOTYPE_OBJECT_IDENTIFIER_CONSTRAINT, phenotypeId), "B");

@@ -211,8 +211,6 @@ public class StockServiceImpl extends AbstractService implements StockService {
 						resultItem.setPublications(publications);
 					}
 
-					resultItem.setPublications(publications);
-
 				}
 			} catch (Exception e) {
 				pubException = e;
@@ -598,13 +596,17 @@ public class StockServiceImpl extends AbstractService implements StockService {
 			throw new Exception("Phenotype cannot be null.");
 		}
 
+		log.info("Phenotype Publcations. I am here");
+		
 		while (iterator.hasNext()) {
 
 			List<Object> currentItem = iterator.next();
+			
+			log.info("Publication Object Item:" + currentItem);
 
 			PublicationVO resultItem = new PublicationVO(currentItem);
 
-			log.info("Publication Item:" + resultItem);
+			log.info("Publication VO Item:" + resultItem);
 
 			if (resultItem.getObjectId() != null) {
 
