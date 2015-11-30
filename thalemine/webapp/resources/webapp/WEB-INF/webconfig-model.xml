@@ -773,7 +773,7 @@
 
        <reportdisplayer javaClass="org.thalemine.web.displayer.PhenotypeGeneticContextDisplayer"
                      jspName="model/phenotypeGeneticContextDisplayer.jsp"
-                     replacesFields="observedIn"
+                     replacesFields="observedIn, publications"
                      placement="Observed In"
                      types="Phenotype"/>
 
@@ -785,7 +785,7 @@
 
          <reportdisplayer javaClass="org.thalemine.web.displayer.GenotypePhenotypeDisplayer"
                      jspName="model/genotypePhenotypeDisplayer.jsp"
-                     replacesFields="phenotypesObserved"
+                     replacesFields="phenotypesObserved, publications"
                      placement="Phenotypes"
                      types="Genotype"/>
 
