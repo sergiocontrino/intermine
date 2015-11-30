@@ -797,8 +797,8 @@
 
           <reportdisplayer javaClass="org.thalemine.web.displayer.AccessionStockDisplayer"
                      jspName="model/accessionStocksDisplayer.jsp"
-                     replacesFields="backgroundStocks,stocks,organism,type"
-                     placement="Stocks"
+                     replacesFields="backgroundStocks,stocks,organism,type, publications"
+                     placement=""
                      types="Strain"/>
 
   </reportdisplayers>
