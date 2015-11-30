@@ -33,6 +33,11 @@
 							<c:forEach var="item" items="${list}">
 								<tr>
 									<td><a href="report.do?id=${item.objectId}">${item.description}</a>
+									<span>
+									<c:forEach var="publicationItem" items="${item.publications}" varStatus="status">
+										${publicationItem.firstAuthor}, (${publicationItem.year})
+									</c:forEach>
+									</span>
 									</td>
 								</tr>
 							</c:forEach>

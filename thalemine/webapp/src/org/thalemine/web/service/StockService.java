@@ -5,6 +5,7 @@ import java.util.List;
 import org.intermine.model.InterMineObject;
 import org.thalemine.web.domain.AlleleVO;
 import org.thalemine.web.domain.PhenotypeVO;
+import org.thalemine.web.domain.PublicationVO;
 import org.thalemine.web.domain.StockAnnotationVO;
 import org.thalemine.web.domain.StockAvailabilityVO;
 import org.thalemine.web.domain.StockGenotypeVO;
@@ -26,6 +27,7 @@ public interface StockService extends BusinessService,  Verifiable {
 	public List<StrainVO> getBackgroundAccessions(String itemId) throws Exception;
 	public List<PhenotypeVO> getPhenotypesbyGeneticItem(String itemId, String stockId, String itemClass) throws Exception;
 	public List<StockGenotypeVO> getPhenotypeGeneticContext(String itemId) throws Exception;
+	public List<PublicationVO> getPhenotypePublications(String primaryIdentifier) throws Exception;
 	
 	
 	

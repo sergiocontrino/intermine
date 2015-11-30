@@ -29,6 +29,7 @@ public class PhenotypeDAOImpl implements QueryRepository, PhenotypeDAO, Verifiab
 
 	private static final String PRIMARY_IDENTIFIER_CONSTRAINT = "Stock.primaryIdentifier";
 	private static final String OBJECT_IDENTIFIER_CONSTRAINT = "Stock.id";
+	private static final String PHENOTYPE_OBJECT_IDENTIFIER_CONSTRAINT = "Phenotype.id";
 
 	private IRepositoryManager repository;
 
@@ -38,7 +39,56 @@ public class PhenotypeDAOImpl implements QueryRepository, PhenotypeDAO, Verifiab
 		super();
 	}
 	
+	@Override
+	public QueryResult getPublications(String objectId) throws Exception {
+		
+		Exception exception = null;
+		PathQuery query = null;
+		QueryResult queryResult = null;
 
+		validateState();
+
+		try {
+			query = getPublicationsQuery(objectId);
+			queryResult = new QueryResultImpl(this.repository, query);
+		} catch (Exception e) {
+			exception = e;
+		} finally {
+
+			if (exception != null) {
+
+				log.error("Error occured while retrieving result set for query:" + "; Query:" + query);
+				log.error("Error:" + exception.getMessage() + ";Cause:" + exception.getCause());
+				exception.printStackTrace();
+
+			} else {
+				log.info("Successfully retrieved resultset for query." + "; Query:" + query);
+			}
+		}
+
+		return queryResult;
+	}
+
+	private PathQuery getPublicationsQuery(String objectId) throws Exception {
+
+		PathQuery query = new PathQuery(getModel());
+        
+        query.addViews(
+    		    "Phenotype.publications.id",
+                "Phenotype.publications.pubMedId",
+                "Phenotype.publications.title",
+                "Phenotype.publications.year",
+                "Phenotype.publications.firstAuthor"
+                );
+             
+       // Add orderby
+   	    query.addOrderBy("Phenotype.publications.title", OrderDirection.ASC);
+   	  
+   	    query.addConstraint(Constraints.eq(PHENOTYPE_OBJECT_IDENTIFIER_CONSTRAINT, objectId));
+
+		return query;
+	}
+	
 	@Override
 	public QueryResult getGenotype(Object item) throws Exception {
 
@@ -119,4 +169,5 @@ public class PhenotypeDAOImpl implements QueryRepository, PhenotypeDAO, Verifiab
 
 	}
 
+	
 }
