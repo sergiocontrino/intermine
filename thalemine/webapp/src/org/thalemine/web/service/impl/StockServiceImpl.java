@@ -566,6 +566,32 @@ public class StockServiceImpl extends AbstractService implements StockService {
 			List<Object> currentItem = iterator.next();
 
 			StockGenotypeVO resultItem = new StockGenotypeVO(currentItem);
+			
+			Exception pubException = null;
+			List<PublicationVO> publications = new ArrayList<PublicationVO>();
+			
+			try {
+				if (resultItem.getStockObjectId() != null) {
+
+					
+					publications = getPhenotypePublications(itemId, resultItem.getStockObjectId() );
+
+					if (publications.size() > 0) {
+						resultItem.setPublications(publications);
+					}
+
+				}
+			} catch (Exception e) {
+				pubException = e;
+			} finally {
+				if (pubException != null) {
+					log.error("Error retriveing publications for Stock/Phenotype:" + resultItem);
+				} else {
+					log.info("Stock/Phenotype publications successfully retrieved:" + resultItem + ";Publication Size:"
+							+ publications.size());
+				}
+
+			}
 
 			List<AlleleVO> alleles = new ArrayList<AlleleVO>();
 

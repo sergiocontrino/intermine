@@ -12,6 +12,7 @@ public class StockGenotypeVO extends DomainVO {
 	private List<AlleleVO> alleles = new ArrayList<AlleleVO>();;
 	private List<GeneVO> genes;
 	private List<GeneModelVO> geneModels = new ArrayList<GeneModelVO>();
+	private List<PublicationVO> publications = new ArrayList<PublicationVO>();
 		
 	public StockGenotypeVO(){
 		
@@ -87,6 +88,14 @@ public class StockGenotypeVO extends DomainVO {
 		this.geneModels = geneModels;
 	}
 
+	public List<PublicationVO> getPublications() {
+		return publications;
+	}
+
+
+	public void setPublications(List<PublicationVO> publications) {
+		this.publications = publications;
+	}
 
 	@Override
 	public String toString() {
