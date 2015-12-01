@@ -223,12 +223,12 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 
             if (miCodes.get(type) != null) {
                 interactionDetail.setAttribute("relationshipType", miCodes.get(type));
-                interactionDetail.setAttribute("type", type);
+                interactionDetail.setAttribute("type", getDescription(miCodes.get(type)));
             }
             interactionDetail.setReference("interaction", interaction);
             interactionDetail.addToCollection("dataSets", dataSetRef);
-            // interactionDetail.setAttribute("role1", role1);
-            // interactionDetail.setAttribute("role2", role2);
+            interactionDetail.setAttribute("role1", "n/a");
+            interactionDetail.setAttribute("role2", "n/a");
             // interactionDetail.addCollection(allInteractors);
 
             store(interactionDetail);
@@ -286,7 +286,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
                 String description = getDescription(token);
                 miCodes.put(miCode, description);
                 try {
-                    getTerm(miCode);
+                    createTerm (miCode, description);
                 } catch (ObjectStoreException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -318,15 +318,21 @@ public class BarPsiInteractionsConverter extends BioFileConverter
      * @return
      */
     private String getDescription(String token) {
-        String a = StringUtils.substringAfterLast(token, "(");
-        String description = StringUtils.substringBeforeLast(a, ")");
-        if (description.startsWith("physical association")) {
+        if (token.contains("(")) {
+            String a = StringUtils.substringAfterLast(token, "(");
+            String description = StringUtils.substringBeforeLast(a, ")");
+            return description;
+        }
+        if (token.startsWith("physical association")) {
             return "physical";
         }
-        if (description.startsWith("predicted interaction")) {
+        if (token.startsWith("predicted interaction")) {
             return "predicted";
         }
-        return description;
+        if (token.startsWith("genetic")) {
+            return "genetic";
+        }
+        return token;
     }
 
     /**
@@ -344,6 +350,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             if (!genes.containsKey(primaryId)) {
                 bioentity = createItem("Gene");
                 bioentity.setAttribute("primaryIdentifier", primaryId);
+//                bioentity.setAttribute("symbol", "s_".concat(primaryId));
                 store(bioentity);
                 genes.put(primaryId, bioentity.getIdentifier());
             }
@@ -408,16 +415,24 @@ public class BarPsiInteractionsConverter extends BioFileConverter
     private String getTerm(String identifier) throws ObjectStoreException {
         String itemId = terms.get(identifier);
         if (itemId == null) {
-            try {
-                Item term = createItem("InteractionTerm");
-                term.setAttribute("identifier", identifier);
-                itemId = term.getIdentifier();
-                terms.put(identifier, itemId);
-                store(term);
-            } catch (ObjectStoreException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            Item term = createItem("InteractionTerm");
+            term.setAttribute("identifier", identifier);
+            itemId = term.getIdentifier();
+            terms.put(identifier, itemId);
+            store(term);
+        }
+        return itemId;
+    }
+
+    private String createTerm (String identifier, String name) throws ObjectStoreException {
+        String itemId = terms.get(identifier);
+        if (itemId == null) {
+            Item term = createItem("InteractionTerm");
+            term.setAttribute("identifier", identifier);
+            term.setAttribute("name", name);
+            itemId = term.getIdentifier();
+            terms.put(identifier, itemId);
+            store(term);
         }
         return itemId;
     }
