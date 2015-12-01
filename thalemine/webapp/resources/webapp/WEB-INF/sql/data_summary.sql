@@ -846,6 +846,118 @@ left join
 where d.name = 'Panther data set' and abda.name = 'Genome Annotation'
 group by d.id, ds.id, ds.name, d.name, d.description, ds.description, d.version, ds.url, d.url, p.pubmed_id, p.author_list, p.year )
 ,
+interactions_summary_helper as (
+select
+cast(count(distinct g.primaryidentifier) as text) as gene_count,
+cast(count(*) as text) feature_count,
+d.id dataset_id
+from dataset d
+join
+datasetsinteractiondetail dl
+on d.id = dl.datasets
+join
+interactiondetail ind on
+ind.id = dl.interactiondetail
+join
+interaction i
+on i.id = ind.interactionid
+join
+gene g
+on g.id = i.participant1id
+group by d.id
+)
+,
+
+interactions_summary_source as (
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Interactions' as text) as category_name,
+7 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+d.description dataset_description,
+gh.dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+gh.gene_count,
+gh.feature_count
+from
+interactions_summary_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds
+on ds.id = d.datasourceid
+left join
+       publication_source p
+       on p.id = d.publicationid
+
+)
+,
+
+protein_domain_summary_helper as (
+select
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Protein Domains' as text) as category_name,
+3 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+d.description dataset_description,
+d.id dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+count(distinct g.primaryidentifier)  gene_count,
+count (distinct pd.id) as feature_count
+from
+genesproteins gp
+join
+gene g
+on g.id = gp.genes
+join
+protein pt
+on pt.id = gp.proteins
+join
+proteindomainregion ptd
+on ptd.proteinid = pt.id
+join
+proteindomain pd
+on pd.id = ptd.proteindomainid
+join
+bioentitiesdatasets bds
+on bds.bioentities = pt.id
+join
+dataset d
+on d.id = bds.datasets
+join
+datasource ds
+ON
+ds.id = d.datasourceid
+join
+organism o
+on
+o.id = g.organismid
+left join
+       publication_source p
+       on p.id = d.publicationid
+where o.taxonid = 3702 and pt.uniprotname IS NOT NULL and ds.name = 'InterPro'
+group by d.id, ds.id, ds.name, d.name, d.description, ds.description, d.version, ds.url, d.url, p.pubmed_id, p.author_list, p.year
+
+),
 
 gene_ontology_summary_helper as (
 SELECT
@@ -957,6 +1069,52 @@ cast(gene_count as text) as gene_count,
 cast(feature_count as text) as feature_count
 from
 expression_summary
+UNION
+select
+distinct
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+cast(gene_count as text) as gene_count,
+cast(feature_count as text) as feature_count
+from
+interactions_summary_source
+UNION
+select
+distinct
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+cast(gene_count as text) as gene_count,
+cast(feature_count as text) as feature_count
+from
+protein_domain_summary_helper
 UNION
 select
 distinct 
