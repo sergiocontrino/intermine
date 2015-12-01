@@ -223,12 +223,12 @@ public class BarPsiInteractionsConverter extends BioFileConverter
 
             if (miCodes.get(type) != null) {
                 interactionDetail.setAttribute("relationshipType", miCodes.get(type));
-                interactionDetail.setAttribute("type", type);
+                interactionDetail.setAttribute("type", getDescription(miCodes.get(type)));
             }
             interactionDetail.setReference("interaction", interaction);
             interactionDetail.addToCollection("dataSets", dataSetRef);
-            // interactionDetail.setAttribute("role1", role1);
-            // interactionDetail.setAttribute("role2", role2);
+            interactionDetail.setAttribute("role1", "n/a");
+            interactionDetail.setAttribute("role2", "n/a");
             // interactionDetail.addCollection(allInteractors);
 
             store(interactionDetail);
@@ -318,15 +318,21 @@ public class BarPsiInteractionsConverter extends BioFileConverter
      * @return
      */
     private String getDescription(String token) {
-        String a = StringUtils.substringAfterLast(token, "(");
-        String description = StringUtils.substringBeforeLast(a, ")");
-        if (description.startsWith("physical association")) {
+        if (token.contains("(")) {
+            String a = StringUtils.substringAfterLast(token, "(");
+            String description = StringUtils.substringBeforeLast(a, ")");
+            return description;
+        }
+        if (token.startsWith("physical association")) {
             return "physical";
         }
-        if (description.startsWith("predicted interaction")) {
+        if (token.startsWith("predicted interaction")) {
             return "predicted";
         }
-        return description;
+        if (token.startsWith("genetic")) {
+            return "genetic";
+        }
+        return token;
     }
 
     /**
@@ -344,6 +350,7 @@ public class BarPsiInteractionsConverter extends BioFileConverter
             if (!genes.containsKey(primaryId)) {
                 bioentity = createItem("Gene");
                 bioentity.setAttribute("primaryIdentifier", primaryId);
+//                bioentity.setAttribute("symbol", "s_".concat(primaryId));
                 store(bioentity);
                 genes.put(primaryId, bioentity.getIdentifier());
             }
