@@ -32,6 +32,7 @@ import org.thalemine.web.service.AlleleService;
 import org.thalemine.web.service.StockService;
 import org.thalemine.web.service.core.ServiceConfig;
 import org.thalemine.web.service.core.ServiceManager;
+import org.thalemine.web.utils.UtilService;
 
 public class StockServiceImpl extends AbstractService implements StockService {
 
@@ -103,9 +104,9 @@ public class StockServiceImpl extends AbstractService implements StockService {
 	}
 
 	@Override
-	public List<StockAvailabilityVO> getStockAvailability(String itemId) throws Exception{
+	public List<StockAvailabilityVO> getStockAvailability(String itemId) throws Exception {
 		List<StockAvailabilityVO> result = new ArrayList<StockAvailabilityVO>();
-				
+
 		if (itemId == null) {
 			log.error("Stock cannot be null");
 			throw new Exception("Stock cannot be null.");
@@ -195,6 +196,34 @@ public class StockServiceImpl extends AbstractService implements StockService {
 			}
 
 			PhenotypeVO resultItem = new PhenotypeVO(objectId, description);
+
+			Exception pubException = null;
+			List<PublicationVO> publications = new ArrayList<PublicationVO>();
+
+			try {
+				if (resultItem.getObjectId() != null) {
+
+					String stockIdentifier = UtilService.getObjectIdentifier(item);
+					
+					publications = getPhenotypePublications(objectId, stockIdentifier);
+
+					if (publications.size() > 0) {
+						resultItem.setPublications(publications);
+					}
+
+				}
+			} catch (Exception e) {
+				pubException = e;
+			} finally {
+				if (pubException != null) {
+					log.error("Error retriveing publications for phenotype:" + resultItem);
+				} else {
+					log.info("Phenotype publications successfully retrieved:" + resultItem + ";Publication Size:"
+							+ publications.size());
+				}
+
+			}
+
 			result.add(resultItem);
 
 			log.debug("Phenotype Stock Result Item:" + resultItem);
@@ -209,9 +238,9 @@ public class StockServiceImpl extends AbstractService implements StockService {
 	public StockAnnotationVO getMutagenChromosomalConstitution(Object item) throws Exception {
 
 		StockAnnotationVO result = null;
-		
+
 		if (item == null) {
-			
+
 			log.error("Stock cannot be null");
 			throw new Exception("Stock cannot be null.");
 		}
@@ -244,7 +273,7 @@ public class StockServiceImpl extends AbstractService implements StockService {
 	public List<StockGenotypeVO> getStockGenotypes(Object item) throws Exception {
 
 		List<StockGenotypeVO> result = new ArrayList<StockGenotypeVO>();
-		
+
 		if (item == null) {
 			log.error("Stock cannot be null");
 			throw new Exception("Stock cannot be null.");
@@ -260,17 +289,17 @@ public class StockServiceImpl extends AbstractService implements StockService {
 
 		int stockGenotypeCount = 0;
 		int alleleCount = 0;
-		
+
 		while (iterator.hasNext()) {
 
 			List<Object> currentItem = iterator.next();
 
 			StockGenotypeVO resultItem = new StockGenotypeVO(currentItem);
-			
+
 			stockGenotypeCount++;
 
 			log.info("Current Stock/Genotype Item Count:" + stockGenotypeCount);
-			
+
 			List<AlleleVO> alleles = new ArrayList<AlleleVO>();
 
 			if (resultItem.getStockObjectId() != null && resultItem.getGenotypeObjectId() != null) {
@@ -279,7 +308,7 @@ public class StockServiceImpl extends AbstractService implements StockService {
 				alleles = getStockGenotypeGeneticContext(resultItem.getStockObjectId(),
 						resultItem.getGenotypeObjectId());
 			}
-			
+
 			log.info("Current Stock/Genotype Allele Item Count:" + alleles.size());
 
 			for (AlleleVO alleleItem : alleles) {
@@ -289,7 +318,7 @@ public class StockServiceImpl extends AbstractService implements StockService {
 
 				genes = alleleService.getGenes(alleleItem.getObjectId());
 				log.info("Genes Size:" + genes);
-				
+
 				alleleItem.setGeneList(genes);
 
 				log.debug("Allele Item:" + alleleItem + "Genes List Size:" + alleleItem.getGeneList().size());
@@ -315,31 +344,31 @@ public class StockServiceImpl extends AbstractService implements StockService {
 
 		List<AlleleVO> result = new ArrayList<AlleleVO>();
 		result.clear();
-		
+
 		Set<String> alleleSet = new HashSet<String>();
 		alleleSet.clear();
-		
+
 		if (stockId == null || genotypeId == null) {
 			log.error("Stock/Genotype Id cannot be null.");
 			throw new Exception("Stock/Genotype Id cannot be null.");
 		}
 
 		QueryResult queryResult = this.stockDao.getStockGenotypeGeneticContext(stockId, genotypeId);
-		
+
 		Iterator<List<Object>> iterator = queryResult.getResultItems();
 
 		log.debug("Getting Allele Item for: " + ";StockId:" + stockId + " ;GenotypeId:" + genotypeId);
 
 		int alleleCount = 0;
-		
+
 		while (iterator.hasNext()) {
 
 			List<Object> currentItem = iterator.next();
 
 			alleleCount = alleleCount + 1;
-			
+
 			log.info("Current Count getStockGenotypeGeneticContext:" + alleleCount);
-			
+
 			String alleleId = null;
 			String alleleName = null;
 			String zygosity = null;
@@ -394,9 +423,9 @@ public class StockServiceImpl extends AbstractService implements StockService {
 
 				boolean canAdd = alleleSet.add(alleleId);
 				log.info("Can Add Allele Item:" + canAdd);
-				
+
 				log.info("Allele Item:" + resultItem);
-				
+
 				if (canAdd) {
 					result.add(resultItem);
 				}
@@ -405,9 +434,8 @@ public class StockServiceImpl extends AbstractService implements StockService {
 
 		}
 
-		
 		log.info("getStockGenotypeGeneticContext: Allele Result Set Size:" + result.size());
-		
+
 		return result;
 
 	}
@@ -484,16 +512,31 @@ public class StockServiceImpl extends AbstractService implements StockService {
 			List<Object> currentItem = iterator.next();
 
 			PhenotypeVO resultItem = new PhenotypeVO(currentItem);
+			
+			Exception pubException = null;
+			List<PublicationVO> publications = new ArrayList<PublicationVO>();
 
-			if (resultItem.getObjectId() != null) {
+			try {
+				if (resultItem.getObjectId() != null) {
 
-				List<PublicationVO> publications = new ArrayList<PublicationVO>();
-				resultItem.setPublications(publications);
+					publications = getPhenotypePublications(resultItem.getObjectId(), stockId);
 
-				log.debug("Phenotype:" + resultItem + ";Publication Size:" + publications.size());
+					if (publications.size() > 0) {
+						resultItem.setPublications(publications);
+					}
+
+				}
+			} catch (Exception e) {
+				pubException = e;
+			} finally {
+				if (pubException != null) {
+					log.error("Error retriveing publications for phenotype:" + resultItem);
+				} else {
+					log.info("Phenotype publications successfully retrieved:" + resultItem + ";Publication Size:"
+							+ publications.size());
+				}
 
 			}
-
 			result.add(resultItem);
 
 			log.debug("Phenotype Result Item:" + resultItem);
@@ -523,6 +566,32 @@ public class StockServiceImpl extends AbstractService implements StockService {
 			List<Object> currentItem = iterator.next();
 
 			StockGenotypeVO resultItem = new StockGenotypeVO(currentItem);
+			
+			Exception pubException = null;
+			List<PublicationVO> publications = new ArrayList<PublicationVO>();
+			
+			try {
+				if (resultItem.getStockObjectId() != null) {
+
+					
+					publications = getPhenotypePublications(itemId, resultItem.getStockObjectId() );
+
+					if (publications.size() > 0) {
+						resultItem.setPublications(publications);
+					}
+
+				}
+			} catch (Exception e) {
+				pubException = e;
+			} finally {
+				if (pubException != null) {
+					log.error("Error retriveing publications for Stock/Phenotype:" + resultItem);
+				} else {
+					log.info("Stock/Phenotype publications successfully retrieved:" + resultItem + ";Publication Size:"
+							+ publications.size());
+				}
+
+			}
 
 			List<AlleleVO> alleles = new ArrayList<AlleleVO>();
 
@@ -554,6 +623,44 @@ public class StockServiceImpl extends AbstractService implements StockService {
 		}
 
 		return result;
+	}
+
+	@Override
+	public List<PublicationVO> getPhenotypePublications(String primaryIdentifier, String stockIdentifier) throws Exception {
+
+		List<PublicationVO> result = new ArrayList<PublicationVO>();
+
+		QueryResult queryResult = this.phenotypeDao.getPublications(primaryIdentifier, stockIdentifier);
+		Iterator<List<Object>> iterator = queryResult.getResultItems();
+
+		if (primaryIdentifier == null) {
+			throw new Exception("Phenotype cannot be null.");
+		}
+
+		log.info("Phenotype Publcations. I am here");
+		
+		while (iterator.hasNext()) {
+
+			List<Object> currentItem = iterator.next();
+			
+			log.info("Publication Object Item:" + currentItem);
+
+			PublicationVO resultItem = new PublicationVO(currentItem);
+
+			log.info("Publication VO Item:" + resultItem);
+
+			if (resultItem.getObjectId() != null) {
+
+				result.add(resultItem);
+
+			}
+
+		}
+
+		log.info("Publication Item Set Size:" + result.size());
+
+		return result;
+
 	}
 
 }

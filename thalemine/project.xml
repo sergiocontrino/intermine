@@ -202,12 +202,13 @@
             <property name="generif.datasetname" value="GeneRIF data set"/>
         </source>
 
+    	<!--
         <source name="bar-psi-interactions" type="bar-psi-interactions">
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/bar-interactions/current"/>
             <property name="bar.organisms" value="3702"/>
             <property name="dataSourceName" value="BAR"/>
             <property name="dataSetName" value="BAR interactions data set"/>
-        </source>
+        </source> -->
 
         <source name="psi-intact" type="psi" >
           <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/psi/intact/current"/>

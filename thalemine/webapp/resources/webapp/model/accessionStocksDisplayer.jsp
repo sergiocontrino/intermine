@@ -81,48 +81,7 @@ a.button:active {
 
 
 <div id="accessions_stocks_displayer" class="collection-table">
-	<c:set var="rowCount" value="${fn:length(stocks)}" />
-
-	<div class="header">
-		<h3>
-			<c:out value="${rowCount}" />
-			Stocks
-		</h3>
-	</div>
-
-	<c:choose>
-		<c:when test="${!empty stocks}">
-
-			<table>
-				<thead>
-					<tr>
-						<th>Germplasm/Stock</th>
-						<th>Description</th>
-						<th>Stock Center</th>
-					</tr>
-				</thead>
-				<tbody>
-
-					<c:forEach var="item" items="${stocks}">
-						<tr>
-
-							<td><a href="report.do?id=${item.id}">${item.displayName}</a></td>
-							
-							<td>
-								${item.description}
-							</td>
-							
-							<td><a class="button"
-								href="report.do?id=${item.id}#StockAvailabilityDisplayer">Order</a>
-							</td>
-
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-
-		</c:when>
-	</c:choose>
+	
 </div>
 
 

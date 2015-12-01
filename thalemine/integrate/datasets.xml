@@ -81,7 +81,7 @@
       </collection>
    </item>
    <item id="0_14" class="DataSet" implements="">
-      <attribute name="version" value="06/30/2015" />
+      <attribute name="version" value="11/2/2015" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from GOC" />
       <attribute name="description" value="GO annotations assigned by the GO Consortium" />
@@ -89,7 +89,7 @@
       <reference name="publication" ref_id="0_12" />
    </item>
    <item id="0_15" class="DataSet" implements="">
-      <attribute name="version" value="06/30/2015" />
+      <attribute name="version" value="11/2/2015" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from IntAct" />
       <attribute name="description" value="GO annotations assigned by IntAct" />
@@ -100,7 +100,7 @@
       <attribute name="pubMedId" value="19578431" />
    </item>
    <item id="0_17" class="DataSet" implements="">
-      <attribute name="version" value="06/30/2015" />
+      <attribute name="version" value="11/2/2015" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from RefGenome" />
       <attribute name="description" value="GO annotations assigned by RefGenome" />
@@ -116,7 +116,7 @@
       <reference name="publication" ref_id="0_12" />
    </item>
    <item id="0_19" class="DataSet" implements="">
-      <attribute name="version" value="06/30/2015" />
+      <attribute name="version" value="11/2/2015" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from TIGR" />
       <attribute name="description" value="GO annotations assigned by TIGR Arabidopsis annotation effort" />
@@ -124,7 +124,7 @@
       <reference name="publication" ref_id="0_12" />
    </item>
    <item id="0_20" class="DataSet" implements="">
-      <attribute name="version" value="06/30/2015" />
+      <attribute name="version" value="11/2/2015" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from UniProt" />
       <attribute name="description" value="GO annotations assigned by UniProt" />
@@ -143,7 +143,7 @@
       </collection>
    </item>
    <item id="0_23" class="DataSet" implements="">
-      <attribute name="version" value="2015_09" />
+      <attribute name="version" value="2015_11" />
       <reference name="dataSource" ref_id="0_22" />
       <attribute name="name" value="Swiss-Prot data set" />
       <attribute name="description" value="High-quality, manually annotated, non-redundant protein sequence database" />
@@ -159,7 +159,7 @@
       <reference name="publication" ref_id="0_21" />
    </item>
    <item id="0_25" class="DataSet" implements="">
-      <attribute name="version" value="2015_09" />
+      <attribute name="version" value="2015_11" />
       <reference name="dataSource" ref_id="0_22" />
       <attribute name="name" value="UniProt FASTA dataset" />
       <attribute name="description" value="Protein sequences and alternative splice forms generated using VARSPLIC" />
@@ -167,7 +167,7 @@
       <reference name="publication" ref_id="0_21" />
    </item>
    <item id="0_26" class="DataSet" implements="">
-      <attribute name="version" value="2015_09" />
+      <attribute name="version" value="2015_11" />
       <reference name="dataSource" ref_id="0_22" />
       <attribute name="name" value="UniProt keywords data set" />
       <attribute name="description" value="Keywords and categories used in UniProtKB" />
@@ -186,7 +186,7 @@
       </collection>
    </item>
    <item id="0_29" class="DataSet" implements="">
-      <attribute name="version" value="v53.0" />
+      <attribute name="version" value="v54.0" />
       <reference name="dataSource" ref_id="0_28" />
       <attribute name="name" value="InterPro data set" />
       <attribute name="description" value="Protein family and domain assignments to proteins" />
@@ -267,7 +267,7 @@
       <attribute name="pubMedId" value="17148475" />
    </item>
    <item id="0_43" class="DataSet" implements="">
-      <attribute name="version" value="10/2/2015" />
+      <attribute name="version" value="11/30/2015" />
       <reference name="dataSource" ref_id="0_41" />
       <attribute name="name" value="PubMed to gene mapping" />
       <attribute name="description" value="Curated associations between publications and NCBI Gene records" />
@@ -275,7 +275,7 @@
       <reference name="publication" ref_id="0_42" />
    </item>
    <item id="0_44" class="DataSet" implements="">
-      <attribute name="version" value="10/2/2015" />
+      <attribute name="version" value="11/30/2015" />
       <reference name="dataSource" ref_id="0_41" />
       <attribute name="name" value="GeneRIF" />
       <attribute name="description" value="Concise phrase describing gene function and publication associated with NCBI Gene records" />
@@ -297,7 +297,7 @@
       <attribute name="pubMedId" value="24214961" />
    </item>
    <item id="0_48" class="DataSet" implements="">
-      <attribute name="version" value="72.0" />
+      <attribute name="version" value="76.0" />
       <reference name="dataSource" ref_id="0_46" />
       <attribute name="name" value="KEGG pathways data set" />
       <attribute name="description" value="Wiring diagrams of molecular interactions, reactions, and relations" />
@@ -316,7 +316,7 @@
       </collection>
    </item>
    <item id="0_51" class="DataSet" implements="">
-      <attribute name="version" value="3.4.128" />
+      <attribute name="version" value="3.4.130" />
       <reference name="dataSource" ref_id="0_50" />
       <attribute name="name" value="BioGRID interaction data set" />
       <attribute name="description" value="Curated set of genetic and physical interactions for Arabidopsis thaliana" />
@@ -335,7 +335,7 @@
       </collection>
    </item>
    <item id="0_54" class="DataSet" implements="">
-      <attribute name="version" value="08/22/2015" />
+      <attribute name="version" value="11/30/2015" />
       <reference name="dataSource" ref_id="0_53" />
       <attribute name="name" value="IntAct interactions data set" />
       <attribute name="description" value="Curated binary and complex protein-protein interactions for Arabidopsis thaliana" />

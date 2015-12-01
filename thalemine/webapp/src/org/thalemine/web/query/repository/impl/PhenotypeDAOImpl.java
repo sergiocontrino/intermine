@@ -29,6 +29,7 @@ public class PhenotypeDAOImpl implements QueryRepository, PhenotypeDAO, Verifiab
 
 	private static final String PRIMARY_IDENTIFIER_CONSTRAINT = "Stock.primaryIdentifier";
 	private static final String OBJECT_IDENTIFIER_CONSTRAINT = "Stock.id";
+	private static final String PHENOTYPE_OBJECT_IDENTIFIER_CONSTRAINT = "Phenotype.id";
 
 	private IRepositoryManager repository;
 
@@ -38,7 +39,57 @@ public class PhenotypeDAOImpl implements QueryRepository, PhenotypeDAO, Verifiab
 		super();
 	}
 	
+	@Override
+	public QueryResult getPublications(String objectId, String stockId) throws Exception {
+		
+		Exception exception = null;
+		PathQuery query = null;
+		QueryResult queryResult = null;
 
+		validateState();
+
+		try {
+			query = getPublicationsQuery(objectId, stockId);
+			queryResult = new QueryResultImpl(this.repository, query);
+		} catch (Exception e) {
+			exception = e;
+		} finally {
+
+			if (exception != null) {
+
+				log.error("Error occured while retrieving result set for query:" + "; Query:" + query);
+				log.error("Error:" + exception.getMessage() + ";Cause:" + exception.getCause());
+				exception.printStackTrace();
+
+			} else {
+				log.info("Successfully retrieved resultset for query." + "; Query:" + query);
+			}
+		}
+
+		return queryResult;
+	}
+
+	private PathQuery getPublicationsQuery(String phenotypeId, String stockId) throws Exception {
+
+		PathQuery query = new PathQuery(getModel());
+        
+		   // Select the output columns:
+        query.addViews("Phenotype.phenotypeAnnotations.publication.id",
+                "Phenotype.phenotypeAnnotations.publication.pubMedId",
+                "Phenotype.phenotypeAnnotations.publication.title",
+                "Phenotype.phenotypeAnnotations.publication.year",
+                "Phenotype.phenotypeAnnotations.publication.firstAuthor");
+             
+       	// Filter the results with the following constraints:
+        query.addConstraint(Constraints.eq("Phenotype.phenotypeAnnotations.stock.id", stockId), "A");
+              
+   	    query.addConstraint(Constraints.eq(PHENOTYPE_OBJECT_IDENTIFIER_CONSTRAINT, phenotypeId), "B");
+   	    
+   	    query.setConstraintLogic("A and B");
+
+		return query;
+	}
+	
 	@Override
 	public QueryResult getGenotype(Object item) throws Exception {
 
@@ -119,4 +170,5 @@ public class PhenotypeDAOImpl implements QueryRepository, PhenotypeDAO, Verifiab
 
 	}
 
+	
 }

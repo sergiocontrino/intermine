@@ -278,6 +278,18 @@ Unknown: Used when the inheritance type is not known or the information is not y
 														
 									<a href="report.do?id=${item.stockObjectId}">${item.stockName}</a>
 									
+									<c:choose>
+										<c:when test="${!empty item.publications}">
+									<span>
+									Publications:
+									<c:forEach var="publicationItem" items="${item.publications}" varStatus="status">
+										<a href="report.do?id=${publicationItem.objectId}">${publicationItem.firstAuthor}, (${publicationItem.year})</a>
+									</c:forEach>
+									</span>
+									
+									</c:when>
+									</c:choose> 
+									
 									</td>
 									
 								</tr>
