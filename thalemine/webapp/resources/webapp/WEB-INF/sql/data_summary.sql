@@ -655,7 +655,7 @@ d.url as dataset_url,
 cast('' as text ) as pubmed_id,
 cast('' as text) as authors,
 0 as year,
-cast('' as text ) as dataset_version,
+cast('10/2013' as text ) as dataset_version,
 cast(st.gene_count as text) as gene_count,
 cast(st.feature_count as text) as feature_count
 FROM
@@ -720,7 +720,7 @@ d.url as dataset_url,
 cast('' as text ) as pubmed_id,
 cast('' as text) as authors,
 0 as year,
-cast('' as text ) as dataset_version,
+cast('10/2013' as text ) as dataset_version,
 cast(st.gene_count as text) as gene_count,
 cast(st.feature_count as text) as feature_count
 FROM
@@ -1164,7 +1164,7 @@ d.url as dataset_url,
 cast('' as text ) as pubmed_id,
 cast('' as text) as authors,
 0 as year,
-cast('' as text ) as dataset_version,
+cast('10/2013' as text ) as dataset_version,
 cast(st.gene_count as text) as gene_count,
 cast(st.feature_count as text) as feature_count
 FROM
