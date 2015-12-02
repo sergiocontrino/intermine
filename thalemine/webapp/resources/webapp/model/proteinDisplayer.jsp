@@ -22,7 +22,7 @@
       <thead>
        <tr>
          <th>DB Identifier</th>
-         <th>Primary Accession</th>
+         <th>UniProt</th>
          <th>Length</th>
        </tr>
     </thead>
@@ -30,7 +30,7 @@
       <c:forEach var="row" items="${list}">
         <tr>
            <td> <a href="report.do?id=${row.id}"> ${row.primaryIdentifier} </a></td>
-           <td> <a href="report.do?id=${row.id}"> ${row.primaryAccession} </a></td>
+           <td> <a class="extlink" href="http://www.uniprot.org/uniprot/${row.primaryAccession}" target="_blank" > ${row.primaryAccession} </a></td>
            <td> <span class="value"> ${row.length} </span> <a target="_new" href="sequenceExporter.do?object=${row.id}"><img class="fasta" title="FASTA" src="model/images/fasta.gif"></img></a>
         </td>
         </tr>
@@ -42,7 +42,7 @@
    </div>
   </c:when>
   <c:otherwise>
-    No protein data available
+    No UniProt protein data available
   </c:otherwise>
 </c:choose>
 

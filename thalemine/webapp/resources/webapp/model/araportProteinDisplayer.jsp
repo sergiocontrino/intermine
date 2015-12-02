@@ -45,7 +45,7 @@
    </div>
   </c:when>
   <c:otherwise>
-    No protein data available
+    No Araport11 protein data available
   </c:otherwise>
 </c:choose>
 
