@@ -51,6 +51,12 @@ SELECT
 		then 'Pathways'
 		when (dt.name = 'PO Annotation from TAIR')
 		then 'Plant Ontology'
+		when (dt.name = 'TAIR Germplasm')
+		then 'Germplasm/Seed Stock'
+		when (dt.name = 'TAIR Polymorphism')
+		then 'Mutant Alleles'
+		when (dt.name = 'TAIR Phenotypes')
+		then 'Phenotypes'
 		else ds.name
 	   	
 	 end as category_name
@@ -94,12 +100,18 @@ select
 			then 10
 		when (category_name = 'Pathways')
 			then 11
+		when (category_name = 'Germplasm/Seed Stock')
+			then 12
+		when (category_name = 'Phenotypes')
+			then 14
+		when (category_name = 'Mutant Alleles')
+			then 15
 		else
 			999
 	end as sort_order
 from
 datacategory dc 
-where dataset_name not in  ('Genome Annotation', 'ATTED-II Co-expression', 'Phytozome Orthologs', 'Gene Summary', 'IntAct', 'BioGRID', 'PO Annotation from TAIR','Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
+where dataset_name not in  ('TAIR Polymorphism', 'TAIR Phenotypes', 'TAIR Germplasm', 'TAIR Ecotypes', 'Genome Annotation', 'ATTED-II Co-expression', 'Phytozome Orthologs', 'Gene Summary', 'IntAct', 'BioGRID', 'PO Annotation from TAIR','Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 and dc.datasource_name not in ('BAR', 'InterPro', 'GO', 'IntAct', 'BioGRID') 
 )
 ,
@@ -593,6 +605,135 @@ SELECT
 	order by st.sort_order )
 
 ,
+
+stock_agg_source as (
+select 
+count(distinct ge.primaryidentifier) as gene_count,
+count(distinct s.id) feature_count,
+cast('TAIR Germplasm' as text) as dataset_name
+from stock s
+left
+join
+genotypesstocks gs
+on gs.stocks = s.id
+left
+join 
+genotype g
+on g.id = gs.genotypes
+left
+join
+allelesgenotypes als
+on als.genotypes = g.id
+left
+join
+allele a
+on a.id = als.alleles
+left
+join
+affectedallelesaffectedgenes afg
+on afg.affectedalleles = a.id
+left
+join 
+gene ge
+on ge.id = afg.affectedgenes
+),
+
+stock_summary as (
+select
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Germplasms/Seed Stocks' as text) as category_name,
+12 as sort_order,
+ds.id datasource_id,
+ds.name as datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+d.description as dataset_description,
+d.id as dataset_id,
+cast('Germplasm/Seed Stock' as text) as dataset_name,
+d.url as dataset_url,
+cast('' as text ) as pubmed_id,
+cast('' as text) as authors,
+0 as year,
+cast('' as text ) as dataset_version,
+cast(st.gene_count as text) as gene_count,
+cast(st.feature_count as text) as feature_count
+FROM
+	datasource ds JOIN dataset d
+		ON
+		ds.id = d.datasourceid
+join
+stock_agg_source st
+on st.dataset_name = d.name
+		where d.name = 'TAIR Germplasm'
+		)
+		,
+phenotype_agg_source as (
+
+select 
+count(ge.primaryidentifier) as gene_count,
+count(distinct s.id) feature_count,
+cast('TAIR Phenotypes' as text) as dataset_name
+from phenotype s
+left
+join
+observedinphenotypesobserved gs
+on gs.phenotypesobserved = s.id
+left
+join 
+genotype g
+on g.id = gs.observedin
+left
+join
+allelesgenotypes als
+on als.genotypes = g.id
+left
+join
+allele a
+on a.id = als.alleles
+left
+join
+affectedallelesaffectedgenes afg
+on afg.affectedalleles = a.id
+left
+join 
+gene ge
+on ge.id = afg.affectedgenes
+
+)
+,
+phenotype_summary as (
+
+select
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Phenotypes' as text) as category_name,
+14 as sort_order,
+ds.id datasource_id,
+ds.name as datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+cast('Germplasm/Stock Phenotypes' as text) as dataset_description,
+d.id as dataset_id,
+cast('Germplasm/Stock Phenotypes' as text) as dataset_name,
+d.url as dataset_url,
+cast('' as text ) as pubmed_id,
+cast('' as text) as authors,
+0 as year,
+cast('' as text ) as dataset_version,
+cast(st.gene_count as text) as gene_count,
+cast(st.feature_count as text) as feature_count
+FROM
+	datasource ds JOIN dataset d
+		ON
+		ds.id = d.datasourceid
+join
+phenotype_agg_source st
+on st.dataset_name = d.name
+		where d.name = 'TAIR Phenotypes'
+
+)
+,
 expression_datasource as
 (
 select 
@@ -990,6 +1131,53 @@ where o.taxonid = 3702 and ds.name = 'GO'
 
 ),
 
+allele_agg_source as (
+select 
+count(distinct ge.primaryidentifier) as gene_count,
+count(distinct s.id) feature_count,
+cast('TAIR Polymorphism' as text) as dataset_name
+from allele s
+left
+join
+affectedallelesaffectedgenes afg
+on afg.affectedalleles = s.id
+left
+join 
+gene ge
+on ge.id = afg.affectedgenes
+),
+
+allele_summary as(
+select
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Mutant Alleles' as text) as category_name,
+15 as sort_order,
+ds.id datasource_id,
+ds.name as datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+cast('Alleles/Polymorphisms' as text) as dataset_description,
+d.id as dataset_id,
+cast('Alleles/Polymorphisms' as text) as dataset_name,
+d.url as dataset_url,
+cast('' as text ) as pubmed_id,
+cast('' as text) as authors,
+0 as year,
+cast('' as text ) as dataset_version,
+cast(st.gene_count as text) as gene_count,
+cast(st.feature_count as text) as feature_count
+FROM
+	datasource ds JOIN dataset d
+		ON
+		ds.id = d.datasourceid
+join
+allele_agg_source st
+on st.dataset_name = d.name
+		where d.name = 'TAIR Polymorphism'
+)
+
+,
 gene_ontology_summary as (
 SELECT
 distinct
@@ -1248,6 +1436,72 @@ gene_count,
 feature_count
 from 
 gene_summary_source
+UNION
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from
+stock_summary
+UNION
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from
+phenotype_summary
+UNION
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from
+allele_summary
 ) 
 
 select
@@ -1282,7 +1536,11 @@ case
 	 	NULL
 end pub_title,
 authors,
-year,
+case when(year = 0)
+	then null
+	else
+		year 
+end as year,
 gene_count,
 feature_count,
 case 
@@ -1306,6 +1564,12 @@ case
 		then 'GeneRIF Annotations'
 	when (category_name = 'Pathways')
 		then 'pathways'
+    when (category_name = 'Germplasms/Seed Stocks')
+		then 'stocks'
+	when (category_name = 'Phenotypes')
+		then 'phenotypes'
+	when (category_name = 'Mutant Alleles')
+		then 'alleles'
 	else
 		NULL
 end as units
