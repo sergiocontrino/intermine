@@ -57,7 +57,7 @@
     <div>
         <iframe name="jbrowse-embed" class="embed-responsive-item" src="${jbLinkEmbed}"></iframe>
         <p>
-            <a href="${jbLinkEmbed}" target="jbrowse">Center on ${object.primaryIdentifier}</a>&nbsp;|&nbsp;
+            <a href="${jbLinkEmbed}" target="jbrowse-embed">Center on ${object.primaryIdentifier}</a>&nbsp;|&nbsp;
             <a href="${jbLink}" target="_blank" class="extlink">Full Screen View</a>&nbsp;|&nbsp;
             Powered by <a href="http://jbrowse.org" target="_blank" class="extlink">JBrowse</a>
         </p>
