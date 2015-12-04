@@ -99,8 +99,8 @@
     <fields>
       <fieldconfig fieldExpr="primaryIdentifier" label="Gene ID" />
       <fieldconfig fieldExpr="symbol"/>
-      <fieldconfig fieldExpr="name"/>
       <fieldconfig fieldExpr="briefDescription"/>
+      <fieldconfig fieldExpr="isObsolete"/>
     </fields>
   </class>
 
@@ -429,14 +429,14 @@
 
  <class className="org.intermine.model.bio.PhenotypeAnnotation">
   <fields>
-  	  <fieldconfig fieldExpr="stock.displayName" label="Stock"/>
+      <fieldconfig fieldExpr="stock.displayName" label="Stock"/>
       <fieldconfig fieldExpr="genotype.primaryIdentifier" label="Genotype"/>
       <fieldconfig fieldExpr="publication.firstAuthor" label="Author"/>
       <fieldconfig fieldExpr="publication.year" label="Year"/>
       <fieldconfig fieldExpr="publication.Title" label="Title"/>
       </fields>
  </class>
- 
+
 
    <class className="org.intermine.model.bio.StockAvailabilityInfo">
      <fields>
@@ -728,18 +728,18 @@
                      placement="Stocks"
                      types="Gene,Allele"/>
 
-   		<reportdisplayer javaClass="org.thalemine.web.displayer.AlleleGeneZygosityDisplayer"
+       <reportdisplayer javaClass="org.thalemine.web.displayer.AlleleGeneZygosityDisplayer"
                      jspName="model/alleleZygosity.jsp"
                      replacesFields="alleleGenotypeZygosities"
                      placement=""
                      types="Allele,Stock,Genotype"/>
-                   
+
         <reportdisplayer javaClass="org.thalemine.web.displayer.PhenotypeAnnotationDisplayer"
                      jspName="model/phenotypeAnnotationDisplayer.jsp"
                      replacesFields="phenotypeAnnotations,stockphenotypeAnnotations,genotypephenotypeAnnotations"
                      placement=""
                      types="Phenotype, Stock, Genotype"/>
-                                             
+
 
        <reportdisplayer javaClass="org.thalemine.web.displayer.StockAccessionDisplayer"
                      jspName="model/stockAccessionDisplayer.jsp"
