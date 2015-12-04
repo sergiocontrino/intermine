@@ -100,7 +100,7 @@
       <fieldconfig fieldExpr="primaryIdentifier" label="Gene ID" />
       <fieldconfig fieldExpr="symbol"/>
       <fieldconfig fieldExpr="briefDescription"/>
-      <fieldconfig fieldExpr="isObsolete"/>
+      <fieldconfig fieldExpr="isObsolete" label="Is Obsolete?"/>
     </fields>
   </class>
 
