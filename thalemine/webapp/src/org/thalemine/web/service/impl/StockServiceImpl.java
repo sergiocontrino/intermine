@@ -637,7 +637,7 @@ public class StockServiceImpl extends AbstractService implements StockService {
 			throw new Exception("Phenotype cannot be null.");
 		}
 
-		log.info("Phenotype Publcations. I am here");
+		log.info("Phenotype Publcations retrieval has started.");
 		
 		while (iterator.hasNext()) {
 
@@ -657,7 +657,7 @@ public class StockServiceImpl extends AbstractService implements StockService {
 
 		}
 
-		log.info("Publication Item Set Size:" + result.size());
+		log.info("Phenotype Publcations retrieval has completed. Publication Item Set Size:" + result.size());
 
 		return result;
 
