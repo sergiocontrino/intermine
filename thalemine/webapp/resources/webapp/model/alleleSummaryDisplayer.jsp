@@ -266,8 +266,12 @@ Unknown: Used when the inheritance type is not known or the information is not y
 							<th>Sequence AlterationType</th>
 							<th>Mutagen</th>
 							<th>Mutation Site</th>
-							<th class="tooltip-top" data-tooltip="${alleleClassTooltip}">Allele Type</th>
-							<th class="tooltip-top" data-tooltip="${inheritanceTypeTooltip}">Inheritance Type</th>
+							<th class="tooltip-top" data-tooltip="${alleleClassTooltip}">Allele Type
+								<img class="tinyQuestionMark" style="padding-bottom:4px;" src="images/icons/information-small-blue.png" alt="?"/>
+							</th>
+							<th class="tooltip-top" data-tooltip="${inheritanceTypeTooltip}">Inheritance Type
+								<img class="tinyQuestionMark" style="padding-bottom:4px;" src="images/icons/information-small-blue.png" alt="?"/>
+							</th>
 						</tr>
 					</thead>
 					<tbody>

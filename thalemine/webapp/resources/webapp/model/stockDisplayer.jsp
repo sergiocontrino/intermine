@@ -155,7 +155,7 @@ a.button:active {
 															<c:when test="${!empty phenotypeItem.publications}">
 																<c:forEach var="publicationItem" items="${phenotypeItem.publications}">
 																<span>&nbsp;</span>
-																	<a href="report.do?id=${publicationItem.objectId}">${publicationItem.firstAuthor}, (${publicationItem.year})</a>
+																	<a href="report.do?id=${publicationItem.objectId}" style="color:#2A65D2">${publicationItem.firstAuthor}, (${publicationItem.year})</a>
 																</c:forEach>
 															</c:when>
 														</c:choose> 

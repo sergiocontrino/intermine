@@ -267,8 +267,12 @@ Unknown: Used when the inheritance type is not known or the information is not y
 							<th>Allele Name</th>
 							<th>Locus</th>
 							<th>Allele Mutagen</th>
-							<th class="tooltip-top" data-tooltip="${alleleClassTooltip}">Allele Type</th>
-							<th class="tooltip-top" data-tooltip="${inheritanceTypeTooltip}">Inheritance Type</th>
+							<th class="tooltip-top" data-tooltip="${alleleClassTooltip}">Allele Type
+								<img class="tinyQuestionMark" style="padding-bottom:4px;" src="images/icons/information-small-blue.png" alt="?"/>
+							</th>
+							<th class="tooltip-top" data-tooltip="${inheritanceTypeTooltip}">Inheritance Type
+								<img class="tinyQuestionMark" style="padding-bottom:4px;" src="images/icons/information-small-blue.png" alt="?"/>
+							</th>
 						</tr>
 					</thead> 
 					<tbody>
@@ -283,7 +287,7 @@ Unknown: Used when the inheritance type is not known or the information is not y
 									<span>
 									Publications:
 									<c:forEach var="publicationItem" items="${item.publications}" varStatus="status">
-										<a href="report.do?id=${publicationItem.objectId}">${publicationItem.firstAuthor}, (${publicationItem.year})</a>
+										<a href="report.do?id=${publicationItem.objectId}" style="color:#2A65D2">${publicationItem.firstAuthor}, (${publicationItem.year})</a>
 									</c:forEach>
 									</span>
 									

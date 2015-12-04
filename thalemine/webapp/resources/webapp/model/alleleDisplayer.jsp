@@ -235,10 +235,14 @@ Unknown: Used when the inheritance type is not known or the information is not y
 							<th>Allele Name</th>
 							<th>Sequence Alteration Type</th>
 							<th class="tooltip-top" data-tooltip="${alleleClassTooltip}">Allele
-								Type</th>
+								Type
+								 <img class="tinyQuestionMark" style="padding-bottom:4px;" src="images/icons/information-small-blue.png" alt="?"/>
+							</th>
 							<th>Mutagen</th>
 							<th class="tooltip-top" data-tooltip="${inheritanceTypeTooltip}">Inheritance
-								Type</th>
+								Type
+							 	<img class="tinyQuestionMark" style="padding-bottom:4px;" src="images/icons/information-small-blue.png" alt="?"/>
+							</th>
 						</tr>
 
 					</thead>

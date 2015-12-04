@@ -35,7 +35,7 @@
 									<td><a href="report.do?id=${item.objectId}">${item.description}</a>
 									<span>
 									<c:forEach var="publicationItem" items="${item.publications}" varStatus="status">
-										<a href="report.do?id=${publicationItem.objectId}">${publicationItem.firstAuthor}, (${publicationItem.year})</a>
+										<a href="report.do?id=${publicationItem.objectId}" style="color:#2A65D2">${publicationItem.firstAuthor}, (${publicationItem.year})</a>
 									</c:forEach>
 									</span>
 									</td>
