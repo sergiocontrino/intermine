@@ -200,12 +200,6 @@ on o.id = g.organismid
 join
 ontologyterm sg
 on sg.id = g.sequenceontologytermid
-JOIN mrna m
-ON
-m.geneid = g.id
-join
-ontologyterm sm
-on sm.id = m.sequenceontologytermid
 join
 bioentitiesdatasets bds
 on g.id = bds.bioentities
@@ -218,10 +212,70 @@ ON
 ds.id = d.datasourceid
 where o.taxonid = 3702 
 and g.isobsolete = false
-and sg.name = 'gene' and sm.name = 'mRNA' and d.name = 'Genome Annotation'
+and sg.name = 'gene' and d.name = 'Genome Annotation'
 group by d.id
 ),
 
+transposable_element_gene_helper as (
+
+select 
+d.id as dataset_id,
+cast(count(distinct g.primaryidentifier) as text) as gene_count,
+cast(NULL as text ) as feature_count 
+from gene g
+join
+organism o
+on o.id = g.organismid
+join
+ontologyterm sg
+on sg.id = g.sequenceontologytermid
+join
+bioentitiesdatasets bds
+on g.id = bds.bioentities
+join
+dataset d
+on d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+where o.taxonid = 3702 
+and g.isobsolete = false
+and sg.name = 'transposable_element_gene' and d.name = 'Genome Annotation'
+group by d.id
+
+)
+,
+
+pseudogene_helper as (
+select 
+d.id as dataset_id,
+cast(count(distinct g.primaryidentifier) as text) as gene_count,
+cast(NULL as text ) as feature_count 
+from gene g
+join
+organism o
+on o.id = g.organismid
+join
+ontologyterm sg
+on sg.id = g.sequenceontologytermid
+join
+bioentitiesdatasets bds
+on g.id = bds.bioentities
+join
+dataset d
+on d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+where o.taxonid = 3702 
+and g.isobsolete = false
+and sg.name = 'pseudogene' and d.name = 'Genome Annotation'
+group by d.id
+)
+
+,
 gene_summary_source as (
 SELECT
 distinct
@@ -245,6 +299,68 @@ gh.gene_count,
 gh.feature_count
 from 
 gene_summary_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds 
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
+UNION
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Genes' as text) as category_name,
+2 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+cast('Transposable element genes' as text) as dataset_description,
+gh.dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+gh.gene_count, 
+gh.feature_count
+from 
+transposable_element_gene_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds 
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
+UNION
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Genes' as text) as category_name,
+2 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+cast('Pseudogenes' as text) as dataset_description,
+gh.dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+d.version dataset_version,
+gh.gene_count, 
+gh.feature_count
+from 
+pseudogene_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
