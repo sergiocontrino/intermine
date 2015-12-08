@@ -77,7 +77,7 @@ select
 	hide_empty_rows,
 	case 
 		when (category_name = 'Genome Assembly')
-			then 0
+			then -1
 		when (category_name = 'Genes')
 			then 1
 		when (category_name = 'Proteins')
@@ -276,18 +276,50 @@ group by d.id
 )
 
 ,
+
+non_coding_genes_helper as (
+select 
+d.id as dataset_id,
+cast(count(distinct nc.primaryidentifier) as text) as gene_count,
+cast(NULL as text ) as feature_count 
+from ncrna nc
+join
+organism o
+on o.id = nc.organismid
+join
+ontologyterm sn
+on sn.id = nc.sequenceontologytermid
+join
+bioentitiesdatasets bds
+on nc.id = bds.bioentities
+join
+dataset d
+on d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+where o.taxonid = 3702 
+and sn.name in ('tRNA', 'ncRNA', 'miRNA', 'snoRNA', 'rRNA', 'snoRNA', 'snRNA')
+and
+d.name = 'Genome Annotation'
+group by d.id
+
+)
+,
+
 gene_summary_source as (
 SELECT
 distinct
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Genes' as text) as category_name,
-1 as sort_order,
+0 as sort_order,
 ds.id datasource_id,
 ds.name datasource_name,
 ds.url datasource_url,
 ds.description as datasource_description,
-cast('Protein-coding genes (AtnGnnnnn, AtCnnnnn, AtMnnnnn)' as text) as dataset_description,
+cast('Protein-coding genes' as text) as dataset_description,
 gh.dataset_id,
 d.name dataset_name,
 d.url dataset_url,
@@ -313,23 +345,54 @@ distinct
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Genes' as text) as category_name,
-2 as sort_order,
+1 as sort_order,
 (select ds.id from datasource ds where ds.name = 'TAIR' limit 1) as datasource_id,
 (select ds.name from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_name,
 (select ds.url from datasource ds where ds.name = 'TAIR' limit 1) as  datasource_url,
 (select ds.description from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_description,
-cast('Transposable element genes (AtnGnnnnn)' as text) as dataset_description,
+cast('Transposable element genes' as text) as dataset_description,
 gh.dataset_id,
-cast (NULL as text) as dataset_name,
-cast (NULL as text) as dataset_url,
+cast ('Genome Annotation - TAIR10' as text) as dataset_name,
+cast ('http://arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp' as text) as dataset_url,
 p.pubmed_id,
 p.author_list as authors,
 p.year,
-cast (NULL as text) dataset_version,
+cast ('11/2010' as text) as dataset_version,
 gh.gene_count, 
 gh.feature_count
 from 
 transposable_element_gene_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds 
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
+UNION
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Genes' as text) as category_name,
+1 as sort_order,
+(select ds.id from datasource ds where ds.name = 'TAIR' limit 1) as datasource_id,
+(select ds.name from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_name,
+(select ds.url from datasource ds where ds.name = 'TAIR' limit 1) as  datasource_url,
+(select ds.description from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_description,
+cast('Pseudogenes' as text) as dataset_description,
+gh.dataset_id,
+cast ('Genome Annotation - TAIR10' as text) as dataset_name,
+cast ('http://arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp' as text) as dataset_url,
+p.pubmed_id,
+p.author_list as authors,
+p.year,
+cast ('11/2010' as text) as dataset_version,
+gh.gene_count, 
+gh.feature_count
+from 
+pseudogene_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
@@ -349,18 +412,18 @@ cast('Genes' as text) as category_name,
 (select ds.name from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_name,
 (select ds.url from datasource ds where ds.name = 'TAIR' limit 1) as  datasource_url,
 (select ds.description from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_description,
-cast('Pseudogenes (AtnGnnnnn)' as text) as dataset_description,
+cast('Non-coding genes' as text) as dataset_description,
 gh.dataset_id,
-cast (NULL as text) as dataset_name,
-cast (NULL as text) as dataset_url,
+cast ('Genome Annotation - TAIR10' as text) as dataset_name,
+cast ('http://arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp' as text) as dataset_url,
 p.pubmed_id,
 p.author_list as authors,
 p.year,
-cast (NULL as text) dataset_version,
+cast ('11/2010' as text) as dataset_version,
 gh.gene_count, 
 gh.feature_count
 from 
-pseudogene_helper gh
+non_coding_genes_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
@@ -1648,6 +1711,9 @@ pubmed_id,
 case
 	 when (datasource_name = 'Araport')
 	 	then 'Manuscript in preparation'
+	when (dataset_description	= 'Transposable element genes' or dataset_description = 'Pseudogenes' or 
+			dataset_description = 'Non-coding genes')
+	 	then 'Araport updates coming 2016'
 	 	else
 	 	NULL
 end pub_title,
