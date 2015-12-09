@@ -116,10 +116,29 @@ a.button:active {
      				 	</tr>
      				  	</c:forEach>
    					 </tbody>
-				<table>
+				</table>
 			</div>
 
 		</c:when>
+		<c:otherwise>
+    			No stock available in ABRC/NASC. Please, consult with the external reference.
+    			
+    			<c:if test = "${!empty externalURL}">
+    				<a href="${externalURL}" style="color:#2A65D2">
+    				
+    				<c:choose>
+						<c:when test="${!empty objectName}">
+    						${objectName} in ABRC/TAIR
+    				</c:when>
+    				<c:otherwise>
+    						ABRC/TAIR
+    				</c:otherwise>
+    				</c:choose>
+    				
+    				</a>
+				</c:if>
+    			
+  		</c:otherwise>
 
 	</c:choose>
 	
