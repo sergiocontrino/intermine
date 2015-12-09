@@ -523,12 +523,19 @@ var mineUrl="${MINEURL}/";
     </tiles:insert>
   </div>
 
+  <c:set var="getFriendly" value="yes"></c:set>
+    <c:if test="${object.type == 'Stock' || object.type == 'Allele' ||
+                  object.type == 'Phenotype' || object.type == 'Genotype'}">
+     <c:set var="getFriendly" value="no"></c:set>
+    </c:if>
   <c:set var="object_bk" value="${object}"/>
   <c:set var="object" value="${reportObject.object}" scope="request"/>
   <div id="external-links">
+  <c:if test="${getFriendly == 'yes'}">
     <tiles:insert name="otherMinesLink.tile" />
+  </c:if>
     <tiles:insert name="attributeLinks.tile" >
-        <tiles:put name="reportObject" beanName="object" />
+    <tiles:put name="reportObject" beanName="object" />
   </tiles:insert>
   </div>
   <c:set var="object" value="${object_bk}"/>
