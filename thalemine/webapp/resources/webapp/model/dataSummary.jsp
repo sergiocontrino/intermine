@@ -53,8 +53,10 @@
 						</td>
 						<td>
 							<a href="${item.dataSourceUrl}" target="_blank" class="extlink">${item.dataSourceName}</a>
-							- 
-							${item.dataSourceDescription}
+								<c:if test="${not empty dataSourceDescription}">
+									- 
+									${item.dataSourceDescription}
+								</c:if>
 						</td>
 						<td>
 						<c:choose>

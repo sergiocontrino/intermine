@@ -1696,7 +1696,10 @@ sort_order,
 datasource_id,
 datasource_name,
 datasource_url,
-datasource_description,
+case when (category_name = 'Genome Assembly' or category_name = 'Genes' )
+		then cast (NULL as text)
+	else datasource_description
+end as datasource_description,
 dataset_description,
 dataset_id,
 case
