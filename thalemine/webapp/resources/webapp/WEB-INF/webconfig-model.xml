@@ -501,14 +501,15 @@
  <fields>
     <fieldconfig fieldExpr="displayName"/>
     <fieldconfig fieldExpr="description" label="Description" showInSummary="false"/>
-     <fieldconfig fieldExpr="stockCenterComment" showInSummary="false" label="ABRC Comments"/>
-     <fieldconfig fieldExpr="germplasmName" label="Germplasm Name" showInSummary="false" showInResults="false"/>
-     <fieldconfig fieldExpr="stockName" label="Stock Name" showInSummary="false" showInResults="false"/>
-     <fieldconfig fieldExpr="secondaryIdentifier" label="TAIR Germplasm Accession" showInSummary="false" showInResults="false"/>
-     <fieldconfig fieldExpr="primaryIdentifier" showInSummary="true" showInResults="false" showInHeader="false"/>
-     <fieldconfig fieldExpr="name" label="" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
-     <fieldconfig fieldExpr="stockAccession" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
-     <fieldconfig fieldExpr="primaryAccession" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
+    <fieldconfig fieldExpr="stockCenterComment" showInSummary="false" label="ABRC Comments"/>
+    <fieldconfig fieldExpr="germplasmName" label="Germplasm Name" showInSummary="false" showInResults="false"/>
+    <fieldconfig fieldExpr="stockName" label="Stock Name" showInSummary="false" showInResults="false"/>
+    <fieldconfig fieldExpr="secondaryIdentifier" label="TAIR Germplasm Accession" showInSummary="false" showInResults="false"/>
+    <fieldconfig fieldExpr="primaryIdentifier" showInSummary="true" showInResults="false" showInHeader="false"/>
+    <fieldconfig fieldExpr="name" label="" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
+    <fieldconfig fieldExpr="stockAccession" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
+    <fieldconfig fieldExpr="primaryAccession" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
+    <fieldconfig fieldExpr="stockphenotypeAnnotations" label="phenotypePublications" showInSummary="false" showInResults="false" showInHeader="false" showInQB="true"/>
   </fields>
 </class>
 
