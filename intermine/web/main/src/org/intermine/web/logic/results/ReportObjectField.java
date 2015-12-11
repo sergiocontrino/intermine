@@ -39,6 +39,9 @@ public class ReportObjectField
      */
     private String pathString;
 
+    /** @var shall we show the field in the header */
+    private boolean fieldShowInHeader;
+
     /** @var shall we truncate the field value? */
     private boolean fieldDoNotTruncate;
 
@@ -53,6 +56,7 @@ public class ReportObjectField
      * @param fieldName String
      * @param fieldValue Object
      * @param fieldDisplayerPage String
+     * @param showInHeader bool
      * @param doNotTruncate bool
      * @param escapeXml bool
      */
@@ -61,11 +65,13 @@ public class ReportObjectField
             String fieldName,
             Object fieldValue,
             String fieldDisplayerPage,
+            boolean showInHeader,
             boolean doNotTruncate,
             boolean escapeXml) {
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
         this.fieldDisplayerPage = fieldDisplayerPage;
+        this.fieldShowInHeader = showInHeader;
         this.fieldDoNotTruncate = doNotTruncate;
         this.fieldEscapeXml = escapeXml;
         this.pathString = objectType + "." + fieldName;
@@ -77,6 +83,7 @@ public class ReportObjectField
      * @param fieldName String
      * @param fieldValue Object
      * @param fieldDisplayerPage String
+     * @param showInHeader bool
      * @param doNotTruncate bool
      * @param escapeXml bool
      * @param label Meat-readable label.
@@ -86,10 +93,11 @@ public class ReportObjectField
             String fieldName,
             Object fieldValue,
             String fieldDisplayerPage,
+            boolean showInHeader,
             boolean doNotTruncate,
             boolean escapeXml,
             String label) {
-        this(objectType, fieldName, fieldValue, fieldDisplayerPage, doNotTruncate, escapeXml);
+        this(objectType, fieldName, fieldValue, fieldDisplayerPage, showInHeader, doNotTruncate, escapeXml);
         this.label = label;
     }
 
@@ -125,6 +133,14 @@ public class ReportObjectField
      */
     public Object getValue() {
         return fieldValue;
+    }
+
+    /**
+     *
+     * @return true if show in header
+     */
+    public boolean getShowInHeader() {
+        return fieldShowInHeader;
     }
 
     /**

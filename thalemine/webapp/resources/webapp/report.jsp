@@ -76,6 +76,7 @@
 
 
       <c:forEach var="field" items="${object.objectSummaryFields}">
+          <c:if test="${field.showInHeader ne false}">
           <c:if test="${tableCount %2 == 0}">
             <c:choose>
               <c:when test="${tableCount == 0}">
@@ -110,32 +111,31 @@
               <!-- Short summary fields: change field description to bold, text to normal -->
                 <td class="label"><strong>${fieldDisplayText}&nbsp;<im:typehelp type="${field.pathString}"/></strong></td>
 
-
-<c:choose>
-<c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && fn:contains(field.value,'; Has ')}" >
-  <td style="vertical-align: top">${fn:substringBefore(field.value, '; Has ')}.&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
-</tr><tr>
-</c:when>
-<c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && !fn:contains(field.value,'; Has ')}" >
-  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
-</tr><tr>
-</c:when>
-<c:when test="${fn:trim(fieldDisplayText) == 'Curator Summary' }" >
-  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</tr>
-</c:when>
-<c:when test="${fn:trim(fieldDisplayText) == 'Brief Description' }" >
-  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['araport.attribution']}</tr>
-</c:when>
-<c:otherwise>
-  <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
-</c:otherwise>
-</c:choose>
-
+                <c:choose>
+                <c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && fn:contains(field.value,'; Has ')}" >
+                  <td style="vertical-align: top">${fn:substringBefore(field.value, '; Has ')}.&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
+                </tr><tr>
+                </c:when>
+                <c:when test="${fn:trim(fieldDisplayText) == 'Computational Description' && !fn:contains(field.value,'; Has ')}" >
+                  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</td>
+                </tr><tr>
+                </c:when>
+                <c:when test="${fn:trim(fieldDisplayText) == 'Curator Summary' }" >
+                  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['tair.attribution']}</tr>
+                </c:when>
+                <c:when test="${fn:trim(fieldDisplayText) == 'Brief Description' }" >
+                  <td style="vertical-align: top">${field.value}&nbsp; ${WEB_PROPERTIES['araport.attribution']}</tr>
+                </c:when>
+                <c:otherwise>
+                  <td style="vertical-align: top"><c:out escapeXml="${field.escapeXml}" value="${field.value}" /></td>
+                </c:otherwise>
+                </c:choose>
 
                 <c:set var="tableCount" value="${tableCount+tableInc}" scope="page" />
               </c:if>
             </c:otherwise>
           </c:choose>
+          </c:if>
       </c:forEach>
     </table>
 

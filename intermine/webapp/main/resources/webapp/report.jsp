@@ -69,6 +69,7 @@
       <c:set var="tableCount" value="0" scope="page" />
 
       <c:forEach var="field" items="${object.objectSummaryFields}">
+          <c:if test="${field.showInHeader ne false}">
           <c:if test="${tableCount %2 == 0}">
             <c:choose>
               <c:when test="${tableCount == 0}">
@@ -105,6 +106,7 @@
               </c:if>
             </c:otherwise>
           </c:choose>
+          </c:if>
       </c:forEach>
     </table>
 
