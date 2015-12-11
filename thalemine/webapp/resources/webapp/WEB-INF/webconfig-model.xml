@@ -462,10 +462,10 @@
       </titles>
     </headerconfig>
   <fields>
-      <fieldconfig fieldExpr="primaryIdentifier" label="Primary Identifier" displayer="model/alleleName.jsp"/>
+      <fieldconfig fieldExpr="primaryIdentifier" label="Name" displayer="model/alleleName.jsp"/>
       <fieldconfig fieldExpr="sequenceAlterationType.name" label="Sequence Alteration Type" showInInlineCollection="false"/>
       <fieldconfig fieldExpr="wildType" showInSummary="false" label="Is Wild Type"/>
-      <fieldconfig fieldExpr="name" label="Name"/>
+      <fieldconfig fieldExpr="name" label="Name" showInHeader="false" showInQB="false"/>
     </fields>
  </class>
 
@@ -519,11 +519,11 @@
         </titles>
    </headerconfig>
   <fields>
-      <fieldconfig fieldExpr="primaryIdentifier" label="Primary Identifier" showInSummary="true" displayer="model/genotypeName.jsp"/>
+      <fieldconfig fieldExpr="primaryIdentifier" label="Name" showInSummary="true" displayer="model/genotypeName.jsp"/>
       <fieldconfig fieldExpr="description" label="Description/Method" showInSummary="false"/>
-      <fieldconfig fieldExpr="name" label="Name" showInSummary="false"/>
-      <fieldconfig fieldExpr="secondaryIdentifier" label="Secondary Identifier" showInSummary="false"/>
-      <fieldconfig fieldExpr="displayName" label="Alelle/Gene/Germplasm" showInSummary="false"/>
+      <fieldconfig fieldExpr="name" label="Name" showInHeader="false" showInQB="false" showInSummary="false"/>
+      <fieldconfig fieldExpr="secondaryIdentifier" label="Secondary Identifier" showInHeader="false" showInQB="false" showInSummary="false"/>
+      <fieldconfig fieldExpr="displayName" label="Alelle/Gene/Germplasm" showInHeader="false" showInQB="false" showInSummary="false"/>
     </fields>
 </class>
 
