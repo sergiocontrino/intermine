@@ -71,14 +71,18 @@ public class ObjectViewController extends TilesAction
         String clsName = DynamicUtil.getSimpleClass(object).getName();
         FieldConfig fc = webConfig.getFieldConfig(clsName, fieldName);
 
+        // show fields in header by default, unless it says otherwise in config
         // truncate fields by default, unless it says otherwise in config
         // escape xml/html by default, unless it says otherwise in config
+        boolean showInHeader = true;
         boolean doNotTruncate = false;
         boolean escapeXml = true;
         if (fc != null) {
+            showInHeader = fc.getShowInHeader();
             doNotTruncate = fc.getDoNotTruncate();
             escapeXml = fc.getEscapeXml();
         }
+        request.setAttribute("showInHeader", Boolean.valueOf(showInHeader));
         request.setAttribute("doNotTruncate", Boolean.valueOf(doNotTruncate));
         request.setAttribute("escapeXml", Boolean.valueOf(escapeXml));
 

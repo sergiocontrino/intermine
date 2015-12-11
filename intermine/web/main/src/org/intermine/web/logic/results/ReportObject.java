@@ -223,6 +223,7 @@ public class ReportObject
                             fieldName,
                             fieldValue,
                             fieldDisplayer,
+                            fc.getShowInHeader(),
                             fc.getDoNotTruncate(),
                             fc.getEscapeXml(),
                             fc.getLabel()
@@ -250,6 +251,7 @@ public class ReportObject
                                 attName,
                                 attributes.get(attName),
                                 null,
+                                true,
                                 false,
                                 false
                         );

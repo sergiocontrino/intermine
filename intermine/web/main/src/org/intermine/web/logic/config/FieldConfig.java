@@ -23,6 +23,7 @@ public class FieldConfig
 {
     private String fieldExpr;
     private boolean doNotTruncate;
+    private boolean showInHeader = true;
     private boolean escapeXml = true;
     private boolean showInSummary = true;
     private boolean outerInSummary = false;
@@ -147,6 +148,22 @@ public class FieldConfig
      */
     public boolean getIsDottedPath() {
         return (fieldExpr.lastIndexOf(".") >= 0);
+    }
+
+    /**
+     * If set to true, show the field on report page header
+     * @param showInHeader show in Header if true
+     */
+    public void setShowInHeader(boolean showInHeader) {
+        this.showInHeader = showInHeader;
+    }
+
+    /**
+     * Return the value of the showInHeader flag.
+     * @return the value of the flag
+     */
+    public boolean getShowInHeader() {
+        return showInHeader;
     }
 
     /**
