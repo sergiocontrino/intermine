@@ -519,7 +519,7 @@
         </titles>
    </headerconfig>
   <fields>
-      <fieldconfig fieldExpr="primaryIdentifier" label="Name" showInSummary="true" displayer="model/genotypeName.jsp"/>
+      <fieldconfig fieldExpr="primaryIdentifier" label="Primary Identifier" showInSummary="true" displayer="model/genotypeName.jsp"/>
       <fieldconfig fieldExpr="description" label="Description/Method" showInSummary="false"/>
       <fieldconfig fieldExpr="name" label="Name" showInSummary="false"/>
       <fieldconfig fieldExpr="secondaryIdentifier" label="Secondary Identifier" showInSummary="false"/>
