@@ -465,7 +465,7 @@
       <fieldconfig fieldExpr="primaryIdentifier" label="Name" displayer="model/alleleName.jsp"/>
       <fieldconfig fieldExpr="sequenceAlterationType.name" label="Sequence Alteration Type" showInInlineCollection="false"/>
       <fieldconfig fieldExpr="wildType" showInSummary="false" label="Is Wild Type"/>
-      <fieldconfig fieldExpr="name" label="" displayer="model/nullDisplayer.jsp"/>
+      <fieldconfig fieldExpr="name" label="Name"/>
     </fields>
  </class>
 
@@ -521,9 +521,9 @@
   <fields>
       <fieldconfig fieldExpr="primaryIdentifier" label="Name" showInSummary="true" displayer="model/genotypeName.jsp"/>
       <fieldconfig fieldExpr="description" label="Description/Method" showInSummary="false"/>
-      <fieldconfig fieldExpr="name" label="" showInSummary="false" displayer="model/nullDisplayer.jsp"/>
-      <fieldconfig fieldExpr="secondaryIdentifier" label="" showInSummary="false" displayer="model/nullDisplayer.jsp"/>
-      <fieldconfig fieldExpr="displayName" label="" showInSummary="false" displayer="model/nullDisplayer.jsp"/>
+      <fieldconfig fieldExpr="name" label="Name" showInSummary="false"/>
+      <fieldconfig fieldExpr="secondaryIdentifier" label="Secondary Identifier" showInSummary="false"/>
+      <fieldconfig fieldExpr="displayName" label="Display Name" showInSummary="false"/>
     </fields>
 </class>
 
