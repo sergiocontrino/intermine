@@ -464,7 +464,7 @@
   <fields>
       <fieldconfig fieldExpr="primaryIdentifier" label="Name" displayer="model/alleleName.jsp"/>
       <fieldconfig fieldExpr="sequenceAlterationType.name" label="Sequence Alteration Type" showInInlineCollection="false"/>
-      <fieldconfig fieldExpr="wildType" showInSummary="false" label="Is Wild Type"/>
+      <fieldconfig fieldExpr="wildType" showInSummary="false" showInHeader="false" showInQB="false" label="Is Wild Type"/>
       <fieldconfig fieldExpr="name" label="Name" showInHeader="false" showInQB="false"/>
     </fields>
  </class>
@@ -483,8 +483,8 @@
     </headerconfig>
     <fields>
     <fieldconfig fieldExpr="description" showInSummary="true" label="Description"/>
-    <fieldconfig fieldExpr="primaryIdentifier" label="" showInSummary="false" showInResults="false"  displayer="model/nullDisplayer.jsp"/>
-    <fieldconfig fieldExpr="secondaryIdentifier" label="" showInSummary="false" showInResults="false" displayer="model/nullDisplayer.jsp"/>
+    <fieldconfig fieldExpr="primaryIdentifier" label="" showInSummary="false" showInResults="false"  showInHeader="false" showInQB="false"/>
+    <fieldconfig fieldExpr="secondaryIdentifier" label="" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
     </fields>
   </class>
 
@@ -506,9 +506,9 @@
      <fieldconfig fieldExpr="stockName" label="Stock Name" showInSummary="false" showInResults="false"/>
      <fieldconfig fieldExpr="secondaryIdentifier" label="TAIR Germplasm Accession" showInSummary="false" showInResults="false"/>
      <fieldconfig fieldExpr="primaryIdentifier" showInSummary="true" showInResults="false" showInHeader="false"/>
-     <fieldconfig fieldExpr="name" label="" showInSummary="false" showInResults="false" displayer="model/nullDisplayer.jsp"/>
-     <fieldconfig fieldExpr="stockAccession" showInSummary="false" showInResults="false" displayer="model/nullDisplayer.jsp" label=""/>
-     <fieldconfig fieldExpr="primaryAccession" showInSummary="false" showInResults="false" displayer="model/nullDisplayer.jsp" label=""/>
+     <fieldconfig fieldExpr="name" label="" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
+     <fieldconfig fieldExpr="stockAccession" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
+     <fieldconfig fieldExpr="primaryAccession" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
   </fields>
 </class>
 
