@@ -507,7 +507,7 @@
     <fieldconfig fieldExpr="germplasmName" label="Germplasm Name" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
     <fieldconfig fieldExpr="stockName" label="Stock Name" showInSummary="false" showInResults="false"/>
     <fieldconfig fieldExpr="secondaryIdentifier" label="Germplasm Accession" showInSummary="false" showInResults="false"/>
-    <fieldconfig fieldExpr="primaryIdentifier" label="Primary Identifier/Germplasm Name" showInSummary="true" showInResults="false" showInHeader="false"/>
+    <fieldconfig fieldExpr="primaryIdentifier" label="Primary Identifier/Germplasm Name" showInSummary="true" showInResults="false" showInHeader="true"/>
     <fieldconfig fieldExpr="name" label="Name" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
     <fieldconfig fieldExpr="stockAccession" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
     <fieldconfig fieldExpr="primaryAccession" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
