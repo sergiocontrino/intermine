@@ -484,7 +484,7 @@
     </headerconfig>
     <fields>
     <fieldconfig fieldExpr="description" showInSummary="true" label="Description"/>
-    <fieldconfig fieldExpr="primaryIdentifier" label="" showInSummary="false" showInResults="false"  showInHeader="false" showInQB="true"/>
+    <fieldconfig fieldExpr="primaryIdentifier" label="Primary Identifier" showInSummary="false" showInResults="false"  showInHeader="false" showInQB="true"/>
     <fieldconfig fieldExpr="secondaryIdentifier" label="" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
     <fieldconfig fieldExpr="phenotypeAnnotations" label="Phenotype Publications" showInSummary="false" showInResults="false" showInHeader="false" showInQB="true"/>
     </fields>
