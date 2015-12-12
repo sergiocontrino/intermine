@@ -431,6 +431,7 @@
   <fields>
       <fieldconfig fieldExpr="stock.displayName" label="Stock"/>
       <fieldconfig fieldExpr="genotype.primaryIdentifier" label="Genotype"/>
+      <fieldconfig fieldExpr="publication.pubMedId" label="PubMedId"/>
       <fieldconfig fieldExpr="publication.firstAuthor" label="Author"/>
       <fieldconfig fieldExpr="publication.year" label="Year"/>
       <fieldconfig fieldExpr="publication.Title" label="Title"/>
@@ -485,6 +486,7 @@
     <fieldconfig fieldExpr="description" showInSummary="true" label="Description"/>
     <fieldconfig fieldExpr="primaryIdentifier" label="" showInSummary="false" showInResults="false"  showInHeader="false" showInQB="false"/>
     <fieldconfig fieldExpr="secondaryIdentifier" label="" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
+    <fieldconfig fieldExpr="phenotypeAnnotations" label="Phenotype Publications" showInSummary="false" showInResults="false" showInHeader="false" showInQB="true"/>
     </fields>
   </class>
 
@@ -499,17 +501,17 @@
       <table path="backgroundAccessions.abbreviationName" showInHeader="true" showLinksToObjects="true"/>
  </inlinelist>
  <fields>
-    <fieldconfig fieldExpr="displayName"/>
+    <fieldconfig fieldExpr="displayName" label="Display Name"/>
     <fieldconfig fieldExpr="description" label="Description" showInSummary="false"/>
     <fieldconfig fieldExpr="stockCenterComment" showInSummary="false" label="ABRC Comments"/>
-    <fieldconfig fieldExpr="germplasmName" label="Germplasm Name" showInSummary="false" showInResults="false"/>
+    <fieldconfig fieldExpr="germplasmName" label="Germplasm Name" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
     <fieldconfig fieldExpr="stockName" label="Stock Name" showInSummary="false" showInResults="false"/>
-    <fieldconfig fieldExpr="secondaryIdentifier" label="TAIR Germplasm Accession" showInSummary="false" showInResults="false"/>
-    <fieldconfig fieldExpr="primaryIdentifier" showInSummary="true" showInResults="false" showInHeader="false"/>
-    <fieldconfig fieldExpr="name" label="" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
+    <fieldconfig fieldExpr="secondaryIdentifier" label="Germplasm Accession" showInSummary="false" showInResults="false"/>
+    <fieldconfig fieldExpr="primaryIdentifier" label="Primary Identifier/Germplasm Name" showInSummary="true" showInResults="false" showInHeader="false"/>
+    <fieldconfig fieldExpr="name" label="Name" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
     <fieldconfig fieldExpr="stockAccession" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
     <fieldconfig fieldExpr="primaryAccession" showInSummary="false" showInResults="false" showInHeader="false" showInQB="false"/>
-    <fieldconfig fieldExpr="stockphenotypeAnnotations" label="phenotypePublications" showInSummary="false" showInResults="false" showInHeader="false" showInQB="true"/>
+    <fieldconfig fieldExpr="stockphenotypeAnnotations" label="Phenotype Publications" showInSummary="false" showInResults="false" showInHeader="false" showInQB="true"/>
   </fields>
 </class>
 
@@ -525,6 +527,7 @@
       <fieldconfig fieldExpr="name" label="Name" showInHeader="false" showInQB="false" showInSummary="false"/>
       <fieldconfig fieldExpr="secondaryIdentifier" label="Secondary Identifier" showInHeader="false" showInQB="false" showInSummary="false"/>
       <fieldconfig fieldExpr="displayName" label="Alelle/Gene/Germplasm" showInHeader="false" showInQB="false" showInSummary="false"/>
+      <fieldconfig fieldExpr="genotypephenotypeAnnotations" label="Phenotype Publications" showInSummary="false" showInResults="false" showInHeader="false" showInQB="true"/>
     </fields>
 </class>
 
