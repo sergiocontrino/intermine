@@ -198,8 +198,9 @@ join
 organism o
 on o.id = g.organismid
 join
-ontologyterm sg
-on sg.id = g.sequenceontologytermid
+cds c
+on 
+c.geneid = g.id
 join
 bioentitiesdatasets bds
 on g.id = bds.bioentities
@@ -212,7 +213,7 @@ ON
 ds.id = d.datasourceid
 where o.taxonid = 3702 
 and g.isobsolete = false
-and sg.name = 'gene' and d.name = 'Genome Annotation'
+and d.name = 'Genome Annotation'
 group by d.id
 ),
 
