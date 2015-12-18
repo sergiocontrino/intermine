@@ -231,8 +231,8 @@ public class BarExpressionsConverter extends BioDBConverter
                 treatmentControlsMap.put(sc.getKey(), controls);
             }
 
-            LOG.info("AAAreps: " + replicatesMap);
-            LOG.info("AAAcontrols: " + treatmentControlsMap);
+            LOG.debug("REPLICATES: " + replicatesMap);
+            LOG.debug("CONTROLS: " + treatmentControlsMap);
     }
 
     /**
@@ -408,8 +408,8 @@ public class BarExpressionsConverter extends BioDBConverter
      * @param name
      * @param alias
      * @param description
-     * @param control		obsolete
-     * @param replication	obsolete
+     * @param control        obsolete
+     * @param replication    obsolete
      * @param file
      * @param type
      *
@@ -679,7 +679,7 @@ public class BarExpressionsConverter extends BioDBConverter
      * @param control Double
      * @param format String
      */
-    private String getRatio(Double signal, Double control, String format)
+    private String getRatio1(Double signal, Double control, String format)
     {
         if (control == null) {
             return "NaN";
@@ -699,6 +699,26 @@ public class BarExpressionsConverter extends BioDBConverter
         return Double.valueOf(df.format(ratio)).toString();
     }
 
+    private String getRatio(Double signal, Double control, String format)
+    {
+        if (control == null) {
+            return null;
+        }
+        if (signal == null){
+            return null;
+        }
+        if (signal.isNaN()){
+            return null;
+        }
+
+        DecimalFormat df = new DecimalFormat(format);
+        Double ratio = signal/control;
+        if (ratio.isInfinite() || ratio.isNaN()) {
+            return null;
+        }
+        return Double.valueOf(df.format(ratio)).toString();
+    }
+
     /**
      * Returns a string representation of the Double rounded and formatted
      * according to format
@@ -707,9 +727,9 @@ public class BarExpressionsConverter extends BioDBConverter
      * @param signal Double
      * @param format String
      */
-    private String getFormat(Double signal, String format)
+    private String getFormat1(Double signal, String format)
     {
-//		LOG.info("GG " + signal);
+//        LOG.info("GG " + signal);
         if (signal == null) {
             return "NaN";
         }
@@ -720,6 +740,21 @@ public class BarExpressionsConverter extends BioDBConverter
         DecimalFormat df = new DecimalFormat(format);
         return Double.valueOf(df.format(signal)).toString();
     }
+
+    private String getFormat(Double signal, String format)
+    {
+//        LOG.info("GG " + signal);
+        if (signal == null) {
+            return null;
+        }
+        if (signal.isNaN()){
+            return null;
+        }
+
+        DecimalFormat df = new DecimalFormat(format);
+        return Double.valueOf(df.format(signal)).toString();
+    }
+
 
     /**
      * Checks if average available and returns it. Otherwise (single replicate) returns the signal
@@ -796,7 +831,7 @@ public class BarExpressionsConverter extends BioDBConverter
         + "FROM sample_biosource_info sb, sample_general_info sg, proj_info p "
         + "WHERE sb.sample_id=sg.sample_id "
         + "AND p.proj_id=sb.proj_id;";
-//    	+ "AND p.proj_id=sb.proj_id AND sb.sample_id <245;";
+//        + "AND p.proj_id=sb.proj_id AND sb.sample_id <245;";
         return doQuery(connection, query, "getSamples");
     }
 
@@ -839,7 +874,7 @@ public class BarExpressionsConverter extends BioDBConverter
                 + "data_call, data_p_val "
                 + "FROM sample_data "
                 + "WHERE data_probeset_id is not null;";  // added for pathogen
-//		+ "FROM sample_data limit 1000;";
+//        + "FROM sample_data limit 1000;";
         return doQuery(connection, query, "getSampleData");
     }
 
@@ -859,7 +894,7 @@ public class BarExpressionsConverter extends BioDBConverter
                 + "FROM sample_data "
                 + "WHERE sample_id in (" + inClause + ") "
                 + "GROUP BY data_probeset_id;";
-//		+ "FROM sample_data limit 1000;";
+//        + "FROM sample_data limit 1000;";
         return doQuery(connection, query, "getAverages");
     }
 
