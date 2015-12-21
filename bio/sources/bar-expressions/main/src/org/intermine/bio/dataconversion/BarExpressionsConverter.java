@@ -679,26 +679,6 @@ public class BarExpressionsConverter extends BioDBConverter
      * @param control Double
      * @param format String
      */
-    private String getRatio1(Double signal, Double control, String format)
-    {
-        if (control == null) {
-            return "NaN";
-        }
-        if (signal == null){
-            return "NaN";
-        }
-        if (signal.isNaN()){
-            return "NaN";
-        }
-
-        DecimalFormat df = new DecimalFormat(format);
-        Double ratio = signal/control;
-        if (ratio.isInfinite() || ratio.isNaN()) {
-            return "NaN";
-        }
-        return Double.valueOf(df.format(ratio)).toString();
-    }
-
     private String getRatio(Double signal, Double control, String format)
     {
         if (control == null) {
@@ -727,23 +707,8 @@ public class BarExpressionsConverter extends BioDBConverter
      * @param signal Double
      * @param format String
      */
-    private String getFormat1(Double signal, String format)
-    {
-//        LOG.info("GG " + signal);
-        if (signal == null) {
-            return "NaN";
-        }
-        if (signal.isNaN()){
-            return "NaN";
-        }
-
-        DecimalFormat df = new DecimalFormat(format);
-        return Double.valueOf(df.format(signal)).toString();
-    }
-
     private String getFormat(Double signal, String format)
     {
-//        LOG.info("GG " + signal);
         if (signal == null) {
             return null;
         }
@@ -769,36 +734,6 @@ public class BarExpressionsConverter extends BioDBConverter
         }
         // average available
         return avgSignal;
-    }
-
-    /**
-     * Returns a string representation of the Double rounded and formatted
-     * according to format
-     * If Double is not a number, returns null
-     *
-     * @param signal Double
-     * @param format String
-     */
-    private String getAvgSignal(Double signal, Double avgSignal, String format)
-    {
-        LOG.info("GG " + signal + "|" + avgSignal);
-        DecimalFormat df = new DecimalFormat(format);
-
-        if (avgSignal == null) {
-            // no averages for this signal, use signal
-            if (signal == null) {
-                return "NaN";
-            }
-            if (signal.isNaN()){
-                return "NaN";
-            }
-            return Double.valueOf(df.format(signal)).toString();
-        }
-        // average available
-        if (avgSignal.isNaN()){
-            return "NaN";
-        }
-        return Double.valueOf(df.format(avgSignal)).toString();
     }
 
     /**
