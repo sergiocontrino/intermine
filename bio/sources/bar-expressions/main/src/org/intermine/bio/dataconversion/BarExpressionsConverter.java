@@ -629,6 +629,7 @@ public class BarExpressionsConverter extends BioDBConverter
         Map<String, Double> controlAvgMap = new HashMap<String, Double>();
         String ratio = null;
         String displayAvgControl = null;
+        Double logRatio = null;
         Double avgSignal = getAvgSignal(signal, avgMap.get(probeSet));
         String displayAvgSignal = getFormat(avgSignal, "#.##");
         if (treatmentControlsMap.containsKey(sampleBarId)) {
@@ -638,6 +639,9 @@ public class BarExpressionsConverter extends BioDBConverter
             Double avgControl = controlAvgMap.get(probeSet);
             ratio = getRatio(avgSignal, avgControl, "#.##");
             displayAvgControl = getFormat(avgControl, "#.##");
+
+            // do log if avgSignal != 0;
+            logRatio=getLog(avgSignal, avgControl);
         }
 
         String probeRefId = probeIdRefMap.get(probeSet);
@@ -664,11 +668,27 @@ public class BarExpressionsConverter extends BioDBConverter
             sampleData.setAttribute("averageControl", displayAvgControl);
         }
 
+        if (logRatio != null) {
+            sampleData.setAttribute("log2Ratio", getFormat(logRatio, "#.##"));;
+        }
+
         sampleData.setReference("sample", sampleIdRef);
         sampleData.setReference("probe", probeRefId);
         store(sampleData);
         return sampleData.getIdentifier();
     }
+
+    private Double getLog(Double avgSignal, Double avgControl) {
+        if (avgSignal == 0) {
+            return null;
+        }
+
+        Double log2Ratio = Math.log(avgSignal/avgControl)/Math.log(2);
+        return log2Ratio;
+    }
+
+
+
 
     /**
      * Returns a string representation of the Double rounded and formatted
