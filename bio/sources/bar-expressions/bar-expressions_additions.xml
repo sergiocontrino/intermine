@@ -68,8 +68,9 @@
         <attribute name="call" type="java.lang.String" />
         <attribute name="pValue" type="java.lang.Double" />
         <attribute name="averageSignal" type="java.lang.Double" />
-        <attribute name="averageRatio" type="java.lang.Double" />
         <attribute name="averageControl" type="java.lang.Double" />
+        <attribute name="averageRatio" type="java.lang.Double" />
+        <attribute name="log2Ratio" type="java.lang.Double" />
         <reference name="sample" referenced-type="Sample" reverse-reference="expressions" />
         <reference name="probe" referenced-type="Probe" reverse-reference="expressions" />
         <reference name="gene" referenced-type="Gene" reverse-reference="expressions" />
