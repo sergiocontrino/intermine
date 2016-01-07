@@ -71,6 +71,13 @@
     </fields>
   </class>
 
+  <class className="org.intermine.model.bio.Experiment">
+    <fields>
+      <fieldconfig fieldExpr="SRAaccession" label="SRA accession"/>
+      <fieldconfig fieldExpr="experimentBarId" showInSummary="false" showInInlineCollection="false" label="experiment BAR Id"/>
+    </fields>
+  </class>
+
 <!--
   <class className="org.intermine.model.bio.Gene">
     <inlinelist>
