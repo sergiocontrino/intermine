@@ -666,10 +666,9 @@ public class BarExpressionsConverter extends BioDBConverter
         if (ratio != null) {
             sampleData.setAttribute("averageRatio", ratio);
             sampleData.setAttribute("averageControl", displayAvgControl);
-        }
-
-        if (logRatio != null) {
-            sampleData.setAttribute("log2Ratio", getFormat(logRatio, "#.##"));;
+            if (logRatio != null) { // avgSignal == 0
+                sampleData.setAttribute("log2Ratio", getFormat(logRatio, "#.##"));;
+            }
         }
 
         sampleData.setReference("sample", sampleIdRef);
