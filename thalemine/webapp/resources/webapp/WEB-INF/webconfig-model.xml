@@ -921,6 +921,7 @@
 
 
       <enrichmentwidgetdisplayer id="pathway_enrichment"
+                                 title="Pathways Enrichment"
                                  description="Pathways enriched for genes in this list - data from KEGG"
                                  label="Pathways"
                                  filterLabel="DataSet"
