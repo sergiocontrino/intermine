@@ -416,6 +416,12 @@
     </fields>
   </class>
 
+  <class className="org.intermine.model.bio.RnaseqExpression" label="RNAseq Expression">
+    <fields>
+      <fieldconfig fieldExpr="TPM" label="Transcripts Per Million"/>
+</fields>
+  </class>
+
   <class className="org.intermine.model.bio.UniProtFeature">
     <fields>
       <fieldconfig fieldExpr="type"/>
