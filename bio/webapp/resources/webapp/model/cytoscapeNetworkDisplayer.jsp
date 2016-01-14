@@ -52,7 +52,8 @@
             "value" : "${cytoscapeInteractionObjectId}",
             "path": "id",
             "op": "="
-          }
+          },
+        compact : true //optional
         }).then(function(hasValues) {
           if (!hasValues) {
             element.parentElement.style.display = "none";
