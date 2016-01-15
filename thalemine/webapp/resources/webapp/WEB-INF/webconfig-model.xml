@@ -448,7 +448,7 @@
       <fieldconfig fieldExpr="publication.pubMedId" label="PubMedId"/>
       <fieldconfig fieldExpr="publication.firstAuthor" label="Author"/>
       <fieldconfig fieldExpr="publication.year" label="Year"/>
-      <fieldconfig fieldExpr="publication.Title" label="Title"/>
+      <fieldconfig fieldExpr="publication.title" label="Title"/>
       </fields>
  </class>
 
