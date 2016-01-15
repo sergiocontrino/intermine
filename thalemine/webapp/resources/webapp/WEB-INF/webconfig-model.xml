@@ -419,6 +419,7 @@
   <class className="org.intermine.model.bio.RnaseqExpression" label="RNAseq Expression">
     <fields>
       <fieldconfig fieldExpr="TPM" label="Transcripts Per Million"/>
+      <fieldconfig fieldExpr="study.SRAaccession" label="Experiment" showInInlineCollection="true" showInSummary="false" />
 </fields>
   </class>
 
