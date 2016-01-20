@@ -38,10 +38,13 @@
    // for local test only
    // var webapp_root_url="http://phytozome.jgi.doe.gov/phytomine/";
    var webapp_root_url = "${WEB_PROPERTIES['phytomine.homolog.prefix']}";
+   var bearer_token = "Bearer ${WEB_PROPERTIES['araport.accessToken']}";
+
+   var phytomine = new imjs.Service({root: webapp_root_url, headers: { "Authorization": bearer_token }});
 
    var options = {
      type: 'table',
-     url: webapp_root_url,
+     service: phytomine,
      query: {"model":{"name":"genomic"},"select":["Homolog.gene2.name","Homolog.organism2.shortName","Homolog.gene2.briefDescription"],"constraintLogic":"A and B","where":[{"path":"Homolog.organism1.taxonId","op":"=","code":"A","value":"3702"},{"path":"Homolog.gene1.name","op":"=","code":"B","value":geneId}]},
      properties: { pageSize: 10 }
     };
@@ -61,30 +64,44 @@
        }
      };
 
-    var formatPhytomineLink = function(id, dataClass, pattern, value) {
+    var formatPhytomineLink = function(id, dataClass, value) {
         var thalemine_url = '/${WEB_PROPERTIES['webapp.path']}' + '/portal.do?class=' + dataClass + '&externalids=' + id;
+        var medicmine_url = '${WEB_PROPERTIES['intermines.medicmine.url']}' + '/portal.do?class=' + dataClass + '&externalids=' + id;
         var phytomine_url = '${WEB_PROPERTIES['intermines.phytomine.url']}' + '/portal.do?class=' + dataClass + '&externalids=' + id;
         if (typeof value === 'undefined') {
             value = id;
         }
-        var re = new RegExp(pattern);
-        if (re.test(id)) {
+
+        var AT_pat, MT_pat;
+        if (dataClass == 'Gene') {
+            AT_pat = '^AT';
+            MT_pat = '^Medtr';
+        } else if (dataClass == 'Organism') {
+            AT_pat = 'thaliana$';
+            MT_pat = 'truncatula$';
+        }
+
+        var AT_re = new RegExp(AT_pat);
+        var MT_re = new RegExp(MT_pat);
+        if (AT_re.test(id)) {
             return formatLink(thalemine_url, wrapSpan(value), "_blank", 'internal');
+        } else if (MT_re.test(id)) {
+            return formatLink(medicmine_url, wrapSpan(value), "_blank", 'extlink');
         } else {
             return formatLink(phytomine_url, wrapSpan(value), "_blank", 'extlink');
         }
     };
 
     var phytomineGeneFormatter = function(o) {
-        return formatPhytomineLink(o.get('name'), "Gene", "^AT", undefined);
+        return formatPhytomineLink(o.get('name'), "Gene", undefined);
     };
 
     var phytomineOrganismFormatter = function(o) {
-        return formatPhytomineLink(o.get('shortName'), "Organism", "thaliana$", undefined);
+        return formatPhytomineLink(o.get('shortName'), "Organism", undefined);
     };
 
     var phytomineDeflineFormatter = function(o) {
-        return formatPhytomineLink(o.get('name'), "Gene", "^AT", o.get('briefDescription'));
+        return formatPhytomineLink(o.get('name'), "Gene", o.get('briefDescription'));
     };
 
     // new way for using imtables
@@ -106,7 +123,7 @@
 
     imtables.loadDash('#phytomine-homolog-container',
         {start : 0, size : 10},
-        {service : {root : options.url},
+        {service : options.service,
             query : options.query}
         ).then(
             withTable,
