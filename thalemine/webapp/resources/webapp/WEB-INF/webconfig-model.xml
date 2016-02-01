@@ -73,10 +73,16 @@
 
   <class className="org.intermine.model.bio.Experiment">
     <fields>
-      <fieldconfig fieldExpr="SRAaccession" label="SRA accession"/>
       <fieldconfig fieldExpr="experimentBarId" showInSummary="false" showInInlineCollection="false" label="experiment BAR Id"/>
     </fields>
   </class>
+
+  <class className="org.intermine.model.bio.RnaseqExperiment" label="RNAseq Expression">
+    <fields>
+      <fieldconfig fieldExpr="SRAaccession" label="SRA accession"/>
+    </fields>
+  </class>
+
 
 <!--
   <class className="org.intermine.model.bio.Gene">
@@ -418,7 +424,7 @@
 
   <class className="org.intermine.model.bio.RnaseqExpression" label="RNAseq Expression">
     <fields>
-      <fieldconfig fieldExpr="score" />
+      <fieldconfig fieldExpr="expressionLevel" />
       <fieldconfig fieldExpr="unit" />
       <fieldconfig fieldExpr="experiment.SRAaccession" label="Experiment" showInInlineCollection="true" showInSummary="false" />
 </fields>
