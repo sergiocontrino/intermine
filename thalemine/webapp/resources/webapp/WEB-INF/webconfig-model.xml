@@ -77,7 +77,7 @@
     </fields>
   </class>
 
-  <class className="org.intermine.model.bio.RnaseqExperiment" label="RNAseq Expression">
+  <class className="org.intermine.model.bio.RnaseqExperiment" label="RNAseq Experiment">
     <fields>
       <fieldconfig fieldExpr="SRAaccession" label="SRA accession"/>
     </fields>
