@@ -380,4 +380,18 @@
       <attribute name="url" value="http://atted.jp/help/API.shtml" />
       <reference name="publication" ref_id="0_58" />
    </item>
+   <item id="0_61" class="DataSet" implements="">
+      <attribute name="version" value="Araport11 Pre-release 3 (12/2015)" />
+      <reference name="dataSource" ref_id="0_7" />
+      <attribute name="name" value="RNA-seq expression" />
+      <attribute name="description" value="Measure of gene expression levels (Transcripts per Million, TPM) quantified by Salmon" />
+      <attribute name="url" value="https://www.araport.org/data/araport11/methods" />
+   </item>
+   <item id="0_62" class="DataSet" implements="">
+      <attribute name="version" value="09/2014" />
+      <reference name="dataSource" ref_id="0_41" />
+      <attribute name="name" value="SRA" />
+      <attribute name="description" value="NCBI Sequence Read Archive (SRA) stores raw sequencing data; Published Arabidopsis thaliana Col-0 RNA-seq datasets retrieved from NCBI SRA" />
+      <attribute name="url" value="https://www.araport.org/113-rna-seq-sets-used-araport11" />
+   </item>
 </items>

@@ -39,3 +39,5 @@ DataSource	Phytozome	Plant Comparative Genomics portal	http://phytozome.jgi.doe.
 DataSet	Phytozome Orthologs	Gene families representing clade-specific orthology/paralogy relationships via PhytoMine web services	http://phytozome.jgi.doe.gov/phytomine/	DataSource:Phytozome,Publication:22110026	real-time
 DataSource	ATTED-II	Arabidopsis thaliana trans-factor and cis-element prediction database	http://atted.jp/	Publication:24334350
 DataSet	ATTED-II Co-expression	Co-regulated gene relationships deduced from microarray and RNA-seq data via ATTED-II web services 	http://atted.jp/help/API.shtml	DataSource:ATTED-II,Publication:24334350	real-time
+DataSet	RNA-seq expression	Measure of gene expression levels (Transcripts per Million, TPM) quantified by Salmon	https://www.araport.org/data/araport11/methods	DataSource:Araport	Araport11 Pre-release 3 (12/2015)
+DataSet	SRA	NCBI Sequence Read Archive (SRA) stores raw sequencing data; Published Arabidopsis thaliana Col-0 RNA-seq datasets retrieved from NCBI SRA	https://www.araport.org/113-rna-seq-sets-used-araport11	DataSource:NCBI	09/2014
