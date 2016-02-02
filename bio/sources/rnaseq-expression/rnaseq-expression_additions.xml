@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<classes>
+
+<class name="SequenceFeature" is-interface="true">
+  <collection name="RNASeqExpressions" referenced-type="RnaseqExpression" reverse-reference="expressionOf" />
+</class>
+
+<class name="RnaseqExperiment" extends="Experiment" is-interface="true">
+  <attribute name="description" type="java.lang.String" />
+  <attribute name="tissue" type="java.lang.String" />
+  <attribute name="SRAaccession" type="java.lang.String" />
+<!--
+  <reference name="dataSet" referenced-type="DataSet" reverse-reference="experiments" /
+  <collection name="properties" referenced-type="SampleProperty" reverse-reference="experiments"/>
+-->
+</class>
+
+<class name="RnaseqExpression" is-interface="true">
+  <attribute name="expressionLevel" type="java.lang.Double" />
+  <attribute name="unit" type="java.lang.String" />
+  <attribute name="type" type="java.lang.String" />
+  <reference name="expressionOf" referenced-type="SequenceFeature" reverse-reference="RNASeqExpressions" />
+  <reference name="experiment" referenced-type="RnaseqExperiment" />
+  <reference name="dataSet" referenced-type="DataSet" />
+  <reference name="organism" referenced-type="Organism" />
+</class>
+
+
+<!--
+    <class name="Sample" is-interface="true">
+        <attribute name="name" type="java.lang.String" />
+        <attribute name="description" type="java.lang.String" />
+        <attribute name="file" type="java.lang.String" />
+        <attribute name="type" type="java.lang.String" />
+
+        <reference name="organism" referenced-type="Organism" />
+        <reference name="experiment" referenced-type="Experiment" reverse-reference="samples" />
+        <reference name="lab" referenced-type="Lab" reverse-reference="samples" />
+        <collection name="expressions" referenced-type="Expression" reverse-reference="sample" />
+        <collection name="properties" referenced-type="SampleProperty" reverse-reference="samples"/>
+    </class>
+
+<class name="SampleProperty" is-interface="true">
+  <attribute name="name" type="java.lang.String"/>
+  <attribute name="value" type="java.lang.String"/>
+  <collection name="experiments" referenced-type="Experiment" reverse-reference="properties" />
+</class>
+-->
+
+</classes>

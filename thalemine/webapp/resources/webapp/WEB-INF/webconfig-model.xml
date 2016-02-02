@@ -71,6 +71,19 @@
     </fields>
   </class>
 
+  <class className="org.intermine.model.bio.Experiment">
+    <fields>
+      <fieldconfig fieldExpr="experimentBarId" showInSummary="false" showInInlineCollection="false" label="experiment BAR Id"/>
+    </fields>
+  </class>
+
+  <class className="org.intermine.model.bio.RnaseqExperiment" label="RNAseq Experiment">
+    <fields>
+      <fieldconfig fieldExpr="SRAaccession" label="SRA accession"/>
+    </fields>
+  </class>
+
+
 <!--
   <class className="org.intermine.model.bio.Gene">
     <inlinelist>
@@ -409,6 +422,14 @@
     </fields>
   </class>
 
+  <class className="org.intermine.model.bio.RnaseqExpression" label="RNAseq Expression">
+    <fields>
+      <fieldconfig fieldExpr="expressionLevel" />
+      <fieldconfig fieldExpr="unit" />
+      <fieldconfig fieldExpr="experiment.SRAaccession" label="Experiment" showInInlineCollection="true" showInSummary="false" />
+</fields>
+  </class>
+
   <class className="org.intermine.model.bio.UniProtFeature">
     <fields>
       <fieldconfig fieldExpr="type"/>
@@ -434,7 +455,7 @@
       <fieldconfig fieldExpr="publication.pubMedId" label="PubMedId"/>
       <fieldconfig fieldExpr="publication.firstAuthor" label="Author"/>
       <fieldconfig fieldExpr="publication.year" label="Year"/>
-      <fieldconfig fieldExpr="publication.Title" label="Title"/>
+      <fieldconfig fieldExpr="publication.title" label="Title"/>
       </fields>
  </class>
 
