@@ -18,6 +18,14 @@
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/genome/gff/" />
         </source>
 
+        <source name="rnaseq-expression" type="rnaseq-expression">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/rnaseq_expression/current"/>
+	    <property name="src.data.dir.includes" value="*RNAseq-expression*"/>
+            <property name="rnaseq.organisms" value="3702"/>
+            <property name="dataSourceName" value="RNASeq"/>
+            <property name="dataSetName" value="RNASeq data set"/>
+        </source>
+
         <source name="psi-mi-ontology" type="psi-mi-ontology">
             <property name="src.data.file" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/psi/psi-mi.obo"/>
         </source>
@@ -221,14 +229,6 @@
           <property name="biogrid.organisms" value="3702"/>
         </source>
 	
-        <source name="rnaseq-expression" type="rnaseq-expression">
-            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/Araport11/isoform.expression/data.Araport11"/>
-	    <property name="src.data.dir.includes" value="*RNAseq-expression*"/>
-            <property name="rnaseq.organisms" value="3702"/>
-            <property name="dataSourceName" value="RNASeq"/>
-            <property name="dataSetName" value="RNASeq data set"/>
-        </source>
-
         <source name="araport-chado-stock" type="araport-chado-db">
             <property name="source.db.name" value="araport"/>
             <property name="organisms" value="3702"/>
