@@ -56,3 +56,9 @@
 
 <action path="/dataCategories" forward="dataSummary.page" />
 <action path="/dataSummary" forward="dataSummary.page" />
+
+<action path="/geneRifLinks"
+        type="org.thalemine.web.controller.GeneRifSubmissionController">
+     <forward name="links" path="/model/geneRifLinks.jsp"/>   
+</action>
+     
