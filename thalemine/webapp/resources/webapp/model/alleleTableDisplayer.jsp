@@ -62,12 +62,13 @@ var query    = {
   ]
 };
 
-imtables.configure('DefaultPageSize', 10);
+imtables.configure('DefaultPageSize', 5);
 imtables.configure('TableCell.IndicateOffHostLinks', false);
+imtables.configure('Tables.CacheFactor', 5);
 
 imtables.loadTable(
   selector,
-  {"start":0,"size":10},  
+  {"start":0,"size":5},  
   {service: service, query: query}
 ).then(
   function (table) { console.log('Table loaded', table); },

@@ -23,16 +23,16 @@ import org.intermine.webservice.client.services.QueryService;
 import org.thalemine.web.service.InfrastructureService;
 import org.thalemine.web.service.impl.InfrastructureServiceImpl;
 
-public class AlelleTableDisplayer extends ReportDisplayer{
+public class StockGeneTableDisplayer extends ReportDisplayer{
 
-	protected static final Logger log = Logger.getLogger(AlelleTableDisplayer.class);
+	protected static final Logger log = Logger.getLogger(StockGeneTableDisplayer.class);
 		
 	  /**
      * Construct with config and the InterMineAPI.
      * @param config to describe the report displayer
      * @param im the InterMine API
      */
-    public AlelleTableDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
+    public StockGeneTableDisplayer(ReportDisplayerConfig config, InterMineAPI im) {
         super(config, im);
     }
     
@@ -41,12 +41,12 @@ public class AlelleTableDisplayer extends ReportDisplayer{
     	 String className = reportObject.getClassDescriptor().getUnqualifiedName();
          request.setAttribute("className", className);
          
-         log.info("Allele Table Displayer has started.");
+         log.info("Stock/Gene Table Displayer has started.");
          InfrastructureService systemService = InfrastructureServiceImpl.getInstance();
          String serviceURL = systemService.getServiceEndPoint();
          log.info("Service URL:" + serviceURL);
          request.setAttribute("serviceURL", serviceURL);
-         log.info("Allele Table Displayer has completed.");
+         log.info("Stock/Gene Table Displayer has completed.");
     }
     
 

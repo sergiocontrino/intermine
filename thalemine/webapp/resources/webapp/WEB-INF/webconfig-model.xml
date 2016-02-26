@@ -754,7 +754,13 @@
                      jspName="model/stockDisplayer.jsp"
                      replacesFields="genotypes,phenotypesObserved"
                      placement="Stocks"
-                     types="Gene,Allele"/>
+                     types="Allele"/>
+                     
+       <reportdisplayer javaClass="org.thalemine.web.displayer.tableview.StockGeneTableDisplayer"
+                     jspName="model/stockPhenotypeTableDisplayer.jsp"
+                     replacesFields="genotypes,phenotypesObserved"
+                     placement="Stocks"
+                     types="Gene"/>
 
        <reportdisplayer javaClass="org.thalemine.web.displayer.AlleleGeneZygosityDisplayer"
                      jspName="model/alleleZygosity.jsp"
