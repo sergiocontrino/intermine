@@ -66,13 +66,13 @@ imtables.configure('DefaultPageSize', 5);
 imtables.configure('TableCell.IndicateOffHostLinks', false);
 imtables.configure('Tables.CacheFactor', 5);
 
-imtables.loadTable(
+imtables.loadDash(
   selector,
   {"start":0,"size":5},  
   {service: service, query: query}
 ).then(
-  function (table) { console.log('Table loaded', table); },
-  function (error) { console.error('Could not load table', error); }
+  function (table) { console.log('Affected Alleles Table loaded', table); },
+  function (error) { console.error('Could not load Affected Alleles table', error); }
 );
 </script>
 	</div>
