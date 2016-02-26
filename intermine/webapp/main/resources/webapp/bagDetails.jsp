@@ -226,6 +226,8 @@
 <small>Date Created:  <im:dateDisplay date="${bag.dateCreated}" /></small>
 </div>
 
+
+
 <%-- BagDisplayers on Left --%>
     <c:if test="${!invalid}">
         <tiles:insert page="/bagDisplayers.jsp">
@@ -280,6 +282,33 @@
 </c:if>
 </TR>
 </TABLE>
+
+  <!-- RNASEQ EXPRESSION -->
+  <c:if test="${bag.type == 'Gene'}">
+    <div id="domainregion" class="collection-table column-border" style="margin-bottom: 0px"></div>
+    <c:set var="QUERYID" value="${bag.name}" />
+    <c:set var="MINEURL" value="${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}" />
+    <svg id="eChart" class="eChart" style="width: 100%;"></svg>
+    <script type="text/javascript" charset="utf-8">
+      //var queryId="AT1G01060";
+      //var queryId="${QUERYID}";
+      var mineUrl="${MINEURL}/";
+      var svgId="eChart";
+      var listName="${bag.name}";
+    </script>
+    <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.css">
+<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3-legend/1.8.0/d3-legend.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.js"></script>
+<!--
+    <script type="text/javascript" charset="utf-8" src="http://localhost:9003/expression.js"></script>
+ -->
+
+  </c:if>
+
+
+  <!--  /RNASEQ EXPRESSION -->
+
 
 <c:if test="${!invalid}">
 
