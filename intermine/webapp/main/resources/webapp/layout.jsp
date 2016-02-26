@@ -116,15 +116,15 @@ if ((typeof intermine != 'undefined') && (intermine.Service != null)) {
         "token": "${PROFILE.dayToken}",
         "help": "${WEB_PROPERTIES['feedback.destination']}"
     });
-    
+
     var notification = new FailureNotification({message: $SERVICE.root + " is incorrect"});
 
     $SERVICE.fetchVersion().then(reportVersion, notification.render);
     if (typeof imtables !== 'undefined') {
         console.debug('Using imtables: ' + (imtables.version || 'UNKNOWN'));
     }
-  
-    // Load list widgets.  
+
+    // Load list widgets.
     (function() {
       if (window['list-widgets'] != null) {
         // Make sure we have all deps required in `global.web.properties`, otherwise we fail!!!
