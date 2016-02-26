@@ -488,6 +488,9 @@
       <fieldconfig fieldExpr="sequenceAlterationType.name" label="Sequence Alteration Type" showInInlineCollection="false"/>
       <fieldconfig fieldExpr="wildType" showInSummary="false" showInHeader="false" showInQB="false" label="Is Wild Type"/>
       <fieldconfig fieldExpr="name" label="Name" showInHeader="false" showInQB="false"/>
+      <fieldconfig fieldExpr="mutagen.name" label="Mutagen" showInHeader="false" showInQB="true"/>
+      <fieldconfig fieldExpr="inheritanceMode.name" label="Inheritance Type" showInHeader="false" showInQB="true"/>
+      <fieldconfig fieldExpr="alleleClass.name" label="Allele Type" showInHeader="false" showInQB="true"/>
     </fields>
  </class>
 
@@ -741,8 +744,8 @@
                      placement="summary"
                      types="Allele"/>
 
-     <reportdisplayer javaClass="org.thalemine.web.displayer.GeneAlleleDisplayer"
-                     jspName="model/alleleDisplayer.jsp"
+     <reportdisplayer javaClass="org.thalemine.web.displayer.tableview.AlelleTableDisplayer"
+                     jspName="model/alleleTableDisplayer.jsp"
                      replacesFields="affectedAlleles"
                      placement="Stocks"
                      types="Gene"/>
