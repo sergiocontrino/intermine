@@ -42,6 +42,7 @@ public class GeneRifSubmissionController extends TilesAction {
 	private final static String GENE_RIF_CORRECTION_BASEURL = "http://www.ncbi.nlm.nih.gov/projects/RefSeq/update.cgi?geneid";
 
 	private final static String SYMBOL_PARAM = "sym";
+	private final static String SYMBOL_PARAM_CORR_URL = "symbol";
 	private final static String ORGANISM_PARAM = "org";
 	private final static String PUBMEDID_PARAM = "pubmedBuff";
 	private final static String TEXT_PARAM = "textBuff";
@@ -102,13 +103,21 @@ public class GeneRifSubmissionController extends TilesAction {
 				throw new Exception("Gene object cannot be null. Report Object is: " + reportObject);
 			}
 
-			primaryIdentifier = geneObject.getPrimaryIdentifier();
+			primaryIdentifier = removeTrailingSpaces(geneObject.getPrimaryIdentifier());
 			symbol = geneObject.getSymbol();
+			
+			if (!StringUtils.isEmpty(symbol)){
+				symbol = removeTrailingSpaces(geneObject.getSymbol());
+			}
 
+			if 	(!hasValidGeneSymbol(primaryIdentifier, symbol)){
+				symbol = null;
+			}
+			
 			NCBIGeneIdLookup webclient = new NCBIGeneIdLookup();
 			entrezGene = webclient.getEntrezGeneByGeneId(primaryIdentifier);
-			ncbiGeneId = entrezGene.getEntrezGeneId();
-
+			ncbiGeneId = removeTrailingSpaces(entrezGene.getEntrezGeneId());
+			
 			geneSubmissionURL = createGeneRifSubmissionURL(ncbiGeneId, symbol);
 			geneCorrectionURL = createGeneRifCorrectionURL(ncbiGeneId, symbol);
 
@@ -166,24 +175,9 @@ public class GeneRifSubmissionController extends TilesAction {
 		urlBuilder.append("=");
 		urlBuilder.append(ORGANISM_VALUE);
 
-		urlBuilder.append("&");
-		urlBuilder.append(PUBMEDID_PARAM);
-		urlBuilder.append("=");
-		urlBuilder.append(PUBMEDID_VALUE);
-
-		urlBuilder.append("&");
-		urlBuilder.append(TEXT_PARAM);
-		urlBuilder.append("=");
-		urlBuilder.append(TEXT_VALUE);
-
-		urlBuilder.append("&");
-		urlBuilder.append(EMAIL_PARAM);
-		urlBuilder.append("=");
-		urlBuilder.append(EMAIL_VALUE);
-
 		return urlBuilder.toString();
 	}
-
+    	
 	private String createGeneRifCorrectionURL(final String geneId, final String symbol) throws Exception {
 
 		StringBuilder urlBuilder = new StringBuilder();
@@ -199,7 +193,7 @@ public class GeneRifSubmissionController extends TilesAction {
 		if (!StringUtils.isEmpty(symbol)) {
 
 			urlBuilder.append("&");
-			urlBuilder.append(SYMBOL_PARAM);
+			urlBuilder.append(SYMBOL_PARAM_CORR_URL);
 			urlBuilder.append("=");
 			urlBuilder.append(symbol);
 
@@ -211,5 +205,26 @@ public class GeneRifSubmissionController extends TilesAction {
 		urlBuilder.append(TASK_VALUE);
 
 		return urlBuilder.toString();
+	}
+	
+	private boolean hasValidGeneSymbol(final String primaryIdentifier, final String symbol){
+		boolean result = true;
+		
+		if (primaryIdentifier.equals(symbol)){
+			result = false;
+		}
+		
+		return result;
+	}
+	
+	private String removeTrailingSpaces(final String identifier) throws Exception{
+		
+		if (StringUtils.isBlank(identifier)){
+			throw new Exception ("Identifier cannot be empty!");
+		}
+		
+		String result  = StringUtils.trim(identifier);
+		
+		return identifier;
 	}
 }
