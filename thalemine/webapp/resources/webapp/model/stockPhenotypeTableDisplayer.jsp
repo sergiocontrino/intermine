@@ -22,8 +22,7 @@
 <c:set var="name" value="${object.primaryIdentifier}"/>
 
 <div id="stock-table-container" class="collection-table imtables-dashboard container-fluid imtables">
-<link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/im-tables/latest/imtables.css">
- <div id="stock-container">
+<div id="stock-container">
  
  </div>
  
@@ -70,17 +69,7 @@ var query    = {
 		  "from": "Stock",
 		  "select": [
 		    "germplasmName",
-		    "genotypes.primaryIdentifier",
-		    "backgroundAccessions.abbreviationName",
-		    "genotypes.phenotypesObserved.description",
-		    "genotypes.genotypephenotypeAnnotations.publication.firstAuthor",
-		    "genotypes.genotypephenotypeAnnotations.publication.year",
-		  ],
-		  "joins": [
-		    "backgroundAccessions",
-		    "genotypes.genotypephenotypeAnnotations",
-		    "genotypes.genotypephenotypeAnnotations.publication",
-		    "genotypes.phenotypesObserved"
+		    "genotypes.primaryIdentifier"
 		  ],
 		  "where": [
 		    {
