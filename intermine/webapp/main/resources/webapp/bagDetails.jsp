@@ -285,6 +285,32 @@
 
   <!-- RNASEQ EXPRESSION -->
   <c:if test="${bag.type == 'Gene'}">
+
+    <script type="text/javascript" charset="utf-8">
+      jQuery(document).ready(function () {
+      var feature_count = parseInt(${bag.size});
+      if (feature_count > 40) {
+      jQuery("#expr").hide();
+      } else {
+      jQuery("#expr").show();
+      }
+
+      jQuery("#bro").click(function () {
+      if(jQuery("#expr").is(":hidden")) {
+      jQuery("#oc").attr("src", "images/disclosed.gif");
+      } else {
+      jQuery("#oc").attr("src", "images/undisclosed.gif");
+      }
+      jQuery("#expr").toggle("slow");
+      });
+      })
+      </script>
+
+    <hr>
+    <a name="#" id="bro" style="cursor:pointer">
+      <h3><b>Click to see/hide</b> the RNA-Seq expression maps<img src="images/undisclosed.gif" id="oc"></h3></a><div id="expr" style="display: block">
+
+
     <div id="domainregion" class="collection-table column-border" style="margin-bottom: 0px"></div>
     <c:set var="QUERYID" value="${bag.name}" />
     <c:set var="MINEURL" value="${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}" />
@@ -296,10 +322,12 @@
       var svgId="eChart";
       var listName="${bag.name}";
     </script>
-    <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.css">
+
+<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.css">
 <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3-legend/1.8.0/d3-legend.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.js"></script>
+
 <!--
     <script type="text/javascript" charset="utf-8" src="http://localhost:9003/expression.js"></script>
  -->
