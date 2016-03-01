@@ -105,10 +105,10 @@ a.button:active {
      				 		<td>			
      				 		
      				 		<c:if test = "${item.stockCenter eq 'ABRC'}">
-  								<a class="button" href="${item.externalStockObjectUrlPrefix}${item.stockNumber}&type=germplasm">Order from ABRC</a>
+  								<a class="button" href="${item.externalStockObjectUrlPrefix}${item.stockNumber}&type=germplasm" target="_blank">Order from ABRC</a>
 							</c:if>
 							<c:if test = "${item.stockCenter eq 'NASC'}">
-  								<a class="button" href="${item.externalStockObjectUrlPrefix}${item.stockNumber}">Order from NASC</a>
+  								<a class="button" href="${item.externalStockObjectUrlPrefix}${item.stockNumber}" target="_blank">Order from NASC</a>
 							</c:if>
 	
      				 		</td>
