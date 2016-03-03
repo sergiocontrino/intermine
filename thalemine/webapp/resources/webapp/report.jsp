@@ -495,7 +495,7 @@ var mineUrl="${MINEURL}/";
 
 <!-- RNASEQ EXPRESSION -->
 
-<c:if test="${aspect eq 'Expression' && object.type == 'Gene'}">
+<c:if test="${aspect eq 'Expression' && (object.type == 'Gene' || object.type == 'Pseudogene')}">
 <div id="domainregion" class="collection-table column-border" style="margin-bottom: 0px"></div>
   <c:set var="QUERYID" value="${fn:substringAfter(stableLink, 'externalids=')}" />
   <c:set var="MINEURL" value="${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}" />
