@@ -196,6 +196,10 @@ public class TransferSequences
                     continue;
                 }
 
+                if (PostProcessUtil.isInstance(model, feature, "Transcript")) {
+                    continue;
+                }
+
                 /**
                  * In human intermine, SNP is not a sequence alteration, which I think is wrong
                  * But here are the kinds of types that are alterations:
