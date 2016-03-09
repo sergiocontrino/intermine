@@ -283,67 +283,6 @@
 </TR>
 </TABLE>
 
-  <!-- RNASEQ EXPRESSION -->
-  <c:if test="${bag.type == 'Gene'}">
-
-    <script type="text/javascript" charset="utf-8">
-      jQuery(document).ready(function () {
-      var feature_count = parseInt(${bag.size});
-      if (feature_count > 40) {
-      jQuery("#expr").hide();
-      } else {
-      jQuery("#expr").show();
-      }
-
-      jQuery("#bro").click(function () {
-      if(jQuery("#expr").is(":hidden")) {
-      jQuery("#oc").attr("src", "images/disclosed.gif");
-      } else {
-      jQuery("#oc").attr("src", "images/undisclosed.gif");
-      }
-      jQuery("#expr").toggle("slow");
-      });
-      })
-      </script>
-
-    <hr>
-    <a name="#" id="bro" style="cursor:pointer">
-      <h3><b>Click to see/hide</b> the RNA-Seq expression maps<img src="images/undisclosed.gif" id="oc"></h3></a><div id="expr" style="display: block">
-
-
-    <div id="expr" class="collection-table column-border" style="margin-bottom: 0px">
-    <c:set var="QUERYID" value="${bag.name}" />
-    <c:set var="MINEURL" value="${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}" />
-
-
-    <svg id="eChart" class="eChart" style="width: 100%;"></svg>
-    <script type="text/javascript" charset="utf-8">
-      //var queryId="AT1G01060";
-      //var queryId="${QUERYID}";
-      var mineUrl="${MINEURL}/";
-      var svgId="eChart";
-      var listName="${bag.name}";
-    </script>
-    <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.css">
-<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3-legend/1.8.0/d3-legend.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.js"></script>
-
-<!--
-    <script type="text/javascript" charset="utf-8" src="http://localhost:9003/expression.js"></script>
- -->
-
-
-    </div>
-    </div>
-
-     
-  </c:if>
-
-
-  <!--  /RNASEQ EXPRESSION -->
-
-
 <c:if test="${!invalid}">
 
 <div class="heading" style="clear:both;margin-top:15px">
@@ -425,6 +364,63 @@
 
 <!-- /templates -->
 </c:if>
+
+
+
+<!-- RNASEQ EXPRESSION -->
+<c:if test="${bag.type == 'Gene'}">
+
+<div class="heading" style="clear:both;margin-top:15px">
+     <a id="widgets">RNA Seq Expression heath map for '${bag.name}'</a> &nbsp;
+</div>
+
+  <script type="text/javascript" charset="utf-8">
+    jQuery(document).ready(function () {
+// uncomment if you want default open/close according to size of list
+//    var feature_count = parseInt(${bag.size});
+//    if (feature_count > 40) {
+//    jQuery("#expr").hide();
+//    } else {
+    jQuery("#expr").show();
+//    }
+
+    jQuery("#bro").click(function () {
+    if(jQuery("#expr").is(":hidden")) {
+    jQuery("#oc").attr("src", "images/icons/toggle-collapse-16.png");
+    } else {
+    jQuery("#oc").attr("src", "images/icons/toggle-expand-16.png");
+    }
+    jQuery("#expr").toggle("slow");
+    });
+    })
+    </script>
+
+  <a name="#" id="bro" style="cursor:pointer">
+    Click to see/hide the RNA-Seq expression map <img src="images/icons/toggle-collapse-16.png" id="oc"></a><div id="expr" style="display: block">
+
+  <div id="expr" class="collection-table column-border" style="margin-bottom: 0px">
+  <c:set var="QUERYID" value="${bag.name}" />
+  <c:set var="MINEURL" value="${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}" />
+
+  <svg id="eChart" class="eChart" style="width: 100%;"></svg>
+  <script type="text/javascript" charset="utf-8">
+    //var queryId="AT1G01060";
+    //var queryId="${QUERYID}";
+    var mineUrl="${MINEURL}/";
+    var svgId="eChart";
+    var listName="${bag.name}";
+  </script>
+  <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.css">
+  <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3-legend/1.8.0/d3-legend.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.js"></script>
+
+  </div>
+</div>
+
+</c:if>
+<!--  /RNASEQ EXPRESSION -->
+
 </c:when>
 <c:otherwise>
 <!--  No list found with this name -->
