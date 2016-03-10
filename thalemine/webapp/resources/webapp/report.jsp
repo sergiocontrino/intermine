@@ -512,11 +512,9 @@ var svgId="eChart";
 <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3-legend/1.8.0/d3-legend.min.js"></script>
 <link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.css">
 <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.0/expression.js"></script>
-<!--
-<script type="text/javascript" charset="utf-8" src="http://localhost:9003/expression.js"></script>
--->
+<br>
 </c:if>
-
+<br>
 <!--  /RNASEQ EXPRESSION -->
 
 
