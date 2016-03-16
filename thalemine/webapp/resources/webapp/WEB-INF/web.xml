@@ -1,4 +1,4 @@
-
+<web-app>
 
   <listener>
     <listener-class>org.thalemine.web.context.AppContextListener</listener-class>
