@@ -130,5 +130,47 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                     feature.setAttribute("symbol", name);
                 }
             }
+
+            // For the Protein feature class, check if the Dbxref(s) to the UniProt
+            // are defined. If true, assign their values to the InterMine attribute
+            // `primaryAccession`
+            if(clsName.equals("Protein")) {
+                String primaryIdentifier = feature.getAttribute("primaryIdentifier").getValue();
+                primaryIdentifier = primaryIdentifier.replace("-Protein", "");  // strip "-Protein" suffix
+                feature.setAttribute("primaryIdentifier", primaryIdentifier);
+
+                List<String> dbxrefs = record.getDbxrefs();
+                if (dbxrefs != null) {
+                    Iterator<String> dbxrefsIter = dbxrefs.iterator();
+
+                    while (dbxrefsIter.hasNext()) {
+                        String dbxref = dbxrefsIter.next();
+
+                        List<String> refList = new ArrayList<String>(
+                                Arrays.asList(StringUtil.split(dbxref, ",")));
+                        for (String ref : refList) {
+                            ref = ref.trim();
+                            int colonIndex = ref.indexOf(":");
+                            if (colonIndex == -1) {
+                                throw new RuntimeException("external reference not understood: " + ref);
+                            }
+
+                            if(ref.startsWith("UniProt:")) {
+                                String attrName1 = "primaryAccession";
+                                String attrName2 = "secondaryIdentifier";
+                                String dbxrefValue = ref.substring(colonIndex + 1);
+                                if(dbxrefValue.contains("_ARATH")) {
+                                    attrName1 = "primaryIdentifier";
+                                    attrName2 = "symbol";
+                                }
+                                feature.setAttribute(attrName1, dbxrefValue);
+                                feature.setAttribute(attrName2, dbxrefValue);
+                            } else {
+                                throw new RuntimeException("unknown external reference type: " + ref);
+                            }
+                        }
+                    }
+                }
+            }
         }
 }
