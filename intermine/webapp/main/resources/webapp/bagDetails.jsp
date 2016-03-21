@@ -371,7 +371,7 @@
 <c:if test="${bag.type == 'Gene'}">
 
 <div class="heading" style="clear:both;margin-top:15px">
-     <a id="widgets">RNA Seq Expression heath map for '${bag.name}'</a> &nbsp;
+     <a id="widgets">RNA Seq Expression heat map for '${bag.name}'</a> &nbsp;
 </div>
 
   <script type="text/javascript" charset="utf-8">
