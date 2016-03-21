@@ -81,7 +81,7 @@
       </collection>
    </item>
    <item id="0_14" class="DataSet" implements="">
-      <attribute name="version" value="11/2/2015" />
+      <attribute name="version" value="3/15/2016" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from GOC" />
       <attribute name="description" value="GO annotations assigned by the GO Consortium" />
@@ -100,7 +100,7 @@
       <attribute name="pubMedId" value="19578431" />
    </item>
    <item id="0_17" class="DataSet" implements="">
-      <attribute name="version" value="11/2/2015" />
+      <attribute name="version" value="3/15/2015" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from RefGenome" />
       <attribute name="description" value="GO annotations assigned by RefGenome" />
@@ -124,7 +124,7 @@
       <reference name="publication" ref_id="0_12" />
    </item>
    <item id="0_20" class="DataSet" implements="">
-      <attribute name="version" value="11/2/2015" />
+      <attribute name="version" value="2/2016" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from UniProt" />
       <attribute name="description" value="GO annotations assigned by UniProt" />
@@ -186,7 +186,7 @@
       </collection>
    </item>
    <item id="0_29" class="DataSet" implements="">
-      <attribute name="version" value="v54.0" />
+      <attribute name="version" value="v56.0" />
       <reference name="dataSource" ref_id="0_28" />
       <attribute name="name" value="InterPro data set" />
       <attribute name="description" value="Protein family and domain assignments to proteins" />
@@ -267,7 +267,7 @@
       <attribute name="pubMedId" value="17148475" />
    </item>
    <item id="0_43" class="DataSet" implements="">
-      <attribute name="version" value="11/30/2015" />
+      <attribute name="version" value="3/15/2016" />
       <reference name="dataSource" ref_id="0_41" />
       <attribute name="name" value="PubMed to gene mapping" />
       <attribute name="description" value="Curated associations between publications and NCBI Gene records" />
@@ -275,7 +275,7 @@
       <reference name="publication" ref_id="0_42" />
    </item>
    <item id="0_44" class="DataSet" implements="">
-      <attribute name="version" value="11/30/2015" />
+      <attribute name="version" value="3/15/2016" />
       <reference name="dataSource" ref_id="0_41" />
       <attribute name="name" value="GeneRIF" />
       <attribute name="description" value="Concise phrase describing gene function and publication associated with NCBI Gene records" />
@@ -297,7 +297,7 @@
       <attribute name="pubMedId" value="24214961" />
    </item>
    <item id="0_48" class="DataSet" implements="">
-      <attribute name="version" value="76.0" />
+      <attribute name="version" value="77.1" />
       <reference name="dataSource" ref_id="0_46" />
       <attribute name="name" value="KEGG pathways data set" />
       <attribute name="description" value="Wiring diagrams of molecular interactions, reactions, and relations" />
@@ -316,7 +316,7 @@
       </collection>
    </item>
    <item id="0_51" class="DataSet" implements="">
-      <attribute name="version" value="3.4.130" />
+      <attribute name="version" value="3.4.134" />
       <reference name="dataSource" ref_id="0_50" />
       <attribute name="name" value="BioGRID interaction data set" />
       <attribute name="description" value="Curated set of genetic and physical interactions for Arabidopsis thaliana" />
@@ -335,7 +335,7 @@
       </collection>
    </item>
    <item id="0_54" class="DataSet" implements="">
-      <attribute name="version" value="11/30/2015" />
+      <attribute name="version" value="3/15/2015" />
       <reference name="dataSource" ref_id="0_53" />
       <attribute name="name" value="IntAct interactions data set" />
       <attribute name="description" value="Curated binary and complex protein-protein interactions for Arabidopsis thaliana" />
@@ -381,7 +381,7 @@
       <reference name="publication" ref_id="0_58" />
    </item>
    <item id="0_61" class="DataSet" implements="">
-      <attribute name="version" value="Araport11 Pre-release 3 (12/2015)" />
+      <attribute name="version" value="Araport11 Pre-release 3 (3/2016)" />
       <reference name="dataSource" ref_id="0_7" />
       <attribute name="name" value="RNA-seq expression" />
       <attribute name="description" value="Measure of gene expression levels (Transcripts per Million, TPM) quantified by Salmon" />
