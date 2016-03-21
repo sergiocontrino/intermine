@@ -12,6 +12,9 @@ import org.intermine.metadata.ClassDescriptor;
 import org.intermine.metadata.CollectionDescriptor;
 import org.intermine.metadata.ConstraintOp;
 import org.intermine.model.InterMineObject;
+import org.intermine.model.bio.Gene;
+import org.intermine.model.bio.Publication;
+import org.intermine.model.bio.Transcript;
 import org.intermine.objectstore.ObjectStore;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.objectstore.ObjectStoreWriter;
@@ -29,415 +32,411 @@ import org.intermine.objectstore.query.ResultsRow;
 import org.intermine.objectstore.query.SimpleConstraint;
 import org.intermine.objectstore.query.SubqueryConstraint;
 import org.intermine.postprocess.PostProcessor;
-import org.intermine.model.bio.Gene;
-import org.intermine.model.bio.Protein;
-import org.intermine.model.bio.Publication;
-import org.intermine.model.bio.Transcript;
 
 public class AraportGFFPostProcess extends PostProcessor {
 
-	private static final Logger log = Logger.getLogger(AraportGFFPostProcess.class);
-	protected ObjectStore os;
+    private static final Logger log = Logger.getLogger(AraportGFFPostProcess.class);
+    protected ObjectStore os;
 
-	public AraportGFFPostProcess(ObjectStoreWriter osw) {
+    public AraportGFFPostProcess(ObjectStoreWriter osw) {
 
-		super(osw);
-		this.os = osw.getObjectStore();
+        super(osw);
+        this.os = osw.getObjectStore();
 
-	}
+    }
 
-	@Override
-	public void postProcess() throws ObjectStoreException {
+    @Override
+    public void postProcess() throws ObjectStoreException {
 
-		log.info("Araport Gff Postprocessor has started.");
+        log.info("Araport Gff Postprocessor has started.");
 
-		try {
-			processGenesTranscriptsPublications();
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error("Error occrured during araport gff postrprocessing." + ";Message:" + e.getMessage());
-		}
+        try {
+            processGenesTranscriptsPublications();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Error occrured during araport gff postrprocessing." + ";Message:" + e.getMessage());
+        }
 
-		log.info("Araport Gff Postprocessor has completed.");
+        log.info("Araport Gff Postprocessor has completed.");
 
-	}
+    }
 
-	private Query getGeneQuerySourceRecordsbyTranscripts() throws ObjectStoreException {
+    private Query getGeneQuerySourceRecordsbyTranscripts() throws ObjectStoreException {
 
-		log.info("Building of Query Gene Source Records To Validate/Transfer Publications from Transcripts has started.");
+        log.info("Building of Query Gene Source Records To Validate/Transfer Publications from Transcripts has started.");
 
-		Query outerQuery = new Query();
+        Query outerQuery = new Query();
 
-		// Create Outer Query Constraint
-		ConstraintSet outerQueryCS = new ConstraintSet(ConstraintOp.AND);
+        // Create Outer Query Constraint
+        ConstraintSet outerQueryCS = new ConstraintSet(ConstraintOp.AND);
 
-		outerQuery.setDistinct(true);
-		QueryClass qcPub = new QueryClass(Publication.class);
-		QueryClass qcGenes = new QueryClass(Gene.class);
-		QueryClass qcTranscript = new QueryClass(Transcript.class);
+        outerQuery.setDistinct(true);
+        QueryClass qcPub = new QueryClass(Publication.class);
+        QueryClass qcGenes = new QueryClass(Gene.class);
+        QueryClass qcTranscript = new QueryClass(Transcript.class);
 
-		// outer query from clause
-		outerQuery.addFrom(qcPub);
-		outerQuery.addFrom(qcTranscript);
-		outerQuery.addFrom(qcGenes);
+        // outer query from clause
+        outerQuery.addFrom(qcPub);
+        outerQuery.addFrom(qcTranscript);
+        outerQuery.addFrom(qcGenes);
 
-		// outer query select clause
-		outerQuery.addToSelect(qcGenes);
+        // outer query select clause
+        outerQuery.addToSelect(qcGenes);
 
-		// join to collection
-		QueryCollectionReference transcriptsGenePubCollection = new QueryCollectionReference(qcGenes, "transcripts");
-		outerQueryCS.addConstraint(new ContainsConstraint(transcriptsGenePubCollection, ConstraintOp.CONTAINS,
-				qcTranscript));
+        // join to collection
+        QueryCollectionReference transcriptsGenePubCollection = new QueryCollectionReference(qcGenes, "transcripts");
+        outerQueryCS.addConstraint(new ContainsConstraint(transcriptsGenePubCollection, ConstraintOp.CONTAINS,
+                qcTranscript));
 
-		QueryCollectionReference transcriptsPublCollection = new QueryCollectionReference(qcTranscript, "publications");
-		outerQueryCS.addConstraint(new ContainsConstraint(transcriptsPublCollection, ConstraintOp.CONTAINS, qcPub));
+        QueryCollectionReference transcriptsPublCollection = new QueryCollectionReference(qcTranscript, "publications");
+        outerQueryCS.addConstraint(new ContainsConstraint(transcriptsPublCollection, ConstraintOp.CONTAINS, qcPub));
 
-		outerQuery.setConstraint(outerQueryCS);
+        outerQuery.setConstraint(outerQueryCS);
 
-		log.info("Building of Query Gene Source Records To Validate/Transfer Publications from Transcripts has completed.");
+        log.info("Building of Query Gene Source Records To Validate/Transfer Publications from Transcripts has completed.");
 
-		return outerQuery;
+        return outerQuery;
 
-	}
+    }
 
-	private Iterator<?> getGeneSourceIterator(final Query query) throws ObjectStoreException {
+    private Iterator<?> getGeneSourceIterator(final Query query) throws ObjectStoreException {
 
-		ObjectStore os1 = osw.getObjectStore();
+        ObjectStore os1 = osw.getObjectStore();
 
-		((ObjectStoreInterMineImpl) os1).precompute(query, Constants.PRECOMPUTE_CATEGORY);
-		Results res = os1.execute(query, 5000, true, false, true);
+        ((ObjectStoreInterMineImpl) os1).precompute(query, Constants.PRECOMPUTE_CATEGORY);
+        Results res = os1.execute(query, 5000, true, false, true);
 
-		if (res != null) {
-			log.info("Gene Source Result Set Size:" + res.size());
-		}
+        if (res != null) {
+            log.info("Gene Source Result Set Size:" + res.size());
+        }
 
-		return res.iterator();
-	}
+        return res.iterator();
+    }
 
-	private Iterator<?> getPublicationIterator(final Query query) throws ObjectStoreException {
+    private Iterator<?> getPublicationIterator(final Query query) throws ObjectStoreException {
 
-		ObjectStore os1 = osw.getObjectStore();
+        ObjectStore os1 = osw.getObjectStore();
 
-		((ObjectStoreInterMineImpl) os1).precompute(query, Constants.PRECOMPUTE_CATEGORY);
-		Results res = os1.execute(query, 5000, true, false, true);
+        ((ObjectStoreInterMineImpl) os1).precompute(query, Constants.PRECOMPUTE_CATEGORY);
+        Results res = os1.execute(query, 5000, true, false, true);
 
-		if (res != null) {
-			log.info("Publications Result Set Size:" + res.size());
-		}
+        if (res != null) {
+            log.info("Publications Result Set Size:" + res.size());
+        }
 
-		return res.iterator();
-	}
+        return res.iterator();
+    }
 
-	private void processGenesTranscriptsPublications() throws Exception, ObjectStoreException {
+    private void processGenesTranscriptsPublications() throws Exception, ObjectStoreException {
 
-		log.info("ProcessGenesTranscriptsPublications has started.");
+        log.info("ProcessGenesTranscriptsPublications has started.");
 
-		Exception exception = null;
+        Exception exception = null;
 
-		Set<Gene> set = new HashSet<Gene>();
+        Set<Gene> set = new HashSet<Gene>();
 
-		long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 
-		Query query = getGeneQuerySourceRecordsbyTranscripts();
+        Query query = getGeneQuerySourceRecordsbyTranscripts();
 
-		Iterator<?> iterator = getGeneSourceIterator(query);
+        Iterator<?> iterator = getGeneSourceIterator(query);
 
-		int count = 0;
-		int pubAddedCount = 0;
+        int count = 0;
+        int pubAddedCount = 0;
 
-		osw.beginTransaction();
+        osw.beginTransaction();
 
-		while (iterator.hasNext()) {
+        while (iterator.hasNext()) {
 
-			ResultsRow item = (ResultsRow) iterator.next();
+            ResultsRow item = (ResultsRow) iterator.next();
 
-			Gene gene = (Gene) item.get(0);
+            Gene gene = (Gene) item.get(0);
 
-			InterMineObject object = (InterMineObject) gene;
+            InterMineObject object = (InterMineObject) gene;
 
-			log.info("Processing Current Gene: = " + gene.getPrimaryIdentifier());
+            log.info("Processing Current Gene: = " + gene.getPrimaryIdentifier());
 
-			count++;
+            count++;
 
-			Set<Publication> notExistingTranscriptsPublications = new HashSet<Publication>();
+            Set<Publication> notExistingTranscriptsPublications = new HashSet<Publication>();
 
-			Set<Publication> existingGenePublications = new HashSet<Publication>();
+            Set<Publication> existingGenePublications = new HashSet<Publication>();
 
-			existingGenePublications = gene.getPublications();
+            existingGenePublications = gene.getPublications();
 
-			log.info("Current Gene # Publication Count: = " + existingGenePublications.size());
+            log.info("Current Gene # Publication Count: = " + existingGenePublications.size());
 
-			notExistingTranscriptsPublications = getPublications(object);
+            notExistingTranscriptsPublications = getPublications(object);
 
-			log.info("Current Gene # Not Existing Publication Count: = " + notExistingTranscriptsPublications.size()
-					+ "; Gene:" + gene.getPrimaryIdentifier());
+            log.info("Current Gene # Not Existing Publication Count: = " + notExistingTranscriptsPublications.size()
+                    + "; Gene:" + gene.getPrimaryIdentifier());
 
-			String destClassName = "Gene";
-			String collectionName = "publications";
+            String destClassName = "Gene";
+            String collectionName = "publications";
 
-			if (notExistingTranscriptsPublications.size() > 0 && !notExistingTranscriptsPublications.isEmpty()) {
-				log.info("Adding not existing pub to a gene publication collection.");
+            if (notExistingTranscriptsPublications.size() > 0 && !notExistingTranscriptsPublications.isEmpty()) {
+                log.info("Adding not existing pub to a gene publication collection.");
 
-				// Attempt to store Gene Publication Collection
+                // Attempt to store Gene Publication Collection
 
-				try {
+                try {
 
-					for (Publication pubItem : notExistingTranscriptsPublications) {
+                    for (Publication pubItem : notExistingTranscriptsPublications) {
 
-						InterMineObject pubObject = (InterMineObject) pubItem;
-						insertPublicationCollectionField(object, pubObject, destClassName, collectionName);
+                        InterMineObject pubObject = (InterMineObject) pubItem;
+                        insertPublicationCollectionField(object, pubObject, destClassName, collectionName);
 
-					}
+                    }
 
-				} catch (Exception e) {
-					exception = e;
-				} finally {
-					if (exception != null) {
-						log.error("Error occurred while processing gene publication collection." + "; Gene:" + gene
-								+ "; Message: " + exception.getMessage() + "; Cause: " + exception.getCause());
-						exception.printStackTrace();
+                } catch (Exception e) {
+                    exception = e;
+                } finally {
+                    if (exception != null) {
+                        log.error("Error occurred while processing gene publication collection." + "; Gene:" + gene
+                                + "; Message: " + exception.getMessage() + "; Cause: " + exception.getCause());
+                        exception.printStackTrace();
 
-					} else {
-						log.info("Publication successfully added to the gene collection.");
-						pubAddedCount++;
-					}
-				}
+                    } else {
+                        log.info("Publication successfully added to the gene collection.");
+                        pubAddedCount++;
+                    }
+                }
 
-			} else {
-				log.info("Count of # Not Existing Transcripts Publication Size = 0. Nothing to merge!");
-			}
+            } else {
+                log.info("Count of # Not Existing Transcripts Publication Size = 0. Nothing to merge!");
+            }
 
-			log.info("Processed Gene Count:" + count);
-		}
-		osw.commitTransaction();
+            log.info("Processed Gene Count:" + count);
+        }
+        osw.commitTransaction();
 
-		log.info("Total Processed Gene Count:" + count);
-		log.info("Total Publications Added Processed:" + pubAddedCount);
+        log.info("Total Processed Gene Count:" + count);
+        log.info("Total Publications Added Processed:" + pubAddedCount);
 
-	}
+    }
 
-	private Query getNotExistingTranscriptsPubbyGeneQuery(InterMineObject object) {
+    private Query getNotExistingTranscriptsPubbyGeneQuery(InterMineObject object) {
 
-		QueryClass qcPub = new QueryClass(Publication.class);
-		QueryClass qcOtherGenes = new QueryClass(Gene.class);
-		QueryClass qcTranscript = new QueryClass(Transcript.class);
+        QueryClass qcPub = new QueryClass(Publication.class);
+        QueryClass qcOtherGenes = new QueryClass(Gene.class);
+        QueryClass qcTranscript = new QueryClass(Transcript.class);
 
-		Query outerQuery = new Query();
+        Query outerQuery = new Query();
 
-		// outer query constraints
-		ConstraintSet outerQueryCS = new ConstraintSet(ConstraintOp.OR);
-		outerQuery.setDistinct(true);
+        // outer query constraints
+        ConstraintSet outerQueryCS = new ConstraintSet(ConstraintOp.OR);
+        outerQuery.setDistinct(true);
 
-		// outer query from clause
-		outerQuery.addFrom(qcPub);
-		outerQuery.addFrom(qcTranscript);
-		outerQuery.addFrom(qcOtherGenes);
+        // outer query from clause
+        outerQuery.addFrom(qcPub);
+        outerQuery.addFrom(qcTranscript);
+        outerQuery.addFrom(qcOtherGenes);
 
-		// outer query group by clause
-		outerQuery.addToGroupBy(new QueryField(qcPub, "id"));
+        // outer query group by clause
+        outerQuery.addToGroupBy(new QueryField(qcPub, "id"));
 
-		QueryField qfDate = new QueryField(qcPub, "year");
-		outerQuery.addToGroupBy(qfDate);
+        QueryField qfDate = new QueryField(qcPub, "year");
+        outerQuery.addToGroupBy(qfDate);
 
-		// outer query select clause
-		outerQuery.addToSelect(qcPub);
+        // outer query select clause
+        outerQuery.addToSelect(qcPub);
 
-		// publication count
-		QueryFunction qf = new QueryFunction();
-		outerQuery.addToSelect(qf);
+        // publication count
+        QueryFunction qf = new QueryFunction();
+        outerQuery.addToSelect(qf);
 
-		outerQuery.addToSelect(qfDate);
+        outerQuery.addToSelect(qfDate);
 
-		// Gene subquery
+        // Gene subquery
 
-		Query geneSubQuery = new Query();
-		QueryClass qcPubGeneSQ = new QueryClass(Publication.class);
-		geneSubQuery.alias(qcPubGeneSQ, "geneSQ");
-		geneSubQuery.setDistinct(false);
-		geneSubQuery.addFrom(qcPubGeneSQ);
-		geneSubQuery.addFrom(qcOtherGenes);
-		geneSubQuery.addToSelect(qcPubGeneSQ);
+        Query geneSubQuery = new Query();
+        QueryClass qcPubGeneSQ = new QueryClass(Publication.class);
+        geneSubQuery.alias(qcPubGeneSQ, "geneSQ");
+        geneSubQuery.setDistinct(false);
+        geneSubQuery.addFrom(qcPubGeneSQ);
+        geneSubQuery.addFrom(qcOtherGenes);
+        geneSubQuery.addToSelect(qcPubGeneSQ);
 
-		ConstraintSet geneSubSetCS = new ConstraintSet(ConstraintOp.AND);
+        ConstraintSet geneSubSetCS = new ConstraintSet(ConstraintOp.AND);
 
-		// works for a single gene object
-		QueryCollectionReference genePubCollection = new QueryCollectionReference(object, "publications");
-		geneSubSetCS.addConstraint(new ContainsConstraint(genePubCollection, ConstraintOp.CONTAINS, qcPubGeneSQ));
+        // works for a single gene object
+        QueryCollectionReference genePubCollection = new QueryCollectionReference(object, "publications");
+        geneSubSetCS.addConstraint(new ContainsConstraint(genePubCollection, ConstraintOp.CONTAINS, qcPubGeneSQ));
 
-		QueryCollectionReference geneClassPubCollection = new QueryCollectionReference(qcOtherGenes, "publications");
-		geneSubSetCS.addConstraint(new ContainsConstraint(geneClassPubCollection, ConstraintOp.CONTAINS, qcPubGeneSQ));
+        QueryCollectionReference geneClassPubCollection = new QueryCollectionReference(qcOtherGenes, "publications");
+        geneSubSetCS.addConstraint(new ContainsConstraint(geneClassPubCollection, ConstraintOp.CONTAINS, qcPubGeneSQ));
 
-		geneSubQuery.setConstraint(geneSubSetCS);
+        geneSubQuery.setConstraint(geneSubSetCS);
 
-		outerQueryCS.addConstraint(new SubqueryConstraint(qcPub, ConstraintOp.NOT_IN, geneSubQuery));
+        outerQueryCS.addConstraint(new SubqueryConstraint(qcPub, ConstraintOp.NOT_IN, geneSubQuery));
 
-		ConstraintSet outerQueryMainCS = new ConstraintSet(ConstraintOp.AND);
+        ConstraintSet outerQueryMainCS = new ConstraintSet(ConstraintOp.AND);
 
-		QueryField geneIdField = new QueryField(qcOtherGenes, "id");
-		QueryValue geneIdValue = new QueryValue(object.getId());
-		SimpleConstraint geneIdCS = new SimpleConstraint(geneIdField, ConstraintOp.EQUALS, geneIdValue);
+        QueryField geneIdField = new QueryField(qcOtherGenes, "id");
+        QueryValue geneIdValue = new QueryValue(object.getId());
+        SimpleConstraint geneIdCS = new SimpleConstraint(geneIdField, ConstraintOp.EQUALS, geneIdValue);
 
-		QueryCollectionReference transcriptsGenePubCollection = new QueryCollectionReference(qcOtherGenes,
-				"transcripts");
-		outerQueryMainCS.addConstraint(new ContainsConstraint(transcriptsGenePubCollection, ConstraintOp.CONTAINS,
-				qcTranscript));
+        QueryCollectionReference transcriptsGenePubCollection = new QueryCollectionReference(qcOtherGenes,
+                "transcripts");
+        outerQueryMainCS.addConstraint(new ContainsConstraint(transcriptsGenePubCollection, ConstraintOp.CONTAINS,
+                qcTranscript));
 
-		QueryCollectionReference transcriptsPublCollection = new QueryCollectionReference(qcTranscript, "publications");
-		outerQueryMainCS.addConstraint(new ContainsConstraint(transcriptsPublCollection, ConstraintOp.CONTAINS, qcPub));
+        QueryCollectionReference transcriptsPublCollection = new QueryCollectionReference(qcTranscript, "publications");
+        outerQueryMainCS.addConstraint(new ContainsConstraint(transcriptsPublCollection, ConstraintOp.CONTAINS, qcPub));
 
-		outerQueryMainCS.addConstraint(geneIdCS);
-		outerQueryMainCS.addConstraint(outerQueryCS);
+        outerQueryMainCS.addConstraint(geneIdCS);
+        outerQueryMainCS.addConstraint(outerQueryCS);
 
-		outerQuery.setConstraint(outerQueryMainCS);
+        outerQuery.setConstraint(outerQueryMainCS);
 
-		return outerQuery;
+        return outerQuery;
 
-	}
+    }
 
-	private Set<Publication> getPublications(InterMineObject object) throws Exception {
+    private Set<Publication> getPublications(InterMineObject object) throws Exception {
 
-		Set<Publication> publications = new HashSet<Publication>();
-		Exception exception = null;
+        Set<Publication> publications = new HashSet<Publication>();
+        Exception exception = null;
 
-		long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 
-		Query query = getNotExistingTranscriptsPubbyGeneQuery(object);
-		Iterator<?> iterator = getPublicationIterator(query);
+        Query query = getNotExistingTranscriptsPubbyGeneQuery(object);
+        Iterator<?> iterator = getPublicationIterator(query);
 
-		int itemCount = 0;
+        int itemCount = 0;
 
-		try {
+        try {
 
-			if (query == null) {
-				exception = new Exception("Publication Query cannot be null.");
-				throw exception;
-			}
+            if (query == null) {
+                exception = new Exception("Publication Query cannot be null.");
+                throw exception;
+            }
 
-			while (iterator.hasNext()) {
+            while (iterator.hasNext()) {
 
-				ResultsRow item = (ResultsRow) iterator.next();
-				Publication pub = (Publication) item.get(0);
+                ResultsRow item = (ResultsRow) iterator.next();
+                Publication pub = (Publication) item.get(0);
 
-				itemCount++;
+                itemCount++;
 
-				Object countObject = (Object) item.get(1);
-				
-				Long publicationCount = (Long) countObject;
-				publications.add(pub);
+                Object countObject = (Object) item.get(1);
 
-			}
-		} catch (Exception e) {
-			exception = e;
-		} finally {
-			if (exception != null) {
-				log.error("Error occurred while executing Publication Query." + " ; Message: " + exception.getMessage()
-						+ "; Cause: " + exception.getCause());
-				throw exception;
-			} else {
-				log.info("Publication Query has successfully completed. " + "; Result Set Size: " + publications.size()
-					);
-			}
-		}
+                Long publicationCount = (Long) countObject;
+                publications.add(pub);
 
-		return publications;
+            }
+        } catch (Exception e) {
+            exception = e;
+        } finally {
+            if (exception != null) {
+                log.error("Error occurred while executing Publication Query." + " ; Message: " + exception.getMessage()
+                        + "; Cause: " + exception.getCause());
+                throw exception;
+            } else {
+                log.info("Publication Query has successfully completed. " + "; Result Set Size: " + publications.size()
+                    );
+            }
+        }
 
-	}
+        return publications;
 
-	private CollectionDescriptor getCollectionDescriptor(final String className, final String collectionName) {
+    }
 
-		ClassDescriptor classDesc;
-		CollectionDescriptor colDesc = null;
-		classDesc = osw.getModel().getClassDescriptorByName(className);
-		String classDescAsStr = null;
-		Map<String, CollectionDescriptor> collectionDescMap = new LinkedHashMap<String, CollectionDescriptor>();
+    private CollectionDescriptor getCollectionDescriptor(final String className, final String collectionName) {
 
-		if (classDesc != null) {
-			classDescAsStr = classDesc.getName();
+        ClassDescriptor classDesc;
+        CollectionDescriptor colDesc = null;
+        classDesc = osw.getModel().getClassDescriptorByName(className);
+        String classDescAsStr = null;
+        Map<String, CollectionDescriptor> collectionDescMap = new LinkedHashMap<String, CollectionDescriptor>();
 
-			Set<CollectionDescriptor> collectionDescGene = classDesc.getAllCollectionDescriptors();
+        if (classDesc != null) {
+            classDescAsStr = classDesc.getName();
 
-			for (CollectionDescriptor item : collectionDescGene) {
+            Set<CollectionDescriptor> collectionDescGene = classDesc.getAllCollectionDescriptors();
 
-				boolean manyToManyC = false;
+            for (CollectionDescriptor item : collectionDescGene) {
 
-				if (item.relationType() == CollectionDescriptor.M_N_RELATION) {
-					manyToManyC = true;
-				}
+                boolean manyToManyC = false;
 
-				collectionDescMap.put(item.getName(), item);
+                if (item.relationType() == CollectionDescriptor.M_N_RELATION) {
+                    manyToManyC = true;
+                }
 
-			}
+                collectionDescMap.put(item.getName(), item);
 
-			if (!collectionDescMap.isEmpty() && collectionDescMap.size() > 0) {
-				if (collectionDescMap.containsKey(collectionName)) {
-					colDesc = collectionDescMap.get(collectionName);
-				}
-			}
-		}
+            }
 
-		if (colDesc != null) {
-			log.debug("Class Collection Desc: " + "; Class: " + "; Collection Desc: " + colDesc.getName());
-		}
-		return colDesc;
-	}
+            if (!collectionDescMap.isEmpty() && collectionDescMap.size() > 0) {
+                if (collectionDescMap.containsKey(collectionName)) {
+                    colDesc = collectionDescMap.get(collectionName);
+                }
+            }
+        }
 
-	private void insertPublicationCollectionField(InterMineObject destObject, InterMineObject sourceObject,
-			final String destClassName, final String collectionName) throws Exception {
+        if (colDesc != null) {
+            log.debug("Class Collection Desc: " + "; Class: " + "; Collection Desc: " + colDesc.getName());
+        }
+        return colDesc;
+    }
 
-		Exception exception = null;
-		String errorMessage = null;
+    private void insertPublicationCollectionField(InterMineObject destObject, InterMineObject sourceObject,
+            final String destClassName, final String collectionName) throws Exception {
 
-		try {
+        Exception exception = null;
+        String errorMessage = null;
 
-			CollectionDescriptor collectionDesc = getCollectionDescriptor(destClassName, collectionName);
-			ClassDescriptor classDesc = osw.getModel().getClassDescriptorByName(destClassName);
+        try {
 
-			// if this is a many to many collection we can use
-			// ObjectStore.addToCollection which will
-			// write directly to the database.
-			boolean manyToMany = false;
+            CollectionDescriptor collectionDesc = getCollectionDescriptor(destClassName, collectionName);
+            ClassDescriptor classDesc = osw.getModel().getClassDescriptorByName(destClassName);
 
-			if (collectionDesc == null) {
+            // if this is a many to many collection we can use
+            // ObjectStore.addToCollection which will
+            // write directly to the database.
+            boolean manyToMany = false;
 
-				errorMessage = "Cannot find collection " + collectionName + " for the class " + destClassName;
-				exception = new Exception(errorMessage);
-				log.error(errorMessage);
-				throw exception;
+            if (collectionDesc == null) {
 
-			}
+                errorMessage = "Cannot find collection " + collectionName + " for the class " + destClassName;
+                exception = new Exception(errorMessage);
+                log.error(errorMessage);
+                throw exception;
 
-			if (collectionDesc.relationType() == CollectionDescriptor.M_N_RELATION) {
-				manyToMany = true;
-			}
+            }
 
-			if (manyToMany) {
-				log.info("Adding Pub to Gene/Pub Collection before");
-				osw.addToCollection(destObject.getId(), classDesc.getType(), collectionName, sourceObject.getId());
-				log.info("Adding Pub to Gene/Pub Collection after");
-			} else { // publications will be always many to many
+            if (collectionDesc.relationType() == CollectionDescriptor.M_N_RELATION) {
+                manyToMany = true;
+            }
 
-				// InterMineObject tempObject =
-				// PostProcessUtil.cloneInterMineObject(destObject);
-				// tempObject.setFieldValue(collectionName, collection);
-				// osw.store(tempObject);
+            if (manyToMany) {
+                log.info("Adding Pub to Gene/Pub Collection before");
+                osw.addToCollection(destObject.getId(), classDesc.getType(), collectionName, sourceObject.getId());
+                log.info("Adding Pub to Gene/Pub Collection after");
+            } else { // publications will be always many to many
 
-			}
+                // InterMineObject tempObject =
+                // PostProcessUtil.cloneInterMineObject(destObject);
+                // tempObject.setFieldValue(collectionName, collection);
+                // osw.store(tempObject);
 
-		} catch (Exception e) {
-			exception = e;
-		} finally {
+            }
 
-			if (exception != null) {
-				exception.printStackTrace();
-				log.error("Error occurred during persistence of collection for object: " + destObject.toString()
-						+ "; Collection Name: " + collectionName + ";Message:" + exception.getMessage() + "; Cause:"
-						+ exception.getCause());
-				throw exception;
-			} else {
-				log.debug("Element of Collection " + collectionName + " successfully stored in the database."
-						+ "; Dest Object:" + destObject.toString() + "; Source Object:" + sourceObject.toString());
-			}
-		}
+        } catch (Exception e) {
+            exception = e;
+        } finally {
 
-	}
+            if (exception != null) {
+                exception.printStackTrace();
+                log.error("Error occurred during persistence of collection for object: " + destObject.toString()
+                        + "; Collection Name: " + collectionName + ";Message:" + exception.getMessage() + "; Cause:"
+                        + exception.getCause());
+                throw exception;
+            } else {
+                log.debug("Element of Collection " + collectionName + " successfully stored in the database."
+                        + "; Dest Object:" + destObject.toString() + "; Source Object:" + sourceObject.toString());
+            }
+        }
+
+    }
 }
