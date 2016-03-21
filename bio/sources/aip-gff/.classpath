@@ -9,5 +9,9 @@
 	<classpathentry exported="true" kind="lib" path="/bio-core-main/lib/biojava-1.7.1.jar"/>
 	<classpathentry kind="lib" path="/bio-core-main/build/classes"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/intermine-model-main"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/bio-postprocess-main"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/intermine-integrate-test"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/intermine-model-test"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/intermine-objectstore-test"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
