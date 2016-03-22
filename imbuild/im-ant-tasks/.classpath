@@ -6,6 +6,6 @@
 	<classpathentry kind="lib" path="lib/ant-1.6.5.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/imbuild"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/testmodel"/>
-	<classpathentry kind="lib" path="/local-homes/sergio/git/i2/imbuild/im-ant-tasks/lib/catalina-ant.jar"/>
+	<classpathentry kind="lib" path="lib/catalina-ant.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
