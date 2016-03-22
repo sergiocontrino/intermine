@@ -1,5 +1,15 @@
 package org.intermine.bio.postprocess;
 
+/*
+ * Copyright (C) 2002-2015 FlyMine
+ *
+ * This code may be freely distributed and modified under the
+ * terms of the GNU Lesser General Public Licence.  This should
+ * be distributed with the code.  See the LICENSE file for more
+ * information or http://www.gnu.org/copyleft/lesser.html.
+ *
+ */
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -33,37 +43,35 @@ import org.intermine.objectstore.query.SimpleConstraint;
 import org.intermine.objectstore.query.SubqueryConstraint;
 import org.intermine.postprocess.PostProcessor;
 
-public class AraportGFFPostProcess extends PostProcessor {
+public class AraportGFFPostProcess extends PostProcessor
+{
 
-    private static final Logger log = Logger.getLogger(AraportGFFPostProcess.class);
+    private static final Logger LOG = Logger.getLogger(AraportGFFPostProcess.class);
     protected ObjectStore os;
 
     public AraportGFFPostProcess(ObjectStoreWriter osw) {
-
         super(osw);
         this.os = osw.getObjectStore();
-
     }
 
     @Override
     public void postProcess() throws ObjectStoreException {
 
-        log.info("Araport Gff Postprocessor has started.");
+        LOG.info("Araport Gff Postprocessor has started.");
 
         try {
             processGenesTranscriptsPublications();
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Error occrured during araport gff postrprocessing." + ";Message:" + e.getMessage());
+            LOG.error("Error during araport gff postprocessing."
+                    + e.getMessage());
         }
-
-        log.info("Araport Gff Postprocessor has completed.");
-
+        LOG.info("Araport Gff Postprocessor has completed.");
     }
 
     private Query getGeneQuerySourceRecordsbyTranscripts() throws ObjectStoreException {
 
-        log.info("Building of Query Gene Source Records To Validate/Transfer Publications from Transcripts has started.");
+        LOG.info("Building of Publications from Transcripts has started.");
 
         Query outerQuery = new Query();
 
@@ -84,17 +92,18 @@ public class AraportGFFPostProcess extends PostProcessor {
         outerQuery.addToSelect(qcGenes);
 
         // join to collection
-        QueryCollectionReference transcriptsGenePubCollection = new QueryCollectionReference(qcGenes, "transcripts");
-        outerQueryCS.addConstraint(new ContainsConstraint(transcriptsGenePubCollection, ConstraintOp.CONTAINS,
-                qcTranscript));
+        QueryCollectionReference transcriptsGenePubCollection =
+                new QueryCollectionReference(qcGenes, "transcripts");
+        outerQueryCS.addConstraint(new ContainsConstraint(transcriptsGenePubCollection,
+                ConstraintOp.CONTAINS, qcTranscript));
 
-        QueryCollectionReference transcriptsPublCollection = new QueryCollectionReference(qcTranscript, "publications");
-        outerQueryCS.addConstraint(new ContainsConstraint(transcriptsPublCollection, ConstraintOp.CONTAINS, qcPub));
+        QueryCollectionReference transcriptsPublCollection =
+                new QueryCollectionReference(qcTranscript, "publications");
+        outerQueryCS.addConstraint(new ContainsConstraint(transcriptsPublCollection,
+                ConstraintOp.CONTAINS, qcPub));
 
         outerQuery.setConstraint(outerQueryCS);
-
-        log.info("Building of Query Gene Source Records To Validate/Transfer Publications from Transcripts has completed.");
-
+        LOG.debug("Building of Publications from Transcripts has completed.");
         return outerQuery;
 
     }
@@ -107,9 +116,8 @@ public class AraportGFFPostProcess extends PostProcessor {
         Results res = os1.execute(query, 5000, true, false, true);
 
         if (res != null) {
-            log.info("Gene Source Result Set Size:" + res.size());
+            LOG.debug("Gene Source Result Set Size:" + res.size());
         }
-
         return res.iterator();
     }
 
@@ -121,21 +129,20 @@ public class AraportGFFPostProcess extends PostProcessor {
         Results res = os1.execute(query, 5000, true, false, true);
 
         if (res != null) {
-            log.info("Publications Result Set Size:" + res.size());
+            LOG.debug("Publications Result Set Size:" + res.size());
         }
-
         return res.iterator();
     }
 
     private void processGenesTranscriptsPublications() throws Exception, ObjectStoreException {
 
-        log.info("ProcessGenesTranscriptsPublications has started.");
+        LOG.debug("ProcessGenesTranscriptsPublications has started.");
 
         Exception exception = null;
 
-        Set<Gene> set = new HashSet<Gene>();
-
-        long startTime = System.currentTimeMillis();
+//        Set<Gene> set = new HashSet<Gene>();
+//
+//        long startTime = System.currentTimeMillis();
 
         Query query = getGeneQuerySourceRecordsbyTranscripts();
 
@@ -154,64 +161,54 @@ public class AraportGFFPostProcess extends PostProcessor {
 
             InterMineObject object = (InterMineObject) gene;
 
-            log.info("Processing Current Gene: = " + gene.getPrimaryIdentifier());
-
+            LOG.debug("Processing Current Gene: = " + gene.getPrimaryIdentifier());
             count++;
-
             Set<Publication> notExistingTranscriptsPublications = new HashSet<Publication>();
-
             Set<Publication> existingGenePublications = new HashSet<Publication>();
-
             existingGenePublications = gene.getPublications();
-
-            log.info("Current Gene # Publication Count: = " + existingGenePublications.size());
-
+            LOG.debug("Current Gene # Publication Count: = " + existingGenePublications.size());
             notExistingTranscriptsPublications = getPublications(object);
-
-            log.info("Current Gene # Not Existing Publication Count: = " + notExistingTranscriptsPublications.size()
+            LOG.info("Current Gene # Not Existing Publication Count: = "
+                    + notExistingTranscriptsPublications.size()
                     + "; Gene:" + gene.getPrimaryIdentifier());
 
             String destClassName = "Gene";
             String collectionName = "publications";
 
-            if (notExistingTranscriptsPublications.size() > 0 && !notExistingTranscriptsPublications.isEmpty()) {
-                log.info("Adding not existing pub to a gene publication collection.");
-
+            if (notExistingTranscriptsPublications.size() > 0
+                    && !notExistingTranscriptsPublications.isEmpty()) {
+                LOG.debug("Adding not existing pub to a gene publication collection.");
                 // Attempt to store Gene Publication Collection
-
                 try {
-
                     for (Publication pubItem : notExistingTranscriptsPublications) {
-
                         InterMineObject pubObject = (InterMineObject) pubItem;
-                        insertPublicationCollectionField(object, pubObject, destClassName, collectionName);
-
+                        insertPublicationCollectionField(object, pubObject,
+                                destClassName, collectionName);
                     }
 
                 } catch (Exception e) {
                     exception = e;
                 } finally {
                     if (exception != null) {
-                        log.error("Error occurred while processing gene publication collection." + "; Gene:" + gene
-                                + "; Message: " + exception.getMessage() + "; Cause: " + exception.getCause());
+                        LOG.error("Error processing gene publication collection. Gene: " + gene
+                                + " Message: " + exception.getMessage()
+                                + " Cause: " + exception.getCause());
                         exception.printStackTrace();
-
                     } else {
-                        log.info("Publication successfully added to the gene collection.");
+                        LOG.debug("Publication successfully added to the gene collection.");
                         pubAddedCount++;
                     }
                 }
 
             } else {
-                log.info("Count of # Not Existing Transcripts Publication Size = 0. Nothing to merge!");
+                LOG.debug("Nothing to merge!");
             }
-
-            log.info("Processed Gene Count:" + count);
+            LOG.debug("Processed Gene Count:" + count);
         }
         osw.commitTransaction();
 
-        log.info("Total Processed Gene Count:" + count);
-        log.info("Total Publications Added Processed:" + pubAddedCount);
+        LOG.info("Total Processed Gene Count:" + count);
+        LOG.info("Total Publications Added Processed:" + pubAddedCount);
 
     }
 
@@ -260,29 +257,37 @@ public class AraportGFFPostProcess extends PostProcessor {
         ConstraintSet geneSubSetCS = new ConstraintSet(ConstraintOp.AND);
 
         // works for a single gene object
-        QueryCollectionReference genePubCollection = new QueryCollectionReference(object, "publications");
-        geneSubSetCS.addConstraint(new ContainsConstraint(genePubCollection, ConstraintOp.CONTAINS, qcPubGeneSQ));
+        QueryCollectionReference genePubCollection =
+                new QueryCollectionReference(object, "publications");
+        geneSubSetCS.addConstraint(new ContainsConstraint(genePubCollection,
+                ConstraintOp.CONTAINS, qcPubGeneSQ));
 
-        QueryCollectionReference geneClassPubCollection = new QueryCollectionReference(qcOtherGenes, "publications");
-        geneSubSetCS.addConstraint(new ContainsConstraint(geneClassPubCollection, ConstraintOp.CONTAINS, qcPubGeneSQ));
+        QueryCollectionReference geneClassPubCollection =
+                new QueryCollectionReference(qcOtherGenes, "publications");
+        geneSubSetCS.addConstraint(new ContainsConstraint(geneClassPubCollection,
+                ConstraintOp.CONTAINS, qcPubGeneSQ));
 
         geneSubQuery.setConstraint(geneSubSetCS);
 
-        outerQueryCS.addConstraint(new SubqueryConstraint(qcPub, ConstraintOp.NOT_IN, geneSubQuery));
+        outerQueryCS.addConstraint(new SubqueryConstraint(qcPub,
+                ConstraintOp.NOT_IN, geneSubQuery));
 
         ConstraintSet outerQueryMainCS = new ConstraintSet(ConstraintOp.AND);
 
         QueryField geneIdField = new QueryField(qcOtherGenes, "id");
         QueryValue geneIdValue = new QueryValue(object.getId());
-        SimpleConstraint geneIdCS = new SimpleConstraint(geneIdField, ConstraintOp.EQUALS, geneIdValue);
+        SimpleConstraint geneIdCS = new SimpleConstraint(geneIdField,
+                ConstraintOp.EQUALS, geneIdValue);
 
-        QueryCollectionReference transcriptsGenePubCollection = new QueryCollectionReference(qcOtherGenes,
-                "transcripts");
-        outerQueryMainCS.addConstraint(new ContainsConstraint(transcriptsGenePubCollection, ConstraintOp.CONTAINS,
-                qcTranscript));
+        QueryCollectionReference transcriptsGenePubCollection =
+                new QueryCollectionReference(qcOtherGenes, "transcripts");
+        outerQueryMainCS.addConstraint(new ContainsConstraint(transcriptsGenePubCollection,
+                ConstraintOp.CONTAINS, qcTranscript));
 
-        QueryCollectionReference transcriptsPublCollection = new QueryCollectionReference(qcTranscript, "publications");
-        outerQueryMainCS.addConstraint(new ContainsConstraint(transcriptsPublCollection, ConstraintOp.CONTAINS, qcPub));
+        QueryCollectionReference transcriptsPublCollection =
+                new QueryCollectionReference(qcTranscript, "publications");
+        outerQueryMainCS.addConstraint(new ContainsConstraint(transcriptsPublCollection,
+                ConstraintOp.CONTAINS, qcPub));
 
         outerQueryMainCS.addConstraint(geneIdCS);
         outerQueryMainCS.addConstraint(outerQueryCS);
@@ -298,15 +303,12 @@ public class AraportGFFPostProcess extends PostProcessor {
         Set<Publication> publications = new HashSet<Publication>();
         Exception exception = null;
 
-        long startTime = System.currentTimeMillis();
+//        long startTime = System.currentTimeMillis();
 
         Query query = getNotExistingTranscriptsPubbyGeneQuery(object);
         Iterator<?> iterator = getPublicationIterator(query);
 
-        int itemCount = 0;
-
         try {
-
             if (query == null) {
                 exception = new Exception("Publication Query cannot be null.");
                 throw exception;
@@ -317,11 +319,8 @@ public class AraportGFFPostProcess extends PostProcessor {
                 ResultsRow item = (ResultsRow) iterator.next();
                 Publication pub = (Publication) item.get(0);
 
-                itemCount++;
-
-                Object countObject = (Object) item.get(1);
-
-                Long publicationCount = (Long) countObject;
+//                Object countObject = (Object) item.get(1);
+//                Long publicationCount = (Long) countObject;
                 publications.add(pub);
 
             }
@@ -329,42 +328,37 @@ public class AraportGFFPostProcess extends PostProcessor {
             exception = e;
         } finally {
             if (exception != null) {
-                log.error("Error occurred while executing Publication Query." + " ; Message: " + exception.getMessage()
-                        + "; Cause: " + exception.getCause());
+                LOG.error("Error executing Publication Query. Message: " + exception.getMessage()
+                        + " Cause: " + exception.getCause());
                 throw exception;
             } else {
-                log.info("Publication Query has successfully completed. " + "; Result Set Size: " + publications.size()
-                    );
+                LOG.debug("Publication Query result Set Size: " + publications.size());
             }
         }
-
         return publications;
-
     }
 
-    private CollectionDescriptor getCollectionDescriptor(final String className, final String collectionName) {
+    private CollectionDescriptor getCollectionDescriptor(
+            final String className, final String collectionName) {
 
         ClassDescriptor classDesc;
         CollectionDescriptor colDesc = null;
         classDesc = osw.getModel().getClassDescriptorByName(className);
-        String classDescAsStr = null;
-        Map<String, CollectionDescriptor> collectionDescMap = new LinkedHashMap<String, CollectionDescriptor>();
+//        String classDescAsStr = null;
+        Map<String, CollectionDescriptor> collectionDescMap =
+                new LinkedHashMap<String, CollectionDescriptor>();
 
         if (classDesc != null) {
-            classDescAsStr = classDesc.getName();
+//            classDescAsStr = classDesc.getName();
 
             Set<CollectionDescriptor> collectionDescGene = classDesc.getAllCollectionDescriptors();
 
             for (CollectionDescriptor item : collectionDescGene) {
-
                 boolean manyToManyC = false;
-
                 if (item.relationType() == CollectionDescriptor.M_N_RELATION) {
                     manyToManyC = true;
                 }
-
                 collectionDescMap.put(item.getName(), item);
-
             }
 
             if (!collectionDescMap.isEmpty() && collectionDescMap.size() > 0) {
@@ -375,12 +369,13 @@ public class AraportGFFPostProcess extends PostProcessor {
         }
 
         if (colDesc != null) {
-            log.debug("Class Collection Desc: " + "; Class: " + "; Collection Desc: " + colDesc.getName());
+            LOG.debug("Class Collection Desc: " + colDesc.getName());
         }
         return colDesc;
     }
 
-    private void insertPublicationCollectionField(InterMineObject destObject, InterMineObject sourceObject,
+    private void insertPublicationCollectionField(
+            InterMineObject destObject, InterMineObject sourceObject,
             final String destClassName, final String collectionName) throws Exception {
 
         Exception exception = null;
@@ -388,7 +383,8 @@ public class AraportGFFPostProcess extends PostProcessor {
 
         try {
 
-            CollectionDescriptor collectionDesc = getCollectionDescriptor(destClassName, collectionName);
+            CollectionDescriptor collectionDesc =
+                    getCollectionDescriptor(destClassName, collectionName);
             ClassDescriptor classDesc = osw.getModel().getClassDescriptorByName(destClassName);
 
             // if this is a many to many collection we can use
@@ -397,12 +393,11 @@ public class AraportGFFPostProcess extends PostProcessor {
             boolean manyToMany = false;
 
             if (collectionDesc == null) {
-
-                errorMessage = "Cannot find collection " + collectionName + " for the class " + destClassName;
+                errorMessage = "Cannot find collection " + collectionName
+                        + " for the class " + destClassName;
                 exception = new Exception(errorMessage);
-                log.error(errorMessage);
+                LOG.error(errorMessage);
                 throw exception;
-
             }
 
             if (collectionDesc.relationType() == CollectionDescriptor.M_N_RELATION) {
@@ -410,16 +405,15 @@ public class AraportGFFPostProcess extends PostProcessor {
             }
 
             if (manyToMany) {
-                log.info("Adding Pub to Gene/Pub Collection before");
-                osw.addToCollection(destObject.getId(), classDesc.getType(), collectionName, sourceObject.getId());
-                log.info("Adding Pub to Gene/Pub Collection after");
+                LOG.info("Adding Pub to Gene/Pub Collection before");
+                osw.addToCollection(destObject.getId(), classDesc.getType(),
+                        collectionName, sourceObject.getId());
+                LOG.info("Adding Pub to Gene/Pub Collection after");
             } else { // publications will be always many to many
-
                 // InterMineObject tempObject =
                 // PostProcessUtil.cloneInterMineObject(destObject);
                 // tempObject.setFieldValue(collectionName, collection);
                 // osw.store(tempObject);
-
             }
 
         } catch (Exception e) {
@@ -428,13 +422,15 @@ public class AraportGFFPostProcess extends PostProcessor {
 
             if (exception != null) {
                 exception.printStackTrace();
-                log.error("Error occurred during persistence of collection for object: " + destObject.toString()
-                        + "; Collection Name: " + collectionName + ";Message:" + exception.getMessage() + "; Cause:"
-                        + exception.getCause());
+                LOG.error("Error during persistence of collection for object: "
+                        + destObject.toString() + " Collection Name: " + collectionName
+                        + " Message: " + exception.getMessage()
+                        + " Cause: " + exception.getCause());
                 throw exception;
             } else {
-                log.debug("Element of Collection " + collectionName + " successfully stored in the database."
-                        + "; Dest Object:" + destObject.toString() + "; Source Object:" + sourceObject.toString());
+                LOG.debug("Element of Collection " + collectionName + " stored in the database."
+                        + " Dest Object:" + destObject.toString()
+                        + " Source Object:" + sourceObject.toString());
             }
         }
 
