@@ -97,9 +97,11 @@ public class ReportObjectField
             boolean doNotTruncate,
             boolean escapeXml,
             String label) {
-        this(objectType, fieldName, fieldValue, fieldDisplayerPage, showInHeader, doNotTruncate, escapeXml);
+        this(objectType, fieldName, fieldValue, fieldDisplayerPage,
+                showInHeader, doNotTruncate, escapeXml);
         this.label = label;
     }
+
 
     /**
      * Get the label to display in the webapp for this field. If there is
