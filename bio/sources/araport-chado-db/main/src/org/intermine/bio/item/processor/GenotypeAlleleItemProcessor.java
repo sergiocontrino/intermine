@@ -17,63 +17,63 @@ import org.intermine.xml.full.Item;
 import org.intermine.bio.domain.source.*;
 
 public class GenotypeAlleleItemProcessor extends DataSourceProcessor implements
-		ItemProcessor<SourceFeatureGenotype, Item> {
+        ItemProcessor<SourceFeatureGenotype, Item> {
 
-	protected static final Logger log = Logger.getLogger(GenotypeAlleleItemProcessor.class);
+    protected static final Logger log = Logger.getLogger(GenotypeAlleleItemProcessor.class);
 
-	private String targetClassName;
+    private String targetClassName;
 
-	private static final String ITEM_CLASSNAME = "Genotype";
+    private static final String ITEM_CLASSNAME = "Genotype";
 
-	public GenotypeAlleleItemProcessor(ChadoDBConverter chadoDBConverter) {
-		super(chadoDBConverter);
-	}
+    public GenotypeAlleleItemProcessor(ChadoDBConverter chadoDBConverter) {
+        super(chadoDBConverter);
+    }
 
-	@Override
-	public Item process(SourceFeatureGenotype item) throws Exception {
+    @Override
+    public Item process(SourceFeatureGenotype item) throws Exception {
 
-		return createItem(item);
+        return createItem(item);
 
-	}
+    }
 
-	private Item createItem(SourceFeatureGenotype source) throws ObjectStoreException {
+    private Item createItem(SourceFeatureGenotype source) throws ObjectStoreException {
 
-		Exception exception = null;
+        Exception exception = null;
 
-		Item item = null;
+        Item item = null;
 
-		try {
-			log.debug("Creating Item has started. Source Object:" + source);
+        try {
+            log.debug("Creating Item has started. Source Object:" + source);
 
-			Item genotypeItem = GenotypeService.getGenotypeItem(source.getGenotypeUniqueAccession()).getItem();
-			ItemHolder alleleItemHolder = AlleleService.getAlleleItem(source.getFeatureUniqueAccession());
+            Item genotypeItem = GenotypeService.getGenotypeItem(source.getGenotypeUniqueAccession()).getItem();
+            ItemHolder alleleItemHolder = AlleleService.getAlleleItem(source.getFeatureUniqueAccession());
 
-			if (alleleItemHolder != null && genotypeItem != null) {
-				AlleleService.addGenotypeItem(source.getFeatureUniqueAccession(), source.getGenotypeUniqueAccession(),
-						genotypeItem);
-			}
+            if (alleleItemHolder != null && genotypeItem != null) {
+                AlleleService.addGenotypeItem(source.getFeatureUniqueAccession(), source.getGenotypeUniqueAccession(),
+                        genotypeItem);
+            }
 
-		} catch (Exception e) {
-			exception = e;
-		} finally {
+        } catch (Exception e) {
+            exception = e;
+        } finally {
 
-			if (exception != null) {
-				log.error("Error adding allele to the genotype/allele item set" + source);
-			} else {
-				log.debug("Allele has been successfully added to the genotype/allele item set." + " Genotype:"
-						+ source.getGenotypeUniqueAccession() + "/" + source.getGenotypeName() + " Allele:"
-						+ source.getFeatureUniqueAccession() + "/" + source.getFeatureUniqueName());
+            if (exception != null) {
+                log.error("Error adding allele to the genotype/allele item set" + source);
+            } else {
+                log.debug("Allele has been successfully added to the genotype/allele item set." + " Genotype:"
+                        + source.getGenotypeUniqueAccession() + "/" + source.getGenotypeName() + " Allele:"
+                        + source.getFeatureUniqueAccession() + "/" + source.getFeatureUniqueName());
 
-			}
-		}
-		return item;
-	}
+            }
+        }
+        return item;
+    }
 
-	public void setTargetClassName(String name) {
-		this.targetClassName = name;
-	}
+    public void setTargetClassName(String name) {
+        this.targetClassName = name;
+    }
 
-	public String getTargetClassName() {
-		return this.targetClassName;
-	}
+    public String getTargetClassName() {
+        return this.targetClassName;
+    }
 }

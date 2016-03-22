@@ -17,81 +17,81 @@ import org.intermine.bio.domain.source.*;
 
 public class CVItemProcessor extends DataSourceProcessor implements ItemProcessor<SourceCV, Item> {
 
-	protected static final Logger log = Logger.getLogger(CVItemProcessor.class);
+    protected static final Logger log = Logger.getLogger(CVItemProcessor.class);
 
-	private String targetClassName;
+    private String targetClassName;
 
-	public CVItemProcessor(ChadoDBConverter chadoDBConverter) {
-		super(chadoDBConverter);
-	}
+    public CVItemProcessor(ChadoDBConverter chadoDBConverter) {
+        super(chadoDBConverter);
+    }
 
-	@Override
-	public Item process(SourceCV item) throws Exception {
+    @Override
+    public Item process(SourceCV item) throws Exception {
 
-		return createItem(item);
+        return createItem(item);
 
-	}
+    }
 
-	private Item createItem(SourceCV source) throws ObjectStoreException {
+    private Item createItem(SourceCV source) throws ObjectStoreException {
 
-		log.info("Creating Item has started. Source Object:" + source);
+        log.info("Creating Item has started. Source Object:" + source);
 
-		String cv_name = source.getName();
-		String item_class_name = DataFlowConfig.getChadoCVMap().get(cv_name).getTargetClassName();
-		String item_name = DataFlowConfig.getChadoCVMap().get(cv_name).getTargetName();
-		String item_unique_name = DataFlowConfig.getChadoCVMap().get(cv_name).getTargetUniqueName();
-		
-		log.info("Chado CV Name:" + cv_name + ";Target CV Class Name:" + item_class_name);
+        String cv_name = source.getName();
+        String item_class_name = DataFlowConfig.getChadoCVMap().get(cv_name).getTargetClassName();
+        String item_name = DataFlowConfig.getChadoCVMap().get(cv_name).getTargetName();
+        String item_unique_name = DataFlowConfig.getChadoCVMap().get(cv_name).getTargetUniqueName();
 
-		Item item = null;
+        log.info("Chado CV Name:" + cv_name + ";Target CV Class Name:" + item_class_name);
 
-		Exception exception = null;
+        Item item = null;
 
-		try {
-			if (!StringUtils.isBlank(item_class_name) && (!StringUtils.isBlank(cv_name))) {
+        Exception exception = null;
 
-				log.info("Passed Validation Criteria. Creating Target Item...");
+        try {
+            if (!StringUtils.isBlank(item_class_name) && (!StringUtils.isBlank(cv_name))) {
 
-				String sourceString = source.getName();
-				String parsedSourceString = StringUtils.replace(sourceString , "_", " ");
-				
-				parsedSourceString = WordUtils.capitalize(parsedSourceString);
-				
-				item = super.getService().createItem(item_class_name);
-				item.setAttribute("name",item_name);
-				item.setAttribute("uniqueName", item_unique_name);
-				item.setAttribute("url", "https://www.arabidopsis.org/");
+                log.info("Passed Validation Criteria. Creating Target Item...");
 
-				int itemId = super.getService().store(item);
-				
-				ItemHolder itemHolder = new ItemHolder(item, itemId);
+                String sourceString = source.getName();
+                String parsedSourceString = StringUtils.replace(sourceString , "_", " ");
 
-				if (itemHolder!=null){
-					CVService.addCVItem(cv_name, itemHolder);
-				}
+                parsedSourceString = WordUtils.capitalize(parsedSourceString);
+
+                item = super.getService().createItem(item_class_name);
+                item.setAttribute("name",item_name);
+                item.setAttribute("uniqueName", item_unique_name);
+                item.setAttribute("url", "https://www.arabidopsis.org/");
+
+                int itemId = super.getService().store(item);
+
+                ItemHolder itemHolder = new ItemHolder(item, itemId);
+
+                if (itemHolder!=null){
+                    CVService.addCVItem(cv_name, itemHolder);
+                }
 
 
-			}
+            }
 
-		} catch (Exception e) {
-			exception = e;
-		} finally {
+        } catch (Exception e) {
+            exception = e;
+        } finally {
 
-			if (exception != null) {
-				log.error("Error occurred during item creation. Source Item:" + source);
-			} else {
-				log.info("Target Item has been created. Target Object:" + item);
-			}
-		}
+            if (exception != null) {
+                log.error("Error occurred during item creation. Source Item:" + source);
+            } else {
+                log.info("Target Item has been created. Target Object:" + item);
+            }
+        }
 
-		return item;
-	}
+        return item;
+    }
 
-	public void setTargetClassName(String name) {
-		this.targetClassName = name;
-	}
+    public void setTargetClassName(String name) {
+        this.targetClassName = name;
+    }
 
-	public String getTargetClassName() {
-		return this.targetClassName;
-	}
+    public String getTargetClassName() {
+        return this.targetClassName;
+    }
 }
