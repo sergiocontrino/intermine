@@ -37,92 +37,92 @@ import net.sf.saxon.s9api.XdmValue;
 
 public class PubMedService {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(PubMedXMLRetriever.class);
-	
+    private static final Logger log = LoggerFactory
+            .getLogger(PubMedXMLRetriever.class);
 
-	// get document JSON Representation
-	public String getPubMedDocument(final String pubMedId)
-			throws SaxonApiException, IOException, URISyntaxException {
 
-		Exception exception = null;
-		String jsonResult = null;
+    // get document JSON Representation
+    public String getPubMedDocument(final String pubMedId)
+            throws SaxonApiException, IOException, URISyntaxException {
 
-		try {
-			String xmlResult = getPubmedAsXML(pubMedId);
+        Exception exception = null;
+        String jsonResult = null;
 
-			if (xmlResult == null) {
-				throw new Exception(
-						"Document is null. Cannot create JSON document for PubMedId:"
-								+ pubMedId);
-			}
-			JSONObject json = XML.toJSONObject(xmlResult);
-			jsonResult = json.toString(4);
-		} catch (Exception e) {
+        try {
+            String xmlResult = getPubmedAsXML(pubMedId);
 
-		} finally {
+            if (xmlResult == null) {
+                throw new Exception(
+                        "Document is null. Cannot create JSON document for PubMedId:"
+                                + pubMedId);
+            }
+            JSONObject json = XML.toJSONObject(xmlResult);
+            jsonResult = json.toString(4);
+        } catch (Exception e) {
 
-			if (exception != null) {
-				log.error("Error retrieving Publication for PubMedId:"
-						+ pubMedId);
-			} else {
+        } finally {
 
-				log.info("Publication for PubMedID:" + jsonResult);
+            if (exception != null) {
+                log.error("Error retrieving Publication for PubMedId:"
+                        + pubMedId);
+            } else {
 
-			}
-		}
+                log.info("Publication for PubMedID:" + jsonResult);
 
-		return jsonResult;
+            }
+        }
 
-	}
+        return jsonResult;
 
-	private String getPubmedAsXML(final String pubMedId)
-			throws SaxonApiException, IOException, URISyntaxException {
+    }
 
-		String result = null;
-		Exception exception = null;
+    private String getPubmedAsXML(final String pubMedId)
+            throws SaxonApiException, IOException, URISyntaxException {
 
-		try {
-			Processor saxon = new Processor(false);
-			XQueryCompiler compiler = saxon.newXQueryCompiler();
-			XQueryExecutable exec;
+        String result = null;
+        Exception exception = null;
 
-			InputStream inputQueryFile = (InputStream) ClassLoader
-					.getSystemResourceAsStream("pubmed.xq");
-			exec = compiler.compile(inputQueryFile);
-			Source src = new StreamSource(new StringReader(
-					new PubMedXMLRetriever().fetchPubMed(pubMedId)));
-			DocumentBuilder builder = saxon.newDocumentBuilder();
-			XdmNode doc = builder.build(src);
+        try {
+            Processor saxon = new Processor(false);
+            XQueryCompiler compiler = saxon.newXQueryCompiler();
+            XQueryExecutable exec;
 
-			XQueryEvaluator query = exec.load();
-			query.setContextItem(doc);
+            InputStream inputQueryFile = (InputStream) ClassLoader
+                    .getSystemResourceAsStream("pubmed.xq");
+            exec = compiler.compile(inputQueryFile);
+            Source src = new StreamSource(new StringReader(
+                    new PubMedXMLRetriever().fetchPubMed(pubMedId)));
+            DocumentBuilder builder = saxon.newDocumentBuilder();
+            XdmNode doc = builder.build(src);
 
-			XdmValue xmlResult = query.evaluate();
+            XQueryEvaluator query = exec.load();
+            query.setContextItem(doc);
 
-			if (xmlResult == null) {
-				throw new Exception(
-						"Nothing to parse. Document is null. PubMedId:"
-								+ xmlResult);
-			}
+            XdmValue xmlResult = query.evaluate();
 
-			result = xmlResult.toString();
-		} catch (Exception e) {
-			exception = e;
+            if (xmlResult == null) {
+                throw new Exception(
+                        "Nothing to parse. Document is null. PubMedId:"
+                                + xmlResult);
+            }
 
-		} finally {
+            result = xmlResult.toString();
+        } catch (Exception e) {
+            exception = e;
 
-			if (exception != null) {
-				log.error("Error retrieving Publication for PubMedId:"
-						+ pubMedId);
-			} else {
+        } finally {
 
-				log.info("Publication for PubMedID:" + result);
+            if (exception != null) {
+                log.error("Error retrieving Publication for PubMedId:"
+                        + pubMedId);
+            } else {
 
-			}
-		}
+                log.info("Publication for PubMedID:" + result);
 
-		return result;
-	}
+            }
+        }
+
+        return result;
+    }
 
 }
