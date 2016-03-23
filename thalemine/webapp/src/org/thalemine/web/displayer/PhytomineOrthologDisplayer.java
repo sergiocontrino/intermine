@@ -1,4 +1,4 @@
-package org.intermine.bio.web.displayer;
+package org.thalemine.web.displayer;
 
 /*
  * Copyright (C) 2002-2014 FlyMine

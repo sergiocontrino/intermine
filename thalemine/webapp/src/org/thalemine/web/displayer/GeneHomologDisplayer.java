@@ -1,4 +1,4 @@
-package org.intermine.bio.web.displayer;
+package org.thalemine.web.displayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,7 +57,7 @@ public class GeneHomologDisplayer extends ReportDisplayer {
       final InterMineAPI im = SessionMethods.getInterMineAPI(session);
 
       Gene geneObj = (Gene)reportObject.getObject();
-      
+
       LOG.info("Entering GeneHomologDisplayer.display for "+geneObj.getPrimaryIdentifier());
       LOG.info("Id is "+geneObj.getId());
 
@@ -75,7 +75,7 @@ public class GeneHomologDisplayer extends ReportDisplayer {
       }
 
       ArrayList<HomologRecord> homologList = new ArrayList<HomologRecord>();
-      
+
       while (result.hasNext()) {
         List<ResultElement> resElement = result.next();
         HomologRecord r = new HomologRecord(resElement);
@@ -99,12 +99,12 @@ public class GeneHomologDisplayer extends ReportDisplayer {
         }
         homologList.add(r);
       }
-        
+
       // for accessing this within the jsp
       request.setAttribute("geneName",geneObj.getPrimaryIdentifier());
       request.setAttribute("list",homologList);
       request.setAttribute("id",geneObj.getId());
-      
+
   }
 
   private PathQuery getHomologTable(Integer id) {
@@ -115,16 +115,16 @@ public class GeneHomologDisplayer extends ReportDisplayer {
         "Homolog.gene2.primaryIdentifier",
         "Homolog.gene2.briefDescription",
         "Homolog.gene2.organism.shortName",
-	"Homolog.relationship",
-	"Homolog.type",
-	"Homolog.bootscore"
+    "Homolog.relationship",
+    "Homolog.type",
+    "Homolog.bootscore"
         );
     query.addOrderBy("Homolog.groupName", OrderDirection.ASC);
     query.addOrderBy("Homolog.gene2.primaryIdentifier", OrderDirection.ASC);
     query.addConstraint(Constraints.eq("Homolog.gene1.id",id.toString()));
     return query;
   }
-  
+
   private String getShortName(Integer p) {
     PathQuery q = new PathQuery(im.getModel());
     q.addViews("Organism.shortName");
@@ -138,14 +138,14 @@ public class GeneHomologDisplayer extends ReportDisplayer {
       LOG.warn("Had an ObjectStoreException in GeneHomologDisplayer.java: "+e.getMessage());
       return null;
     }
-    
+
     while (result.hasNext()) {
       List<ResultElement> resElement = result.next();
       return resElement.get(0).getField().toString();
     }
     return null;
   }
-  
+
   public class HomologRecord {
     private String id;
     private String groupName;
@@ -179,7 +179,7 @@ public class GeneHomologDisplayer extends ReportDisplayer {
       score = ((resElement.get(8)!=null) && (resElement.get(8).getField()!= null))?
                                  resElement.get(8).getField().toString():"&nbsp;";
       nodeName = "&nbsp";
- 
+
     }
     private void setNodeName(String s) { nodeName = s;}
     public String getId() { return id; }
@@ -193,5 +193,5 @@ public class GeneHomologDisplayer extends ReportDisplayer {
     public String getScore() { return score; }
     public String getNodeName() { return nodeName; }
   }
-  
+
 }

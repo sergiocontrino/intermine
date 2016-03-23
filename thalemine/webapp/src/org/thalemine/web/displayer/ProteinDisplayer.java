@@ -1,4 +1,4 @@
-package org.intermine.bio.web.displayer;
+package org.thalemine.web.displayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
