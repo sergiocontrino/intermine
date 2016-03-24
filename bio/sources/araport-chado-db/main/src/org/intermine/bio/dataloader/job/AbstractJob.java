@@ -29,261 +29,261 @@ import org.intermine.bio.dataloader.util.ClassUtils;
  * configuration parameters are set here. Therefore, common error handling and
  * listener calling activities are abstracted away from implementations.
  *
- * 
+ *
  */
 public abstract class AbstractJob implements Job, StepLocator
 {
 
-	protected static final Log logger = LogFactory.getLog(AbstractJob.class);
+    protected static final Log logger = LogFactory.getLog(AbstractJob.class);
 
-	private String name;
+    private String name;
 
-	private boolean restartable = true;
-	
-	private JobParametersIncrementer jobParametersIncrementer;
-	
-	private StepHandler stepHandler;
+    private boolean restartable = true;
 
-	/**
-	 * Default constructor.
-	 */
-	public AbstractJob() {
-		super();
-	}
+    private JobParametersIncrementer jobParametersIncrementer;
 
-	/**
-	 * Convenience constructor to immediately add name (which is mandatory but
-	 * not final).
-	 *
-	 * @param name
-	 */
-	public AbstractJob(String name) {
-		super();
-		this.name = name;
-	}
+    private StepHandler stepHandler;
 
-	
-	/**
-	 * Set the name property. Always overrides the default value if this object
-	 * is a Spring bean.
-	 *
-	 * @see #setBeanName(java.lang.String)
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * Default constructor.
+     */
+    public AbstractJob() {
+        super();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.springframework.batch.core.domain.IJob#getName()
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
+    /**
+     * Convenience constructor to immediately add name (which is mandatory but
+     * not final).
+     *
+     * @param name
+     */
+    public AbstractJob(String name) {
+        super();
+        this.name = name;
+    }
 
-	/**
-	 * Retrieve the step with the given name. If there is no Step with the given
-	 * name, then return null.
-	 *
-	 * @param stepName
-	 * @return the Step
-	 */
-	@Override
-	public abstract Step getStep(String stepName);
 
-	/**
-	 * Retrieve the step names.
-	 *
-	 * @return the step names
-	 */
-	@Override
-	public abstract Collection<String> getStepNames();
+    /**
+     * Set the name property. Always overrides the default value if this object
+     * is a Spring bean.
+     *
+     * @see #setBeanName(java.lang.String)
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	
-	/**
-	 * Boolean flag to prevent categorically a job from restarting, even if it
-	 * has failed previously.
-	 *
-	 * @param restartable
-	 *            the value of the flag to set (default true)
-	 */
-	public void setRestartable(boolean restartable) {
-		this.restartable = restartable;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.batch.core.domain.IJob#getName()
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Public setter for the {@link JobParametersIncrementer}.
-	 *
-	 * @param jobParametersIncrementer
-	 *            the {@link JobParametersIncrementer} to set
-	 */
-	public void setJobParametersIncrementer(
-			JobParametersIncrementer jobParametersIncrementer) {
-		this.jobParametersIncrementer = jobParametersIncrementer;
-	}
+    /**
+     * Retrieve the step with the given name. If there is no Step with the given
+     * name, then return null.
+     *
+     * @param stepName
+     * @return the Step
+     */
+    @Override
+    public abstract Step getStep(String stepName);
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.springframework.batch.core.Job#getJobParametersIncrementer()
-	 */
-	@Override
-	public JobParametersIncrementer getJobParametersIncrementer() {
-		return this.jobParametersIncrementer;
-	}
+    /**
+     * Retrieve the step names.
+     *
+     * @return the step names
+     */
+    @Override
+    public abstract Collection<String> getStepNames();
 
-	/**
-	 * Extension point for subclasses allowing them to concentrate on processing
-	 * logic and ignore listeners and repository calls. Implementations usually
-	 * are concerned with the ordering of steps, and delegate actual step
-	 * processing to {@link #handleStep(Step, JobExecution)}.
-	 *
-	 * @param execution
-	 *            the current {@link JobExecution}
-	 *
-	 * @throws JobExecutionException
-	 *             to signal a fatal batch framework error (not a business or
-	 *             validation exception)
-	 */
-	abstract protected void doExecute(JobExecution execution)
-			throws JobExecutionException;
 
-	/**
-	 * Run the specified job, handling all listener and repository calls, and
-	 * delegating the actual processing to {@link #doExecute(JobExecution)}.
-	 *
-	 * @see Job#execute(JobExecution)
-	 * @throws StartLimitExceededException
-	 *             if start limit of one of the steps was exceeded
-	 */
-	@Override
-	public final void execute(JobExecution execution) {
+    /**
+     * Boolean flag to prevent categorically a job from restarting, even if it
+     * has failed previously.
+     *
+     * @param restartable
+     *            the value of the flag to set (default true)
+     */
+    public void setRestartable(boolean restartable) {
+        this.restartable = restartable;
+    }
 
-		logger.debug("Job execution starting: " + execution);
+    /**
+     * Public setter for the {@link JobParametersIncrementer}.
+     *
+     * @param jobParametersIncrementer
+     *            the {@link JobParametersIncrementer} to set
+     */
+    public void setJobParametersIncrementer(
+            JobParametersIncrementer jobParametersIncrementer) {
+        this.jobParametersIncrementer = jobParametersIncrementer;
+    }
 
-		try {
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.batch.core.Job#getJobParametersIncrementer()
+     */
+    @Override
+    public JobParametersIncrementer getJobParametersIncrementer() {
+        return this.jobParametersIncrementer;
+    }
 
-			if (execution.getStatus() != BatchStatus.STOPPING) {
+    /**
+     * Extension point for subclasses allowing them to concentrate on processing
+     * logic and ignore listeners and repository calls. Implementations usually
+     * are concerned with the ordering of steps, and delegate actual step
+     * processing to {@link #handleStep(Step, JobExecution)}.
+     *
+     * @param execution
+     *            the current {@link JobExecution}
+     *
+     * @throws JobExecutionException
+     *             to signal a fatal batch framework error (not a business or
+     *             validation exception)
+     */
+    abstract protected void doExecute(JobExecution execution)
+            throws JobExecutionException;
 
-				execution.setStartTime(new Date());
-				updateStatus(execution, BatchStatus.STARTED);
+    /**
+     * Run the specified job, handling all listener and repository calls, and
+     * delegating the actual processing to {@link #doExecute(JobExecution)}.
+     *
+     * @see Job#execute(JobExecution)
+     * @throws StartLimitExceededException
+     *             if start limit of one of the steps was exceeded
+     */
+    @Override
+    public final void execute(JobExecution execution) {
 
-				try {
-					doExecute(execution);
-					logger.debug("Job execution complete: " + execution);
-				} catch (RepeatException e) {
-					throw e.getCause();
-				}
-			} else {
+        logger.debug("Job execution starting: " + execution);
 
-				// The job was already stopped before we even got this far. Deal
-				// with it in the same way as any other interruption.
-				execution.setStatus(BatchStatus.STOPPED);
-				execution.setExitStatus(ExitStatus.COMPLETED);
-				logger.debug("Job execution was stopped: " + execution);
+        try {
 
-			}
+            if (execution.getStatus() != BatchStatus.STOPPING) {
 
-		} catch (JobInterruptedException e) {
-			logger.info("Encountered interruption executing job: "
-					+ e.getMessage());
-			if (logger.isDebugEnabled()) {
-				logger.debug("Full exception", e);
-			}
-			execution.setExitStatus(getDefaultExitStatusForFailure(e, execution));
-			execution.setStatus(BatchStatus.max(BatchStatus.STOPPED, e.getStatus()));
-			execution.addFailureException(e);
-		} catch (Throwable t) {
-			logger.error("Encountered fatal error executing job", t);
-			logger.error("Cause:" + t.getCause());
-			execution.setExitStatus(getDefaultExitStatusForFailure(t, execution));
-			execution.setStatus(BatchStatus.FAILED);
-			execution.addFailureException(t);
-		} finally {
-			try {
-				if (execution.getStatus().isLessThanOrEqualTo(BatchStatus.STOPPED)
-						&& execution.getStepExecutions().isEmpty()) {
-					ExitStatus exitStatus = execution.getExitStatus();
-					ExitStatus newExitStatus =
-							ExitStatus.NOOP.addExitDescription("All steps already completed or no steps configured for this job.");
-					execution.setExitStatus(exitStatus.and(newExitStatus));
-				}
+                execution.setStartTime(new Date());
+                updateStatus(execution, BatchStatus.STARTED);
 
-				execution.setEndTime(new Date());
+                try {
+                    doExecute(execution);
+                    logger.debug("Job execution complete: " + execution);
+                } catch (RepeatException e) {
+                    throw e.getCause();
+                }
+            } else {
 
-				
-			} finally {
-				logger.info("Job Completed");
-			}
+                // The job was already stopped before we even got this far. Deal
+                // with it in the same way as any other interruption.
+                execution.setStatus(BatchStatus.STOPPED);
+                execution.setExitStatus(ExitStatus.COMPLETED);
+                logger.debug("Job execution was stopped: " + execution);
 
-		}
+            }
 
-	}
+        } catch (JobInterruptedException e) {
+            logger.info("Encountered interruption executing job: "
+                    + e.getMessage());
+            if (logger.isDebugEnabled()) {
+                logger.debug("Full exception", e);
+            }
+            execution.setExitStatus(getDefaultExitStatusForFailure(e, execution));
+            execution.setStatus(BatchStatus.max(BatchStatus.STOPPED, e.getStatus()));
+            execution.addFailureException(e);
+        } catch (Throwable t) {
+            logger.error("Encountered fatal error executing job", t);
+            logger.error("Cause:" + t.getCause());
+            execution.setExitStatus(getDefaultExitStatusForFailure(t, execution));
+            execution.setStatus(BatchStatus.FAILED);
+            execution.addFailureException(t);
+        } finally {
+            try {
+                if (execution.getStatus().isLessThanOrEqualTo(BatchStatus.STOPPED)
+                        && execution.getStepExecutions().isEmpty()) {
+                    ExitStatus exitStatus = execution.getExitStatus();
+                    ExitStatus newExitStatus =
+                            ExitStatus.NOOP.addExitDescription("All steps already completed or no steps configured for this job.");
+                    execution.setExitStatus(exitStatus.and(newExitStatus));
+                }
 
-	/**
-	 * Convenience method for subclasses to delegate the handling of a specific
-	 * step in the context of the current {@link JobExecution}. Clients of this
-	 * method do not need access to the {@link JobRepository}, nor do they need
-	 * to worry about populating the execution context on a restart, nor
-	 * detecting the interrupted state (in job or step execution).
-	 *
-	 * @param step
-	 *            the {@link Step} to execute
-	 * @param execution
-	 *            the current {@link JobExecution}
-	 * @return the {@link StepExecution} corresponding to this step
-	 *
-	 * @throws JobInterruptedException
-	 *             if the {@link JobExecution} has been interrupted, and in
-	 *             particular if {@link BatchStatus#ABANDONED} or
-	 *             {@link BatchStatus#STOPPING} is detected
-	 * @throws StartLimitExceededException
-	 *             if the start limit has been exceeded for this step
-	 * @throws JobRestartException
-	 *             if the job is in an inconsistent state from an earlier
-	 *             failure
-	 */
-	protected final StepExecution handleStep(Step step, JobExecution execution)
-			 {
-		return stepHandler.handleStep(step, execution);
+                execution.setEndTime(new Date());
 
-	}
 
-	/**
-	 * Default mapping from throwable to {@link ExitStatus}.
-	 *
-	 * @param ex
-	 *            the cause of the failure
-	 * @return an {@link ExitStatus}
-	 */
-	protected ExitStatus getDefaultExitStatusForFailure(Throwable ex, JobExecution execution) {
-		ExitStatus exitStatus;
-		if (ex instanceof JobInterruptedException
-				|| ex.getCause() instanceof JobInterruptedException) {
-			exitStatus = ExitStatus.STOPPED
-					.addExitDescription(JobInterruptedException.class.getName());
-		} else if (ex instanceof NoSuchJobException
-				|| ex.getCause() instanceof NoSuchJobException) {
-			exitStatus = new ExitStatus(ExitCodeMapper.NO_SUCH_JOB, ex
-					.getClass().getName());
-		} else {
-			exitStatus = ExitStatus.FAILED.addExitDescription(ex);
-		}
+            } finally {
+                logger.info("Job Completed");
+            }
 
-		return exitStatus;
-	}
+        }
 
-	private void updateStatus(JobExecution jobExecution, BatchStatus status) {
-		jobExecution.setStatus(status);
-		}
+    }
 
-	@Override
-	public String toString() {
-		return ClassUtils.getShortName(getClass()) + ": [name=" + name + "]";
-	}
-	
-	
-	
+    /**
+     * Convenience method for subclasses to delegate the handling of a specific
+     * step in the context of the current {@link JobExecution}. Clients of this
+     * method do not need access to the {@link JobRepository}, nor do they need
+     * to worry about populating the execution context on a restart, nor
+     * detecting the interrupted state (in job or step execution).
+     *
+     * @param step
+     *            the {@link Step} to execute
+     * @param execution
+     *            the current {@link JobExecution}
+     * @return the {@link StepExecution} corresponding to this step
+     *
+     * @throws JobInterruptedException
+     *             if the {@link JobExecution} has been interrupted, and in
+     *             particular if {@link BatchStatus#ABANDONED} or
+     *             {@link BatchStatus#STOPPING} is detected
+     * @throws StartLimitExceededException
+     *             if the start limit has been exceeded for this step
+     * @throws JobRestartException
+     *             if the job is in an inconsistent state from an earlier
+     *             failure
+     */
+    protected final StepExecution handleStep(Step step, JobExecution execution)
+             {
+        return stepHandler.handleStep(step, execution);
+
+    }
+
+    /**
+     * Default mapping from throwable to {@link ExitStatus}.
+     *
+     * @param ex
+     *            the cause of the failure
+     * @return an {@link ExitStatus}
+     */
+    protected ExitStatus getDefaultExitStatusForFailure(Throwable ex, JobExecution execution) {
+        ExitStatus exitStatus;
+        if (ex instanceof JobInterruptedException
+                || ex.getCause() instanceof JobInterruptedException) {
+            exitStatus = ExitStatus.STOPPED
+                    .addExitDescription(JobInterruptedException.class.getName());
+        } else if (ex instanceof NoSuchJobException
+                || ex.getCause() instanceof NoSuchJobException) {
+            exitStatus = new ExitStatus(ExitCodeMapper.NO_SUCH_JOB, ex
+                    .getClass().getName());
+        } else {
+            exitStatus = ExitStatus.FAILED.addExitDescription(ex);
+        }
+
+        return exitStatus;
+    }
+
+    private void updateStatus(JobExecution jobExecution, BatchStatus status) {
+        jobExecution.setStatus(status);
+        }
+
+    @Override
+    public String toString() {
+        return ClassUtils.getShortName(getClass()) + ": [name=" + name + "]";
+    }
+
+
+
 }
