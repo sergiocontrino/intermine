@@ -1,7 +1,7 @@
 package org.intermine.bio.dataconversion;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -9,10 +9,6 @@ package org.intermine.bio.dataconversion;
  * information or http://www.gnu.org/copyleft/lesser.html.
  *
  */
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.biojava.bio.Annotation;
 import org.biojava.bio.seq.Sequence;
 import org.intermine.metadata.Model;
@@ -26,6 +22,7 @@ import org.intermine.model.bio.SequenceFeature;
 import org.intermine.objectstore.ObjectStore;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.util.DynamicUtil;
+
 
 /**
  * A fasta loader that understand the headers of AIP fasta CDS fasta files and can make the
@@ -74,12 +71,11 @@ public class AIPCDSFastaLoaderTask extends AIPFeatureFastaLoaderTask
      */
     @Override
     protected String getIdentifier(Sequence bioJavaSequence) {
-        Annotation annotation = bioJavaSequence.getAnnotation();
+//        Annotation annotation = bioJavaSequence.getAnnotation();
+//        String header = (String) annotation.getProperty("description");
         String mrnaIdentifier = bioJavaSequence.getName();
-        String header = (String) annotation.getProperty("description");
 
         // it doesn't matter too much what the CDS identifier is
         return mrnaIdentifier;
-
     }
 }
