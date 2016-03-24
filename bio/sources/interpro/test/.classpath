@@ -5,10 +5,12 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/bio-core-main"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/bio-postprocess-main"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/bio-source-interpro"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/im-ant-tasks"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/intermine-integrate-main"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/intermine-integrate-test"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/intermine-objectstore-main"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/intermine-objectstore-test"/>
-	<classpathentry kind="output" path="bin"/><classpathentry combineaccessrules="false" kind="src" path="/intermine-model-test"/><classpathentry combineaccessrules="false" kind="src" path="/intermine-model-main"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/intermine-model-test"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/intermine-model-main"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ant-tasks"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
