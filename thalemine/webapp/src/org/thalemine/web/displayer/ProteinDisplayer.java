@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.TreeMap;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -29,6 +32,7 @@ import org.intermine.model.bio.MRNA;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.pathquery.Constraints;
 import org.intermine.pathquery.OrderDirection;
+import org.intermine.pathquery.OuterJoinStatus;
 import org.intermine.pathquery.PathQuery;
 import org.intermine.util.DynamicUtil;
 import org.intermine.web.displayer.ReportDisplayer;
@@ -42,6 +46,7 @@ public class ProteinDisplayer extends ReportDisplayer {
   protected static final Logger LOG = Logger.getLogger(ProteinDisplayer.class);
   PathQueryExecutor exec;
   private HashMap<Integer,String> organismMap = new HashMap<Integer,String>();
+  private HashMap<String,Set<String>> synonymsMap = new HashMap<String,Set<String>>();
 
   /**
    * Construct with config and the InterMineAPI.
@@ -63,9 +68,37 @@ public class ProteinDisplayer extends ReportDisplayer {
       LOG.info("Entering ProteinDisplayer.display for "+geneObj.getPrimaryIdentifier());
       LOG.info("Id is "+geneObj.getId());
 
+      Profile profile = SessionMethods.getProfile(session);
+      // query the protein synonyms
+      PathQuery synonymsQuery = getAraportSynonyms(geneObj.getId());
+      exec = im.getPathQueryExecutor(profile);
+      ExportResultsIterator synonymsResult;
+      try {
+        synonymsResult = exec.execute(synonymsQuery);
+      } catch (ObjectStoreException e) {
+        // silently return
+        LOG.warn("Had an ObjectStoreException in ProteinDisplayer.java: "+e.getMessage());
+        return;
+      }
+
+      while (synonymsResult.hasNext()) {
+        List<ResultElement> resElement = synonymsResult.next();
+        String id = ((resElement.get(0)!=null) && (resElement.get(0).getField()!= null))?
+                                   resElement.get(0).getField().toString():"&nbsp;";
+        String synonym = ((resElement.get(1)!=null) && (resElement.get(1).getField()!= null))?
+                                   resElement.get(1).getField().toString():"&nbsp;";
+
+        if (synonymsMap.get(id) == null) synonymsMap.put(id, new HashSet<String>());
+        String regexp = "AT[1-5CM]G[0-9]{5,5}\\.[0-9]+";
+        Pattern p = Pattern.compile(regexp);
+        Matcher m = p.matcher(synonym);
+        if(m.find()) {  // only store Araport Transcript IDs in synonym map
+            synonymsMap.get(id).add(synonym);
+        }
+      }
+
       // query the proteins
       PathQuery query = getProteinTable(geneObj.getId());
-      Profile profile = SessionMethods.getProfile(session);
       exec = im.getPathQueryExecutor(profile);
       ExportResultsIterator result;
       try {
@@ -80,7 +113,7 @@ public class ProteinDisplayer extends ReportDisplayer {
 
       while (result.hasNext()) {
         List<ResultElement> resElement = result.next();
-        ProteinRecord r = new ProteinRecord(resElement);
+        ProteinRecord r = new ProteinRecord(resElement, synonymsMap);
         proteinList.add(r);
       }
 
@@ -88,7 +121,6 @@ public class ProteinDisplayer extends ReportDisplayer {
       request.setAttribute("geneName",geneObj.getPrimaryIdentifier());
       request.setAttribute("list",proteinList);
       request.setAttribute("id",geneObj.getId());
-
   }
 
   private PathQuery getProteinTable(Integer id) {
@@ -98,12 +130,11 @@ public class ProteinDisplayer extends ReportDisplayer {
             "Gene.proteins.primaryAccession",
             "Gene.proteins.uniprotAccession",
             "Gene.proteins.length"
-//		    ,"Gene.proteins.mRNA.primaryIdentifier"
             );
 
     query.addOrderBy("Gene.proteins.primaryIdentifier", OrderDirection.ASC);
-    query.addConstraint(Constraints.eq("Gene.id",id.toString()));
-    query.addConstraint(Constraints.neq("Gene.proteins.dataSets.name","Protein Sequence FASTA"));
+    query.addConstraint(Constraints.eq("Gene.id", id.toString()));
+    //query.addConstraint(Constraints.oneOfValues("Gene.proteins.dataSets.name", Arrays.asList("Genome Annotation", "Swiss-Prot data set","TrEMBL data set")));
     return query;
   }
 
@@ -113,9 +144,9 @@ public class ProteinDisplayer extends ReportDisplayer {
     private String primaryAccession;
     private String uniprotAccession;
     private String length;
-//    private String geneName;
+    private String araportTranscripts;
 
-    public ProteinRecord(List<ResultElement> resElement) {
+    public ProteinRecord(List<ResultElement> resElement, HashMap<String,Set<String>> synonymsMap) {
       // the fields are a copy of the query results
       id = ((resElement.get(0)!=null) && (resElement.get(0).getField()!= null))?
                                  resElement.get(0).getField().toString():"&nbsp;";
@@ -127,8 +158,8 @@ public class ProteinDisplayer extends ReportDisplayer {
                                  resElement.get(3).getField().toString():"&nbsp;";
       length = ((resElement.get(4)!=null) && (resElement.get(4).getField()!= null))?
                                  resElement.get(4).getField().toString():"&nbsp;";
-//      geneName = ((resElement.get(5)!=null) && (resElement.get(5).getField()!= null))?
-//                                 resElement.get(5).getField().toString():"&nbsp;";
+
+      araportTranscripts = (synonymsMap.get(id) != null) ? StringUtils.join(synonymsMap.get(id), ", ") : "&nbsp;";
     }
 
     public String getId() { return id; }
@@ -136,7 +167,18 @@ public class ProteinDisplayer extends ReportDisplayer {
     public String getPrimaryAccession() { return primaryAccession; }
     public String getUniprotAccession() { return uniprotAccession; }
     public String getLength() { return length; }
-//    public String getGeneName() { return geneName; }
+    public String getAraportTranscripts() { return araportTranscripts; }
   }
 
+  private PathQuery getAraportSynonyms(Integer id) {
+    PathQuery query = new PathQuery(im.getModel());
+    query.addViews( "Gene.proteins.id",
+            "Gene.proteins.synonyms.value");
+
+    query.addOrderBy("Gene.proteins.id", OrderDirection.ASC);
+    query.addConstraint(Constraints.eq("Gene.id", id.toString()));
+    query.addConstraint(Constraints.eq("Gene.proteins.dataSets.name", "Genome Annotation"));
+    query.setOuterJoinStatus("Gene.proteins.synonyms",  OuterJoinStatus.OUTER);
+    return query;
+  }
 }
