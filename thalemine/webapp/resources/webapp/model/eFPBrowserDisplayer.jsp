@@ -63,6 +63,17 @@
       </a>
   </div>
   <script type="text/javascript">
+    function showImage(obj) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            jQuery('#eFPimage_loading_progress').hide();
+            var img = new Image();
+            img.src = reader.result;
+            jQuery('#eFPimage').html(img);
+        };
+        reader.readAsDataURL(new Blob([obj], {type: 'image/png'}));
+    }
+
     function loadeFPimage(ds) {
         var bar_eFPBrowser_url = "${WEB_PROPERTIES['bar.eFPBrowser.prefix']}";
         var agi = jQuery('#agi').val();
@@ -72,22 +83,28 @@
         if(ds !== undefined) {
             jQuery('#datasource option[value="' + ds + '"]').prop('selected', true);
         }
-        var bar_eFPBrowser_params = 'request={"agi":"' + agi + '","datasource":"' + datasource + '"}';
 
-        var bar_img_url = bar_eFPBrowser_url + "?" + bar_eFPBrowser_params;
-        var img_holder = jQuery('<img>').attr('src', bar_img_url);
         jQuery('#eFPimage_loading_progress').show();
 
-        img_holder.on('load', function() {
+        var req_url = bar_eFPBrowser_url + "?locus=" + agi + "&source=" + datasource;
+        var request = new XMLHttpRequest();
+        request.open('GET', req_url, true);
+        request.setRequestHeader('Authorization', 'Bearer ' + "${WEB_PROPERTIES['araport.accessToken']}");
+        request.responseType = 'blob';
+        request.onload = function () {
+            if (this.status === 200) {
+                var blob = request.response;
+                showImage(blob);
+            } else {
+                jQuery('#eFPimage_loading_progress').hide();
+                jQuery('#eFPimage').html( jQuery('<img>').attr('src', img_not_available) );
+            }
+        };
+        request.onerror = function (e) {
             jQuery('#eFPimage_loading_progress').hide();
-        });
-
-        img_holder.error('load', function() {
-            jQuery('#eFPimage_loading_progress').hide();
-            jQuery('<img>').attr('src', img_not_available);
-        });
-
-        jQuery('#eFPimage').html(img_holder);
+            jQuery('#eFPimage').html( jQuery('<img>').attr('src', img_not_available) );
+        };
+        request.send();
     }
 
     jQuery(document).ready(function(){
