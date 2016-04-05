@@ -187,6 +187,8 @@ public class JWTVerifier
         if (!algorithm.endsWith("RS256")) {
             throw new VerificationError("Unsupported signing algorithm: " + algorithm);
         }
+        // If above condition is passed, forces set String alogrithm = "SHA256withRSA"
+        algorithm = "SHA256withRSA";
         Log.debug("Verifying using " + strategy + " strategy");
         try {
             if ("NAMED_ALIAS".equals(strategy)) {
