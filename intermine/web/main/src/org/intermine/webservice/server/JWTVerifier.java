@@ -181,8 +181,10 @@ public class JWTVerifier
         } catch (JSONException e) {
             throw new VerificationError("Missing required property: " + e.getMessage());
         }
-       // algorithm should be something like "SHA256withRSA"
-        if (!algorithm.endsWith("withRSA")) {
+       // OLD: algorithm should be something like "SHA256withRSA"
+       // AFTER UPGRADE TO APIM 1.9: algorithm is something like "RS256"
+       // NOTE: Make this a configurable parameter in web.properties
+        if (!algorithm.endsWith("RS256")) {
             throw new VerificationError("Unsupported signing algorithm: " + algorithm);
         }
         Log.debug("Verifying using " + strategy + " strategy");
