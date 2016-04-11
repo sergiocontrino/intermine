@@ -36,9 +36,7 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
 
     private static final Logger LOG = Logger.getLogger(AipGffGFF3RecordHandler.class);
     private final Map<String, Item> pubmedIdMap = new HashMap<String, Item>();
-    private final Map<String, String> mrnaIdMap = new HashMap<String, String>();
-    private final HashMap<String, ArrayList<String>> mrnaIdsMap = new HashMap<String, ArrayList<String>>();
-    private final HashMap<String, ArrayList<String>> protMrnaMap = new HashMap<String, ArrayList<String>>();
+    private final Map<String, Item> protIdMap = new HashMap<String, Item>();
     /**
      * Create a new AipGffGFF3RecordHandler for the given data model.
      * @param model the model for which items will be created
@@ -123,8 +121,18 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                             } else if(ref.startsWith("UniProt:")) {
                                 String uniprotAcc = ref.substring(colonIndex + 1);
 
-                                if (protMrnaMap.get(uniprotAcc) == null) protMrnaMap.put(uniprotAcc, new ArrayList<String>());
-                                protMrnaMap.get(uniprotAcc).add(primaryIdentifier);
+                                Item proteinItem;
+                                if (protIdMap.containsKey(uniprotAcc)) {
+                                    proteinItem = protIdMap.get(uniprotAcc);
+                                } else {
+                                    proteinItem = converter.createItem("Protein");
+                                    proteinItem.setAttribute("primaryAccession", uniprotAcc);
+                                    proteinItem.setReference("organism", getOrganism());
+                                    addItem(proteinItem);
+
+                                    protIdMap.put(uniprotAcc, proteinItem);
+                                }
+                                feature.setReference("protein", proteinItem);
                             } else {
                                 throw new RuntimeException("unknown external reference type: " + ref);
                             }
@@ -144,106 +152,5 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                     feature.setAttribute("symbol", name);
                 }
             }
-
-            // For the MRNA feature class, store the InterMineObject ID in a map for
-            // use with the Protein feature loading
-            if(clsName.equals("MRNA")) {
-                String primaryIdentifier = feature.getAttribute("primaryIdentifier").getValue();
-                mrnaIdMap.put(primaryIdentifier, feature.getIdentifier());
-            }
-
-            // For the Protein feature class, check if the Dbxref(s) to the UniProt
-            // are defined. If true, assign their values to the InterMine attribute
-            // `primaryAccession`
-            if(clsName.equals("Protein")) {
-                String primaryIdentifier = feature.getAttribute("primaryIdentifier").getValue();
-                primaryIdentifier = primaryIdentifier.replace("-Protein", "");  // strip "-Protein" suffix
-                feature.setAttribute("primaryIdentifier", primaryIdentifier);
-
-                String mrnaId = getMRNA(primaryIdentifier);
-
-                if(mrnaId == null) {
-                    throw new RuntimeException("Protein does not have corresponding mRNA entity: " + primaryIdentifier);
-                }
-
-                List<String> dbxrefs = record.getDbxrefs();
-                if (dbxrefs != null) {
-                    Iterator<String> dbxrefsIter = dbxrefs.iterator();
-
-                    while (dbxrefsIter.hasNext()) {
-                        String dbxref = dbxrefsIter.next();
-
-                        List<String> refList = new ArrayList<String>(
-                                Arrays.asList(StringUtil.split(dbxref, ",")));
-                        for (String ref : refList) {
-                            ref = ref.trim();
-                            int colonIndex = ref.indexOf(":");
-                            if (colonIndex == -1) {
-                                throw new RuntimeException("external reference not understood: " + ref);
-                            }
-
-                            if(ref.startsWith("UniProt:")) {
-                                String dbxrefValue = ref.substring(colonIndex + 1);
-                                //LOG.info("Processing UniProt dbxref: " + dbxrefValue + " for Transcript: " + primaryIdentifier);
-                                String attrName1 = "primaryAccession";
-
-                                // store mapping of uniprot to Araport InterMine IDs in an ArrayList
-                                if (mrnaIdsMap.get(dbxrefValue) == null) mrnaIdsMap.put(dbxrefValue, new ArrayList<String>());
-                                mrnaIdsMap.get(dbxrefValue).add(mrnaId);
-
-                                // skip loading duplicate protein entities
-                                if (protMrnaMap.get(dbxrefValue).size() != mrnaIdsMap.get(dbxrefValue).size()) {
-                                    //clear();
-                                    removeFeature();
-                                    return;
-                                }
-
-                                // set the Transcripts and mRNAs collections with above instantiated ArrayList
-                                feature.setCollection("transcripts", mrnaIdsMap.get(dbxrefValue));
-                                feature.setCollection("mRNA", mrnaIdsMap.get(dbxrefValue));
-
-                                for (String mrnaPrimaryId : protMrnaMap.get(dbxrefValue)) {
-                                    if (mrnaPrimaryId.equals(primaryIdentifier)) {
-                                        continue;   // skip loading current feature ID as synonym
-                                    }
-                                    // add Araport IDs as synonyms of Protein
-                                    Item synonym = converter.createItem("Synonym");
-                                    synonym.setAttribute("value", mrnaPrimaryId);
-                                    synonym.setReference("subject", feature.getIdentifier());
-                                    items.put(synonym.getIdentifier(), synonym);
-                                }
-                                feature.setAttribute(attrName1, dbxrefValue);
-                            } else {
-                                throw new RuntimeException("unknown external reference type: " + ref);
-                            }
-                        }
-                    }
-                }
-            }
         }
-
-    /*
-     * retrieve InterMine ID of mRNA from HashMap using Araport Transcript ID as key
-     */
-    private String getMRNA(String primaryIdentifier) {
-        String mrnaId = mrnaIdMap.get(primaryIdentifier);
-        if (mrnaId != null) {
-            return mrnaId;
-        }
-        return null;
-    }
-
-    /**
-     * Return false - skip loading Locations for Protein features
-     * Return true  - load Locations for all other types of features
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean createLocations(@SuppressWarnings("unused") GFF3Record record) {
-        String type = record.getType();
-        if (type.equals("protein")) {
-            return false;
-        }
-        return true;
-    }
 }

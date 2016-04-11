@@ -1,10 +1,12 @@
 package org.intermine.bio.postprocess;
 
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
 
 import org.apache.log4j.Logger;
 import org.intermine.bio.util.Constants;
@@ -28,11 +30,13 @@ import org.intermine.objectstore.query.Results;
 import org.intermine.objectstore.query.ResultsRow;
 import org.intermine.objectstore.query.SimpleConstraint;
 import org.intermine.objectstore.query.SubqueryConstraint;
-import org.intermine.postprocess.PostProcessor;
 import org.intermine.model.bio.Gene;
 import org.intermine.model.bio.Protein;
 import org.intermine.model.bio.Publication;
 import org.intermine.model.bio.Transcript;
+import org.intermine.model.bio.Synonym;
+import org.intermine.postprocess.PostProcessor;
+import org.intermine.util.DynamicUtil;
 
 public class UniprotPostProcess extends PostProcessor {
 
@@ -53,6 +57,7 @@ public class UniprotPostProcess extends PostProcessor {
 
 		try {
 			processGenesProteinsPublications();
+            processProteinsTranscripts();
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Error occrured during uniprot postrprocessing." + ";Message:" + e.getMessage());
@@ -61,6 +66,121 @@ public class UniprotPostProcess extends PostProcessor {
 		log.info("Uniprot Postprocessor has completed.");
 
 	}
+
+    private Query getQueryProteinsTranscripts() throws ObjectStoreException {
+        Query q = new Query();
+
+        q.setDistinct(false);
+
+        QueryClass qcProtein = new QueryClass(Protein.class);
+        QueryClass qcTranscript = new QueryClass(Transcript.class);
+
+        q.addFrom(qcProtein);
+        q.addFrom(qcTranscript);
+
+        q.addToSelect(qcProtein);
+        q.addToSelect(qcTranscript);
+
+        ConstraintSet cs = new ConstraintSet(ConstraintOp.AND);
+
+        QueryField proteinIdField = new QueryField(qcProtein, "id");
+        SimpleConstraint proteinIdCS = new SimpleConstraint(proteinIdField, ConstraintOp.IS_NOT_NULL);
+        cs.addConstraint(proteinIdCS);
+
+        QueryCollectionReference proteinsTranscriptsRef = new QueryCollectionReference(qcProtein, "transcripts");
+        cs.addConstraint(new ContainsConstraint(proteinsTranscriptsRef, ConstraintOp.CONTAINS, qcTranscript));
+
+        q.setConstraint(cs);
+
+        return q;
+    }
+
+    private Iterator<?> getProteinsTranscriptsIterator(final Query query) throws ObjectStoreException {
+
+        ObjectStore os1 = osw.getObjectStore();
+
+        ((ObjectStoreInterMineImpl) os1).precompute(query, Constants.PRECOMPUTE_CATEGORY);
+        Results res = os1.execute(query, 5000, true, false, true);
+
+        if (res != null) {
+            log.info("Proteins Transcripts Result Set Size:" + res.size());
+        }
+
+        return res.iterator();
+    }
+
+    private void processProteinsTranscripts() throws Exception, ObjectStoreException {
+
+        log.info("ProcessProteinsTranscripts has started.");
+        Exception exception = null;
+
+        long startTime = System.currentTimeMillis();
+
+        Query query = getQueryProteinsTranscripts();
+        Iterator<?> iterator = getProteinsTranscriptsIterator(query);
+        HashMap<Integer, HashSet<Synonym>> protTranscriptsMap = new HashMap<Integer, HashSet<Synonym>>();
+        ClassDescriptor classDesc = osw.getModel().getClassDescriptorByName("Protein");
+
+        int count = 0;
+        Protein lastProtein = null;
+
+        osw.beginTransaction();
+        while (iterator.hasNext()) {
+            ResultsRow rr = (ResultsRow) iterator.next();
+
+            Protein thisProtein = (Protein) rr.get(0);
+            Transcript transcript = (Transcript) rr.get(1);
+
+            if (lastProtein != null && !(lastProtein.equals(thisProtein))) {
+                Collections syns = (Collections) lastProtein.getFieldValue("synonyms");
+                syns.addAll(protTranscriptsMap.values());
+
+                Protein tempObject;
+                try {
+                    tempObject = PostProcessUtil.cloneInterMineObject(lastProtein);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+
+                tempObject.setFieldValue("synonyms", syns);
+                osw.store(tempObject);
+
+                lastProtein = thisProtein;
+                protTranscriptsMap = new HashMap<Integer, HashSet<Synonym>>();
+            }
+
+            Integer proteinId = thisProtein.getId();
+            String transcriptPrimaryId = transcript.getPrimaryIdentifier();
+
+            // add Transcript IDs as synonyms of Protein
+            Class<?> synonymCls = osw.getModel().getClassDescriptorByName("Synonym").getType();
+            Synonym synonym = (Synonym) DynamicUtil.createObject(Collections.singleton(synonymCls));
+            synonym.setValue(transcriptPrimaryId);
+            synonym.setSubject(thisProtein);
+            osw.store(synonym);
+
+            if (protTranscriptsMap.get(proteinId) == null) protTranscriptsMap.put(proteinId, new HashSet<Synonym>());
+            protTranscriptsMap.get(proteinId).add(synonym);
+        }
+
+        if (lastProtein != null) {
+            Collections syns = (Collections) lastProtein.getFieldValue("synonyms");
+            syns.addAll(protTranscriptsMap.values());
+
+            Protein tempObject;
+            try {
+                tempObject = PostProcessUtil.cloneInterMineObject(lastProtein);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+
+            tempObject.setFieldValue("synonyms", syns);
+            osw.store(tempObject);
+        }
+
+        osw.commitTransaction();
+        log.info("ProcessProteinsTranscripts has completed.");
+    }
 
 	private Query getGeneQuerySourceRecordsbyProteins() throws ObjectStoreException {
 
@@ -156,7 +276,7 @@ public class UniprotPostProcess extends PostProcessor {
 			InterMineObject object = (InterMineObject) gene;
 
 			count++;
-			
+
 			Set<Publication> notExistingProteinsPublications = new HashSet<Publication>();
 
 			Set<Publication> existingGenePublications = new HashSet<Publication>();
@@ -319,7 +439,7 @@ public class UniprotPostProcess extends PostProcessor {
 				itemCount++;
 
 				Object countObject = (Object) item.get(1);
-				
+
 				Long publicationCount = (Long) countObject;
 				publications.add(pub);
 
@@ -355,7 +475,7 @@ public class UniprotPostProcess extends PostProcessor {
 			Set<CollectionDescriptor> collectionDescGene = classDesc.getAllCollectionDescriptors();
 
 			// Adding Class Collection Descriptors to the Map
-			
+
 			for (CollectionDescriptor item : collectionDescGene) {
 
 				boolean manyToManyC = false;
@@ -407,11 +527,11 @@ public class UniprotPostProcess extends PostProcessor {
 				manyToMany = true;
 			}
 
-			
+
 			if (manyToMany) {
-				
+
 				osw.addToCollection(destObject.getId(), classDesc.getType(), collectionName, sourceObject.getId());
-				
+
 			} else { // publications will be always many to many
 
 				// InterMineObject tempObject =
