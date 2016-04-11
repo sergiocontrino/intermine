@@ -16,6 +16,8 @@ import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -181,7 +183,17 @@ public class JWTVerifier
         } catch (JSONException e) {
             throw new VerificationError("Missing required property: " + e.getMessage());
         }
-       // algorithm should be something like "SHA256withRSA"
+        // AFTER UPGRADE TO APIM 1.9: algorithm string is something like "RS256"
+        final String regexp = "^RS([0-9]{1,3})$";
+        Pattern p = Pattern.compile(regexp);
+        Matcher m = p.matcher(algorithm);
+        // If regexp pattern is matched, extract BIT value and transform
+        // algorithm string to "SHA{BIT}withRSA"
+        if (m.matches()) {
+            String bits = m.group(1);
+            algorithm = "SHA" + bits + "withRSA";
+        }
+        // algorithm should be something like "SHA256withRSA"
         if (!algorithm.endsWith("withRSA")) {
             throw new VerificationError("Unsupported signing algorithm: " + algorithm);
         }
