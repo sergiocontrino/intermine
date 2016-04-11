@@ -62,8 +62,8 @@ public class AIPProteinFastaLoaderTask extends AIPFeatureFastaLoaderTask
             InterMineObject mrna = getMRNA(mrnaIdentifier, organism, model);
             if (mrna != null) {
                 Set<? extends InterMineObject> mrnas = new HashSet(Collections.singleton(mrna));
-                bioEntity.setFieldValue("transcripts", mrnas);
                 bioEntity.setFieldValue("mRNA", mrnas);
+                bioEntity.setFieldValue("transcripts", mrnas);
             }
 
             String geneIdentifier = mrnaIdentifier.substring(0, mrnaIdentifier.indexOf('.'));
