@@ -172,6 +172,7 @@
         <source name="aip-pep-fasta" type="fasta">
             <property name="fasta.loaderClassName"
                 value="org.intermine.bio.dataconversion.AIPProteinFastaLoaderTask"/>
+            <property name="fasta.skipIfProteinLoaded" value="true"/>
             <property name="fasta.taxonId" value="3702"/>
             <property name="fasta.sequenceType" value="protein"/>
             <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
@@ -228,7 +229,7 @@
           <property name="src.data.dir.includes" value="*Arabidopsis_thaliana*"/>
           <property name="biogrid.organisms" value="3702"/>
         </source>
-	
+
         <source name="araport-chado-stock" type="araport-chado-db">
             <property name="source.db.name" value="araport"/>
             <property name="organisms" value="3702"/>

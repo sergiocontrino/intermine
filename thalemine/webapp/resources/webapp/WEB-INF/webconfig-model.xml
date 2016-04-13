@@ -645,12 +645,6 @@
                      placement="Proteins"
                      types="Gene"/>
 
-    <reportdisplayer javaClass="org.intermine.bio.web.displayer.AraportProteinDisplayer"
-                     jspName="model/araportProteinDisplayer.jsp"
-                     replacesFields="Protein"
-                     placement="Proteins"
-                     types="Gene"/>
-
     <reportdisplayer javaClass="org.intermine.bio.web.displayer.UniProtCommentsDisplayer"
                      jspName="model/uniProtCommentsDisplayer.jsp"
                      replacesFields="md5checksum"
@@ -755,7 +749,7 @@
                      replacesFields="genotypes,phenotypesObserved"
                      placement="Stocks"
                      types="Allele"/>
-                     
+
        <reportdisplayer javaClass="org.thalemine.web.displayer.tableview.StockGeneTableDisplayer"
                      jspName="model/stockPhenotypeTableDisplayer.jsp"
                      replacesFields="genotypes,phenotypesObserved"

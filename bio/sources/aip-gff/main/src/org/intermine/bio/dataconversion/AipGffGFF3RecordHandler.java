@@ -14,11 +14,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.intermine.bio.io.gff3.GFF3Record;
 import org.intermine.metadata.Model;
 import org.intermine.metadata.StringUtil;
@@ -31,7 +34,9 @@ import org.intermine.xml.full.Item;
 public class AipGffGFF3RecordHandler extends GFF3RecordHandler
 {
 
+    private static final Logger LOG = Logger.getLogger(AipGffGFF3RecordHandler.class);
     private final Map<String, Item> pubmedIdMap = new HashMap<String, Item>();
+    private final Map<String, Item> protIdMap = new HashMap<String, Item>();
     /**
      * Create a new AipGffGFF3RecordHandler for the given data model.
      * @param model the model for which items will be created
@@ -81,6 +86,8 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
             p = Pattern.compile(regexp);
             m = p.matcher(clsName);
             if(m.find()) {
+                String primaryIdentifier = feature.getAttribute("primaryIdentifier").getValue();
+
                 List<String> dbxrefs = record.getDbxrefs();
                 if (dbxrefs != null) {
                     Iterator<String> dbxrefsIter = dbxrefs.iterator();
@@ -111,6 +118,21 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
                                     addItem(pubmedItem);
                                 }
                                 addPublication(pubmedItem);
+                            } else if(ref.startsWith("UniProt:")) {
+                                String uniprotAcc = ref.substring(colonIndex + 1);
+
+                                Item proteinItem;
+                                if (protIdMap.containsKey(uniprotAcc)) {
+                                    proteinItem = protIdMap.get(uniprotAcc);
+                                } else {
+                                    proteinItem = converter.createItem("Protein");
+                                    proteinItem.setAttribute("primaryAccession", uniprotAcc);
+                                    proteinItem.setReference("organism", getOrganism());
+                                    addItem(proteinItem);
+
+                                    protIdMap.put(uniprotAcc, proteinItem);
+                                }
+                                feature.setReference("protein", proteinItem);
                             } else {
                                 throw new RuntimeException("unknown external reference type: " + ref);
                             }

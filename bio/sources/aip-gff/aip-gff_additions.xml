@@ -9,6 +9,7 @@
   </class>
   <class name="Gene" extends="SequenceFeature" is-interface="true">
      <collection name="UTRs" referenced-type="UTR" reverse-reference="gene" />
+     <collection name="uORFs" referenced-type="UORF" reverse-reference="gene" />
   </class>
 
   <class name="Transcript" extends="SequenceFeature" is-interface="true"></class>
@@ -18,12 +19,22 @@
      <collection name="fivePrimeUTRs" referenced-type="FivePrimeUTR" reverse-reference="mRNAs" />
      <collection name="threePrimeUTRs" referenced-type="ThreePrimeUTR" reverse-reference="mRNAs" />
   </class>
+  <class name="UORF" extends="SequenceFeature" is-interface="true">
+     <reference name="gene" referenced-type="Gene" reverse-reference="uORFs" />
+  </class>
   <class name="NcRNA" extends="Transcript" is-interface="true"></class>
+  <class name="MiRNAPrimaryTranscript" extends="Transcript" is-interface="true">
+     <collection name="miRNAs" referenced-type="MiRNA" reverse-reference="miRNAPrimaryTranscript" />
+  </class>
   <class name="TRNA" extends="NcRNA" is-interface="true"></class>
-  <class name="MiRNA" extends="NcRNA" is-interface="true"></class>
+  <class name="MiRNA" extends="NcRNA" is-interface="true">
+     <reference name="miRNAPrimaryTranscript" referenced-type="MiRNAPrimaryTranscript" reverse-reverse="MiRNA" />
+  </class>
   <class name="RRNA" extends="NcRNA" is-interface="true"></class>
   <class name="SnRNA" extends="NcRNA" is-interface="true"></class>
   <class name="SnoRNA" extends="NcRNA" is-interface="true"></class>
+  <class name="LncRNA" extends="NcRNA" is-interface="true"></class>
+  <class name="AntisenseLncRNA" extends="NcRNA" is-interface="true"></class>
   <class name="Exon" extends="SequenceFeature" is-interface="true">
     <collection name="transcripts" referenced-type="Transcript" reverse-reference="exons"/>
   </class>
@@ -45,6 +56,7 @@
      <reference name="pseudogene" referenced-type="Pseudogene" reverse-reference="pseudogenictranscripts"/>
      <collection name="pseudogenicexons" referenced-type="PseudogenicExon" reverse-reference="pseudogenictranscripts"/>
    </class>
+   <class name="PseudogenicTRNA" extends="PseudogenicTranscript" is-interface="true"></class>
    <class name="PseudogenicExon" extends="Exon" is-interface="true">
      <collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogenicexons"/>
    </class>
@@ -55,4 +67,5 @@
      <collection name="transposableelements" referenced-type="TransposableElement" reverse-reference="transposonfragments"/>
    </class>
    <class name="TransposableElementGene" extends="Gene" is-interface="true"></class>
+   <class name="TranscriptRegion" extends="Transcript" is-interface="true"></class>
 </classes>

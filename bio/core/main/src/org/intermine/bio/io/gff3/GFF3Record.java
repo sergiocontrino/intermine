@@ -344,6 +344,9 @@ public class GFF3Record
         if (getAttributes().containsKey("Parent")) {
             return getAttributes().get("Parent");
         }
+        if (getAttributes().containsKey("Derives_from")) {
+            return getAttributes().get("Derives_from");
+        }
         return null;
     }
 
