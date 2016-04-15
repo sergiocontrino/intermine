@@ -409,7 +409,7 @@
     var mineUrl="${MINEURL}/";
     var svgId="eChart";
     var listName="${bag.name}";
-    var token="{token}";
+    var token="${token}";
   </script>
   <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
   <link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.1/expression.css">
