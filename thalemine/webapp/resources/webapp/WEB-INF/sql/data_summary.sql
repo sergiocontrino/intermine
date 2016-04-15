@@ -57,6 +57,8 @@ SELECT
 		then 'Mutant Alleles'
 		when (dt.name = 'TAIR Phenotypes')
 		then 'Phenotypes'
+		when (dt.name = 'RNA-seq expression')
+		then 'Expression'
 		else ds.name
 	   	
 	 end as category_name
@@ -111,7 +113,7 @@ select
 	end as sort_order
 from
 datacategory dc 
-where dataset_name not in  ('TAIR Polymorphism', 'TAIR Phenotypes', 'TAIR Germplasm', 'TAIR Ecotypes', 'Genome Annotation', 'ATTED-II Co-expression', 'Phytozome Orthologs', 'Gene Summary', 'IntAct', 'BioGRID', 'PO Annotation from TAIR','Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
+where dataset_name not in  ('RNA-seq expression', 'SRA', 'TAIR Polymorphism', 'TAIR Phenotypes', 'TAIR Germplasm', 'TAIR Ecotypes', 'Genome Annotation', 'ATTED-II Co-expression', 'Phytozome Orthologs', 'Gene Summary', 'IntAct', 'BioGRID', 'PO Annotation from TAIR','Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 and dc.datasource_name not in ('BAR', 'InterPro', 'GO', 'IntAct', 'BioGRID') 
 )
 ,
@@ -1167,6 +1169,54 @@ left join
 where d.name = 'Panther data set' and abda.name = 'Genome Annotation'
 group by d.id, ds.id, ds.name, d.name, d.description, ds.description, d.version, ds.url, d.url, p.pubmed_id, p.author_list, p.year )
 ,
+
+rnaseq_summary_helper as(
+select count(*) as gene_count,
+cast('' as text) as feature_count,
+dt.id dataset_id
+from rnaseqexpression r
+join
+rnaseqexperiment rn
+on r.experimentid = rn.id
+join dataset dt
+on dt.id = r.datasetid
+where r.type = 'gene' 
+and
+rn.sraaccession = 'ERR274309'
+group by dt.id)
+,
+
+rnaseq_summary_source as (
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Expression' as text) as category_name,
+8 as sort_order,
+ds.id datasource_id,
+ds.name datasource_name,
+ds.url datasource_url,
+ds.description as datasource_description,
+cast('RNA-seq based gene expression levels (Transcripts per Million, TPM) quantified by Salmon' as text) dataset_description,
+gh.dataset_id,
+d.name dataset_name,
+d.url dataset_url,
+cast('http://biorxiv.org/content/early/2016/04/05/047308' as text ) as pubmed_id,
+cast('Cheng et al.' as text) as authors,
+2016 as year,
+d.version as dataset_version,
+cast(gh.gene_count as text) as gene_count,
+cast(gh.feature_count as text) as feature_count
+from
+rnaseq_summary_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds
+on ds.id = d.datasourceid
+)
+,
+
 interactions_summary_helper as (
 select
 cast(count(distinct g.primaryidentifier) as text) as gene_count,
@@ -1682,6 +1732,27 @@ gene_count,
 feature_count
 from
 allele_summary
+UNION
+select
+row_type,
+parent_dataset_id,
+category_name,
+sort_order,
+datasource_id,
+datasource_name,
+datasource_url,
+datasource_description,
+dataset_description,
+dataset_id,
+dataset_name,
+dataset_url,
+dataset_version,
+pubmed_id,
+authors,
+year,
+gene_count,
+feature_count
+from rnaseq_summary_source
 ) 
 
 select
@@ -1713,7 +1784,7 @@ dataset_url,
 dataset_version,
 pubmed_id,
 case
-	 when (datasource_name = 'Araport')
+	 when (datasource_name = 'Araport' and dataset_name = 'RNA-seq expression')
 	 	then 'Manuscript in preparation'
 	when (dataset_description	= 'Transposable element genes' or dataset_description = 'Pseudogenes' or 
 			dataset_description = 'Non-coding genes')
