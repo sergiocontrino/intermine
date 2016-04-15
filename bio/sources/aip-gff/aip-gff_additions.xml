@@ -36,6 +36,7 @@
   <class name="SnRNA" extends="NcRNA" is-interface="true"></class>
   <class name="SnoRNA" extends="NcRNA" is-interface="true"></class>
   <class name="LncRNA" extends="NcRNA" is-interface="true"></class>
+  <class name="AntisenseRNA" extends="NcRNA" is-interface="true"></class>
   <class name="AntisenseLncRNA" extends="NcRNA" is-interface="true"></class>
   <class name="Exon" extends="SequenceFeature" is-interface="true">
     <collection name="transcripts" referenced-type="Transcript" reverse-reference="exons"/>

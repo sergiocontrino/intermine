@@ -57,6 +57,7 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
         refsAndCollections.put("SnRNA", "gene");
         refsAndCollections.put("SnoRNA", "gene");
         refsAndCollections.put("LncRNA", "gene");
+        refsAndCollections.put("AntisenseRNA", "gene");
         refsAndCollections.put("AntisenseLncRNA", "gene");
     }
 
