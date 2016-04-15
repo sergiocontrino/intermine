@@ -50,21 +50,21 @@
      <collection name="mRNAs" referenced-type="MRNA" reverse-reference="threePrimeUTRs"/>
   </class>
   <class name="Pseudogene" extends="Gene" is-interface="true">
-     <collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogene"/>
+     <collection name="pseudogenicTranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogene"/>
    </class>
    <class name="PseudogenicTranscript" extends="Transcript" is-interface="true">
-     <reference name="pseudogene" referenced-type="Pseudogene" reverse-reference="pseudogenictranscripts"/>
-     <collection name="pseudogenicexons" referenced-type="PseudogenicExon" reverse-reference="pseudogenictranscripts"/>
+     <reference name="pseudogene" referenced-type="Pseudogene" reverse-reference="pseudogenicTranscripts"/>
+     <collection name="pseudogenicExons" referenced-type="PseudogenicExon" reverse-reference="pseudogenicTranscripts"/>
    </class>
    <class name="PseudogenicTRNA" extends="PseudogenicTranscript" is-interface="true"></class>
    <class name="PseudogenicExon" extends="Exon" is-interface="true">
-     <collection name="pseudogenictranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogenicexons"/>
+     <collection name="pseudogenicTranscripts" referenced-type="PseudogenicTranscript" reverse-reference="pseudogenicExons"/>
    </class>
    <class name="TransposableElement" extends="SequenceFeature"  is-interface="true">
-     <collection name="transposonfragments" referenced-type="TransposonFragment" reverse-reference="transposableelements"/>
+     <collection name="transposonFragments" referenced-type="TransposonFragment" reverse-reference="transposableElement"/>
    </class>
    <class name="TransposonFragment" extends="SequenceFeature" is-interface="true">
-     <collection name="transposableelements" referenced-type="TransposableElement" reverse-reference="transposonfragments"/>
+     <reference name="transposableElement" referenced-type="TransposableElement" reverse-reference="transposonFragments"/>
    </class>
    <class name="TransposableElementGene" extends="Gene" is-interface="true"></class>
    <class name="TranscriptRegion" extends="Transcript" is-interface="true"></class>
