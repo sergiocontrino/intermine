@@ -12,7 +12,9 @@
      <collection name="uORFs" referenced-type="UORF" reverse-reference="gene" />
   </class>
 
-  <class name="Transcript" extends="SequenceFeature" is-interface="true"></class>
+  <class name="Transcript" extends="SequenceFeature" is-interface="true">
+     <attribute name="briefDescription" type="java.lang.String"/>
+  </class>
   <class name="MRNA" extends="Transcript" is-interface="true">
      <attribute name="confidenceClass" type="java.lang.String"/>
      <attribute name="confidenceRating" type="java.lang.String"/>

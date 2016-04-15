@@ -63,14 +63,16 @@ public class ProteinDisplayer extends ReportDisplayer {
       HttpSession session = request.getSession();
       final InterMineAPI im = SessionMethods.getInterMineAPI(session);
 
+      LOG.debug("In the ProteinDisplayer, going to retrieve the gene object");
       Gene geneObj = (Gene)reportObject.getObject();
+      LOG.debug("In the ProteinDisplayer, successfully retrieved the gene object");
 
       LOG.info("Entering ProteinDisplayer.display for "+geneObj.getPrimaryIdentifier());
       LOG.info("Id is "+geneObj.getId());
 
       Profile profile = SessionMethods.getProfile(session);
       // query the protein synonyms
-      PathQuery synonymsQuery = getAraportSynonyms(geneObj.getId());
+      PathQuery synonymsQuery = getUniProtSynonyms(geneObj.getId());
       exec = im.getPathQueryExecutor(profile);
       ExportResultsIterator synonymsResult;
       try {
@@ -170,14 +172,15 @@ public class ProteinDisplayer extends ReportDisplayer {
     public String getAraportTranscripts() { return araportTranscripts; }
   }
 
-  private PathQuery getAraportSynonyms(Integer id) {
+  private PathQuery getUniProtSynonyms(Integer id) {
     PathQuery query = new PathQuery(im.getModel());
     query.addViews( "Gene.proteins.id",
             "Gene.proteins.synonyms.value");
 
     query.addOrderBy("Gene.proteins.id", OrderDirection.ASC);
-    query.addConstraint(Constraints.eq("Gene.id", id.toString()));
-    query.addConstraint(Constraints.eq("Gene.proteins.dataSets.name", "Genome Annotation"));
+    query.addConstraint(Constraints.eq("Gene.id", id.toString()), "A");
+    query.addConstraint(Constraints.eq("Gene.proteins.dataSets.name", "Genome Annotation"), "B");
+    query.setConstraintLogic("A and B");
     query.setOuterJoinStatus("Gene.proteins.synonyms",  OuterJoinStatus.OUTER);
     return query;
   }
