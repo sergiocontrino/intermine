@@ -79,9 +79,9 @@ select
 	hide_empty_rows,
 	case 
 		when (category_name = 'Genome Assembly')
-			then -1
+			then -2
 		when (category_name = 'Genes')
-			then 1
+			then -1
 		when (category_name = 'Proteins')
 			then 2
 		when (category_name = 'Proteins Domains')
@@ -311,25 +311,47 @@ group by d.id
 )
 ,
 
+uorf_helper as
+(
+select 
+cast(count(*) as text) as gene_count,
+cast(count(*) as text) as feature_count,
+d.id dataset_id
+from dataset d
+join
+bioentitiesdatasets bds
+on 
+d.id = bds.datasets
+join
+datasource ds 
+ON
+ds.id = d.datasourceid
+join uorf u
+on u.id = bds.bioentities
+join 
+gene g
+on g.id = u.geneid
+group by d.id),
+
 gene_summary_source as (
 SELECT
 distinct
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Genes' as text) as category_name,
-0 as sort_order,
+-1 as sort_order,
 ds.id datasource_id,
 ds.name datasource_name,
 ds.url datasource_url,
 ds.description as datasource_description,
 cast('Protein-coding genes' as text) as dataset_description,
 gh.dataset_id,
-d.name dataset_name,
+cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as dataset_name,
 d.url dataset_url,
 p.pubmed_id,
-p.author_list as authors,
-p.year,
-d.version dataset_version,
+cast('Cheng and Krishnakumar et al.,' as text) as authors,
+2016 as year,
+cast ('' as text) as dataset_version,
 gh.gene_count, 
 gh.feature_count
 from 
@@ -349,18 +371,18 @@ cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Genes' as text) as category_name,
 1 as sort_order,
-(select ds.id from datasource ds where ds.name = 'TAIR' limit 1) as datasource_id,
-(select ds.name from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_name,
-(select ds.url from datasource ds where ds.name = 'TAIR' limit 1) as  datasource_url,
-(select ds.description from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_description,
+(select ds.id from datasource ds where ds.name = 'Araport' limit 1) as datasource_id,
+(select ds.name from datasource ds where ds.name = 'Araport' limit 1)  as datasource_name,
+(select ds.url from datasource ds where ds.name = 'Araport' limit 1) as  datasource_url,
+(select ds.description from datasource ds where ds.name = 'Araport' limit 1)  as datasource_description,
 cast('Transposable element genes' as text) as dataset_description,
 gh.dataset_id,
-cast ('Genome Annotation - TAIR10' as text) as dataset_name,
-cast ('http://arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp' as text) as dataset_url,
+cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as dataset_name,
+cast ('http://www.araport.org/data/araport11' as text) as dataset_url,
 p.pubmed_id,
-p.author_list as authors,
-p.year,
-cast ('11/2010' as text) as dataset_version,
+cast('Lamesch et al.,' as text) as authors,
+2012 as year,
+cast ('' as text) as dataset_version,
 gh.gene_count, 
 gh.feature_count
 from 
@@ -379,19 +401,19 @@ distinct
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Genes' as text) as category_name,
-1 as sort_order,
-(select ds.id from datasource ds where ds.name = 'TAIR' limit 1) as datasource_id,
-(select ds.name from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_name,
-(select ds.url from datasource ds where ds.name = 'TAIR' limit 1) as  datasource_url,
-(select ds.description from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_description,
+-1 as sort_order,
+(select ds.id from datasource ds where ds.name = 'Araport' limit 1) as datasource_id,
+(select ds.name from datasource ds where ds.name = 'Araport' limit 1)  as datasource_name,
+(select ds.url from datasource ds where ds.name = 'Araport' limit 1) as  datasource_url,
+(select ds.description from datasource ds where ds.name = 'Araport' limit 1)  as datasource_description,
 cast('Pseudogenes' as text) as dataset_description,
 gh.dataset_id,
-cast ('Genome Annotation - TAIR10' as text) as dataset_name,
-cast ('http://arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp' as text) as dataset_url,
+cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as dataset_name,
+cast ('http://www.araport.org/data/araport11' as text) as dataset_url,
 p.pubmed_id,
-p.author_list as authors,
-p.year,
-cast ('11/2010' as text) as dataset_version,
+cast('Cheng and Krishnakumar et al.,' as text) as authors,
+2016 as year,
+cast ('' as text) as dataset_version,
 gh.gene_count, 
 gh.feature_count
 from 
@@ -410,23 +432,54 @@ distinct
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Genes' as text) as category_name,
-2 as sort_order,
-(select ds.id from datasource ds where ds.name = 'TAIR' limit 1) as datasource_id,
-(select ds.name from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_name,
-(select ds.url from datasource ds where ds.name = 'TAIR' limit 1) as  datasource_url,
-(select ds.description from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_description,
+0 as sort_order,
+(select ds.id from datasource ds where ds.name = 'Araport' limit 1) as datasource_id,
+(select ds.name from datasource ds where ds.name = 'Araport' limit 1)  as datasource_name,
+(select ds.url from datasource ds where ds.name = 'Araport' limit 1) as  datasource_url,
+(select ds.description from datasource ds where ds.name = 'Araport' limit 1)  as datasource_description,
 cast('Non-coding genes' as text) as dataset_description,
 gh.dataset_id,
-cast ('Genome Annotation - TAIR10' as text) as dataset_name,
-cast ('http://arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp' as text) as dataset_url,
+cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as dataset_name,
+cast ('http://www.araport.org/data/araport11' as text) as dataset_url,
 p.pubmed_id,
-p.author_list as authors,
-p.year,
-cast ('11/2010' as text) as dataset_version,
+cast('Cheng and Krishnakumar et al.,' as text) as authors,
+2016 as year,
+cast ('' as text) as dataset_version,
 gh.gene_count, 
 gh.feature_count
 from 
 non_coding_genes_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds 
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
+UNION
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Genomic Features' as text) as category_name,
+2 as sort_order,
+ds.id as datasource_id,
+ds.name as datasource_name,
+ds.url as datasource_url,
+cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as datasource_description,
+cast('Upstream open reading frames' as text) as dataset_description,
+gh.dataset_id,
+cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as dataset_name,
+cast ('http://www.araport.org/data/araport11' as text) as dataset_url,
+p.pubmed_id,
+cast('Cheng and Krishnakumar et al.,' as text) as authors,
+2016 as year,
+cast ('' as text) as dataset_version,
+gh.gene_count, 
+gh.feature_count
+from 
+uorf_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
@@ -1782,13 +1835,18 @@ case
 end dataset_name,
 dataset_url,
 dataset_version,
-pubmed_id,
+case 
+	when (category_name = 'Genomic Features' or dataset_description = 'Non-coding genes' 
+	or dataset_description = 'Pseudogenes' or dataset_description = 'Protein-coding genes')
+	then 'http://dx.doi.org/10.1101/047308'
+	when (dataset_description = 'Transposable element genes')
+	then cast(22140109 as text)
+	else
+	pubmed_id
+end pubmed_id,
 case
 	 when (datasource_name = 'Araport' and dataset_name = 'RNA-seq expression')
 	 	then 'Manuscript in preparation'
-	when (dataset_description	= 'Transposable element genes' or dataset_description = 'Pseudogenes' or 
-			dataset_description = 'Non-coding genes')
-	 	then 'Araport updates coming 2016'
 	 	else
 	 	NULL
 end pub_title,
