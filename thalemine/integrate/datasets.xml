@@ -22,11 +22,11 @@
       <reference name="publication" ref_id="0_3" />
    </item>
    <item id="0_5" class="DataSet" implements="">
-      <attribute name="version" value="09/30/2014" />
+      <attribute name="version" value="03/31/2015" />
       <reference name="dataSource" ref_id="0_2" />
       <attribute name="name" value="Gene Summary" />
       <attribute name="description" value="TAIR-curated Arabidopsis gene symbol(s), curator summary and links between loci &amp; publications" />
-      <attribute name="url" value="https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/Public_Data_Releases/TAIR_Data_20140930" />
+      <attribute name="url" value="https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/Public_Data_Releases/TAIR_Data_20150331" />
       <reference name="publication" ref_id="0_1" />
    </item>
    <item id="0_6" class="Publication" implements="">
@@ -62,7 +62,7 @@
       <attribute name="url" value="https://www.araport.org/data/araport11" />
    </item>
    <item id="0_11" class="DataSet" implements="">
-      <attribute name="version" value="09/30/2014" />
+      <attribute name="version" value="03/31/2015" />
       <reference name="dataSource" ref_id="0_2" />
       <attribute name="name" value="PO Annotation from TAIR" />
       <attribute name="description" value="Literature-based annotations of genes to Plant Ontology (PO) terms" />
@@ -81,7 +81,7 @@
       </collection>
    </item>
    <item id="0_14" class="DataSet" implements="">
-      <attribute name="version" value="3/15/2016" />
+      <attribute name="version" value="4/01/2016" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from GOC" />
       <attribute name="description" value="GO annotations assigned by the GO Consortium" />
@@ -89,7 +89,7 @@
       <reference name="publication" ref_id="0_12" />
    </item>
    <item id="0_15" class="DataSet" implements="">
-      <attribute name="version" value="11/2/2015" />
+      <attribute name="version" value="4/01/2015" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from IntAct" />
       <attribute name="description" value="GO annotations assigned by IntAct" />
@@ -100,7 +100,7 @@
       <attribute name="pubMedId" value="19578431" />
    </item>
    <item id="0_17" class="DataSet" implements="">
-      <attribute name="version" value="3/15/2015" />
+      <attribute name="version" value="4/01/2016" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from RefGenome" />
       <attribute name="description" value="GO annotations assigned by RefGenome" />
@@ -108,7 +108,7 @@
       <reference name="publication" ref_id="0_16" />
    </item>
    <item id="0_18" class="DataSet" implements="">
-      <attribute name="version" value="06/30/2015" />
+      <attribute name="version" value="4/01/2016" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from TAIR" />
       <attribute name="description" value="GO annotations assigned by TAIR" />
@@ -116,7 +116,7 @@
       <reference name="publication" ref_id="0_12" />
    </item>
    <item id="0_19" class="DataSet" implements="">
-      <attribute name="version" value="11/2/2015" />
+      <attribute name="version" value="4/01/2016" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from TIGR" />
       <attribute name="description" value="GO annotations assigned by TIGR Arabidopsis annotation effort" />
@@ -124,7 +124,7 @@
       <reference name="publication" ref_id="0_12" />
    </item>
    <item id="0_20" class="DataSet" implements="">
-      <attribute name="version" value="2/2016" />
+      <attribute name="version" value="4/01/2016" />
       <reference name="dataSource" ref_id="0_13" />
       <attribute name="name" value="GO Annotation from UniProt" />
       <attribute name="description" value="GO annotations assigned by UniProt" />
@@ -143,7 +143,7 @@
       </collection>
    </item>
    <item id="0_23" class="DataSet" implements="">
-      <attribute name="version" value="2015_11" />
+      <attribute name="version" value="2016_02" />
       <reference name="dataSource" ref_id="0_22" />
       <attribute name="name" value="Swiss-Prot data set" />
       <attribute name="description" value="High-quality, manually annotated, non-redundant protein sequence database" />
@@ -151,7 +151,7 @@
       <reference name="publication" ref_id="0_21" />
    </item>
    <item id="0_24" class="DataSet" implements="">
-      <attribute name="version" value="2015_09" />
+      <attribute name="version" value="2016_02" />
       <reference name="dataSource" ref_id="0_22" />
       <attribute name="name" value="TrEMBL data set" />
       <attribute name="description" value="Computationally analysed records, enriched with automatic annotation" />
@@ -159,7 +159,7 @@
       <reference name="publication" ref_id="0_21" />
    </item>
    <item id="0_25" class="DataSet" implements="">
-      <attribute name="version" value="2015_11" />
+      <attribute name="version" value="2016_02" />
       <reference name="dataSource" ref_id="0_22" />
       <attribute name="name" value="UniProt FASTA dataset" />
       <attribute name="description" value="Protein sequences and alternative splice forms generated using VARSPLIC" />
@@ -167,7 +167,7 @@
       <reference name="publication" ref_id="0_21" />
    </item>
    <item id="0_26" class="DataSet" implements="">
-      <attribute name="version" value="2015_11" />
+      <attribute name="version" value="2016_02" />
       <reference name="dataSource" ref_id="0_22" />
       <attribute name="name" value="UniProt keywords data set" />
       <attribute name="description" value="Keywords and categories used in UniProtKB" />
@@ -208,7 +208,7 @@
       <attribute name="version" value="10.0" />
       <reference name="dataSource" ref_id="0_31" />
       <attribute name="name" value="Panther data set" />
-      <attribute name="description" value="PANTHER paralogs from Arabidopsis and orthologs from Yeast, Roundworm, Fruit Fly, Zebrafish, Human, Mouse and Rat" />
+      <attribute name="description" value="PANTHER paralogs from Arabidopsis" />
       <attribute name="url" value="https://www.pantherdb.org" />
       <reference name="publication" ref_id="0_30" />
    </item>
