@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="im"%>
@@ -88,9 +89,18 @@
 												</c:if>
 							</c:if>
 							<c:if test="${not empty item.pubMedId}">
-								<br>
-								<a href="http://www.ncbi.nlm.nih.gov/pubmed/${item.pubMedId}" target="_blank" class="extlink">PubMed: ${item.pubMedId}</a>
-								</br>
+								<c:choose>
+								<c:when test="${fn:contains(item.pubMedId, 'http')}">
+									<br>
+									<a href="${item.pubMedId}" target="_blank" class="extlink"> ${item.pubMedId}</a>
+									</br>
+								</c:when>
+								<c:otherwise>
+									<br>
+									<a href="http://www.ncbi.nlm.nih.gov/pubmed/${item.pubMedId}" target="_blank" class="extlink">PubMed: ${item.pubMedId}</a>
+									</br>
+								</c:otherwise>
+							</c:choose>
 							</c:if>
 							
 							<c:if test="${not empty item.pubTitle}">
@@ -202,10 +212,19 @@
   												 ${item.year}
 												</c:if>
 							</c:if>
-							<c:if test="${not empty item.pubMedId}">
-								<br>
-								<a href="http://www.ncbi.nlm.nih.gov/pubmed/${item.pubMedId}" target="_blank" class="extlink">PubMed: ${item.pubMedId}</a>
-								</br>
+								<c:if test="${not empty item.pubMedId}">
+								<c:choose>
+								<c:when test="${fn:contains(item.pubMedId, 'http')}">
+									<br>
+									<a href="${item.pubMedId}" target="_blank" class="extlink"> ${item.pubMedId}</a>
+									</br>
+								</c:when>
+								<c:otherwise>
+									<br>
+									<a href="http://www.ncbi.nlm.nih.gov/pubmed/${item.pubMedId}" target="_blank" class="extlink">PubMed: ${item.pubMedId}</a>
+									</br>
+								</c:otherwise>
+							</c:choose>
 							</c:if>
 							</td>
 					</tr>
