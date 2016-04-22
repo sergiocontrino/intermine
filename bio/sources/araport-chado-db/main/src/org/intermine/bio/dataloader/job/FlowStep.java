@@ -10,7 +10,7 @@ package org.intermine.bio.dataloader.job;
  *
  */
 
-import org.apache.commons.lang.time.StopWatch;
+
 import org.apache.log4j.Logger;
 import org.intermine.bio.item.ItemProcessor;
 import org.intermine.item.domain.database.DatabaseItemReader;
@@ -20,7 +20,7 @@ import org.intermine.item.domain.database.UnexpectedInputException;
 public class FlowStep<I, O> extends AbstractStep
 {
     protected static final Logger LOG = Logger.getLogger(FlowStep.class);
-    private static final StopWatch TIMER = new StopWatch();
+//    private static final StopWatch TIMER = new StopWatch();
     private DatabaseItemReader<? extends I> reader;
     private ItemProcessor<? super I, ? extends O> processor;
     private Step postProcessor;
@@ -29,9 +29,8 @@ public class FlowStep<I, O> extends AbstractStep
     @Override
     protected void open() throws Exception {
         if (reader != null) {
-            LOG.info("Opening Cursor in FlowStep:" + this.getName());
             reader.open();
-            LOG.info("Successfully Opened Cursor in FlowStep:" + this.getName());
+            LOG.debug("Successfully Opened Cursor in FlowStep: " + this.getName());
         } else {
             LOG.error("Error Opening Cursor in FlowStep");
         }
@@ -41,18 +40,17 @@ public class FlowStep<I, O> extends AbstractStep
     protected void doExecute(StepExecution stepExecution) throws Exception {
         taskExecutor.execute(new Runnable() {
             public void run() {
-                LOG.info("Running Flow Step!" + getName());
+                LOG.info("Running Flow Step " + getName());
                 I item = null;
                 try {
                     while (reader.hasNext()) {
                         item = reader.read();
-                        LOG.info("SQL" + reader.getSql());
-                        LOG.info("Current Item = " + item);
-                        LOG.info("Parameter values:" + reader.getParameterMap());
+                        LOG.debug("SQL" + reader.getSql());
+                        LOG.debug("Current Item = " + item);
+                        LOG.debug("Parameter values:" + reader.getParameterMap());
                         if (item != null) {
-                            LOG.info("Item will be created: " + item);
                             O processedItem = processor.process(item);
-                            LOG.info("Item has been created: " + processedItem);
+                            LOG.debug("Item has been created: " + processedItem);
                         }
                     }
                 } catch (UnexpectedInputException e1) {
@@ -65,21 +63,19 @@ public class FlowStep<I, O> extends AbstractStep
                     LOG.error("Error: " + e1.getCause());
                     e1.printStackTrace();
                 }
-                LOG.info("Flow Step has been completed!");
+                LOG.info(getName() + " has been completed.");
             }
         });
     }
 
     @Override
     protected void doPostProcess(StepExecution stepExecution) throws Exception {
-        LOG.info("Evaluating PostProcessing!");
         if (postProcessor != null) {
-            LOG.info("Running PostProcessing!");
+            LOG.info("Running PostProcessing..");
             postProcessor.execute(stepExecution);
         } else {
             LOG.info("PostProcessor is Null");
         }
-        LOG.info("Evaluating PostProcessing!");
     }
 
     public void setItemReader(DatabaseItemReader<? extends I> reader) {
@@ -102,11 +98,9 @@ public class FlowStep<I, O> extends AbstractStep
         this.postProcessor = postProcessor;
     }
 
-
     protected Step getStepProcessor() {
         return postProcessor;
     }
-
 
     public void setTaskExecutor(TaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
