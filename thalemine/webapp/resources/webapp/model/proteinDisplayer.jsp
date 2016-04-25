@@ -32,8 +32,14 @@
       <c:forEach var="row" items="${list}">
         <tr>
            <td> <a href="report.do?id=${row.id}" title="go to Thalemine protein page"> ${row.primaryIdentifier} </a></td>
-           <td> ${row.araportTranscripts} </td>
-           <td> <a class="extlink" href="http://www.uniprot.org/uniprot/${row.primaryAccession}" title="go to UniProt" target="_blank" > ${row.primaryAccession} </a></td>
+           <td> <c:choose>
+               <c:when test="${!empty row.araportTranscripts}"> ${row.araportTranscripts} </c:when>
+               <c:otherwise> N/A </c:otherwise>
+           </c:choose> </td>
+           <td> <c:choose>
+               <c:when test="${!empty row.primaryAccession}"> <a class="extlink" href="http://www.uniprot.org/uniprot/${row.primaryAccession}" title="go to UniProt" target="_blank"> ${row.primaryAccession} </a> </c:when>
+               <c:otherwise> N/A </c:otherwise>
+           </c:choose> </td>
            <td> <span class="value"> ${row.length} </span> <a target="_new" href="sequenceExporter.do?object=${row.id}"><img class="fasta" title="FASTA" src="model/images/fasta.gif"></img></a>
         </td>
         </tr>
