@@ -73,10 +73,10 @@ public class ProteinDisplayer extends ReportDisplayer {
 
       while (synonymsResult.hasNext()) {
         List<ResultElement> resElement = synonymsResult.next();
-        String id = ((resElement.get(0)!=null) && (resElement.get(0).getField()!= null))?
-                                   resElement.get(0).getField().toString():"&nbsp;";
-        String synonym = ((resElement.get(1)!=null) && (resElement.get(1).getField()!= null))?
-                                   resElement.get(1).getField().toString():"&nbsp;";
+        String id = ((resElement.get(0) != null) && (resElement.get(0).getField() != null)) ?
+                                   resElement.get(0).getField().toString() : "&nbsp;";
+        String synonym = ((resElement.get(1) != null) && (resElement.get(1).getField() != null)) ?
+                                   resElement.get(1).getField().toString() : "&nbsp;";
 
         if (synonymsMap.get(id) == null) synonymsMap.put(id, new HashSet<String>());
         String regexp = "AT[1-5CM]G[0-9]{5,5}\\.[0-9]+";
@@ -118,7 +118,6 @@ public class ProteinDisplayer extends ReportDisplayer {
     query.addViews( "Gene.proteins.id",
             "Gene.proteins.primaryIdentifier",
             "Gene.proteins.primaryAccession",
-            "Gene.proteins.uniprotAccession",
             "Gene.proteins.length"
             );
 
@@ -132,30 +131,27 @@ public class ProteinDisplayer extends ReportDisplayer {
     private String id;
     private String primaryIdentifier;
     private String primaryAccession;
-    private String uniprotAccession;
     private String length;
     private String araportTranscripts;
 
     public ProteinRecord(List<ResultElement> resElement, HashMap<String,Set<String>> synonymsMap) {
       // the fields are a copy of the query results
-      id = ((resElement.get(0)!=null) && (resElement.get(0).getField()!= null))?
-                                 resElement.get(0).getField().toString():"&nbsp;";
-      primaryIdentifier = ((resElement.get(1)!=null) && (resElement.get(1).getField()!= null))?
-                                 resElement.get(1).getField().toString():"&nbsp;";
-      primaryAccession = ((resElement.get(2)!=null) && (resElement.get(2).getField()!= null))?
-                                 resElement.get(2).getField().toString():"&nbsp;";
-      uniprotAccession = ((resElement.get(3)!=null) && (resElement.get(3).getField()!= null))?
-                                 resElement.get(3).getField().toString():"&nbsp;";
-      length = ((resElement.get(4)!=null) && (resElement.get(4).getField()!= null))?
-                                 resElement.get(4).getField().toString():"&nbsp;";
+      id = ((resElement.get(0) != null) && (resElement.get(0).getField() != null)) ?
+                                 resElement.get(0).getField().toString() : "&nbsp;";
+      primaryIdentifier = ((resElement.get(1) != null) && (resElement.get(1).getField() != null)) ?
+                                 resElement.get(1).getField().toString() : "&nbsp;";
+      primaryAccession = ((resElement.get(2) != null) && (resElement.get(2).getField() != null)) ?
+                                 resElement.get(2).getField().toString() : null;
+      length = ((resElement.get(3) != null) && (resElement.get(3).getField() != null)) ?
+                                 resElement.get(3).getField().toString() : "&nbsp;";
 
-      araportTranscripts = (synonymsMap.get(id) != null) ? StringUtils.join(synonymsMap.get(id), ", ") : "&nbsp;";
+      araportTranscripts = (synonymsMap.get(id) != null) ? StringUtils.join(synonymsMap.get(id), ", ") :
+                            ((primaryAccession == null) ? primaryIdentifier : null);
     }
 
     public String getId() { return id; }
     public String getPrimaryIdentifier() { return primaryIdentifier; }
     public String getPrimaryAccession() { return primaryAccession; }
-    public String getUniprotAccession() { return uniprotAccession; }
     public String getLength() { return length; }
     public String getAraportTranscripts() { return araportTranscripts; }
   }
