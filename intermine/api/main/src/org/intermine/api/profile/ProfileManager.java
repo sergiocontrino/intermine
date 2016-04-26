@@ -1370,8 +1370,8 @@ public class ProfileManager
             String[] providers = oauth2Providers.split(", ");
 
             // extract name of first OAuth2 provider
-            if(!providers.isEmpty()) {
-                username = providers[0].trim().toUpperCase() + ":" parts[0];
+            if(providers != null && providers.length > 0) {
+                username = providers[0].trim().toUpperCase() + ":" + parts[0];
             } else {
                 username = parts[0];
             }
