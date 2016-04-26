@@ -368,7 +368,8 @@
 
 
 <!-- RNASEQ EXPRESSION -->
-<c:if test="${bag.type == 'Gene'}">
+
+<c:if test="${bag.type == 'Gene' || bag.type == 'Pseudogene' || bag.type == 'TransposableElementGene' || fn:contains(bag.type, 'RNA') || fn:contains(bag.type, 'Transcript')}">
 
 <div class="heading" style="clear:both;margin-top:15px">
      <a id="widgets">RNA Seq Expression heat map for '${bag.name}'</a> &nbsp;
@@ -404,17 +405,16 @@
 
   <svg id="eChart" class="eChart" style="width: 100%;"></svg>
   <script type="text/javascript" charset="utf-8">
-    //var queryId="AT1G01060";
-    //var queryId="${QUERYID}";
     var mineUrl="${MINEURL}/";
     var svgId="eChart";
     var listName="${bag.name}";
     var token="${token}";
+    var type="${bag.type}";
   </script>
   <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
   <link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.1/expression.css">
   <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3-legend/1.8.0/d3-legend.min.js"></script>
-  <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.1/expression.js"></script>
+  <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.2/expression.min.js"></script>
   </div>
 </div>
 
