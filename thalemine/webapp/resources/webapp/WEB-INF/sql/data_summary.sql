@@ -1225,7 +1225,7 @@ group by d.id, ds.id, ds.name, d.name, d.description, ds.description, d.version,
 
 rnaseq_summary_helper as(
 select count(*) as gene_count,
-cast('' as text) as feature_count,
+cast(count(distinct r.expressionofid) as text) as feature_count,
 dt.id dataset_id
 from rnaseqexpression r
 join
@@ -1885,6 +1885,8 @@ case
 		then 'phenotypes'
 	when (category_name = 'Mutant Alleles')
 		then 'alleles'
+	when (dataset_name = 'RNA-seq expression')
+		then 'expressions'
 	else
 		NULL
 end as units

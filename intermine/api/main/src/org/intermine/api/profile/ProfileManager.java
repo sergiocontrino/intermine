@@ -1365,7 +1365,16 @@ public class ProfileManager
         if (parts.length > 1) {
             username = parts[0].toUpperCase() + ":" + parts[1];
         } else {
-            username = parts[0];
+            // parse list of OAuth2 providers from web.properties
+            String oauth2Providers = PropertiesUtil.getProperties().getProperty("oauth2.providers");
+            String[] providers = oauth2Providers.split(", ");
+
+            // extract name of first OAuth2 provider
+            if(providers != null && providers.length > 0) {
+                username = providers[0].trim().toUpperCase() + ":" + parts[0];
+            } else {
+                username = parts[0];
+            }
         }
 
         Profile profile = getProfile(username, classKeys);
