@@ -2,9 +2,9 @@ DataSource	TAIR	The Arabidopsis Information Resource	http://www.arabidopsis.org	
 DataSet	Genome Assembly	TAIR9 Genome assembly (5 chromosomes plus chloroplast and mitochondrial assemblies)	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	DataSource:TAIR,Publication:11130711	TAIR9
 DataSet	Gene Summary	TAIR-curated Arabidopsis gene symbol(s), curator summary and links between loci & publications	https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/Public_Data_Releases/TAIR_Data_20150331	DataSource:TAIR,Publication:26201819	03/31/2015
 DataSource	Araport	Arabidopsis Information Portal	https://www.araport.org	Publication:25414324
-DataSet	Genome Annotation	Araport11 protein coding genes supplemented with TAIR10 non-coding RNA and transposable elements	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 Pre-release 4 (03/2016)
-DataSet	Coding Sequence FASTA	Araport11 coding sequences	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 Pre-release 4 (03/2016)
-DataSet	Protein Sequence FASTA	Araport11 protein sequences	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 Pre-release 4 (03/2016)
+DataSet	Genome Annotation	Araport11 protein coding genes supplemented with TAIR10 non-coding RNA and transposable elements	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 (04/2016)
+DataSet	Coding Sequence FASTA	Araport11 coding sequences	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 (04/2016)
+DataSet	Protein Sequence FASTA	Araport11 protein sequences	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 (04/2016)
 DataSet	PO Annotation from TAIR	Literature-based annotations of genes to Plant Ontology (PO) terms	https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/GO_and_PO_Annotations/Plant_Ontology_Annotations	DataSource:TAIR,Publication:26201819	03/31/2015
 DataSource	GO	Gene Ontology Consortium	http://geneontology.org	Publication:25428369
 DataSet	GO Annotation from GOC	GO annotations assigned by the GO Consortium	http://www.geneontology.org	DataSource:GO,Publication:25428369	4/01/2016
@@ -39,5 +39,5 @@ DataSource	Phytozome	Plant Comparative Genomics portal	http://phytozome.jgi.doe.
 DataSet	Phytozome Orthologs	Gene families representing clade-specific orthology/paralogy relationships via PhytoMine web services	http://phytozome.jgi.doe.gov/phytomine/	DataSource:Phytozome,Publication:22110026	real-time
 DataSource	ATTED-II	Arabidopsis thaliana trans-factor and cis-element prediction database	http://atted.jp/	Publication:24334350
 DataSet	ATTED-II Co-expression	Co-regulated gene relationships deduced from microarray and RNA-seq data via ATTED-II web services 	http://atted.jp/help/API.shtml	DataSource:ATTED-II,Publication:24334350	real-time
-DataSet	RNA-seq expression	Measure of gene expression levels (Transcripts per Million, TPM) quantified by Salmon	https://www.araport.org/data/araport11/methods	DataSource:Araport	Araport11 Pre-release 4 (03/2016)
+DataSet	RNA-seq expression	Measure of gene expression levels (Transcripts per Million, TPM) quantified by Salmon	https://www.araport.org/data/araport11/methods	DataSource:Araport	Araport11 (04/2016)
 DataSet	SRA	NCBI Sequence Read Archive (SRA) stores raw sequencing data; Published Arabidopsis thaliana Col-0 RNA-seq datasets retrieved from NCBI SRA	https://www.araport.org/113-rna-seq-sets-used-araport11	DataSource:NCBI	09/2014
