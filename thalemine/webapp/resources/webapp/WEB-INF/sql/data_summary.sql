@@ -5,18 +5,18 @@ SELECT
 	ds.id datasource_id,
 	dt.name dataset_name,
 	ds.name datasource_name,
-	case 
+	case
 		when (ds.name = 'GO')
 			then true
 		else
 			false
 	end as hide_empty_rows,
-	case 
+	case
 		when (dt.name = 'Genome Assembly')
 		then 'Genome Assembly'
 		when (dt.name = 'Genome Annotation' or dt.name = 'Coding Sequence FASTA')
 		then 'Genes'
-	   when (	
+	   when (
 			dt.name = 'Swiss-Prot data set' OR
 			dt.name = 'TrEMBL data set' OR
 			dt.name = 'UniProt FASTA dataset' OR
@@ -28,22 +28,22 @@ SELECT
 		when (dt.name = 'Panther data set')
 	   	then 'Homology'
 	   	when (ds.name = 'GO' or dt.name = 'InterPro GO Annotation data set')
-	   	then 'Gene Ontology'
-	   	when (dt.name = 'IntAct interactions data set' or dt.name = 'BioGRID interaction data set')
-	   		then 'Interactions'
-	   	when (dt.name = 'atgenexp_hormone' or 
-	   		dt.name = 'atgenexp' or 
-	   		dt.name = 'atgenexp_pathogen' or 
-	   		dt.name = 'atgenexp_plus' or 
-	   		dt.name = 'light_series' or
-	   		dt.name = 'atgenexp_stress' or
-	   		dt.name = 'root' or
+		then 'Gene Ontology'
+		when (dt.name = 'IntAct interactions data set' or dt.name = 'BioGRID interaction data set')
+			then 'Interactions'
+		when (dt.name = 'atgenexp_hormone' or
+			dt.name = 'atgenexp' or
+			dt.name = 'atgenexp_pathogen' or
+			dt.name = 'atgenexp_plus' or
+			dt.name = 'light_series' or
+			dt.name = 'atgenexp_stress' or
+			dt.name = 'root' or
 	   		dt.name = 'seed_db' or
-	   		dt.name = 'affydb' or
-	   		dt.name = 'arabidopsis_ecotypes'
-	   		)
-	   	then 'Expression'	
-	   	when (dt.name = 'PubMed to gene mapping')
+			dt.name = 'affydb' or
+			dt.name = 'arabidopsis_ecotypes'
+			)
+		then 'Expression'
+		when (dt.name = 'PubMed to gene mapping')
 		then 'Publications'
 		when (dt.name = 'GeneRIF')
 		then 'GeneRIF'
@@ -60,13 +60,13 @@ SELECT
 		when (dt.name = 'RNA-seq expression')
 		then 'Expression'
 		else ds.name
-	   	
+
 	 end as category_name
 FROM
 	datasource ds JOIN dataset dt
 		ON
 		ds.id = dt.datasourceid
-) 
+)
 
 ,
 sort as (
@@ -77,7 +77,7 @@ select
 	dataset_name,
 	category_name,
 	hide_empty_rows,
-	case 
+	case
 		when (category_name = 'Genome Assembly')
 			then -2
 		when (category_name = 'Genes')
@@ -112,9 +112,9 @@ select
 			999
 	end as sort_order
 from
-datacategory dc 
+datacategory dc
 where dataset_name not in  ('RNA-seq expression', 'SRA', 'TAIR Polymorphism', 'TAIR Phenotypes', 'TAIR Germplasm', 'TAIR Ecotypes', 'Genome Annotation', 'ATTED-II Co-expression', 'Phytozome Orthologs', 'Gene Summary', 'IntAct', 'BioGRID', 'PO Annotation from TAIR','Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
-and dc.datasource_name not in ('BAR', 'InterPro', 'GO', 'IntAct', 'BioGRID') 
+and dc.datasource_name not in ('BAR', 'InterPro', 'GO', 'IntAct', 'BioGRID')
 )
 ,
 publication_source as (
@@ -139,12 +139,12 @@ FROM
 		bp.bioentities = g.id JOIN publication p
 		ON
 		p.id = bp.publications
-		join organism o on 
+		join organism o on
 		g.organismid = o.id and o.taxonid = 3702
-		)	
+		)
 ,
 gene_rif_pub_agg_source as (
-select 
+select
 count(*) as feature_count,
 (select d.id from dataset d where d.name = 'GeneRIF' limit 1) dataset_id
 from generif gr
@@ -154,54 +154,54 @@ on g.id = gr.geneid
 join
 publication p
 on gr.publicationid = p.id
-join organism o on 
+join organism o on
 g.organismid = o.id and o.taxonid = 3702
 )
 ,
 
 ncbi_pub_agg_source as (
-select 
+select
 feature_count,
 dataset_id
-from 
-gene_pub_source gs 
+from
+gene_pub_source gs
 )
 ,
 gene_agg_source as (
-select 
+select
 count(*) as gene_count,
 d.id dataset_id
 from dataset d
 join
 bioentitiesdatasets bds
-on 
+on
 d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
 join gene g
 on g.id = bds.bioentities
-join 
+join
 organism o
-on 
+on
 o.id = g.organismid
 where o.taxonid = 3702 and g.isobsolete = false and d.name not in  ('IntAct', 'BioGRID', 'Panther data set', 'BAR Annotations Lookup', 'Coding Sequence FASTA', 'Protein Sequence FASTA', 'UniProt FASTA dataset', 'UniProt keywords data set')
 group by d.id
 )
 ,
 gene_summary_helper as (
-select 
+select
 d.id as dataset_id,
 cast(count(distinct g.primaryidentifier) as text) as gene_count,
-cast(NULL as text ) as feature_count 
+cast(NULL as text ) as feature_count
 from gene g
 join
 organism o
 on o.id = g.organismid
 join
 cds c
-on 
+on
 c.geneid = g.id
 join
 bioentitiesdatasets bds
@@ -210,10 +210,10 @@ join
 dataset d
 on d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
-where o.taxonid = 3702 
+where o.taxonid = 3702
 and g.isobsolete = false
 and d.name = 'Genome Annotation'
 group by d.id
@@ -221,10 +221,10 @@ group by d.id
 
 transposable_element_gene_helper as (
 
-select 
+select
 d.id as dataset_id,
 cast(count(distinct g.primaryidentifier) as text) as gene_count,
-cast(NULL as text ) as feature_count 
+cast(NULL as text ) as feature_count
 from gene g
 join
 organism o
@@ -239,11 +239,10 @@ join
 dataset d
 on d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
-where o.taxonid = 3702 
-and g.isobsolete = false
+where o.taxonid = 3702
 and sg.name = 'transposable_element_gene' and d.name = 'Genome Annotation'
 group by d.id
 
@@ -251,10 +250,10 @@ group by d.id
 ,
 
 pseudogene_helper as (
-select 
+select
 d.id as dataset_id,
 cast(count(distinct g.primaryidentifier) as text) as gene_count,
-cast(NULL as text ) as feature_count 
+cast(NULL as text ) as feature_count
 from gene g
 join
 organism o
@@ -269,11 +268,10 @@ join
 dataset d
 on d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
-where o.taxonid = 3702 
-and g.isobsolete = false
+where o.taxonid = 3702
 and sg.name = 'pseudogene' and d.name = 'Genome Annotation'
 group by d.id
 )
@@ -281,11 +279,11 @@ group by d.id
 ,
 
 non_coding_genes_helper as (
-select 
+select
 d.id as dataset_id,
-cast(count(distinct nc.primaryidentifier) as text) as gene_count,
-cast(NULL as text ) as feature_count 
-from ncrna nc
+cast(count(distinct nc.geneid) as text) as gene_count,
+cast(count(distinct nc.primaryidentifier) as text) as feature_count
+from transcript nc
 join
 organism o
 on o.id = nc.organismid
@@ -299,11 +297,11 @@ join
 dataset d
 on d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
-where o.taxonid = 3702 
-and sn.name in ('tRNA', 'ncRNA', 'miRNA', 'snoRNA', 'rRNA', 'snoRNA', 'snRNA')
+where o.taxonid = 3702
+and sn.name in ('tRNA', 'pseudogenic_tRNA', 'miRNA_primary_transcript', 'snRNA', 'snoRNA', 'rRNA', 'lnc_RNA', 'antisense_lncRNA', 'antisense_RNA', 'ncRNA')
 and
 d.name = 'Genome Annotation'
 group by d.id
@@ -313,22 +311,22 @@ group by d.id
 
 uorf_helper as
 (
-select 
+select
 cast(count(*) as text) as gene_count,
 cast(count(*) as text) as feature_count,
 d.id dataset_id
 from dataset d
 join
 bioentitiesdatasets bds
-on 
+on
 d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
 join uorf u
 on u.id = bds.bioentities
-join 
+join
 gene g
 on g.id = u.geneid
 group by d.id),
@@ -346,20 +344,20 @@ ds.url datasource_url,
 ds.description as datasource_description,
 cast('Protein-coding genes' as text) as dataset_description,
 gh.dataset_id,
-cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as dataset_name,
+cast('Genome Annotation - Araport11 (04/2016)' as text) as dataset_name,
 d.url dataset_url,
 p.pubmed_id,
 cast('Cheng and Krishnakumar et al.' as text) as authors,
 2016 as year,
 cast ('' as text) as dataset_version,
-gh.gene_count, 
+gh.gene_count,
 gh.feature_count
-from 
+from
 gene_summary_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
-datasource ds 
+datasource ds
 on ds.id = d.datasourceid
 left join
 	publication_source p
@@ -383,14 +381,14 @@ p.pubmed_id,
 cast('Lamesch et al.,' as text) as authors,
 2012 as year,
 cast ('' as text) as dataset_version,
-gh.gene_count, 
+gh.gene_count,
 gh.feature_count
-from 
+from
 transposable_element_gene_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
-datasource ds 
+datasource ds
 on ds.id = d.datasourceid
 left join
 	publication_source p
@@ -408,20 +406,20 @@ cast('Genes' as text) as category_name,
 (select ds.description from datasource ds where ds.name = 'Araport' limit 1)  as datasource_description,
 cast('Pseudogenes' as text) as dataset_description,
 gh.dataset_id,
-cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as dataset_name,
+cast('Genome Annotation - Araport11 (04/2016)' as text) as dataset_name,
 cast ('http://www.araport.org/data/araport11' as text) as dataset_url,
 p.pubmed_id,
 cast('Cheng and Krishnakumar et al.' as text) as authors,
 2016 as year,
 cast ('' as text) as dataset_version,
-gh.gene_count, 
+gh.gene_count,
 gh.feature_count
-from 
+from
 pseudogene_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
-datasource ds 
+datasource ds
 on ds.id = d.datasourceid
 left join
 	publication_source p
@@ -439,20 +437,20 @@ cast('Genes' as text) as category_name,
 (select ds.description from datasource ds where ds.name = 'Araport' limit 1)  as datasource_description,
 cast('Non-coding genes' as text) as dataset_description,
 gh.dataset_id,
-cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as dataset_name,
+cast('Genome Annotation - Araport11 (04/2016)' as text) as dataset_name,
 cast ('http://www.araport.org/data/araport11' as text) as dataset_url,
 p.pubmed_id,
 cast('Cheng and Krishnakumar et al.' as text) as authors,
 2016 as year,
 cast ('' as text) as dataset_version,
-gh.gene_count, 
+gh.gene_count,
 gh.feature_count
-from 
+from
 non_coding_genes_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
-datasource ds 
+datasource ds
 on ds.id = d.datasourceid
 left join
 	publication_source p
@@ -467,23 +465,23 @@ cast('Genomic Features' as text) as category_name,
 ds.id as datasource_id,
 ds.name as datasource_name,
 ds.url as datasource_url,
-cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as datasource_description,
+cast('Genome Annotation - Araport11 (04/2016)' as text) as datasource_description,
 cast('Upstream open reading frames' as text) as dataset_description,
 gh.dataset_id,
-cast('Genome Annotation- Araport11 Pre-release 4 (3/2016)' as text) as dataset_name,
+cast('Genome Annotation - Araport11 (04/2016)' as text) as dataset_name,
 cast ('http://www.araport.org/data/araport11' as text) as dataset_url,
 p.pubmed_id,
 cast('Cheng and Krishnakumar et al.,' as text) as authors,
 2016 as year,
 cast ('' as text) as dataset_version,
-gh.gene_count, 
+gh.gene_count,
 gh.feature_count
-from 
+from
 uorf_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
-datasource ds 
+datasource ds
 on ds.id = d.datasourceid
 left join
 	publication_source p
@@ -491,32 +489,32 @@ left join
 )
 ,
 pub_agg_feature_source as (
-select 
+select
 feature_count,
 dataset_id
-from 
+from
 gene_rif_pub_agg_source
 UNION
 select
 feature_count,
 dataset_id
-from 
+from
 ncbi_pub_agg_source
  )
-, 
+,
 
 protein_agg_source as (
 
-select 
+select
 count(distinct(proteins)) feature_count,
 d.id dataset_id
 from dataset d
 join
 bioentitiesdatasets bds
-on 
+on
 d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
 join gene g
@@ -528,7 +526,7 @@ join protein p
 on p.id = gp.proteins
 join organism o
 on o.id = g.organismid
-where o.taxonid = 3702 and ds.name = 'UniProt' 
+where o.taxonid = 3702 and ds.name = 'UniProt'
 and p.uniprotname IS NOT NULL
 group by d.id
 )
@@ -536,16 +534,16 @@ group by d.id
 
 po_summary_helper as(
 SELECT
-	cast(count(distinct g.primaryidentifier) as text) as gene_count, 
+	cast(count(distinct g.primaryidentifier) as text) as gene_count,
 	cast(count(*) as text) feature_count,
 	d.id dataset_id
 	from dataset d
 join
 bioentitiesdatasets bds
-on 
+on
 d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
 join gene g
@@ -579,14 +577,14 @@ p.pubmed_id,
 p.author_list as authors,
 p.year,
 d.version dataset_version,
-gh.gene_count, 
+gh.gene_count,
 gh.feature_count
-from 
+from
 po_summary_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
-datasource ds 
+datasource ds
 on ds.id = d.datasourceid
 left join
 	publication_source p
@@ -600,10 +598,10 @@ SELECT
 	from dataset d
 join
 bioentitiesdatasets bds
-on 
+on
 d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
 join gene g
@@ -626,10 +624,10 @@ d.id dataset_id
 from dataset d
 join
 bioentitiesdatasets bds
-on 
+on
 d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
 join gene g
@@ -640,18 +638,18 @@ on g.id = gp.genes
 join organism o
 on o.id = g.organismid
 where o.taxonid = 3702 and d.name = 'KEGG pathways data set'
-group by 
+group by
 d.id
 
 ),
 
 genome_assembly_agg_source as (
-select count(*) feature_count, 
+select count(*) feature_count,
 d.id dataset_id
 from dataset d
 join
 bioentitiesdatasets ds
-on 
+on
 d."id" = ds.datasets
 join sequencefeature g
 on g."id" = ds.bioentities
@@ -660,12 +658,12 @@ group by d.id
 ),
 
 cds_agg_source as (
-select count(*) feature_count, 
+select count(*) feature_count,
 d.id dataset_id
 from dataset d
 join
 bioentitiesdatasets ds
-on 
+on
 d."id" = ds.datasets
 join cds c
 on c.id = ds.bioentities
@@ -675,7 +673,7 @@ on g.id = c.geneid
 group by d.id)
 
 ,
-agg_feature_count_helper as 
+agg_feature_count_helper as
 (
 select
 feature_count,
@@ -683,16 +681,16 @@ dataset_id
 from
 cds_agg_source
 UNION
-select 
+select
 feature_count,
 dataset_id
-from 
+from
 genome_assembly_agg_source
 UNION
-select 
+select
 feature_count,
 dataset_id
-from 
+from
 pub_agg_feature_source
 UNION
 select
@@ -720,7 +718,7 @@ join
 dataset dt
 on dataset_id = dt.id
 join
-datasource ds 
+datasource ds
 on ds.id = dt.datasourceid
 )
 ,
@@ -731,28 +729,28 @@ sum(feature_count) feature_count,
 datasource_id
 from
 agg_feature_count
-group by 
+group by
 datasource_id
 )
 ,
 gene_data_source_agg as (
-select 
+select
 count(*) as gene_count,
 ds.id datasource_id
 from dataset d
 join
 bioentitiesdatasets bds
-on 
+on
 d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
 join gene g
 on g.id = bds.bioentities
-join 
+join
 organism o
-on 
+on
 o.id = g.organismid
 where o.taxonid = 3702 and d.name not in ('IntAct', 'BioGRID', 'Panther data set') and ds.name not in ('IntAct', 'BioGRID')
 group by ds.id )
@@ -769,30 +767,30 @@ SELECT
 	ds.id datasource_id,
 	ds.url datasource_url,
 	ds.description datasource_description,
-	case 
-		when (ds.name = 'GO' or ds.name = 'BAR') 
+	case
+		when (ds.name = 'GO' or ds.name = 'BAR')
 			then
 				ds.description
-		when (dt.name = 'PubMed to gene mapping') 
+		when (dt.name = 'PubMed to gene mapping')
 			then
 				'Curated associations between publications and genes'
 		 else dt.description
 	end as dataset_description,
-	case 
-		when (ds.name = 'GO' or ds.name = 'BAR') 
+	case
+		when (ds.name = 'GO' or ds.name = 'BAR')
 			then
 				ds.id
 		 else dt.id
 	end as dataset_id,
-	case 
-		when (ds.name = 'GO' or ds.name = 'BAR') 
+	case
+		when (ds.name = 'GO' or ds.name = 'BAR')
 			then
 				ds.name
 		 else dt.name
 	end as dataset_name,
 	dt.version dataset_version,
-	case 
-		when (ds.name = 'GO' or ds.name = 'BAR') 
+	case
+		when (ds.name = 'GO' or ds.name = 'BAR')
 			then
 				ds.url
 		 else dt.url
@@ -800,15 +798,15 @@ SELECT
 	p.pubmed_id,
 	p.author_list as authors,
 	p.year,
-	case 
-		when (ds.name = 'GO') 
+	case
+		when (ds.name = 'GO')
 			then
 				gds.gene_count
 		 else gs.gene_count
 	end as gene_count,
 	gds.gene_count data_source_gene_count,
-	case 
-		when (ds.name = 'GO') 
+	case
+		when (ds.name = 'GO')
 			then
 				agg_f_ds.feature_count
 		 else aggf.feature_count
@@ -819,7 +817,7 @@ SELECT
 		ON
 		ds.id = dt.datasourceid
 		join
-		sort st 
+		sort st
 		on st.dataset_id = dt.id and st.datasource_id = ds.id
 		left join
 	publication_source p
@@ -827,9 +825,9 @@ SELECT
 	left join
 	gene_agg_source gs
 	on gs.dataset_id = dt.id
-	left join 
+	left join
 	agg_feature_count aggf
-	on aggf.dataset_id = dt.id 
+	on aggf.dataset_id = dt.id
 	left join
 	gene_data_source_agg gds
 	on gds.datasource_id = ds.id
@@ -842,7 +840,7 @@ SELECT
 ,
 
 stock_agg_source as (
-select 
+select
 count(distinct ge.primaryidentifier) as gene_count,
 count(distinct s.id) feature_count,
 cast('TAIR Germplasm' as text) as dataset_name
@@ -852,7 +850,7 @@ join
 genotypesstocks gs
 on gs.stocks = s.id
 left
-join 
+join
 genotype g
 on g.id = gs.genotypes
 left
@@ -868,7 +866,7 @@ join
 affectedallelesaffectedgenes afg
 on afg.affectedalleles = a.id
 left
-join 
+join
 gene ge
 on ge.id = afg.affectedgenes
 ),
@@ -905,7 +903,7 @@ on st.dataset_name = d.name
 		,
 phenotype_agg_source as (
 
-select 
+select
 count(ge.primaryidentifier) as gene_count,
 count(distinct s.id) feature_count,
 cast('TAIR Phenotypes' as text) as dataset_name
@@ -915,7 +913,7 @@ join
 observedinphenotypesobserved gs
 on gs.phenotypesobserved = s.id
 left
-join 
+join
 genotype g
 on g.id = gs.observedin
 left
@@ -931,7 +929,7 @@ join
 affectedallelesaffectedgenes afg
 on afg.affectedalleles = a.id
 left
-join 
+join
 gene ge
 on ge.id = afg.affectedgenes
 
@@ -971,7 +969,7 @@ on st.dataset_name = d.name
 ,
 expression_datasource as
 (
-select 
+select
 ds.id datasource_id,
 ds.name datasource_name,
 ds.url datasource_url,
@@ -996,7 +994,7 @@ where ds.name = 'BAR'
 ,
 
 efp_summary as (
-select 
+select
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Expression' as text) category_name,
@@ -1025,7 +1023,7 @@ on p.id = d.publicationid
 where d.name = 'Arabidopsis eFP')
 ,
 expression_summary_helper as (
-select 
+select
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast ('Expression' as text) category_name,
@@ -1044,7 +1042,7 @@ eds.authors,
 eds.year,
 24005 as gene_count,
 123 as feature_count
-from 
+from
 expression_datasource eds
 limit 1
 )
@@ -1070,7 +1068,7 @@ authors,
 year,
 cast(gene_count as text) as gene_count,
 cast(feature_count as text) as feature_count
-from 
+from
 expression_summary_helper
 UNION
 select
@@ -1093,13 +1091,13 @@ authors,
 year,
 cast(gene_count as text) as gene_count,
 cast(feature_count as text) as feature_count
-from 
+from
 efp_summary
 )
 
 ,
-phytomozome_summary as (
-select 
+phytozome_summary as (
+select
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Homology' as text) as category_name,
@@ -1130,7 +1128,7 @@ where d.name = 'Phytozome Orthologs'
 ,
 
 atgen_express_summary as (
-select 
+select
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
 cast('Co-Expression' as text) category_name,
@@ -1169,7 +1167,7 @@ cast('Homology' as text) as category_name,
 4 as sort_order,
 ds.id datasource_id,
 ds.name datasource_name,
-case 
+case
 	when (d.url is not null)
 		then replace(ds.url, 'https', 'http')
 	else
@@ -1179,7 +1177,7 @@ ds.description as datasource_description,
 d.description dataset_description,
 d.id dataset_id,
 d.name dataset_name,
-case 
+case
 	when (d.url is not null)
 		then replace(d.url, 'https', 'http')
 	else
@@ -1189,9 +1187,9 @@ p.pubmed_id,
 p.author_list as authors,
 p.year,
 d.version dataset_version,
-cast(count(distinct abg.primaryidentifier) as text) as gene_count, 
+cast(count(distinct abg.primaryidentifier) as text) as gene_count,
 cast(count(distinct be.primaryidentifier) as text) as feature_count
-from 
+from
 gene g
 join
 bioentitiesdatasets bds
@@ -1200,16 +1198,16 @@ join
 dataset d
 on d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
-join homologue h 
+join homologue h
 on g.id = h.geneid
 join bioentity be
 on be.id = h.homologueid
 join
 gene abg
-on 
+on
 g.id = abg.id
 join
 bioentitiesdatasets bdsa
@@ -1233,7 +1231,7 @@ rnaseqexperiment rn
 on r.experimentid = rn.id
 join dataset dt
 on dt.id = r.datasetid
-where r.type = 'gene' 
+where r.type = 'gene'
 and
 rn.sraaccession = 'ERR274309'
 group by dt.id)
@@ -1386,9 +1384,9 @@ group by d.id, ds.id, ds.name, d.name, d.description, ds.description, d.version,
 gene_ontology_summary_helper as (
 SELECT
 (select d.id from dataset d join datasource ds on ds.id = d.datasourceid where ds.name = 'GO' limit 1)  as dataset_id,
-cast(count(distinct g.primaryidentifier) as text) as gene_count, 
+cast(count(distinct g.primaryidentifier) as text) as gene_count,
 cast(count(*) as text) feature_count
-from 
+from
 genegoannotation go
 join gene g
 on g.id = go.gene
@@ -1398,7 +1396,7 @@ join
 goannotation goa
 on go.goannotation = goa.id
 join
-ontologyterm ot 
+ontologyterm ot
 on ot.id = goa.ontologytermid
 join
 bioentitiesdatasets bds
@@ -1407,7 +1405,7 @@ join
 dataset d
 on d.id = bds.datasets
 join
-datasource ds 
+datasource ds
 ON
 ds.id = d.datasourceid
 where o.taxonid = 3702 and ds.name = 'GO'
@@ -1415,7 +1413,7 @@ where o.taxonid = 3702 and ds.name = 'GO'
 ),
 
 allele_agg_source as (
-select 
+select
 count(distinct ge.primaryidentifier) as gene_count,
 count(distinct s.id) feature_count,
 cast('TAIR Polymorphism' as text) as dataset_name
@@ -1425,7 +1423,7 @@ join
 affectedallelesaffectedgenes afg
 on afg.affectedalleles = s.id
 left
-join 
+join
 gene ge
 on ge.id = afg.affectedgenes
 ),
@@ -1480,22 +1478,22 @@ p.pubmed_id,
 p.author_list as authors,
 p.year,
 d.version dataset_version,
-gh.gene_count, 
+gh.gene_count,
 gh.feature_count
-from 
+from
 gene_ontology_summary_helper gh
 join dataset d
 on d.id = gh.dataset_id
 join
-datasource ds 
+datasource ds
 on ds.id = d.datasourceid
 left join
 	publication_source p
 	on p.id = d.publicationid
 )
-, 
+,
 data_summary_source_units as (
-select 
+select
 distinct
 row_type,
 parent_dataset_id,
@@ -1515,7 +1513,7 @@ authors,
 year,
 cast(gene_count as text) as gene_count,
 cast(feature_count as text) as feature_count
-from 
+from
 data_summary_source
 UNION
 select
@@ -1588,7 +1586,7 @@ from
 protein_domain_summary_helper
 UNION
 select
-distinct 
+distinct
 row_type,
 parent_dataset_id,
 category_name,
@@ -1608,7 +1606,7 @@ year,
 cast('real-time' as text) as gene_count,
 cast('real-time' as text) as feature_count
 from
-phytomozome_summary
+phytozome_summary
 UNION
 select
 row_type,
@@ -1651,7 +1649,7 @@ authors,
 year,
 gene_count,
 feature_count
-from 
+from
 homologs_summary_source
 UNION
 select
@@ -1717,7 +1715,7 @@ authors,
 year,
 gene_count,
 feature_count
-from 
+from
 gene_summary_source
 UNION
 select
@@ -1806,7 +1804,7 @@ year,
 gene_count,
 feature_count
 from rnaseq_summary_source
-) 
+)
 
 select
 row_type,
@@ -1835,8 +1833,8 @@ case
 end dataset_name,
 dataset_url,
 dataset_version,
-case 
-	when (category_name = 'Genomic Features' or dataset_description = 'Non-coding genes' 
+case
+	when (category_name = 'Genomic Features' or dataset_description = 'Non-coding genes'
 	or dataset_description = 'Pseudogenes' or dataset_description = 'Protein-coding genes')
 	then 'http://dx.doi.org/10.1101/047308'
 	when (dataset_description = 'Transposable element genes')
@@ -1854,11 +1852,11 @@ authors,
 case when(year = 0)
 	then null
 	else
-		year 
+		year
 end as year,
 gene_count,
 feature_count,
-case 
+case
 	when (category_name = 'Proteins')
 		then 'proteins'
 	when (category_name = 'Protein Domains')
