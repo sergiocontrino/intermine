@@ -1,7 +1,7 @@
 package org.intermine.bio.dataconversion;
 
 /*
- * Copyright (C) 2002-2015 FlyMine
+ * Copyright (C) 2002-2016 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -49,8 +49,9 @@ public class UniprotEntry
     // map of gene designation (normally the primary name) to dbref (eg. FlyBase, FBgn001)
     // this map is used when there is more than one gene but the dbref is needed to set an
     // identifier
-    private Map<String, Dbref> geneDesignationToDbref = new HashMap<String, Dbref>();
+//    private Map<String, Dbref> geneDesignationToDbref = new HashMap<String, Dbref>();
     private Map<String, Dbref> mrnaDesignationToDbref = new HashMap<String, Dbref>();
+    private Map<String, String> geneDesignationToDbref = new HashMap<String, String>();
 
     // temporary objects that hold attribute value until the item is stored
     // usually on the next line of XML
@@ -128,13 +129,18 @@ public class UniprotEntry
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void addToCollection(String collectionName, String value) {
+    public List<String> getCollection(String collectionName) {
         List<String> values = collections.get(collectionName);
         if (values == null) {
             values = new ArrayList();
             collections.put(collectionName, values);
         }
-        values.add(value);
+        return values;
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private void addToCollection(String collectionName, String value) {
+        getCollection(collectionName).add(value);
     }
 
     /**
@@ -488,7 +494,9 @@ public class UniprotEntry
      */
     public void addCanonicalIsoform(String accession) {
         isIsoform = false;
-        addToCollection("accessions", accession);
+        addToCollection("canonicalIsoformAccessions", accession);
+        collections.get("canonicalIsoformAccessions").addAll(getIsoformSynonyms());
+        collections.remove("isoformSynonyms");
     }
 
     /**
@@ -502,7 +510,12 @@ public class UniprotEntry
      * @param accession of the isoform
      */
     public void addIsoform(String accession) {
+        List<String> synonyms = getIsoformSynonyms();
+        for (String s : synonyms) {
+            accession += ("|" + s);
+        }
         addToCollection("isoforms", accession);
+        collections.remove("isoformSynonyms");
     }
 
     /**
@@ -593,7 +606,7 @@ public class UniprotEntry
     /**
      * @param geneDesignationToDbref map of gene designations to dbref
      */
-    public void setGeneDesignations(Map<String, Dbref> geneDesignationToDbref) {
+    private void setGeneDesignations(Map<String, String> geneDesignationToDbref) {
         this.geneDesignationToDbref = geneDesignationToDbref;
     }
 
@@ -810,14 +823,15 @@ public class UniprotEntry
      * the dbref entries to the correct gene.
      *
      * this is especially important when multiple identifiers are assigned, as in the case of yeast.
-     * @param geneDesignation "gene designation" for this gene.  usually the "primary" name
+     * @param identifier "gene designation" for this gene from the XML.
      */
-    public void addGeneDesignation(String geneDesignation) {
-        if (dbref != null && geneDesignationToDbref.get(geneDesignation) == null) {
-            geneDesignationToDbref.put(geneDesignation, dbref);
+    public void addGeneDesignation(String identifier) {
+        if (dbref != null) {
+            geneDesignationToDbref.put(identifier, dbref.type);
         } else {
-            LOG.debug("Could not set 'gene designation' for dbref:" + dbref);
+            LOG.debug("Could not set 'gene designation' for dbref:" + dbref.value);
         }
+
     }
 
     /**
@@ -847,8 +861,8 @@ public class UniprotEntry
      */
     public Set<String> getGeneDesignation(String dbrefName) {
         Set<String> identifiers = new HashSet<String>();
-        for (Map.Entry<String, Dbref> entry : geneDesignationToDbref.entrySet()) {
-            if (entry.getValue().getType().equals(dbrefName)) {
+        for (Map.Entry<String, String> entry : geneDesignationToDbref.entrySet()) {
+            if (entry.getValue().equals(dbrefName)) {
                 identifiers.add(entry.getKey());
             }
         }
@@ -981,6 +995,8 @@ public class UniprotEntry
      * @return cloned uniprot entry, an isoform of original entry
      */
     public UniprotEntry createIsoformEntry(String accession) {
+        String[] bits = accession.split("\\|");
+        accession = bits[0];
         UniprotEntry entry = new UniprotEntry(accession);
         entry.setIsoform(true);
         entry.setDatasetRefId(datasetRefId);
@@ -990,7 +1006,10 @@ public class UniprotEntry
         entry.setFragment(isFragment);
         entry.setUniprotAccession(uniprotAccession);
         entry.setDbrefs(dbrefs);
-        entry.setAccessions(collections.get("accessions"));
+        entry.getCollection("accessions").addAll(getCollection("accessions"));
+        for (int i = 1; i < bits.length; i++) {
+            entry.addAccession (bits[i]);
+        }
         entry.setComments(collections.get("comments"));
 //        entry.setCommentEvidence(commentEvidence);
         entry.setDomains(collections.get("domains"));
