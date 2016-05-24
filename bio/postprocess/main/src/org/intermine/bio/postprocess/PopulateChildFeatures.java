@@ -155,8 +155,9 @@ public class PopulateChildFeatures
                 continue;
             }
 
-            LOG.debug("ZERO " + childSOTerm.getName() + " :" + childCollectionName + "-->"
+            LOG.info("ZERO " + childSOTerm.getName() + " :" + childCollectionName + "-->"
             + childClassName + " PAR =>" + childSOTerm.getParents().size());
+            LOG.info("ZERO1 parent: " + parentClass.getCanonicalName());
 
             // is gene in transcript parents collection
             // exon.parents() contains transcript, but we need to match on mRNA which is a
@@ -221,8 +222,8 @@ public class PopulateChildFeatures
         Query q = new Query();
         q.setDistinct(false);
 
-        QueryClass qcFeature = new QueryClass(model.getClassDescriptorByName("SequenceFeature")
-                .getType());
+        QueryClass qcFeature =
+                new QueryClass(model.getClassDescriptorByName("SequenceFeature").getType());
         q.addToSelect(qcFeature);
         q.addFrom(qcFeature);
 
