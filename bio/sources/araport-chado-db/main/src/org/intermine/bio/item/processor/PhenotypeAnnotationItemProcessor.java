@@ -25,364 +25,360 @@ import org.intermine.xml.full.Item;
 import org.intermine.bio.domain.source.*;
 
 public class PhenotypeAnnotationItemProcessor extends DataSourceProcessor implements
-		ItemProcessor<SourcePhenotypeAnnotation, Item> {
+        ItemProcessor<SourcePhenotypeAnnotation, Item>
+{
 
-	protected static final Logger log = Logger.getLogger(PhenotypeAnnotationItemProcessor.class);
+    protected static final Logger LOG = Logger.getLogger(PhenotypeAnnotationItemProcessor.class);
 
-	private String targetClassName;
+    private String targetClassName;
 
-	private static final String DATASET_NAME = "TAIR Germplasm";
-	private static final String ITEM_CLASSNAME = "PhenotypeAnnotation";
+    private static final String DATASET_NAME = "TAIR Germplasm";
+    private static final String ITEM_CLASSNAME = "PhenotypeAnnotation";
 
-	public PhenotypeAnnotationItemProcessor(ChadoDBConverter chadoDBConverter) {
-		super(chadoDBConverter);
-	}
+    public PhenotypeAnnotationItemProcessor(ChadoDBConverter chadoDBConverter) {
+        super(chadoDBConverter);
+    }
 
-	@Override
-	public Item process(SourcePhenotypeAnnotation item) throws Exception {
+    @Override
+    public Item process(SourcePhenotypeAnnotation item) throws Exception {
 
-		return createPhenotypeAnnotation(item);
+        return createPhenotypeAnnotation(item);
 
-	}
+    }
 
-	private Item createPhenotypeAnnotation(SourcePhenotypeAnnotation source) throws ObjectStoreException {
+    private Item createPhenotypeAnnotation(SourcePhenotypeAnnotation source)
+        throws ObjectStoreException {
 
-		Exception exception = null;
+        Exception exception = null;
+        Item item = null;
+        ItemHolder phenotypeItemHolder = null;
+        Item phenotypeItem = null;
+        ItemHolder genotypeItemHolder = null;
+        Item genotypeItem = null;
+        ItemHolder stockItemHolder = null;
+        Item stockItem = null;
+        ItemHolder publicationItemHolder = null;
+        Item publicationItem = null;
+        int itemId = -1;
 
-		Item item = null;
+        try {
+            LOG.debug("Creating Item has started. Source Object:" + source);
 
-		ItemHolder phenotypeItemHolder = null;
-		Item phenotypeItem = null;
+            item = super.getService().createItem(ITEM_CLASSNAME);
 
-		ItemHolder genotypeItemHolder = null;
-		Item genotypeItem = null;
+            LOG.debug("Item place holder has been created: " + item);
 
-		ItemHolder stockItemHolder = null;
-		Item stockItem = null;
+            // Get All Accessions first
 
-		ItemHolder publicationItemHolder = null;
-		Item publicationItem = null;
+            if (StringUtils.isBlank(source.getPhenotypeUniqueAccession())) {
+                Exception e = new Exception("Phenotype Accession cannot be null! Skipping Source Record:" + source);
+                throw e;
+            }
 
-		int itemId = -1;
+            if (StringUtils.isBlank(source.getGenotypeUniqueAccession())) {
+                Exception e = new Exception("Genotype Accession cannot be null! Skipping Source Record:" + source);
+                throw e;
+            }
 
-		try {
-			log.debug("Creating Item has started. Source Object:" + source);
+            if (StringUtils.isBlank(source.getGermplasmUniqueAccession())) {
+                Exception e = new Exception("Germpalsm Accession cannot be null! Skipping Source Record:" + source);
+                throw e;
+            }
 
-			item = super.getService().createItem(ITEM_CLASSNAME);
+            if (StringUtils.isBlank(source.getPubAccessionNumber())) {
+                Exception e = new Exception("Publication Accession cannot be null! Skipping Source Record:" + source);
+                throw e;
+            }
 
-			log.debug("Item place holder has been created: " + item);
+            LOG.info("Phenotype Accession " + source.getPhenotypeUniqueAccession());
+            LOG.info("Germplasm Accession " + source.getGermplasmUniqueAccession());
+            LOG.info("Genotype Accession " + source.getGenotypeUniqueAccession());
+            LOG.info("Publication Accession " + source.getPubUniqueAccession());
 
-			// Get All Accessions first
+            // Obtain Phenotype Reference
 
-			if (StringUtils.isBlank(source.getPhenotypeUniqueAccession())) {
-				Exception e = new Exception("Phenotype Accession cannot be null! Skipping Source Record:" + source);
-				throw e;
-			}
+            phenotypeItemHolder = PhenotypeService.getPhenotypeItem(source.getPhenotypeUniqueAccession());
 
-			if (StringUtils.isBlank(source.getGenotypeUniqueAccession())) {
-				Exception e = new Exception("Genotype Accession cannot be null! Skipping Source Record:" + source);
-				throw e;
-			}
+            if (phenotypeItemHolder == null) {
+                Exception e = new Exception("Phenotype Item Holder has not found ! Skipping Source Record:"
+                        + "Phenotype Accession:" + source.getPhenotypeUniqueAccession() + "Source:" + source);
+                throw e;
+            }
 
-			if (StringUtils.isBlank(source.getGermplasmUniqueAccession())) {
-				Exception e = new Exception("Germpalsm Accession cannot be null! Skipping Source Record:" + source);
-				throw e;
-			}
+            phenotypeItem = phenotypeItemHolder.getItem();
 
-			if (StringUtils.isBlank(source.getPubAccessionNumber())) {
-				Exception e = new Exception("Publication Accession cannot be null! Skipping Source Record:" + source);
-				throw e;
-			}
+            if (phenotypeItem == null) {
+                Exception e = new Exception("Phenotype Item cannot be null ! Skipping Source Record:"
+                        + "Phenotype Accession:" + source.getPhenotypeUniqueAccession() + "Source:" + source);
+                throw e;
+            }
 
-			log.info("Phenotype Accession " + source.getPhenotypeUniqueAccession());
-			log.info("Germplasm Accession " + source.getGermplasmUniqueAccession());
-			log.info("Genotype Accession " + source.getGenotypeUniqueAccession());
-			log.info("Publication Accession " + source.getPubUniqueAccession());
+            item.setReference("phenotype", phenotypeItem);
 
-			// Obtain Phenotype Reference
+            // obtain Genotype Reference
 
-			phenotypeItemHolder = PhenotypeService.getPhenotypeItem(source.getPhenotypeUniqueAccession());
+            genotypeItemHolder = GenotypeService.getGenotypeItem(source.getGenotypeUniqueAccession());
 
-			if (phenotypeItemHolder == null) {
-				Exception e = new Exception("Phenotype Item Holder has not found ! Skipping Source Record:"
-						+ "Phenotype Accession:" + source.getPhenotypeUniqueAccession() + "Source:" + source);
-				throw e;
-			}
+            if (genotypeItemHolder == null) {
+                Exception e = new Exception("Genotype Item Holder has not found ! Skipping Source Record:"
+                        + "Genotype Accession:" + source.getGenotypeUniqueAccession() + "; Source:" + source);
+                throw e;
+            }
 
-			phenotypeItem = phenotypeItemHolder.getItem();
+            genotypeItem = genotypeItemHolder.getItem();
 
-			if (phenotypeItem == null) {
-				Exception e = new Exception("Phenotype Item cannot be null ! Skipping Source Record:"
-						+ "Phenotype Accession:" + source.getPhenotypeUniqueAccession() + "Source:" + source);
-				throw e;
-			}
+            if (genotypeItem == null) {
+                Exception e = new Exception("Genotype Item cannot be null ! Skipping Source Record:"
+                        + "Genotype Accession:" + source.getGenotypeUniqueAccession() + source);
+                throw e;
+            }
 
-			item.setReference("phenotype", phenotypeItem);
+            item.setReference("genotype", genotypeItem);
 
-			// obtain Genotype Reference
+            // set Stock Reference
 
-			genotypeItemHolder = GenotypeService.getGenotypeItem(source.getGenotypeUniqueAccession());
+            stockItemHolder = StockService.getStockItem(source.getGermplasmUniqueAccession());
 
-			if (genotypeItemHolder == null) {
-				Exception e = new Exception("Genotype Item Holder has not found ! Skipping Source Record:"
-						+ "Genotype Accession:" + source.getGenotypeUniqueAccession() + "; Source:" + source);
-				throw e;
-			}
+            if (stockItemHolder == null) {
+                Exception e = new Exception("Stock Item Holder has not found ! Skipping Source Record:"
+                        + "Germplasm Accession:" + source.getGermplasmUniqueAccession() + source);
+                throw e;
+            }
 
-			genotypeItem = genotypeItemHolder.getItem();
+            stockItem = stockItemHolder.getItem();
 
-			if (genotypeItem == null) {
-				Exception e = new Exception("Genotype Item cannot be null ! Skipping Source Record:"
-						+ "Genotype Accession:" + source.getGenotypeUniqueAccession() + source);
-				throw e;
-			}
+            if (stockItem == null) {
+                Exception e = new Exception("Stock Item cannot be null ! Skipping Source Record:"
+                        + "Germplasm Accession:" + source.getGermplasmUniqueAccession() + source);
+                throw e;
+            }
 
-			item.setReference("genotype", genotypeItem);
+            item.setReference("stock", stockItem);
 
-			// set Stock Reference
+            // set Publication Reference
 
-			stockItemHolder = StockService.getStockItem(source.getGermplasmUniqueAccession());
+            publicationItemHolder = PublicationService.getPublicationItem(source.getPubAccessionNumber());
 
-			if (stockItemHolder == null) {
-				Exception e = new Exception("Stock Item Holder has not found ! Skipping Source Record:"
-						+ "Germplasm Accession:" + source.getGermplasmUniqueAccession() + source);
-				throw e;
-			}
+            if (publicationItemHolder == null) {
+                Exception e = new Exception("Publication Item Holder has not found ! Skipping Source Record:"
+                        + "Publication Accession:" + source.getPubAccessionNumber() + source);
+                throw e;
+            }
 
-			stockItem = stockItemHolder.getItem();
+            publicationItem = publicationItemHolder.getItem();
 
-			if (stockItem == null) {
-				Exception e = new Exception("Stock Item cannot be null ! Skipping Source Record:"
-						+ "Germplasm Accession:" + source.getGermplasmUniqueAccession() + source);
-				throw e;
-			}
+            if (publicationItem == null) {
+                Exception e = new Exception("Publication Item cannot be null ! Skipping Source Record:"
+                        + "Pubclication Accession:" + source.getPubAccessionNumber() + source);
+                throw e;
+            }
 
-			item.setReference("stock", stockItem);
+            item.setReference("publication", publicationItem);
 
-			// set Publication Reference
+            itemId = super.getService().store(item);
 
-			publicationItemHolder = PublicationService.getPublicationItem(source.getPubAccessionNumber());
+        } catch (ObjectStoreException e) {
+            exception = e;
+        } catch (Exception e) {
+            exception = e;
+        } finally {
 
-			if (publicationItemHolder == null) {
-				Exception e = new Exception("Publication Item Holder has not found ! Skipping Source Record:"
-						+ "Publication Accession:" + source.getPubAccessionNumber() + source);
-				throw e;
-			}
+            if (exception != null) {
+                LOG.error("Error storing item for source record:" + source + "; Message:" + exception.getMessage()
+                        + "; Cause:" + exception.getCause());
+            } else {
 
-			publicationItem = publicationItemHolder.getItem();
+                LOG.info("Target Item has been created. Target Object:" + item);
 
-			if (publicationItem == null) {
-				Exception e = new Exception("Publication Item cannot be null ! Skipping Source Record:"
-						+ "Pubclication Accession:" + source.getPubAccessionNumber() + source);
-				throw e;
-			}
+                addToCollections(source, item);
 
-			item.setReference("publication", publicationItem);
+            }
+        }
 
-			itemId = super.getService().store(item);
+        return item;
+    }
 
-		} catch (ObjectStoreException e) {
-			exception = e;
-		} catch (Exception e) {
-			exception = e;
-		} finally {
+    private boolean addToCollections(SourcePhenotypeAnnotation source, Item item) {
 
-			if (exception != null) {
-				log.error("Error storing item for source record:" + source + "; Message:" + exception.getMessage()
-						+ "; Cause:" + exception.getCause());
-			} else {
+        boolean result = false;
 
-				log.info("Target Item has been created. Target Object:" + item);
+        result = addToStockCollection(source, item);
+        result = addToPhenotypeCollection(source, item);
+        result = addToGenotypeCollection(source, item);
 
-				addToCollections(source, item);
+        if (result) {
+            LOG.info("Phenotype Annotation has been added to collections. StockPhenotypeAnnotation, GenotypePhenotypeAnnotation, PhenotypePhenotypeAnnotation");
+        }
+        return result;
 
-			}
-		}
+    }
 
-		return item;
-	}
+    private boolean addToStockCollection(SourcePhenotypeAnnotation source, Item item) {
 
-	private boolean addToCollections(SourcePhenotypeAnnotation source, Item item) {
+        Exception exception = null;
+        boolean result = true;
 
-		boolean result = false;
+        try {
+            if (StringUtils.isBlank(source.getGermplasmUniqueAccession())) {
 
-		result = addToStockCollection(source, item);
-		result = addToPhenotypeCollection(source, item);
-		result = addToGenotypeCollection(source, item);
+                Exception e = new Exception("Stock Item cannot be null ! Skipping Source Record:"
+                        + "Germplasm Accession:" + source.getGermplasmUniqueAccession() + source);
+                throw e;
+            }
 
-		if (result) {
-			log.info("Phenotype Annotation has been added to the collections. StockPhenotypeAnnotation, GenotypePhenotypeAnnotation, PhenotypePhenotypeAnnotation");
-		}
-		return result;
+            if (item == null) {
+                Exception e = new Exception("PhenotypeAnnotation Item cannot be null ! Skipping Source Record:"
+                        + "Item:" + item + "Source:" + source);
+                throw e;
+            }
 
-	}
+            StockService.addPhenotypeAnnotation(source.getGermplasmUniqueAccession(), item);
 
-	private boolean addToStockCollection(SourcePhenotypeAnnotation source, Item item) {
+        } catch (Exception e) {
+            exception = e;
+        } finally {
 
-		Exception exception = null;
-		boolean result = true;
+            if (exception != null) {
+                LOG.error("Error adding PhenotypeAnnotation to the StockCollection for source record:" + source
+                        + "; Message:" + exception.getMessage() + "; Cause:" + exception.getCause());
+                result = false;
+            } else {
 
-		try {
-			if (StringUtils.isBlank(source.getGermplasmUniqueAccession())) {
+                LOG.info("Phenotype Annotation has been added to the Stock Collection:" + item);
 
-				Exception e = new Exception("Stock Item cannot be null ! Skipping Source Record:"
-						+ "Germplasm Accession:" + source.getGermplasmUniqueAccession() + source);
-				throw e;
-			}
+            }
+        }
 
-			if (item == null) {
-				Exception e = new Exception("PhenotypeAnnotation Item cannot be null ! Skipping Source Record:"
-						+ "Item:" + item + "Source:" + source);
-				throw e;
-			}
+        return result;
+    }
 
-			StockService.addPhenotypeAnnotation(source.getGermplasmUniqueAccession(), item);
+    private boolean addToPhenotypeCollection(SourcePhenotypeAnnotation source, Item item) {
 
-		} catch (Exception e) {
-			exception = e;
-		} finally {
+        Exception exception = null;
+        boolean result = true;
 
-			if (exception != null) {
-				log.error("Error adding PhenotypeAnnotation to the StockCollection for source record:" + source
-						+ "; Message:" + exception.getMessage() + "; Cause:" + exception.getCause());
-				result = false;
-			} else {
+        try {
+            if (StringUtils.isBlank(source.getPhenotypeUniqueAccession())) {
 
-				log.info("Phenotype Annotation has been added to the Stock Collection:" + item);
+                Exception e = new Exception("Phenotype Item cannot be null ! Skipping Source Record:"
+                        + "Phenotype Accession:" + source.getPhenotypeUniqueAccession() + source);
+                throw e;
+            }
 
-			}
-		}
+            if (item == null) {
+                Exception e = new Exception("PhenotypeAnnotation Item cannot be null ! Skipping Source Record:"
+                        + "Item:" + item + "Source:" + source);
+                throw e;
+            }
 
-		return result;
-	}
+            PhenotypeService.addPhenotypeAnnotation(source.getPhenotypeUniqueAccession(), item);
 
-	private boolean addToPhenotypeCollection(SourcePhenotypeAnnotation source, Item item) {
+        } catch (Exception e) {
+            exception = e;
+        } finally {
 
-		Exception exception = null;
-		boolean result = true;
+            if (exception != null) {
+                LOG.error("Error adding PhenotypeAnnotation to the StockCollection for source record:" + source
+                        + "; Message:" + exception.getMessage() + "; Cause:" + exception.getCause());
+                result = false;
+            } else {
 
-		try {
-			if (StringUtils.isBlank(source.getPhenotypeUniqueAccession())) {
+                LOG.info("Phenotype Annotation has been added to the Phenotype Collection:" + item);
 
-				Exception e = new Exception("Phenotype Item cannot be null ! Skipping Source Record:"
-						+ "Phenotype Accession:" + source.getPhenotypeUniqueAccession() + source);
-				throw e;
-			}
+            }
+        }
 
-			if (item == null) {
-				Exception e = new Exception("PhenotypeAnnotation Item cannot be null ! Skipping Source Record:"
-						+ "Item:" + item + "Source:" + source);
-				throw e;
-			}
+        return result;
+    }
 
-			PhenotypeService.addPhenotypeAnnotation(source.getPhenotypeUniqueAccession(), item);
+    private boolean addToGenotypeCollection(SourcePhenotypeAnnotation source, Item item) {
 
-		} catch (Exception e) {
-			exception = e;
-		} finally {
+        Exception exception = null;
+        boolean result = true;
 
-			if (exception != null) {
-				log.error("Error adding PhenotypeAnnotation to the StockCollection for source record:" + source
-						+ "; Message:" + exception.getMessage() + "; Cause:" + exception.getCause());
-				result = false;
-			} else {
+        try {
+            if (StringUtils.isBlank(source.getGenotypeUniqueAccession())) {
 
-				log.info("Phenotype Annotation has been added to the Phenotype Collection:" + item);
+                Exception e = new Exception("Genotype Item cannot be null ! Skipping Source Record:"
+                        + "Genotype Accession:" + source.getGenotypeUniqueAccession() + source);
+                throw e;
+            }
 
-			}
-		}
+            if (item == null) {
+                Exception e = new Exception("PhenotypeAnnotation Item cannot be null ! Skipping Source Record:"
+                        + "Item:" + item + "Source:" + source);
+                throw e;
+            }
 
-		return result;
-	}
+            GenotypeService.addPhenotypeAnnotation(source.getGenotypeUniqueAccession(), item);
 
-	private boolean addToGenotypeCollection(SourcePhenotypeAnnotation source, Item item) {
+        } catch (Exception e) {
+            exception = e;
+        } finally {
 
-		Exception exception = null;
-		boolean result = true;
+            if (exception != null) {
+                LOG.error("Error adding PhenotypeAnnotation to the GenotypeCollection for source record:" + source
+                        + "; Message:" + exception.getMessage() + "; Cause:" + exception.getCause());
+                result = false;
+            } else {
 
-		try {
-			if (StringUtils.isBlank(source.getGenotypeUniqueAccession())) {
+                LOG.info("Phenotype Annotation has been added to the Genotype Collection:" + item);
 
-				Exception e = new Exception("Genotype Item cannot be null ! Skipping Source Record:"
-						+ "Genotype Accession:" + source.getGenotypeUniqueAccession() + source);
-				throw e;
-			}
+            }
+        }
 
-			if (item == null) {
-				Exception e = new Exception("PhenotypeAnnotation Item cannot be null ! Skipping Source Record:"
-						+ "Item:" + item + "Source:" + source);
-				throw e;
-			}
+        return result;
+    }
 
-			GenotypeService.addPhenotypeAnnotation(source.getGenotypeUniqueAccession(), item);
+    public void setTargetClassName(String name) {
+        this.targetClassName = name;
+    }
 
-		} catch (Exception e) {
-			exception = e;
-		} finally {
+    public String getTargetClassName() {
+        return this.targetClassName;
+    }
 
-			if (exception != null) {
-				log.error("Error adding PhenotypeAnnotation to the GenotypeCollection for source record:" + source
-						+ "; Message:" + exception.getMessage() + "; Cause:" + exception.getCause());
-				result = false;
-			} else {
+    private void setDataSetItem(ItemHolder item, SourceStock source) {
 
-				log.info("Phenotype Annotation has been added to the Genotype Collection:" + item);
+        Exception exception = null;
 
-			}
-		}
+        Item dataSetItem = null;
+        Item dataSourceItem = null;
 
-		return result;
-	}
+        try {
 
-	public void setTargetClassName(String name) {
-		this.targetClassName = name;
-	}
+            dataSetItem = getDataSet();
+            dataSourceItem = DataSourceService.getDataSourceItem("TAIR").getItem();
 
-	public String getTargetClassName() {
-		return this.targetClassName;
-	}
+            if (dataSetItem == null) {
+                Exception e = new Exception("DataSet Item Cannot be Null!");
+                throw e;
+            }
 
-	private void setDataSetItem(ItemHolder item, SourceStock source) {
+            if (dataSourceItem == null) {
+                Exception e = new Exception("DataSource Item Cannot be Null!");
+                throw e;
+            }
 
-		Exception exception = null;
+            BioStoreHook.setDataSets(getModel(), item.getItem(), dataSetItem.getIdentifier(), DataSourceService
+                    .getDataSourceItem("TAIR").getItem().getIdentifier());
 
-		Item dataSetItem = null;
-		Item dataSourceItem = null;
+        } catch (Exception e) {
+            exception = e;
+        } finally {
 
-		try {
+            if (exception != null) {
+                LOG.error("Error adding source record to the dataset. Source" + source + "Error:"
+                        + exception.getMessage());
+            } else {
+                LOG.debug("Stock has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
+                        + item.getItem());
+            }
+        }
 
-			dataSetItem = getDataSet();
-			dataSourceItem = DataSourceService.getDataSourceItem("TAIR").getItem();
+    }
 
-			if (dataSetItem == null) {
-				Exception e = new Exception("DataSet Item Cannot be Null!");
-				throw e;
-			}
-
-			if (dataSourceItem == null) {
-				Exception e = new Exception("DataSource Item Cannot be Null!");
-				throw e;
-			}
-
-			BioStoreHook.setDataSets(getModel(), item.getItem(), dataSetItem.getIdentifier(), DataSourceService
-					.getDataSourceItem("TAIR").getItem().getIdentifier());
-
-		} catch (Exception e) {
-			exception = e;
-		} finally {
-
-			if (exception != null) {
-				log.error("Error adding source record to the dataset. Source" + source + "Error:"
-						+ exception.getMessage());
-			} else {
-				log.debug("Stock has been successfully added to the dataset. DataSet:" + dataSetItem + " Item:"
-						+ item.getItem());
-			}
-		}
-
-	}
-
-	private Item getDataSet() {
-		return DataSetService.getDataSetItem(DATASET_NAME).getItem();
-	}
+    private Item getDataSet() {
+        return DataSetService.getDataSetItem(DATASET_NAME).getItem();
+    }
 }
