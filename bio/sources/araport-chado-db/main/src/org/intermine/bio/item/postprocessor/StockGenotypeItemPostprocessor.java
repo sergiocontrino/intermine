@@ -49,7 +49,7 @@ public class StockGenotypeItemPostprocessor extends AbstractStep {
     @Override
     protected void doExecute(StepExecution stepExecution) throws Exception {
 
-        LOG.info("Running Task Let Step!  StockGenotypeItemPostprocessor " + getName());
+        LOG.debug("Running Step StockGenotypeItemPostprocessor " + getName());
 
         taskExecutor.execute(new Runnable() {
             public void run() {
@@ -78,7 +78,7 @@ public class StockGenotypeItemPostprocessor extends AbstractStep {
 
         for (Map.Entry<String, Item> item : items.entrySet()) {
             String genotype = item.getKey();
-            LOG.info("Processing Genotype: " + genotype);
+            LOG.debug("Processing Genotype: " + genotype);
             Collection<Item> collection = (Collection<Item>) item.getValue();
             List<Item> collectionItems = new ArrayList<Item>(collection);
 
