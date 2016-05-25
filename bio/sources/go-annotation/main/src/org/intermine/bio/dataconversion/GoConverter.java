@@ -642,7 +642,7 @@ public class GoConverter extends BioFileConverter
         if (item != null) {
             store(item);
         }
-        LOG.info("pubrefid: " + pubRefId);
+        LOG.debug("pubrefid: " + pubRefId);
         return pubRefId;
     }
 
@@ -652,7 +652,7 @@ public class GoConverter extends BioFileConverter
      * @throws ObjectStoreException
      */
     private void createXrefs(String pubRefId, Set<String> xrefs)
-            throws ObjectStoreException {
+        throws ObjectStoreException {
         for (String xref : xrefs) {
 
             String dataSource = null;
@@ -746,7 +746,7 @@ public class GoConverter extends BioFileConverter
 
         protected void addPublicationRefId(String publicationRefId) {
             if (publicationRefId != null) {
-                LOG.info("PUB " + publicationRefId);
+                LOG.debug("PUB " + publicationRefId);
                 publicationRefIds.add(publicationRefId);
             }
         }
