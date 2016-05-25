@@ -1,6 +1,5 @@
 package org.intermine.bio.item.processor;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.intermine.bio.chado.AlleleService;
 import org.intermine.bio.chado.GenotypeService;
@@ -38,12 +37,12 @@ public class PhenotypeGeneticContextItemProcessor extends DataSourceProcessor im
         Exception exception = null;
         Item item = null;
         try {
-            LOG.info("Creating Item has started. Source Object:" + source);
+            LOG.debug("Creating Item has started. Source Object:" + source);
             item = getItembyGeneticFeatureType(source);
-            LOG.info("Phenotype Unique Accession: " + source.getPhenotypeUniqueAccession());
-            if (!StringUtils.isBlank(source.getPhenotypeDescription())) {
-                LOG.info("Phenotype Description:" + source.getPhenotypeDescription());
-            }
+            LOG.debug("Phenotype Unique Accession: " + source.getPhenotypeUniqueAccession());
+//            if (!StringUtils.isBlank(source.getPhenotypeDescription())) {
+//                LOG.debug("Phenotype Description:" + source.getPhenotypeDescription());
+//            }
 
             if (item != null) {
                 addToCollection(source, item);
@@ -57,11 +56,11 @@ public class PhenotypeGeneticContextItemProcessor extends DataSourceProcessor im
             if (exception != null) {
                 LOG.error("phenotype/genetic context collection item for source: " + source
                         + ";Error occured:" + exception.getMessage());
-            } else {
-                LOG.info("Record successfully added to a phenotype/genetic context collection: "
-                        + item);
-
             }
+//            else {
+//                LOG.info("Record successfully added to a phenotype/genetic context collection: "
+//                        + item);
+//            }
         }
         return item;
     }
@@ -85,11 +84,11 @@ public class PhenotypeGeneticContextItemProcessor extends DataSourceProcessor im
     private Item getItembyGeneticFeatureType(SourcePhenotypeGeneticContext source) {
         Item item = null;
         boolean status = false;
-        if (source.getGeneticFeatureType().equals("allele")) {
+        if ("allele".equals(source.getGeneticFeatureType())) {
 
             item = AlleleService.getAlleleItem(source.getEntityUniqueAccession()).getItem();
             status = true;
-        } else if (source.getGeneticFeatureType().equals("genotype")) {
+        } else if ("genotype".equals(source.getGeneticFeatureType())) {
 
             ItemHolder itemHolder = null;
             itemHolder = GenotypeService.getGenotypeItem(source.getEntityUniqueAccession());
@@ -99,9 +98,9 @@ public class PhenotypeGeneticContextItemProcessor extends DataSourceProcessor im
             status = true;
         }
 
-        if (status == true) {
-            LOG.info("Item place holder has been obtained: " + item + "; Source record:" + source);
-        } else {
+        if (true != status) {
+//           LOG.info("Item place holder has been obtained: " + item + "; Source record:" + source);
+//        } else {
             LOG.error("Unknown feature type: skipping row " + source);
         }
 
@@ -111,22 +110,21 @@ public class PhenotypeGeneticContextItemProcessor extends DataSourceProcessor im
     private void addToCollection(SourcePhenotypeGeneticContext source, Item item) {
 
         boolean status = false;
-
-        if (source.getGeneticFeatureType().equals("allele")) {
-
+        if ("allele".equals(source.getGeneticFeatureType())) {
             addAllelePhenotypeItem(source, item);
             status = true;
 
-        } else if (source.getGeneticFeatureType().equals("genotype")) {
+        } else if ("genotype".equals(source.getGeneticFeatureType())) {
             addGenotypePhenotypeItem(source, item);
             status = true;
         }
 
-        if (status == true) {
-            LOG.info("Item has been added to a phenotype/genetic context collection " + item);
-        } else {
+        if (true != status) {
             LOG.error("Unknown feature type: skipping row " + source);
         }
+//        else {
+//            LOG.info("Item has been added to a phenotype/genetic context collection " + item);
+//        }
 
     }
 }
