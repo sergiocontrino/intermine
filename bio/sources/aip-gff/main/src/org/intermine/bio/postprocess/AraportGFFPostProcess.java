@@ -137,7 +137,6 @@ public class AraportGFFPostProcess extends PostProcessor
     private void processGenesTranscriptsPublications() throws Exception, ObjectStoreException {
 
         LOG.debug("ProcessGenesTranscriptsPublications has started.");
-
         Exception exception = null;
 
 //        Set<Gene> set = new HashSet<Gene>();
@@ -147,10 +146,8 @@ public class AraportGFFPostProcess extends PostProcessor
         Query query = getGeneQuerySourceRecordsbyTranscripts();
 
         Iterator<?> iterator = getGeneSourceIterator(query);
-
         int count = 0;
         int pubAddedCount = 0;
-
         osw.beginTransaction();
 
         while (iterator.hasNext()) {
@@ -158,7 +155,6 @@ public class AraportGFFPostProcess extends PostProcessor
             ResultsRow item = (ResultsRow) iterator.next();
 
             Gene gene = (Gene) item.get(0);
-
             InterMineObject object = (InterMineObject) gene;
 
             LOG.debug("Processing Current Gene: = " + gene.getPrimaryIdentifier());
@@ -168,9 +164,11 @@ public class AraportGFFPostProcess extends PostProcessor
             existingGenePublications = gene.getPublications();
             LOG.debug("Current Gene # Publication Count: = " + existingGenePublications.size());
             notExistingTranscriptsPublications = getPublications(object);
-            LOG.info("Current Gene # Not Existing Publication Count: = "
-                    + notExistingTranscriptsPublications.size()
-                    + "; Gene:" + gene.getPrimaryIdentifier());
+
+            if (notExistingTranscriptsPublications.size() > 0) {
+                LOG.info("Gene " + gene.getPrimaryIdentifier() + ": found "
+                        + notExistingTranscriptsPublications.size() + " missing publications.");
+            }
 
             String destClassName = "Gene";
             String collectionName = "publications";
@@ -185,7 +183,6 @@ public class AraportGFFPostProcess extends PostProcessor
                         insertPublicationCollectionField(object, pubObject,
                                 destClassName, collectionName);
                     }
-
                 } catch (Exception e) {
                     exception = e;
                 } finally {
@@ -245,7 +242,6 @@ public class AraportGFFPostProcess extends PostProcessor
         outerQuery.addToSelect(qfDate);
 
         // Gene subquery
-
         Query geneSubQuery = new Query();
         QueryClass qcPubGeneSQ = new QueryClass(Publication.class);
         geneSubQuery.alias(qcPubGeneSQ, "geneSQ");
@@ -405,10 +401,10 @@ public class AraportGFFPostProcess extends PostProcessor
             }
 
             if (manyToMany) {
-                LOG.info("Adding Pub to Gene/Pub Collection before");
+                LOG.debug("Adding Pub to Gene/Pub Collection before");
                 osw.addToCollection(destObject.getId(), classDesc.getType(),
                         collectionName, sourceObject.getId());
-                LOG.info("Adding Pub to Gene/Pub Collection after");
+                LOG.debug("Adding Pub to Gene/Pub Collection after");
             } else { // publications will be always many to many
                 // InterMineObject tempObject =
                 // PostProcessUtil.cloneInterMineObject(destObject);
