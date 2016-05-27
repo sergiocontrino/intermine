@@ -2,20 +2,21 @@ package org.intermine.bio.item.processor;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.intermine.bio.chado.CVService;
 import org.intermine.bio.chado.OrganismService;
 import org.intermine.bio.dataconversion.ChadoDBConverter;
 import org.intermine.bio.dataconversion.DataSourceProcessor;
-import org.intermine.bio.dataflow.config.ApplicationContext;
+import org.intermine.bio.domain.source.SourceBackgroundStrain;
 import org.intermine.bio.item.ItemProcessor;
 import org.intermine.bio.item.util.ItemHolder;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
-import org.intermine.bio.domain.source.*;
 
-public class BackgroundAccessionStockItemProcessor extends DataSourceProcessor implements ItemProcessor<SourceBackgroundStrain, Item> {
+public class BackgroundAccessionStockItemProcessor extends DataSourceProcessor
+    implements ItemProcessor<SourceBackgroundStrain, Item>
+{
 
-    protected static final Logger log = Logger.getLogger(BackgroundAccessionStockItemProcessor.class);
+    protected static final Logger LOG =
+            Logger.getLogger(BackgroundAccessionStockItemProcessor.class);
 
     private String targetClassName;
 
@@ -25,9 +26,7 @@ public class BackgroundAccessionStockItemProcessor extends DataSourceProcessor i
 
     @Override
     public Item process(SourceBackgroundStrain item) throws Exception {
-
         return createItem(item);
-
     }
 
     private Item createItem(SourceBackgroundStrain source) throws ObjectStoreException {
@@ -37,52 +36,55 @@ public class BackgroundAccessionStockItemProcessor extends DataSourceProcessor i
         Item item = null;
         Item itemStock = null;
         ItemHolder itemHolder = null;
-        ItemHolder itemStockHolder = null;
+//        ItemHolder itemStockHolder = null;
 
         try {
-            log.info("Creating Mapping for background Accession has started. Source Object:" + source);
+            LOG.debug("Mapping for background Accession for source " + source.getStockId());
 
-            if (StringUtils.isBlank(source.getBackgroundAccessionName())){
-                Exception e = new Exception("Stock Background Accession Cannot Be Null!");
+            if (StringUtils.isBlank(source.getBackgroundAccessionName())) {
+                Exception e = new Exception("Stock Background Null!");
                 throw e;
             }
 
-            if (OrganismService.getStrainMap().containsKey(source.getBackgroundAccessionName())){
-
-                itemHolder = OrganismService.getStrainMap().get(source.getBackgroundAccessionName());
-
+            if (OrganismService.getStrainMap().containsKey(source.getBackgroundAccessionName())) {
+                itemHolder = OrganismService.getStrainMap()
+                        .get(source.getBackgroundAccessionName());
             }
 
-            if (itemHolder == null){
-                Exception e = new Exception("Stock Background Accession ItemHolder Cannot Be Null!");
+            if (itemHolder == null) {
+                Exception e = new Exception("Stock Background Accession ItemHolder Null!");
                 throw e;
             }
 
             item = itemHolder.getItem();
-
-            if (item == null){
-                Exception e = new Exception("Stock Background Accession Item Cannot Be Null!");
+            if (item == null) {
+                Exception e = new Exception("Stock Background Accession Item Null!");
                 throw e;
             }
 
-            if (item!=null){
-                if 	(DataSourceProcessor.getStockItems().containsKey(source.getStockUniqueAccession())) {
-                    itemStock = DataSourceProcessor.getStockItems().get(source.getStockUniqueAccession());
+            if (item != null) {
+                if (DataSourceProcessor.getStockItems()
+                        .containsKey(source.getStockUniqueAccession())) {
+                    itemStock = DataSourceProcessor
+                            .getStockItems().get(source.getStockUniqueAccession());
                 }
             }
 
-            if (item!=null && itemStock!=null){
-                OrganismService.addBgStockItem(source.getBackgroundAccessionName(), source.getStockUniqueAccession(), itemStock);
+            if (item != null && itemStock != null) {
+                OrganismService.addBgStockItem(source.getBackgroundAccessionName(),
+                        source.getStockUniqueAccession(), itemStock);
             }
         } catch (Exception e) {
             exception = e;
         } finally {
 
             if (exception != null) {
-                log.error("Error creating background accession record:" + source + "; Error:" + exception.getMessage());
-            } else {
-                log.info("Target Item has been mapped.");
+                LOG.error("Error creating background accession record: " + source + "; Error: "
+                        + exception.getMessage());
             }
+//            else {
+//                LOG.info("Target Item has been mapped.");
+//            }
         }
         return item;
     }

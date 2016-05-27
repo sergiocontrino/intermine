@@ -24,114 +24,102 @@ import org.intermine.xml.full.ReferenceList;
 
 public class StockGenotypeItemPostprocessor extends AbstractStep {
 
-	protected static final Logger log = Logger.getLogger(StockGenotypeItemPostprocessor.class);
+    protected static final Logger LOG = Logger.getLogger(StockGenotypeItemPostprocessor.class);
 
-	private static ChadoDBConverter service;
+    private static ChadoDBConverter service;
 
-	protected TaskExecutor taskExecutor;
+    protected TaskExecutor taskExecutor;
 
-	public StockGenotypeItemPostprocessor(ChadoDBConverter chadoDBConverter) {
-		super();
-		service = chadoDBConverter;
+    public StockGenotypeItemPostprocessor(ChadoDBConverter chadoDBConverter) {
+        super();
+        service = chadoDBConverter;
 
-	}
+    }
 
-	public StockGenotypeItemPostprocessor getPostProcessor(String name, ChadoDBConverter chadoDBConverter,
-			TaskExecutor taskExecutor
+    public StockGenotypeItemPostprocessor
+    getPostProcessor(String name, ChadoDBConverter chadoDBConverter, TaskExecutor taskExecutor) {
 
-	) {
+        StockGenotypeItemPostprocessor processor =
+                new StockGenotypeItemPostprocessor(chadoDBConverter);
+        processor.setName(name);
+        processor.setTaskExecutor(taskExecutor);
+        return processor;
+    }
 
-		StockGenotypeItemPostprocessor processor = new StockGenotypeItemPostprocessor(chadoDBConverter);
-		processor.setName(name);
+    @Override
+    protected void doExecute(StepExecution stepExecution) throws Exception {
 
-		processor.setTaskExecutor(taskExecutor);
+        LOG.debug("Running Step StockGenotypeItemPostprocessor " + getName());
 
-		return processor;
+        taskExecutor.execute(new Runnable() {
+            public void run() {
+                createStockGenotypeCollection();
+            }
+        });
+    }
 
-	}
+    @Override
+    protected void doPostProcess(StepExecution stepExecution) throws Exception {
+        // TODO Auto-generated method stub
+    }
 
-	@Override
-	protected void doExecute(StepExecution stepExecution) throws Exception {
+    public void setTaskExecutor(TaskExecutor taskExecutor) {
+        this.taskExecutor = taskExecutor;
+    }
 
-		log.info("Running Task Let Step!  StockGenotypeItemPostprocessor " + getName());
+    protected TaskExecutor getTaskExecutor() {
+        return taskExecutor;
+    }
 
-		taskExecutor.execute(new Runnable() {
+    private void createStockGenotypeCollection() {
 
-			public void run() {
-				createStockGenotypeCollection();
-			}
-		});
+        Map<String, Item> items = GenotypeService.getGenotypeStockItemSet();
+        LOG.debug("Total Count of Stock/Genotype Collections to Process:" + items.size());
 
-	}
+        for (Map.Entry<String, Item> item : items.entrySet()) {
+            String genotype = item.getKey();
+            LOG.debug("Processing Genotype: " + genotype);
+            Collection<Item> collection = (Collection<Item>) item.getValue();
+            List<Item> collectionItems = new ArrayList<Item>(collection);
 
-	@Override
-	protected void doPostProcess(StepExecution stepExecution) throws Exception {
-		// TODO Auto-generated method stub
+            ItemHolder itemHolder = GenotypeService.getGenotypeMap().get(genotype);
 
-	}
+            LOG.debug("Collection Holder: " + genotype);
+            LOG.debug("Total Count of Entities to Process:" + collectionItems.size());
 
-	public void setTaskExecutor(TaskExecutor taskExecutor) {
-		this.taskExecutor = taskExecutor;
-	}
+            /*
+             * for (Item member: collectionItems){
+             *
+             * log.info("Member of Collection: " + member + "; " +
+             * " Collection Holder:" + genotype); }
+             *
+             * /*
+             */
 
-	protected TaskExecutor getTaskExecutor() {
-		return taskExecutor;
-	}
+            Exception exception = null;
 
-	private void createStockGenotypeCollection() {
+            ReferenceList referenceList = new ReferenceList();
+            referenceList.setName("stocks");
+            try {
 
-		Map<String, Item> items = GenotypeService.getGenotypeStockItemSet();
-		log.debug("Total Count of Stock/Genotype Collections to Process:" + items.size());
+                StoreService.storeCollection(collection, itemHolder, referenceList.getName());
+            } catch (ObjectStoreException e) {
+                exception = e;
+            } catch (Exception e) {
+                exception = e;
 
-		for (Map.Entry<String, Item> item : items.entrySet()) {
+            } finally {
+                if (exception != null) {
+                    LOG.error("Error storing stock collection for genotype:" + genotype + "; Error:"
+                            + exception.getMessage());
+                } else {
+                    LOG.debug("Stock/Genotype Collection successfully stored." + itemHolder.getItem() + ";"
+                            + "Collection size:" + collection.size());
+                }
+            }
 
-			String genotype = item.getKey();
+        }
 
-			log.info("Processing Genotype: " + genotype);
-
-			Collection<Item> collection = (Collection<Item>) item.getValue();
-
-			List<Item> collectionItems = new ArrayList<Item>(collection);
-
-			ItemHolder itemHolder = GenotypeService.getGenotypeMap().get(genotype);
-
-			log.debug("Collection Holder: " + genotype);
-
-			log.debug("Total Count of Entities to Process:" + collectionItems.size());
-
-			/*
-			 * for (Item member: collectionItems){
-			 * 
-			 * log.info("Member of Collection: " + member + "; " +
-			 * " Collection Holder:" + genotype); }
-			 * 
-			 * /*
-			 */
-
-			Exception exception = null;
-
-			ReferenceList referenceList = new ReferenceList();
-			referenceList.setName("stocks");
-			try {
-
-				StoreService.storeCollection(collection, itemHolder, referenceList.getName());
-			} catch (ObjectStoreException e) {
-				exception = e;
-			} catch (Exception e) {
-				exception = e;
-
-			} finally {
-				if (exception != null) {
-					log.error("Error storing stock collection for genotype:" + genotype + "; Error:"
-							+ exception.getMessage());
-				} else {
-					log.debug("Stock/Genotype Collection successfully stored." + itemHolder.getItem() + ";"
-							+ "Collection size:" + collection.size());
-				}
-			}
-
-		}
-
-	}
+    }
 
 }

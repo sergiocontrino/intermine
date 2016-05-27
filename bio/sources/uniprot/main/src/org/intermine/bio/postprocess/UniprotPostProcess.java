@@ -243,7 +243,7 @@ public class UniprotPostProcess extends PostProcessor
         ((ObjectStoreInterMineImpl) os1).precompute(query, Constants.PRECOMPUTE_CATEGORY);
         Results res = os1.execute(query, 5000, true, false, true);
         if (res != null) {
-            LOG.info("Publications Result Set Size:" + res.size());
+            LOG.debug("Publications Result Set Size:" + res.size());
         }
         return res.iterator();
     }

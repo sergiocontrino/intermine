@@ -127,7 +127,7 @@ public class HomologueDisplayer extends ReportDisplayer
         if (dataSets != null && !dataSets.isEmpty()) {
             q.addConstraint(Constraints.oneOfValues("Gene.homologues.dataSets.name", dataSets));
         }
-        q.addConstraint(Constraints.neq("Gene.homologues.type", "paralogue"));
+        //q.addConstraint(Constraints.neq("Gene.homologues.type", "paralogue"));
         q.addOrderBy("Gene.homologues.homologue.organism.shortName", OrderDirection.ASC);
         return q;
     }

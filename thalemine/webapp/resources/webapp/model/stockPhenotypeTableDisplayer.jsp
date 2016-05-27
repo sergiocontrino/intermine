@@ -10,12 +10,12 @@
 <div id="stockPhenotypeTableDisplayer" class="collection-table">
 
 <div class="header">
-	<h3>Stocks</h3>
-	<p>
-			Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=TAIR+Germplasm">TAIR/ABRC Germplasms/Seed
-				Stocks</a>
-			</span>
-	</p>
+  <h3>Stocks</h3>
+  <p>
+      Data Source: <a target="_blank" href="/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=TAIR+Germplasm">TAIR/ABRC Germplasms/Seed
+        Stocks</a>
+      </span>
+  </p>
 </div>
 
 <c:set var="object" value="${reportObject.object}"/>
@@ -23,9 +23,9 @@
 
 <div id="stock-table-container" class="collection-table imtables-dashboard container-fluid imtables">
 <div id="stock-container">
- 
+
  </div>
- 
+
 <style>
 
 .link{
@@ -52,47 +52,46 @@ var formatLink = function(url, text, target, cls){
 var wrapSpan = function(text){
         return '<span  class="link">'+text+'</span>';
      };
-    
-     var formatDataLink = function(name, id, text, dataClass, value){
-	 var url = '/${WEB_PROPERTIES['webapp.path']}' + '/report.do?id=' + id + '#StockAvailabilityDisplayer';
-	 var target = "_blank";
-		 
-	 console.log("In formatDataLink!");
-	 
-	 return name + ' &nbsp;&nbsp;' + '<a href="'+url+'" target="'+target+'">' + wrapSpan(' Order Stock ' + '<i class="fa fa-external-link"></i>')  + '</a>';
-		
+
+   var formatDataLink = function(name, id, text, dataClass, value){
+   var url = '/${WEB_PROPERTIES['webapp.path']}' + '/report.do?id=' + id + '#StockAvailabilityDisplayer';
+   var target = "_blank";
+
+   //console.log("In formatDataLink!");
+   return name + ' &nbsp;&nbsp;' + '<a href="'+url+'" target="'+target+'">' + wrapSpan(' Order Stock ' + '<i class="fa fa-external-link"></i>')  + '</a>';
+
  }
- 
+
 var selector = '#stock-container';
 var service  = {root: serviceURL};
 var query    = {
-		  "from": "Stock",
-		  "select": [
-		    "germplasmName",
-		    "genotypes.primaryIdentifier"
-		  ],
-		  "where": [
-		    {
-		      "path": "genotypes.alleles.affectedGenes.primaryIdentifier",
-		      "op": "=",
-		      "value": geneId
-		    }
-		  ]
-		};
+      "from": "Stock",
+      "select": [
+        "germplasmName",
+        "genotypes.primaryIdentifier"
+      ],
+      "where": [
+        {
+          "path": "genotypes.alleles.affectedGenes.primaryIdentifier",
+          "op": "=",
+          "value": geneId
+        }
+      ]
+    };
 
 var stockFormatter = function(o) {
-	
-	console.log("In Stock Formatter!");
+
+  //console.log("In Stock Formatter!");
     return formatDataLink(o.get('germplasmName'), o.get('id'), "Stock", undefined);
 };
 
 
 imtables.formatting.registerFormatter(
-		stockFormatter,
-	    'genomic',
-	    'Stock',
-	    ['germplasmName', 'id']
-	);
+    stockFormatter,
+      'genomic',
+      'Stock',
+      ['germplasmName', 'id']
+  );
 
 var properties = { SubtableInitialState: 'open' };
 
@@ -102,13 +101,13 @@ imtables.configure('Tables.CacheFactor', 5);
 
 imtables.loadDash(
   selector,
-  {"start":0,"size":5},  
+  {"start":0,"size":5},
   {service: service, query: query, properties: properties}
 ).then(
   function (table) { console.log('Gene Report: Stocks Table loaded', table); },
   function (error) { console.error('Gene Report: Could not load Stocks Table', error); }
 );
 </script>
-	</div>
+  </div>
 </div>
 <!-- /stockPhenotypeTableDisplayer.jsp -->

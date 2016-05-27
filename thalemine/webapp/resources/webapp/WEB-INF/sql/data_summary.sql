@@ -309,6 +309,58 @@ group by d.id
 )
 ,
 
+ntr_genes_helper as (
+select
+d.id as dataset_id,
+cast(count(distinct ntr.geneid) as text) as gene_count,
+cast(count(distinct ntr.primaryidentifier) as text) as feature_count
+from transcript ntr
+join
+organism o
+on o.id = ntr.organismid
+join
+ontologyterm sn
+on sn.id = ntr.sequenceontologytermid
+join
+bioentitiesdatasets bds
+on ntr.id = bds.bioentities
+join
+dataset d
+on d.id = bds.datasets
+join
+datasource ds
+ON
+ds.id = d.datasourceid
+where o.taxonid = 3702
+and sn.name = 'transcript_region' and d.name = 'Genome Annotation'
+group by d.id
+
+)
+,
+
+transposable_element_helper as
+(
+select
+cast(count(distinct tf.transposableelementid) as text) as gene_count,
+cast(count(distinct tf.primaryidentifier) as text) as feature_count,
+d.id dataset_id
+from dataset d
+join
+bioentitiesdatasets bds
+on
+d.id = bds.datasets
+join
+datasource ds
+ON
+ds.id = d.datasourceid
+join transposonfragment tf
+on tf.id = bds.bioentities
+join
+transposableelement te
+on te.id = tf.transposableelementid
+group by d.id
+),
+
 uorf_helper as
 (
 select
@@ -373,7 +425,7 @@ cast('Genes' as text) as category_name,
 (select ds.name from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_name,
 (select ds.url from datasource ds where ds.name = 'TAIR' limit 1) as  datasource_url,
 (select ds.description from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_description,
-cast('Transposable element genes' as text) as dataset_description,
+cast('Transposable Element genes' as text) as dataset_description,
 gh.dataset_id,
 cast('Genome Annotation - TAIR10' as text) as dataset_name,
 cast ('http://arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp' as text) as dataset_url,
@@ -460,13 +512,75 @@ SELECT
 distinct
 cast('summary' as text) as row_type,
 0 as parent_dataset_id,
+cast('Genes' as text) as category_name,
+0 as sort_order,
+(select ds.id from datasource ds where ds.name = 'Araport' limit 1) as datasource_id,
+(select ds.name from datasource ds where ds.name = 'Araport' limit 1)  as datasource_name,
+(select ds.url from datasource ds where ds.name = 'Araport' limit 1) as  datasource_url,
+(select ds.description from datasource ds where ds.name = 'Araport' limit 1)  as datasource_description,
+cast('Novel Transcribed Regions' as text) as dataset_description,
+gh.dataset_id,
+cast('Genome Annotation - Araport11 (04/2016)' as text) as dataset_name,
+cast ('http://www.araport.org/data/araport11' as text) as dataset_url,
+p.pubmed_id,
+cast('Cheng and Krishnakumar et al.' as text) as authors,
+2016 as year,
+cast ('' as text) as dataset_version,
+gh.gene_count,
+gh.feature_count
+from
+ntr_genes_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
+UNION
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
+cast('Genomic Features' as text) as category_name,
+2 as sort_order,
+(select ds.id from datasource ds where ds.name = 'TAIR' limit 1) as datasource_id,
+(select ds.name from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_name,
+(select ds.url from datasource ds where ds.name = 'TAIR' limit 1) as  datasource_url,
+(select ds.description from datasource ds where ds.name = 'TAIR' limit 1)  as datasource_description,
+cast('Transposable Elements' as text) as dataset_description,
+gh.dataset_id,
+cast('Genome Annotation - TAIR10' as text) as dataset_name,
+cast ('http://arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp' as text) as dataset_url,
+p.pubmed_id,
+cast('Lamesch et al.,' as text) as authors,
+2012 as year,
+cast ('' as text) as dataset_version,
+gh.gene_count,
+gh.feature_count
+from
+transposable_element_helper gh
+join dataset d
+on d.id = gh.dataset_id
+join
+datasource ds
+on ds.id = d.datasourceid
+left join
+	publication_source p
+	on p.id = d.publicationid
+UNION
+SELECT
+distinct
+cast('summary' as text) as row_type,
+0 as parent_dataset_id,
 cast('Genomic Features' as text) as category_name,
 2 as sort_order,
 ds.id as datasource_id,
 ds.name as datasource_name,
 ds.url as datasource_url,
 cast('Genome Annotation - Araport11 (04/2016)' as text) as datasource_description,
-cast('Upstream open reading frames' as text) as dataset_description,
+cast('Upstream Open Reading Frames' as text) as dataset_description,
 gh.dataset_id,
 cast('Genome Annotation - Araport11 (04/2016)' as text) as dataset_name,
 cast ('http://www.araport.org/data/araport11' as text) as dataset_url,
@@ -1257,7 +1371,7 @@ cast('Cheng and Krishnakumar et al.' as text) as authors,
 2016 as year,
 d.version as dataset_version,
 cast(gh.gene_count as text) as gene_count,
-cast(gh.feature_count as text) as feature_count
+cast('113 datasets from 11 tissues' as text) as feature_count
 from
 rnaseq_summary_helper gh
 join dataset d
@@ -1834,10 +1948,12 @@ end dataset_name,
 dataset_url,
 dataset_version,
 case
-	when (category_name = 'Genomic Features' or dataset_description = 'Non-coding genes'
-	or dataset_description = 'Pseudogenes' or dataset_description = 'Protein-coding genes')
+	when (dataset_description = 'Upstream Open Reading Frames' or dataset_description = 'Non-coding genes'
+	or dataset_description = 'Pseudogenes' or dataset_description = 'Protein-coding genes'
+    or dataset_description = 'Novel Transcribed Regions')
 	then 'http://dx.doi.org/10.1101/047308'
-	when (dataset_description = 'Transposable element genes')
+	when (dataset_description = 'Transposable Element genes'
+    or dataset_description = 'Transposable Elements')
 	then cast(22140109 as text)
 	else
 	pubmed_id
@@ -1883,8 +1999,6 @@ case
 		then 'phenotypes'
 	when (category_name = 'Mutant Alleles')
 		then 'alleles'
-	when (dataset_name = 'RNA-seq expression')
-		then 'expressions'
 	else
 		NULL
 end as units

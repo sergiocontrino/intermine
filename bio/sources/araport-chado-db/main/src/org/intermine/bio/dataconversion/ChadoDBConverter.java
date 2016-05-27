@@ -39,10 +39,10 @@ import org.intermine.metadata.StringUtil;
  */
 public class ChadoDBConverter extends BioDBConverter
 {
-    protected static final Logger log = Logger.getLogger(ChadoDBConverter.class);
+    protected static final Logger LOG = Logger.getLogger(ChadoDBConverter.class);
 
     private static final int TAXON_ID = 3702;
-    
+
     // a Map from chado organism_id to taxonId
     private final Map<Integer, OrganismData> chadoToOrgData = new HashMap<Integer, OrganismData>();
     private String processors = "";
@@ -166,7 +166,7 @@ public class ChadoDBConverter extends BioDBConverter
     protected Map<OrganismData, Integer> getChadoOrganismIds(Connection conn)
         throws SQLException {
         String query = "select organism_id, abbreviation, genus, species from organism";
-        log.info("executing: " + query);
+        LOG.info("executing: " + query);
         Statement stmt = conn.createStatement();
         ResultSet res = stmt.executeQuery(query);
 
@@ -193,7 +193,7 @@ public class ChadoDBConverter extends BioDBConverter
             }
 
             if (od == null) {
-                log.warn("can't find OrganismData for species: " + species
+                LOG.warn("can't find OrganismData for species: " + species
                          + " genus: " + genus + " abbreviation: " + abbreviation);
             }
 
@@ -258,20 +258,16 @@ public class ChadoDBConverter extends BioDBConverter
     public List<ChadoProcessor> getCompletedProcessors() {
         return completedProcessors;
     }
-    
+
     public static int getTargetOrganismTaxonId(){
-    	return TAXON_ID;
+        return TAXON_ID;
     }
-    
+
     public OrganismData getOrganism(){
-    	
-    	OrganismRepository repository = OrganismRepository.getOrganismRepository();
-    	
-    	OrganismData organism = repository.getOrganismDataByTaxon(new Integer(TAXON_ID));
-    	
-    	log.info("Organism:" + organism);
-    	
-    	return  organism;
+        OrganismRepository repository = OrganismRepository.getOrganismRepository();
+        OrganismData organism = repository.getOrganismDataByTaxon(new Integer(TAXON_ID));
+        LOG.debug("Organism:" + organism);
+        return  organism;
     }
-    
+
 }
