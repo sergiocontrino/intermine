@@ -43,7 +43,7 @@
                  <a href="report.do?id=${row.geneId}">${row.geneName}</a>
                </c:when>
                <c:otherwise>
-                 <a href="${WEB_PROPERTIES['intermines.phytomine.url']}/portal.do?class=Gene&externalids=${row.geneName}">${row.geneName}</a>
+                 <a href="${WEB_PROPERTIES['phytomine.url']}/portal.do?class=Gene&externalids=${row.geneName}">${row.geneName}</a>
                </c:otherwise>
              </c:choose>
            </td>
@@ -69,9 +69,9 @@
   </c:otherwise>
 </c:choose>
 
-<script type="text/javascript">    
+<script type="text/javascript">
         numberOfTableRowsToShow=100000
-        trimTable('#gene_homolog_displayer');    
+        trimTable('#gene_homolog_displayer');
 </script>
 
 </div>

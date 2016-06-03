@@ -67,7 +67,7 @@
     var formatPhytomineLink = function(id, dataClass, value) {
         var thalemine_url = '/${WEB_PROPERTIES['webapp.path']}' + '/portal.do?class=' + dataClass + '&externalids=' + id;
         var medicmine_url = '${WEB_PROPERTIES['intermines.medicmine.url']}' + '/portal.do?class=' + dataClass + '&externalids=' + id;
-        var phytomine_url = '${WEB_PROPERTIES['intermines.phytomine.url']}' + '/portal.do?class=' + dataClass + '&externalids=' + id;
+        var phytomine_url = '${WEB_PROPERTIES['phytomine.url']}' + '/portal.do?class=' + dataClass + '&externalids=' + id;
         if (typeof value === 'undefined') {
             value = id;
         }
