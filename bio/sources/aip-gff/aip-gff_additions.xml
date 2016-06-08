@@ -57,7 +57,7 @@
    </class>
    <class name="PseudogenicTranscript" extends="Transcript" is-interface="true">
      <reference name="pseudogene" referenced-type="Pseudogene" reverse-reference="pseudogenicTranscripts"/>
-     <collection name="pseudogenicExons" referenced-type="PseudogenicExon" reverse-reference="pseudogenicTranscripts"/>
+     <collection name="exons" referenced-type="Exon" reverse-reference="pseudogenicTranscripts"/>
    </class>
    <class name="PseudogenicTRNA" extends="PseudogenicTranscript" is-interface="true"></class>
    <class name="PseudogenicExon" extends="Exon" is-interface="true">
