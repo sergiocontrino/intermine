@@ -47,9 +47,8 @@ public class AipGffGFF3RecordHandler extends GFF3RecordHandler
         refsAndCollections.put("ThreePrimeUTR", "mRNAs");
         refsAndCollections.put("TransposonFragment", "transposableElement");
         refsAndCollections.put("PseudogenicTranscript","pseudogene");
-        refsAndCollections.put("Exon","pseudogenicTranscripts");
+        refsAndCollections.put("PseudogenicExon","pseudogenicTranscripts");
         refsAndCollections.put("PseudogenicTRNA","pseudogene");
-        refsAndCollections.put("Exon","pseudogenicTRNAs");
         refsAndCollections.put("PseudogenicTranscript", "gene");
         refsAndCollections.put("PseudogenicTRNA", "gene");
         refsAndCollections.put("UORF", "gene");
