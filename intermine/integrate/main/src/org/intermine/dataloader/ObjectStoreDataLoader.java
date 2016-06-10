@@ -1,7 +1,7 @@
 package org.intermine.dataloader;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -15,6 +15,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.intermine.dataconversion.ItemToObjectTranslator;
+import org.intermine.metadata.Util;
 import org.intermine.model.FastPathObject;
 import org.intermine.model.InterMineObject;
 import org.intermine.objectstore.ObjectStore;
@@ -23,7 +24,6 @@ import org.intermine.objectstore.fastcollections.ObjectStoreFastCollectionsForTr
 import org.intermine.objectstore.query.Query;
 import org.intermine.objectstore.query.QueryClass;
 import org.intermine.objectstore.query.SingletonResults;
-import org.intermine.util.DynamicUtil;
 import org.intermine.util.IntPresentSet;
 import org.intermine.util.PropertiesUtil;
 
@@ -179,26 +179,30 @@ public class ObjectStoreDataLoader extends DataLoader
                                 + (600000000L / (now - time)) + " (avg "
                                 + ((60000L * opCount) / (now - startTime))
                                 + ") objects per minute -- now on "
-                                + DynamicUtil.getFriendlyName(obj.getClass()));
+                                + Util.getFriendlyName(obj.getClass()));
                     } else {
                         LOG.info("Dataloaded " + opCount + " objects - running at "
                                 + (600000000L / (now - time)) + " (200000 avg "
                                 + (12000000000L / (now - times[(int) ((opCount / 10000) % 20)]))
                                 + ") (avg = " + ((60000L * opCount) / (now - startTime))
                                 + ") objects per minute -- now on "
-                                + DynamicUtil.getFriendlyName(obj.getClass()));
+                                + Util.getFriendlyName(obj.getClass()));
                     }
                     time = now;
                     times[(int) ((opCount / 10000) % 20)] = now;
+                    LOG.info("Before Batch Commit Transaction. OpCount = " + opCount);
                     if (opCount % 500000 == 0) {
                         getIntegrationWriter().batchCommitTransaction();
                     }
+                    LOG.info("After Batch Commit Transaction.");
                 }
                 time4 = System.currentTimeMillis();
                 timeSpentCommit += time4 - time3;
             }
             time3 = System.currentTimeMillis();
+            LOG.info("Before Last Batch Commit Transaction. OpCount = " + opCount);
             getIntegrationWriter().commitTransaction();
+            LOG.info("After Last Batch Commit Transaction.");
             getIntegrationWriter().close();
             long now = System.currentTimeMillis();
             timeSpentCommit += now - time3;

@@ -1,7 +1,7 @@
 package org.intermine.bio.web.displayer;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -10,7 +10,6 @@ package org.intermine.bio.web.displayer;
  *
  */
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,6 +25,7 @@ import org.intermine.metadata.FieldDescriptor;
 import org.intermine.metadata.Model;
 import org.intermine.model.InterMineObject;
 import org.intermine.model.bio.Gene;
+import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.pathquery.Constraints;
 import org.intermine.pathquery.OrderDirection;
 import org.intermine.pathquery.PathQuery;
@@ -43,18 +43,6 @@ import org.intermine.web.logic.session.SessionMethods;
  */
 public class GeneExpressionAtlasTissuesDisplayer extends ReportDisplayer
 {
-
-    /** @var column keys we have in the results table */
-    private ArrayList<String> expressionColumns =  new ArrayList<String>() {
-        {
-            add("condition");
-            add("expression");
-            add("pValue");
-            add("tStatistic");
-            add("type");
-        }
-    };
-
     /**
      * Constructor
      * @param config .
@@ -72,7 +60,7 @@ public class GeneExpressionAtlasTissuesDisplayer extends ReportDisplayer
 
         // API connection
         HttpSession session = request.getSession();
-        final InterMineAPI im = SessionMethods.getInterMineAPI(session);
+        im = SessionMethods.getInterMineAPI(session);
         Model model = im.getModel();
         PathQuery query = new PathQuery(model);
 
@@ -87,10 +75,16 @@ public class GeneExpressionAtlasTissuesDisplayer extends ReportDisplayer
             // execute the query
             Profile profile = SessionMethods.getProfile(session);
             PathQueryExecutor executor = im.getPathQueryExecutor(profile);
-            ExportResultsIterator values = executor.execute(query);
+            ExportResultsIterator values;
+            try {
+                values = executor.execute(query);
+            } catch (ObjectStoreException e) {
+                throw new RuntimeException(e);
+            }
 
             // convert to a map
-            GeneExpressionAtlasTissuesExpressions geae = new GeneExpressionAtlasTissuesExpressions(values);
+            GeneExpressionAtlasTissuesExpressions geae
+                = new GeneExpressionAtlasTissuesExpressions(values);
 
             // attach to results
             request.setAttribute("expressions", geae);
@@ -108,7 +102,7 @@ public class GeneExpressionAtlasTissuesDisplayer extends ReportDisplayer
                         collection = (Collection<?>)
                             reportObject.getObject().getFieldValue("atlasExpression");
                     } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                        return;
                     }
 
                     List<Class<?>> lc = PathQueryResultHelper.
@@ -137,7 +131,7 @@ public class GeneExpressionAtlasTissuesDisplayer extends ReportDisplayer
      * @param query
      * @return
      */
-    private PathQuery geneExpressionAtlasQuery(String genePrimaryID, PathQuery query) {
+    private static PathQuery geneExpressionAtlasQuery(String genePrimaryID, PathQuery query) {
         query.addViews(
                 "Gene.atlasExpression.condition",
                 "Gene.atlasExpression.expression",

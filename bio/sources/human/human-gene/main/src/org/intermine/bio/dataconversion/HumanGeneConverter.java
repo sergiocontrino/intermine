@@ -1,7 +1,7 @@
 package org.intermine.bio.dataconversion;
 
 /*
- * Copyright (C) 2002-2009 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 import org.intermine.dataconversion.ItemWriter;
 import org.intermine.metadata.Model;
 import org.intermine.util.FormattedTextParser;
-import org.intermine.util.StringUtil;
+import org.intermine.metadata.StringUtil;
 import org.intermine.xml.full.Item;
 
 /**
@@ -113,9 +113,11 @@ public class HumanGeneConverter extends BioFileConverter
             Item gene = createItem("Gene");
             gene.setReference("organism", getOrganism(HUMAN_TAXONID));
             createCrossReference(gene.getIdentifier(), hgncid, "HGNC", true);
+            createCrossReference(gene.getIdentifier(), line[1], "HGNC", true);
 
             if (!entrezid.isEmpty()) {
                 createCrossReference(gene.getIdentifier(), NCBI_PREFIX + entrezid, "NCBI", true);
+                createCrossReference(gene.getIdentifier(), entrezid, "NCBI", true);
             }
 
             if (!ensemblid.isEmpty()) {

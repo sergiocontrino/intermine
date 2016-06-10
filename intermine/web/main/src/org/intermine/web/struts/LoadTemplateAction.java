@@ -1,7 +1,7 @@
 package org.intermine.web.struts;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -37,15 +37,16 @@ import org.intermine.web.logic.export.http.TableExporterFactory;
 import org.intermine.web.logic.export.http.TableHttpExporter;
 import org.intermine.web.logic.results.PagedTable;
 import org.intermine.web.logic.session.SessionMethods;
-import org.intermine.web.logic.template.TemplateHelper;
-import org.intermine.web.logic.template.TemplateHelper.TemplateValueParseException;
 import org.intermine.web.logic.template.TemplateResultInput;
+import org.intermine.web.logic.template.Templates;
+import org.intermine.web.logic.template.Templates.TemplateValueParseException;
 
 /**
  * Implementation of <strong>Action</strong> that runs a template
  *
  * @author Julie Sullivan
  */
+@SuppressWarnings("deprecation")
 public class LoadTemplateAction extends DispatchAction
 {
     private TemplateQuery parseTemplate(HttpServletRequest request, InterMineAPI im) {
@@ -56,7 +57,7 @@ public class LoadTemplateAction extends DispatchAction
         TemplateResultInput input = new TemplateResultInput();
         // parse constraints from request
         try {
-            input.setConstraints(TemplateHelper.parseConstraints(request));
+            input.setConstraints(Templates.parseConstraints(request));
         } catch (TemplateValueParseException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -70,7 +71,7 @@ public class LoadTemplateAction extends DispatchAction
 
         Map<String, List<TemplateValue>> templateValues;
         try {
-            templateValues = TemplateHelper.getValuesFromInput(template, input);
+            templateValues = Templates.getValuesFromInput(template, input);
         } catch (TemplateValueParseException e) {
             throw new RuntimeException(e.getMessage(), e);
         }

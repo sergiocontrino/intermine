@@ -3,12 +3,10 @@ data_dir: "/micklem/data"
 
 default_sources:
   - "BioGRID"
-  - "EnsemblCompara"
   - "FlyAnatomyOntology"
   - "FlyBaseFasta"
   - "FlyBaseOrthologues"
   - "FlyCVTerms"
-  - "FlyDevelopmentOntology"
   - "GOAnnotation"
   - "IntAct"
   - "IntActVocabulary"
@@ -71,6 +69,7 @@ UniProt:
         - 377271
         - 377586
         - 377587
+        - 741158
         - 943925
         - 943926
 

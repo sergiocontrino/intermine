@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -32,9 +33,24 @@
     <c:set var="pathString" value="${object.classDescriptor.unqualifiedName}.${fieldName}"/>
     <c:set var="fieldDisplayName"
         value="${imf:formatFieldStr(pathString, INTERMINE_API, WEBCONFIG)}"/>
-
+        <!-- quick fix for MINE-756 -->
+        <c:if test="${fn:startsWith(fieldDisplayName,'Gene Rifs')}">
+          <c:set var="fieldDisplayName" value="GeneRIFs (Gene References Into Functions)<br /><p style='font-weight:normal;font-size:12px'>Data Source: <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=GeneRIF'>NCBI</a></p>" />
+        </c:if>
+        <!-- quick fix for MINE-769 -->
+        <c:if test="${fn:startsWith(fieldDisplayName,'Pathways')}">
+          <c:set var="fieldDisplayName" value="Pathways<br /><p style='font-weight:normal;font-size:12px'>Data Source: <a target='_blank' href='/${WEB_PROPERTIES['webapp.path']}/portal.do?class=DataSet&externalids=KEGG+pathways+data+set'>KEGG</a></p>" />
+        </c:if>
+        <!-- quick fix for MINE-840 -->
+        <c:if test="${fn:startsWith(fieldDisplayName,'Flanking Regions')}">
+          <c:set var="fieldDisplayName" value="Flanking Regions<br /><p style='font-weight:normal;font-size:12px'>Flank size: from most upstream transcription start site, or most downstream transcription stop site</p>" />
+        </c:if>
+        <!-- quick fix for MINE-969 -->
+        <c:if test="${fn:startsWith(fieldDisplayName,'Po Annotation')}">
+          <c:set var="fieldDisplayName" value="PO Annotation" />
+        </c:if>
     <c:set var="placementAndField" value="${aspectPlacement}_${fieldName}" />
-    <c:set var="divName" value="${fn:replace(aspectPlacement, ':', '_')}${fieldName}_table" /> 
+    <c:set var="divName" value="${fn:replace(aspectPlacement, ':', '_')}${fieldName}_table" />
 
         <div id="${fn:replace(aspectPlacement, ":", "_")}${fieldName}_table" class="collection-table">
         <a name="${fieldName}" class="anchor"></a>
@@ -57,43 +73,56 @@
          <c:when test="${collection.size > 0}">
           <div id="coll_${fn:replace(aspectPlacement, ":", "_")}${fieldName}">
           <div id="coll_${fn:replace(aspectPlacement, ":", "_")}${fieldName}_inner" style="overflow-x:hidden;">
-          <c:set var="innerDivName" value="coll_${fn:replace(aspectPlacement, ':', '_')}${fieldName}" /> 
+          <c:set var="innerDivName" value="coll_${fn:replace(aspectPlacement, ':', '_')}${fieldName}" />
           <c:set var="inlineResultsTable" value="${collection.table}"/>
           <c:set var="useTableWidget" value="${WEB_PROPERTIES['inline.collections.in.tables']=='true'}" />
           <c:set var="useLocalStorage" value="${WEB_PROPERTIES['use.localstorage']=='true'}" />
+          <c:set var="expandOnLoad" value="${WEB_PROPERTIES['web.collections.expandonload']=='true'}"/>
           <c:choose>
             <c:when test="${useTableWidget}">
-              <tiles:insert page="/collectionToTable.do?field=${fieldName}&id=${object.id}&trail=${param.trail}&pathString=${object.classDescriptor.unqualifiedName}.${fieldName}"> 
+              <tiles:insert page="/collectionToTable.do?field=${fieldName}&id=${object.id}&trail=${param.trail}&pathString=${object.classDescriptor.unqualifiedName}.${fieldName}">
               </tiles:insert>
             </c:when>
             <c:otherwise>
-             <tiles:insert page="/reportCollectionTable.jsp"> 
+             <tiles:insert page="/reportCollectionTable.jsp">
               <tiles:put name="inlineResultsTable" beanName="inlineResultsTable" />
               <tiles:put name="object" beanName="object" />
               <tiles:put name="fieldName" value="${fieldName}" />
              </tiles:insert>
-            </c:otherwise> 
+            </c:otherwise>
           </c:choose>
           <script type="text/javascript">
             trimTable('#coll_${fn:replace(aspectPlacement, ":", "_")}${fieldName}_inner');
-            $(function(){
+            (function($) {
+              var EXPAND_ON_LOAD = ${expandOnLoad};
+              $(function(){
                 if(${useLocalStorage} && typeof(Storage)!=="undefined"){
-                 if(localStorage.${innerDivName}==undefined || localStorage.${innerDivName} == "hide"){
-                   $('#${innerDivName}').hide();
-                   localStorage.${innerDivName}="hide";
+                  if (localStorage.${innerDivName}==undefined) {
+                    if (!EXPAND_ON_LOAD) {
+                      $('#${innerDivName}').hide();
+                    }
+                  }
+                  if(localStorage.${innerDivName} == "hide"){
+                    $('#${innerDivName}').hide();
+                    localStorage.${innerDivName}="hide";
+                  }
+                } else {
+                  if (!EXPAND_ON_LOAD) {
+                    $('#${innerDivName}').hide();
+                  }
+                }
+                $('#${divName}_h3').click(function(e){
+                 $('#${innerDivName}').slideToggle('fast');
+                 if(${useLocalStorage} && typeof(Storage)!=="undefined"){
+                   if(localStorage.${innerDivName}=="hide"){
+                       localStorage.${innerDivName}="show";
+                   }else{
+                       localStorage.${innerDivName}="hide";
+                   }
                  }
-              }
-              $('#${divName}_h3').click(function(e){
-               $('#${innerDivName}').slideToggle('fast');
-               if(${useLocalStorage} && typeof(Storage)!=="undefined"){
-                 if(localStorage.${innerDivName}=="hide"){
-                     localStorage.${innerDivName}="show";
-                 }else{
-                     localStorage.${innerDivName}="hide";
-                 }
-               }
-               });
-            });
+                 });
+              });
+            })(window.jQuery);
           </script>
           </div>
           <c:choose>
@@ -102,7 +131,7 @@
               <html:link action="/collectionDetails?id=${object.id}&amp;field=${fieldName}&amp;trail=${param.trail}">
                 Show all in a table
               </html:link>
-              </div> 
+              </div>
             </c:when>
           </c:choose>
           </div>

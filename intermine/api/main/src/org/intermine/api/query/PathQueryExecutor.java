@@ -1,7 +1,7 @@
 package org.intermine.api.query;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -45,6 +45,9 @@ import org.intermine.pathquery.PathQuery;
 public class PathQueryExecutor extends QueryExecutor
 {
 
+    /**
+     * default batch size
+     */
     public static final int DEFAULT_BATCH_SIZE = 5000;
     private static final long MAX_WAIT_TIME = 2000;
     private int batchSize = DEFAULT_BATCH_SIZE;
@@ -87,25 +90,15 @@ public class PathQueryExecutor extends QueryExecutor
      *
      * @param pathQuery path query to be executed
      * @return results
+     * @throws ObjectStoreException if something goes wrong with the database
      */
-    public ExportResultsIterator execute(PathQuery pathQuery) {
-        try {
-            Map<String, QuerySelectable> pathToQueryNode = new HashMap<String, QuerySelectable>();
-            Map<String, BagQueryResult> returnBagQueryResults = new HashMap<String, BagQueryResult>();
+    public ExportResultsIterator execute(PathQuery pathQuery) throws ObjectStoreException {
+        Map<String, QuerySelectable> pathToQueryNode = new HashMap<String, QuerySelectable>();
+        Map<String, BagQueryResult> returnBagQueryResults = new HashMap<String, BagQueryResult>();
 
-            Query q = makeQuery(pathQuery, returnBagQueryResults, pathToQueryNode);
-            Results results = os.execute(q, batchSize, true, true, false);
-
-            //Query realQ = results.getQuery();
-            //if (realQ == q) {
-            //    queryToPathToQueryNode.put(q, pathToQueryNode);
-            //} else {
-            //    pathToQueryNode = queryToPathToQueryNode.get(realQ);
-            //}
-            return new ExportResultsIterator(pathQuery, q, results, pathToQueryNode);
-        } catch (ObjectStoreException e) {
-            throw new RuntimeException("Creating export results iterator failed", e);
-        }
+        Query q = makeQuery(pathQuery, returnBagQueryResults, pathToQueryNode);
+        Results results = os.execute(q, batchSize, true, true, false);
+        return new ExportResultsIterator(pathQuery, q, results, pathToQueryNode);
     }
 
 
@@ -118,37 +111,26 @@ public class PathQueryExecutor extends QueryExecutor
      * results from database from index 0 and just throws away all before start index.
      * @param limit maximum number of results
      * @return results
+     * @throws ObjectStoreException if fail to execute query
      */
 
     public ExportResultsIterator execute(PathQuery pathQuery, final int start,
-            final int limit) {
+            final int limit) throws ObjectStoreException {
+        Map<String, QuerySelectable> pathToQueryNode = new HashMap<String, QuerySelectable>();
+        Map<String, BagQueryResult> returnBagQueryResults = new HashMap<String, BagQueryResult>();
+
+        Query q = makeQuery(pathQuery, returnBagQueryResults, pathToQueryNode);
+        Results results = os.execute(q, batchSize, true, true, false);
+        // Prime the results -- although lazy, ExportResults are always fetched to be
+        // evaluated, and we want errors thrown here, not later when they are swallowed
+        // by the list interface.
         try {
-            Map<String, QuerySelectable> pathToQueryNode = new HashMap<String, QuerySelectable>();
-            Map<String, BagQueryResult> returnBagQueryResults = new HashMap<String, BagQueryResult>();
-
-            Query q = makeQuery(pathQuery, returnBagQueryResults, pathToQueryNode);
-            Results results = os.execute(q, batchSize, true, true, false);
-
-            /* 
-             * The purpose behind all this is to make sure that the results caching
-             * does not interfere with the routine to convertColumns in ExportResultsIterator.
-             * Sad, but true.
-             * TODO: dispense with these stupid shenanigins! and just pass through the query itself.
-            Query realQ = results.getQuery();
-            if (realQ == q) {
-                queryToPathToQueryNode.put(q, pathToQueryNode);
-            } else {
-                pathToQueryNode = queryToPathToQueryNode.get(realQ);
-            }
-            if (pathToQueryNode == null) {
-                throw new Error("realQ != q but !queryToPathToQueryNode.contains(realQ)");
-            }
-            */
-            return new ResultIterator(pathQuery, q, results, pathToQueryNode, start, limit);
-        } catch (ObjectStoreException e) {
-            throw new RuntimeException(
-                    "Creating export results iterator failed", e);
+            results.range(0, 0);
+        } catch (IndexOutOfBoundsException e) {
+            // Ignore, it just means it's empty.
         }
+
+        return new ResultIterator(pathQuery, q, results, pathToQueryNode, start, limit);
     }
 
     private Query makeQuery(PathQuery pathQuery, Map<String, BagQueryResult> pathToBagQueryResult,
@@ -160,13 +142,14 @@ public class PathQueryExecutor extends QueryExecutor
                 pathToBagQueryResult);
         return q;
     }
-    
+
     /* make this the returned value rather than those stupid maps...
     private class MainHelperResult {
-        final Map<String, BagQueryResult> pathToBagQueryResult = new HashMap<String, BagQueryResult>();
+        final Map<String, BagQueryResult> pathToBagQueryResult
+            = new HashMap<String, BagQueryResult>();
         final Map<String, QuerySelectable> pathToQueryNode = new HashMap<String, QuerySelectable>();
         Query query;
-        
+
         MainHelperResult() {
         }
     }
@@ -179,6 +162,7 @@ public class PathQueryExecutor extends QueryExecutor
      * @return The Query to run.
      * @throws ObjectStoreException if there is a problem making the query.
      */
+    @Override
     public Query makeQuery(PathQuery pq) throws ObjectStoreException {
         Map<String, QuerySelectable> pathToQueryNode = new HashMap<String, QuerySelectable>();
         Map<String, BagQueryResult> returnBagQueryResults =

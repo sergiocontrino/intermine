@@ -132,10 +132,15 @@ div.wrapper { margin-bottom:30px; }
 /* templates */
 div.template h3 span.name { cursor:pointer; }
 
+/* quick fix for modal problem */
+.modal-backdrop {
+display: none;
+}
+
 /* resizing on small screens */
 @media only screen and (max-width:1440px) {
     /* header summary fields */
-    #object_header table.fields { width:70%; }
+    #object_header table.fields { width:80%; }
     /* menu */
     #toc-menu-wrap div.wrap a, #fixed-menu div.wrap a { padding: 0 2px; }
 }

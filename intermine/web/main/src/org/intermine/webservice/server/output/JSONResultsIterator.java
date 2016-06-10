@@ -1,7 +1,7 @@
 package org.intermine.webservice.server.output;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -253,8 +253,8 @@ public class JSONResultsIterator implements Iterator<JSONObject>
      * @param cell The result element
      * @param column The path representing the view column
      * @param objectMap The map to put the values on
-     * @throws JSONFormattingException if the map already has values for this attribute and they are
-     * different to the ones in the cell
+     * @throws JSONFormattingException if the map already has values for this attribute
+     *                                  and they are different to the ones in the cell
      */
     protected void addFieldToMap(ResultElement cell, Path column,
             Map<String, Object> objectMap) {
@@ -267,26 +267,30 @@ public class JSONResultsIterator implements Iterator<JSONObject>
         if (cell.getField() instanceof Date) {
             newValue = ConstraintValueParser.ISO_DATE_FORMAT.format(cell.getField());
         } else if (cell.getField() instanceof ClobAccess) {
-        	newValue = cell.getField().toString();
+            newValue = cell.getField().toString();
         } else {
             newValue = cell.getField();
         }
+        if (newValue instanceof CharSequence) {
+            newValue = newValue.toString();
+        }
 
         if (objectMap.containsKey(key)) {
-            if (objectMap.get(key) == null) {
+            Object current = objectMap.get(key);
+            if (current == null) {
                 if (newValue != null) {
                     throw new JSONFormattingException(
-                            "Trying to set key " + key + " as " + cell.getField()
+                            "Trying to set key " + key + " as " + newValue
                             + " in " + objectMap + " but it already has the value "
-                            + objectMap.get(key)
+                            + current
                     );
                 }
             } else {
-                if (!objectMap.get(key).equals(newValue)) {
+                if (!current.equals(newValue)) {
                     throw new JSONFormattingException(
-                            "Trying to set key " + key + " as " + cell.getField()
+                            "Trying to set key " + key + " as " + newValue
                             + " in " + objectMap + " but it already has the value "
-                            + objectMap.get(key));
+                            + current);
                 }
             }
         } else {

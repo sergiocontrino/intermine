@@ -1,7 +1,7 @@
 package org.intermine.webservice.server.template.result;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -16,20 +16,14 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.intermine.api.InterMineAPI;
 import org.intermine.api.profile.Profile;
-import org.intermine.api.search.Scope;
 import org.intermine.api.template.TemplateManager;
 import org.intermine.api.template.TemplatePopulator;
-import org.intermine.pathquery.PathConstraint;
-import org.intermine.pathquery.PathQuery;
 import org.intermine.template.TemplatePopulatorException;
 import org.intermine.template.TemplateQuery;
 import org.intermine.template.TemplateValue;
-import org.intermine.web.logic.template.ConstraintInput;
-import org.intermine.web.logic.template.TemplateHelper;
-import org.intermine.web.logic.template.TemplateHelper.TemplateValueParseException;
 import org.intermine.web.logic.template.TemplateResultInput;
-import org.intermine.web.struts.TemplateAction;
-import org.intermine.web.util.URLGenerator;
+import org.intermine.web.logic.template.Templates;
+import org.intermine.web.logic.template.Templates.TemplateValueParseException;
 import org.intermine.webservice.server.exceptions.BadRequestException;
 import org.intermine.webservice.server.exceptions.ResourceNotFoundException;
 import org.intermine.webservice.server.query.result.PathQueryBuilderForJSONObj;
@@ -70,12 +64,13 @@ public class TemplateResultService extends QueryResultService
         template = templateManager.getUserOrGlobalTemplate(profile, input.getName());
         if (template == null) {
             throw new ResourceNotFoundException(
-                "You do not have access to a template called '" + input.getName() + "' in this mine.");
+                "You do not have access to a template called '"
+                        + input.getName() + "' in this mine.");
         }
 
         Map<String, List<TemplateValue>> templateValues;
         try {
-            templateValues = TemplateHelper.getValuesFromInput(
+            templateValues = Templates.getValuesFromInput(
                     template, input);
         } catch (TemplateValueParseException e) {
             throw new BadRequestException(e.getMessage(), e);
@@ -95,9 +90,9 @@ public class TemplateResultService extends QueryResultService
             populatedTemplate.clearView();
             populatedTemplate.addViews(newView);
         }
-        setHeaderAttributes(populatedTemplate, input.getStart(), input.getMaxCount());
+        setHeaderAttributes(populatedTemplate, input.getStart(), input.getLimit());
         if (populatedTemplate.isValid()) {
-            runPathQuery(populatedTemplate, input.getStart(), input.getMaxCount());
+            runPathQuery(populatedTemplate, input.getStart(), input.getLimit());
         } else {
             String msg = "Required data source (template) is outdated and is in conflict "
                 + "with model: " + populatedTemplate.verifyQuery();

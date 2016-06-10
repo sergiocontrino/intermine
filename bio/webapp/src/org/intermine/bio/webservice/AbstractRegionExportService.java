@@ -1,7 +1,7 @@
 package org.intermine.bio.webservice;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -25,16 +25,19 @@ import org.intermine.api.query.PathQueryExecutor;
 import org.intermine.api.results.ExportResultsIterator;
 import org.intermine.bio.web.model.GenomicRegion;
 import org.intermine.objectstore.ObjectStore;
+import org.intermine.objectstore.ObjectStoreException;
+import org.intermine.objectstore.ObjectStoreQueryDurationException;
 import org.intermine.objectstore.query.Query;
 import org.intermine.objectstore.query.Results;
 import org.intermine.objectstore.query.ResultsRow;
 import org.intermine.pathquery.Constraints;
 import org.intermine.pathquery.PathQuery;
-import org.intermine.util.StringUtil;
+import org.intermine.metadata.StringUtil;
 import org.intermine.web.logic.export.Exporter;
 import org.intermine.web.logic.export.ResponseUtil;
 import org.intermine.webservice.server.Format;
 import org.intermine.webservice.server.WebServiceRequestParser;
+import org.intermine.webservice.server.exceptions.ServiceException;
 import org.intermine.webservice.server.lists.ListInput;
 import org.intermine.webservice.server.output.Formatter;
 import org.intermine.webservice.server.output.Output;
@@ -58,23 +61,27 @@ public abstract class AbstractRegionExportService extends GenomicRegionSearchSer
 
     @Override
     public boolean isAuthenticated() {
-        // Allow anyone to use this service, as it doesn't use a list, but 
-        // an id-list query.
+        // Allow anyone to use this service, as it doesn't use a list, but an id-list query.
         return true;
+    }
+
+    @Override
+    protected void validateState() {
+        // what does this do
     }
 
     @Override
     protected void makeList(ListInput input, String type, Profile profile,
             Set<String> temporaryBagNamesAccumulator) throws Exception {
-        
+
         GenomicRegionSearchListInput searchInput = (GenomicRegionSearchListInput) input;
 
         Set<Integer> objectIds = new HashSet<Integer>();
         Map<GenomicRegion, Query> queries = createQueries(searchInput.getSearchInfo());
         for (Entry<GenomicRegion, Query> e: queries.entrySet()) {
             Query q = e.getValue();
-            ObjectStore os = im.getObjectStore();
-            Results rs = os.execute(q);
+            ObjectStore objectstore = im.getObjectStore();
+            Results rs = objectstore.execute(q);
             Iterator<Object> it = rs.iterator();
             while (it.hasNext()) {
                 ResultsRow rr = (ResultsRow) it.next();
@@ -89,8 +96,11 @@ public abstract class AbstractRegionExportService extends GenomicRegionSearchSer
 
     /**
      * Make a path-query from a bag.
-     * @param tempBag The bag to constrain this query on.
+     *
+     * @param ids list of ids
+     * @param type The bag to constrain this query on.
      * @return A path-query.
+     * @throws Exception if something goes wrong
      */
     protected PathQuery makePathQuery(String type, Collection<Integer> ids) throws Exception {
         PathQuery pq = new PathQuery(im.getModel());
@@ -100,10 +110,19 @@ public abstract class AbstractRegionExportService extends GenomicRegionSearchSer
         return pq;
     }
 
+    /**
+     * No-op stub. Override to implement format checks.
+     * @param pq pathquery
+     * @throws Exception if something goes wrong
+     */
     protected void checkPathQuery(PathQuery pq) throws Exception {
         // No-op stub. Override to implement format checks.
     }
 
+    /**
+     * @param pq pathquery
+     * @return the exporter
+     */
     protected abstract Exporter getExporter(PathQuery pq);
 
     /**
@@ -116,9 +135,13 @@ public abstract class AbstractRegionExportService extends GenomicRegionSearchSer
         ExportResultsIterator iter = null;
         try {
             PathQueryExecutor executor = this.im.getPathQueryExecutor(profile);
-            iter = executor.execute(pq, 0, WebServiceRequestParser.DEFAULT_MAX_COUNT);
+            iter = executor.execute(pq, 0, WebServiceRequestParser.DEFAULT_LIMIT);
             iter.goFaster();
             exporter.export(iter);
+        } catch (ObjectStoreQueryDurationException e) {
+            throw new ServiceException("Query would take too long to run.", e);
+        } catch (ObjectStoreException e) {
+            throw new ServiceException("Could not run query.", e);
         } finally {
             if (iter != null) {
                 iter.releaseGoFaster();
@@ -127,7 +150,7 @@ public abstract class AbstractRegionExportService extends GenomicRegionSearchSer
     }
 
     /**
-     * The suffix for the file name.
+     * @return The suffix for the file name.
      */
     protected abstract String getSuffix();
 
@@ -138,25 +161,38 @@ public abstract class AbstractRegionExportService extends GenomicRegionSearchSer
 
     private PrintWriter pw;
     private OutputStream os;
-    
+
+    /**
+     * @return printwriter
+     */
     protected PrintWriter getPrintWriter() {
         return pw;
     }
 
+    /**
+     * @return outputstream
+     */
     protected OutputStream getOutputStream() {
         return os;
     }
 
+    /**
+     * @return content type
+     */
     protected abstract String getContentType();
 
+    /**
+     * @return formatter
+     */
     protected Formatter getFormatter() {
         return new PlainFormatter();
     }
 
     @Override
-    protected Output getDefaultOutput(PrintWriter out, OutputStream os, String separator) {
+    protected Output getDefaultOutput(PrintWriter out, OutputStream outputstream,
+            String separator) {
         this.pw = out;
-        this.os = os;
+        this.os = outputstream;
         output = new StreamedOutput(out, getFormatter(), separator);
         if (isUncompressed()) {
             ResponseUtil.setCustomTypeHeader(response, getDefaultFileName(), getContentType());

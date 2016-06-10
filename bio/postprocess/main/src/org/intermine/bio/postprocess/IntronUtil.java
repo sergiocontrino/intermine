@@ -1,7 +1,7 @@
 package org.intermine.bio.postprocess;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -37,7 +37,7 @@ import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.objectstore.ObjectStoreWriter;
 import org.intermine.objectstore.intermine.ObjectStoreInterMineImpl;
 import org.intermine.objectstore.query.BagConstraint;
-import org.intermine.objectstore.query.ConstraintOp;
+import org.intermine.metadata.ConstraintOp;
 import org.intermine.objectstore.query.ConstraintSet;
 import org.intermine.objectstore.query.ContainsConstraint;
 import org.intermine.objectstore.query.Query;
@@ -78,12 +78,11 @@ public class IntronUtil
         this.os = osw.getObjectStore();
         this.model = os.getModel();
         dataSource = (DataSource) DynamicUtil.createObject(Collections.singleton(DataSource.class));
-        dataSource.setName("FlyMine");
+        dataSource.setName("ThaleMine");
         try {
-            dataSource = (DataSource) os.getObjectByExample(dataSource,
-                                                            Collections.singleton("name"));
+            dataSource = os.getObjectByExample(dataSource, Collections.singleton("name"));
         } catch (ObjectStoreException e) {
-            throw new RuntimeException("unable to fetch FlyMine DataSource object", e);
+            throw new RuntimeException("unable to fetch ThaleMine DataSource object", e);
         }
     }
 
@@ -109,10 +108,10 @@ public class IntronUtil
         throws ObjectStoreException {
 
         dataSet = (DataSet) DynamicUtil.createObject(Collections.singleton(DataSet.class));
-        dataSet.setName("FlyMine introns");
-        dataSet.setDescription("Introns calculated by FlyMine");
+        dataSet.setName("ThaleMine introns");
+        dataSet.setDescription("Introns calculated by ThaleMine");
         dataSet.setVersion("" + new Date()); // current time and date
-        dataSet.setUrl("http://www.flymine.org");
+        dataSet.setUrl("https://apps.araport.org/thalemine");
         dataSet.setDataSource(dataSource);
 
         // Documented as an example of how to use the query API
@@ -315,7 +314,7 @@ public class IntronUtil
             int newLocStart = nextIntronStart + tranStart;
             int newLocEnd = intronEnd + tranStart;
 
-            String identifier = "intron_chr" + chr.getPrimaryIdentifier()
+            String identifier = "intron_" + chr.getPrimaryIdentifier()
                 + "_" + Integer.toString(newLocStart) + ".." + Integer.toString(newLocEnd);
 
             if (intronMap.get(identifier) == null) {
@@ -335,7 +334,7 @@ public class IntronUtil
                 location.setEnd(new Integer(newLocEnd));
                 location.setStrand(tranLoc.getStrand());
                 location.setFeature(intron);
-                location.setLocatedOn(transcript);
+                location.setLocatedOn(chr);
                 location.addDataSets(dataSet);
 
                 intron.setChromosomeLocation(location);

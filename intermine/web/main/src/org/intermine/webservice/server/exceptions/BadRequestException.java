@@ -1,7 +1,7 @@
 package org.intermine.webservice.server.exceptions;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -21,33 +21,33 @@ public class BadRequestException extends ServiceException
 {
 
     private static final long serialVersionUID = 1L;
+    private static final int ERROR_CODE = Output.SC_BAD_REQUEST;
 
     /**
+     * 400 - BAD REQUEST
+     *
      * @param message message
      */
     public BadRequestException(String message) {
-        super(message);
-        initErrorCode();
+        super(message, ERROR_CODE);
     }
 
     /**
+     * 404 - BAD REQUEST
+     *
      * @param message message
      * @param cause cause
      */
     public BadRequestException(String message, Throwable cause) {
-        super(message, cause);
-        initErrorCode();
+        super(message, cause, ERROR_CODE);
     }
 
     /**
+     * 404 - BAD REQUEST
+     *
      * @param cause cause
      */
     public BadRequestException(Throwable cause) {
-        super(cause);
-        initErrorCode();
-    }
-
-    private void initErrorCode() {
-        setHttpErrorCode(Output.SC_BAD_REQUEST);
+        super(cause, ERROR_CODE);
     }
 }

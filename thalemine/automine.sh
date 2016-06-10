@@ -10,9 +10,14 @@
 
 # see after argument parsing for all envs related to the release
 
-DATADIR=/micklem/data/thalemine
+DATADIR=/micklem/data
 
-LOGDIR=$DATADIR/logs
+MINE=`echo ${PWD##*/}`
+
+#echo $MINE
+
+
+LOGDIR=$DATADIR/$MINE/logs
 
 PROPDIR=$HOME/.intermine
 #SCRIPTDIR=../bio/scripts/thalemine
@@ -25,17 +30,6 @@ RECIPIENTS=contrino@flymine.org
 MINEDIR=$PWD
 BUILDDIR=$MINEDIR/integrate/build
 
-#--rm?
-pwd | grep thalemine > pathcheck.tmp
-if [ ! -s pathcheck.tmp ]
-then
-echo "EXITING: you should be in the thalemine directory from your checkout."
-echo
-rm pathcheck.tmp
-exit;
-fi
-rm pathcheck.tmp
-#--mr
 
 
 # default settings: edit with care
@@ -170,10 +164,10 @@ shift $(($OPTIND - 1))
 # -m1 to grep only the first occurrence (multiple modencode sources)
 #
 
-MINEHOST=`grep -v "#" $PROPDIR/thalemine.properties.$REL | grep -m1 production.datasource.serverName | awk -F "=" '{print $2}'`
-DBUSER=`grep -v "#" $PROPDIR/thalemine.properties.$REL | grep -m1 metadata.datasource.user | awk -F "=" '{print $2}'`
-DBPW=`grep -v "#" $PROPDIR/thalemine.properties.$REL | grep -m1 metadata.datasource.password | awk -F "=" '{print $2}'`
-MINEDB=`grep -v "#" $PROPDIR/thalemine.properties.$REL | grep -m1 db.production.datasource.databaseName | awk -F "=" '{print $2}'`
+MINEHOST=`grep -v "#" $PROPDIR/$MINE.properties.$REL | grep -m1 production.datasource.serverName | awk -F "=" '{print $2}'`
+DBUSER=`grep -v "#" $PROPDIR/$MINE.properties.$REL | grep -m1 metadata.datasource.user | awk -F "=" '{print $2}'`
+DBPW=`grep -v "#" $PROPDIR/$MINE.properties.$REL | grep -m1 metadata.datasource.password | awk -F "=" '{print $2}'`
+MINEDB=`grep -v "#" $PROPDIR/$MINE.properties.$REL | grep -m1 db.production.datasource.databaseName | awk -F "=" '{print $2}'`
 
 
 #***
@@ -210,7 +204,7 @@ fi
 
 echo
 echo "==================================="
-echo "Building thalemine-$REL on $MINEHOST."
+echo "Building $MINE-$REL on $MINEHOST."
 echo "==================================="
 echo "current directory: $MINEDIR"
 echo "Log: $LOG"
@@ -339,7 +333,7 @@ if [ $INCR = "y" ]
 then
 # just add to present mine
 # NB: if failing won't stop!! ant exit with 0!
-echo; echo "Appending new chado (metadata) to thalemine-$REL.."
+echo; echo "Appending new chado (metadata) to $MINE-$REL.."
 cd integrate
 ant $V -Drelease=$REL -Dsource=modencode-metadata-inc || { printf "%b" "\n ThaleMine build FAILED.\n" ; exit 1 ; }
 elif [ $RESTART = "y" ]
@@ -347,19 +341,20 @@ then
 # restart build after failure
 echo; echo "Restarting build using last available back-up db.."
 ../bio/scripts/project_build -V $REL $V -l localhost $ARKDIR/build/mod-final.dmp\
-|| { printf "%b" "\n ThaleMine build (restart) FAILED.\n" ; exit 1 ; }
+|| { printf "%b" "\n $MINE build (restart) FAILED.\n" ; exit 1 ; }
 elif [ $QRESTART = "y" ]
 then
 # restart build without recovering last dumped db
 echo; echo "Quick restart of the build (using current db).."
 ../bio/scripts/project_build -V $REL $V -r localhost $ARKDIR/build/mod-final.dmp\
-|| { printf "%b" "\n ThaleMine build (quick restart) FAILED.\n" ; exit 1 ; }
+|| { printf "%b" "\n $MINE build (quick restart) FAILED.\n" ; exit 1 ; }
 elif [ $META = "y" ]
 then
-# new build. static, metadata, organism
+# new build, named sources
+
 echo "SOURCES: $SOURCES"
 ../bio/scripts/project_build -a $SOURCES -V $REL $V -b localhost /tmp/mod-meta\
-|| { printf "%b" "\n ThaleMine build (only metadata) FAILED.\n" ; exit 1 ; }
+|| { printf "%b" "\n $MINE build (only metadata) FAILED.\n" ; exit 1 ; }
 #cd postprocess
 #ant -v -Daction=set-missing-chromosome-locations -Drelease=$REL\
 #|| { printf "%b" "\n ThaleMine build (only metadata) FAILED while setting locations.\n" ; exit 1 ; }
@@ -376,12 +371,12 @@ else
 # .. and build thalemine
 cd $MINEDIR
 ../bio/scripts/project_build -V $REL $V -b localhost $ARKDIR/build/mod-final.dmp\
-|| { printf "%b" "\n ThaleMine build FAILED.\n" ; exit 1 ; }
+|| { printf "%b" "\n $MINE build FAILED.\n" ; exit 1 ; }
 fi
 
 else
 echo
-echo "Using previously built ThaleMine."
+echo "Using previously built $MINE."
 echo
 fi #BUILD=y
 
@@ -416,4 +411,3 @@ NAMESTAMP="$REL"_`date "+%y%m%d.%H%M"`
 fi
 runTest $NAMESTAMP
 fi
-

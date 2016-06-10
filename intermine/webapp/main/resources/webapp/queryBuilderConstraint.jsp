@@ -1,3 +1,4 @@
+<!doctype html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
@@ -53,6 +54,8 @@
     <fmt:message key="query.filterValue" /><%--Filter query results on this field having a specific value.--%>
     </a>
     </LEGEND>
+
+
     <!--
        ATTRIBUTE CONSTRAINT
     -->
@@ -75,6 +78,7 @@
         </c:when>
       </c:choose>
     </c:if>
+
 
     <!-- input or radio buttons -->
      <c:set var="selectedValue" value="" />
@@ -138,6 +142,7 @@
                     <option value="${option}" <c:if test="${dec.selectedValue == option}">selected</c:if>>
                       <c:out value="${option}" />
                     </option>
+
                   </c:forEach>
                 </html:select>
 
@@ -318,7 +323,8 @@
 <!--
    NULL OR NOT NULL CONSTRAINT
 -->
-  <c:if test="${(dec.path.attribute && !dec.path.primitive)}">
+  <c:if test="${(dec.path.attribute && !dec.path.primitive) || dec.path.reference || dec.path.collection}">
+
   <br/>
   <FIELDSET class="constraintFieldset">
     <LEGEND>
@@ -341,6 +347,41 @@
           </label>
         &nbsp;
         <html:submit property="nullnotnull" styleId="emptySubmit" disabled="true">
+        <fmt:message key="query.submitConstraint"/><%--Add to query--%>
+        </html:submit>
+    </p>
+    </FIELDSET>
+  </c:if>
+
+<!--
+   RANGE CONSTRAINT
+-->
+  <c:if test="${dec.validRange && !dec.path.attribute}">
+  <br/>
+  <FIELDSET class="constraintFieldset">
+    <LEGEND>
+    <a href="javascript:swapInputs('range');">
+            <fmt:message key="query.filterRange"/><%--Filter query results on range--%>
+        </a>
+    </LEGEND>
+    <p style="text-align: left;">
+        <fmt:message key="query.filterRangeHelpText" />
+          <br/>
+        <!-- OP -->
+                     <html:select property="rangeOp" styleId="range1" disabled="true">
+                      <c:forEach items="${dec.rangeQueryOps}" var="op">
+                        <option value="${op.property}"
+                          <c:if test="${!empty dec.selectedOp && dec.selectedOp.property == op.property}">selected</c:if>>
+                          <im:displayableOpName opName="${op.label}" valueType="${op.property}" />
+                        </option>
+                      </c:forEach>
+                    </html:select>&nbsp;
+
+        <!-- Ranges -->
+        <html:text styleId="range2" property="rangeConstraint" value="${dec.selectedValue}" disabled="true"></html:text>
+
+        &nbsp;
+        <html:submit property="range" styleId="rangeSubmit" disabled="true">
         <fmt:message key="query.submitConstraint"/><%--Add to query--%>
         </html:submit>
     </p>

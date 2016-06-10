@@ -1,5 +1,16 @@
 package org.intermine.api.query.codegen;
 
+/*
+ * Copyright (C) 2002-2015 FlyMine
+ *
+ * This code may be freely distributed and modified under the
+ * terms of the GNU Lesser General Public Licence.  This should
+ * be distributed with the code.  See the LICENSE file for more
+ * information or http://www.gnu.org/copyleft/lesser.html.
+ *
+ */
+
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -8,7 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
-import org.intermine.objectstore.query.ConstraintOp;
+import org.intermine.metadata.ConstraintOp;
 import org.intermine.pathquery.OrderDirection;
 import org.intermine.pathquery.OrderElement;
 import org.intermine.pathquery.OuterJoinStatus;
@@ -23,8 +34,11 @@ import org.intermine.pathquery.PathException;
 import org.intermine.pathquery.PathQuery;
 import org.intermine.template.SwitchOffAbility;
 import org.intermine.template.TemplateQuery;
-import org.intermine.util.TypeUtil;
+import org.intermine.metadata.TypeUtil;
 
+/**
+ * @author Alex
+ */
 public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
 {
 
@@ -35,37 +49,40 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
     protected static final String SPACE                   = " ";
     protected static final String LEFT_BRACE              = "{";
     protected static final String RIGHT_BRACE             = "}";
-    protected static final String ENDL                    = System.getProperty("line.separator");
+
+    private String endl = System.getProperty("line.separator");
 
     protected static final String TEMPLATE_BAG_CONSTRAINT = "This template contains a list "
-                                                              + "constraint, which is currently not supported.";
+            + "constraint, which is currently not supported.";
 
 
     private void appendBoilerPlate(StringBuffer sb, WebserviceCodeGenInfo info) {
 
-        sb.append("#!/usr/bin/env ruby" + ENDL + ENDL);
-        sb.append("# This is an automatically generated script to run your query" + ENDL);
-        sb.append("# to use it you will require the intermine ruby client." + ENDL);
-        sb.append("# To install the client, run the following command from a terminal:" + ENDL);
-        sb.append("#" + ENDL);
-        sb.append("#     sudo gem install intermine" + ENDL);
-        sb.append("#" + ENDL);
-        sb.append("# For further documentation you can visit:" + ENDL);
-        sb.append("#          http://intermine.org/docs/ruby-docs/" + ENDL);
-        sb.append("#     and: http://intermine.org/docs/ruby-bio-docs/" + ENDL);
-        sb.append("#" + ENDL);
-        sb.append("# The following two lines will be needed in every script:" + ENDL);
-        sb.append("require \"rubygems\"" + ENDL);
-        sb.append("require \"intermine/service\"" + ENDL);
+        sb.append("#!/usr/bin/env ruby" + endl + endl);
+        sb.append("# This is an automatically generated script to run your query" + endl);
+        sb.append("# to use it you will require the intermine ruby client." + endl);
+        sb.append("# To install the client, run the following command from a terminal:" + endl);
+        sb.append("#" + endl);
+        sb.append("#     sudo gem install intermine" + endl);
+        sb.append("#" + endl);
+        sb.append("# For further documentation you can visit:" + endl);
+        sb.append("#          http://intermine.org/docs/ruby-docs/" + endl);
+        sb.append("#     and: http://intermine.org/docs/ruby-bio-docs/" + endl);
+        sb.append("#" + endl);
+        sb.append("# The following two lines will be needed in every script:" + endl);
+        sb.append("require \"rubygems\"" + endl);
+        sb.append("require \"intermine/service\"" + endl);
         sb.append("service = Service.new(\"" + info.getServiceBaseURL() + "\"");
         if (!info.isPublic()) {
             sb.append(", \"YOUR-API-KEY\"");
         }
-        sb.append(")" +  ENDL + ENDL);
+        sb.append(")" +  endl + endl);
     }
 
     @Override
     public String generate(WebserviceCodeGenInfo wsCodeGeninfo) {
+
+        endl = wsCodeGeninfo.getLineBreak();
 
         PathQuery query = wsCodeGeninfo.getQuery();
 
@@ -90,7 +107,8 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
         return sb.toString();
     }
 
-    private class PresentedList<T> {
+    private class PresentedList<T>
+    {
 
         StringBuffer presented = new StringBuffer();
 
@@ -107,12 +125,13 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
             presented.append("\"" + elem.toString() + "\"");
         }
 
+        @Override
         public String toString() {
             return "[" + presented.toString() + "]";
         }
     }
 
-    private Collection<String> deheadify(Collection<String> withHeads) {
+    private static Collection<String> deheadify(Collection<String> withHeads) {
         List<String> deheadeds = new ArrayList<String>();
         for (String x: withHeads) {
             deheadeds.add(decapitate(x));
@@ -120,15 +139,16 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
         return deheadeds;
     }
 
-    private String decapitate(String x) {
+    private static String decapitate(String x) {
         return x.substring(x.indexOf('.') + 1);
     }
 
-    private String dblQuote(String x) {
+    private static String dblQuote(String x) {
         return "\"" + x + "\"";
     }
 
-    private class RubyWhereClause {
+    private class RubyWhereClause
+    {
 
         PathConstraint pc;
         String wc;
@@ -173,7 +193,8 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
                 if (StringUtils.isBlank(extraValue)) {
                     subv = dblQuote(((PathConstraintLookup) pc).getValue());
                 } else {
-                    subv = dblQuote(((PathConstraintLookup) pc).getValue() + "\", => :with => " + extraValue);
+                    subv = dblQuote(((PathConstraintLookup) pc).getValue()
+                            + "\", => :with => " + extraValue);
                 }
             } else if ("PathConstraintAttribute".equals(className)) {
                 String val = dblQuote(((PathConstraintAttribute) pc).getValue());
@@ -192,11 +213,12 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
                     throw new InvalidQueryException("Unknown null-constraint op (" + op + ")");
                 }
             } else {
-                throw new InvalidQueryException("Unknown constraint class (" + className +")");
+                throw new InvalidQueryException("Unknown constraint class (" + className + ")");
             }
             if (rhs == null) {
                 rhs = "{"
-                      + ((subk.startsWith("!") || subk.startsWith("=")) ? dblQuote(subk) : ":" + subk)
+                      + ((subk.startsWith("!") || subk.startsWith("="))
+                              ? dblQuote(subk) : ":" + subk)
                       + " => "
                       + subv
                       + "}";
@@ -204,6 +226,7 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
             wc = "where(" + dblQuote(path) + " => " + rhs + ")";
         }
 
+        @Override
         public String toString() {
             return wc;
         }
@@ -212,12 +235,12 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
 
     private void appendPathQuery(StringBuffer sb, PathQuery query)  throws InvalidQueryException {
         if (query.getDescription() != null && !"".equals(query.getDescription())) {
-            sb.append("# query description - " + query.getDescription() + ENDL + ENDL);
+            sb.append("# query description - " + query.getDescription() + endl + endl);
         }
 
-        sb.append("# Get a new query from the service you will be querying:"  + ENDL);
+        sb.append("# Get a new query from the service you will be querying:"  + endl);
         try {
-            sb.append("service.new_query(\"" + query.getRootClass() + "\")." + ENDL );
+            sb.append("service.new_query(\"" + query.getRootClass() + "\")." + endl);
         } catch (PathException e1) {
             throw new InvalidQueryException(e1.getMessage());
         }
@@ -226,7 +249,8 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
         // Put on subclasses first.
         try {
             for (Entry<String, String> entry: query.getSubclasses().entrySet()) {
-                sb.append(INDENT + new RubyWhereClause(entry.getKey(), entry.getValue()) + "." + ENDL);
+                sb.append(INDENT + new RubyWhereClause(entry.getKey(), entry.getValue())
+                    + "." + endl);
             }
         } catch (PathException e) {
             throw new InvalidQueryException(e.getMessage());
@@ -237,44 +261,44 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
         }
         sb.append(INDENT + "select(");
         sb.append(new PresentedList<String>(deheadify(query.getView())));
-        sb.append(")." + ENDL);
+        sb.append(")." + endl);
 
         // Add constraints
         if (query.getConstraints() != null && !query.getConstraints().isEmpty()) {
             // Add comments for constraints
-            sb.append(INDENT + "# You can edit the constraint values below" + ENDL);
+            sb.append(INDENT + "# You can edit the constraint values below" + endl);
 
-            int coded_cons = 0;
+            int codedCons = 0;
             for (PathConstraint pc : query.getConstraints().keySet()) {
                 if (query.getConstraints().get(pc) == null) {
                     continue;
                 }
-                coded_cons++;
-                sb.append(INDENT  + new RubyWhereClause(pc) + "." + ENDL);
+                codedCons++;
+                sb.append(INDENT  + new RubyWhereClause(pc) + "." + endl);
             }
 
             // Add constraintLogic
             String logic = query.getConstraintLogic();
-            if (   (coded_cons > 0)
+            if ((codedCons > 0)
                 && (logic != null)
                 && (!"".equals(logic))
                 && (logic.indexOf("or") != -1)) {
-                sb.append(INDENT + "set_logic(\"" + logic + "\")." + ENDL);
+                sb.append(INDENT + "set_logic(\"" + logic + "\")." + endl);
             }
         }
 
         // Add orderBy
         if (query.getOrderBy() != null && !query.getOrderBy().isEmpty()) { // no sort order
-            if ( // The default
-                query.getOrderBy().size() == 1
+            if (query.getOrderBy().size() == 1
                 && query.getOrderBy().get(0).getOrderPath().equals(query.getView().get(0))
                 && query.getOrderBy().get(0).getDirection() == OrderDirection.ASC) {
                 // The default
 
                 for (OrderElement oe : query.getOrderBy()) {
                     sb.append(INDENT + "order_by(");
-                    sb.append("\"" + decapitate(oe.getOrderPath()) + "\", \"" + oe.getDirection() + "\"");
-                    sb.append(")." + ENDL);
+                    sb.append("\"" + decapitate(oe.getOrderPath()) + "\", \""
+                            + oe.getDirection() + "\"");
+                    sb.append(")." + endl);
                 }
             }
         }
@@ -282,14 +306,16 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
 
         if (query.getOuterJoinStatus() != null && !query.getOuterJoinStatus().isEmpty()) {
             for (Entry<String, OuterJoinStatus> entry : query.getOuterJoinStatus().entrySet()) {
-                sb.append(INDENT + "join(\"" + entry.getKey() + "\", \"" + entry.getValue() + "\")." + ENDL);
+                sb.append(INDENT + "join(\"" + entry.getKey() + "\", \""
+                        + entry.getValue() + "\")." + endl);
             }
         }
-        sb.append(INDENT + "limit(10)." + ENDL);
-        sb.append(INDENT + "each_row { |r| puts r}" + ENDL);
+        sb.append(INDENT + "limit(10)." + endl);
+        sb.append(INDENT + "each_row { |r| puts r}" + endl);
     }
 
-    private class TemplateComment {
+    private class TemplateComment
+    {
 
         private String code;
         private String path;
@@ -303,11 +329,13 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
 
         @Override
         public String toString() {
-            return "#" + INDENT + code + INDENT + path + (StringUtils.isBlank(description) ? "" : INDENT + description);
+            return "#" + INDENT + code + INDENT + path + (StringUtils.isBlank(description)
+                    ? "" : INDENT + description);
         }
     }
 
-    private class RubyTemplateConstraint {
+    private class RubyTemplateConstraint
+    {
         private String str;
 
         public RubyTemplateConstraint(String code, PathConstraint pc) throws InvalidQueryException {
@@ -319,12 +347,12 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
          // We can't handle these in templates.
             String className = TypeUtil.unqualifiedName(pc.getClass().toString());
             if ("PathConstraintBag".equals(className)) {
-                throw new InvalidQueryException("The webservice API cannot handle templates with list constraints " +
-                        "- convert this template to a query instead");
+                throw new InvalidQueryException("The webservice API cannot handle templates"
+                        + " with list constraints - convert this template to a query instead");
             }
             if ("PathConstraintLoop".equals(className)) {
-                throw new InvalidQueryException("The webservice API cannot handle template with loop constraints " +
-                        "- convert this template to a query instead");
+                throw new InvalidQueryException("The webservice API cannot handle template "
+                       + "with loop constraints - convert this template to a query instead");
             }
 
             String key1 = pc.getOp().toString().toLowerCase().replace(" ", "_");
@@ -342,7 +370,8 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
                 } else if (ConstraintOp.IS_NOT_NULL.equals(pc.getOp())) {
 
                 } else {
-                    throw new InvalidQueryException("Unknown null-constraint operator (" + pc.getOp() + ")");
+                    throw new InvalidQueryException("Unknown null-constraint operator ("
+                            + pc.getOp() + ")");
                 }
                 val1 = "nil";
             } else if ("PathConstraintSubclass".equals(className)) {
@@ -392,21 +421,23 @@ public class WebserviceRubyCodeGenerator implements WebserviceCodeGenerator
         }
 
         if (!StringUtils.isBlank(description)) {
-            sb.append("# " + description + ENDL);
+            sb.append("# " + description + endl);
         }
 
         for (TemplateComment tc : templateComments) {
-            sb.append(tc.toString() + ENDL);
+            sb.append(tc.toString() + endl);
         }
-        sb.append("params = {" + ENDL);
+        sb.append("params = {" + endl);
         for (Iterator<RubyTemplateConstraint> i = templateConstraints.iterator(); i.hasNext();) {
             sb.append(INDENT + i.next());
-            if (i.hasNext())
+            if (i.hasNext()) {
                 sb.append(",");
-            sb.append(ENDL);
+            }
+            sb.append(endl);
         }
-        sb.append("}" + ENDL);
-        sb.append("service.template('" + templateName + "').limit(10).each_row(params) { |r| puts r }" + ENDL);
+        sb.append("}" + endl);
+        sb.append("service.template('" + templateName
+                + "').limit(10).each_row(params) { |r| puts r }" + endl);
     }
 
 }

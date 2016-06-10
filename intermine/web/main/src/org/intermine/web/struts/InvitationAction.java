@@ -1,8 +1,17 @@
 package org.intermine.web.struts;
 
+/*
+ * Copyright (C) 2002-2015 FlyMine
+ *
+ * This code may be freely distributed and modified under the
+ * terms of the GNU Lesser General Public Licence.  This should
+ * be distributed with the code.  See the LICENSE file for more
+ * information or http://www.gnu.org/copyleft/lesser.html.
+ *
+ */
+
 import java.util.Properties;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,9 +29,16 @@ import org.intermine.api.profile.ProfileManager;
 import org.intermine.api.profile.UserAlreadyShareBagException;
 import org.intermine.util.Emailer;
 import org.intermine.web.context.InterMineContext;
+import org.intermine.web.context.MailAction;
 import org.intermine.web.logic.session.SessionMethods;
 
-public class InvitationAction extends InterMineAction {
+/**
+ * Action that processes invitations.
+ * @author Alex Kalderimis
+ *
+ */
+public class InvitationAction extends InterMineAction
+{
 
     private static final Logger LOG = Logger.getLogger(InvitationAction.class);
 
@@ -36,7 +52,6 @@ public class InvitationAction extends InterMineAction {
         ProfileManager pm = api.getProfileManager();
         Profile p = SessionMethods.getProfile(request.getSession());
         Properties props = SessionMethods.getWebProperties(request);
-        Emailer emailer = InterMineContext.getEmailer();
 
         if (!p.isLoggedIn()) {
             ActionMessage message = new ActionMessage("invitation-errors.mustlogin");
@@ -51,13 +66,8 @@ public class InvitationAction extends InterMineAction {
         try {
             invite = SharingInvite.getByToken(api, inviteForm.getInvite());
             sbm.acceptInvitation(invite, p);
-            emailer.email(
-                pm.getProfileUserName(invite.getBag().getProfileId()), "was-accepted",
-                invite.getCreatedAt(), invite.getInvitee(), invite.getBag().getName(), p.getUsername(),
-                props.getProperty("project.title"));
-            return forwardToBagDetails(mapping, invite);
-        } catch (MessagingException e) {
-            LOG.warn("Failed to email the owner of the list", e); // The logged in user doesn't need to know.
+            notifyInvitee(pm, invite, p, props);
+
             return forwardToBagDetails(mapping, invite);
         } catch (UserAlreadyShareBagException e) {
             sendErrorMsg(request, e, "invitation-errors.alreadyshared", new Object[]{});
@@ -70,9 +80,32 @@ public class InvitationAction extends InterMineAction {
         return mapping.findForward("mymine");
     }
 
+    private void notifyInvitee(
+            final ProfileManager pm, final SharingInvite invite,
+            final Profile accepter, final Properties props) {
+        MailAction action = new MailAction() {
+            @Override
+            public void act(Emailer emailer) throws Exception {
+                emailer.email(
+                        pm.getProfileUserName(invite.getBag().getProfileId()),
+                        "was-accepted",
+                        invite.getCreatedAt(),
+                        invite.getInvitee(),
+                        invite.getBag().getName(),
+                        accepter.getUsername(),
+                        props.getProperty("project.title"));
+            }
+        };
+        boolean queued = InterMineContext.queueMessage(action);
+        if (!queued) {
+            LOG.warn("Mail queue is full - could not send message");
+        }
+    }
+
     private ActionForward forwardToBagDetails(ActionMapping mapping,
             SharingInvite invite) {
-        ForwardParameters forwardParameters = new ForwardParameters(mapping.findForward("bagDetails"));
+        ForwardParameters forwardParameters =
+                new ForwardParameters(mapping.findForward("bagDetails"));
         forwardParameters.addParameter("name", invite.getBag().getName());
         return forwardParameters.forward();
     }

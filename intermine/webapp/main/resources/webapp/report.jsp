@@ -15,6 +15,13 @@
   <%-- apply white background as report page loads slowly and body bg will show through --%>
   var pageBackgroundColor = jQuery('body').css('background-color');
   jQuery('body').css('background-color', '#FFF');
+
+  <%--  Expose useful properties to the js. The properties themselves are
+        set in the foreach later down the page --%>
+  var imSummaryFields = {
+    type : "${object.type}"
+  };
+
 </script>
 
 <c:choose>
@@ -69,6 +76,10 @@
       <c:set var="tableCount" value="0" scope="page" />
 
       <c:forEach var="field" items="${object.objectSummaryFields}">
+        <%-- Expose useful props to the js --%>
+        <script> imSummaryFields["${field.name}"] = "${field.value}";</script>
+
+        <c:if test="${field.showInHeader ne false}">
           <c:if test="${tableCount %2 == 0}">
             <c:choose>
               <c:when test="${tableCount == 0}">
@@ -105,6 +116,7 @@
               </c:if>
             </c:otherwise>
           </c:choose>
+          </c:if>
       </c:forEach>
     </table>
 
@@ -295,13 +307,18 @@
       <tiles:put name="placement" value="summary" />
     <tiles:put name="reportObject" beanName="object" />
      </tiles:insert>
-  
+
    <tiles:insert name="templateList.tile">
     <tiles:put name="scope" value="global" />
     <tiles:put name="placement" value="im:aspect:summary" />
     <tiles:put name="reportObject" beanName="object" />
   </tiles:insert>
-  
+
+    <tiles:insert page="/reportRefsCols.jsp">
+      <tiles:put name="object" beanName="object" />
+      <tiles:put name="placement" value="im:summary" />
+    </tiles:insert>
+
   </div>
 
   <c:forEach items="${categories}" var="aspect" varStatus="status">

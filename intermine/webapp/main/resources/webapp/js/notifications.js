@@ -1,5 +1,6 @@
 (function($, Backbone) {
-	
+    'use strict';
+    
     if (typeof this.console === 'undefined') {
         this.console = {log: function() {}};
     }
@@ -7,42 +8,50 @@
         this.console.error = this.console.log;
     }
 
-	var Notification = Backbone.View.extend( {
+  var canShow = true;
+
+  window.addEventListener('beforeunload', function () {
+    canShow = false;
+    return;
+  });
+
+    var Notification = Backbone.View.extend( {
         tagName: 'div',
         className: 'im-event-notification topBar messages',
+        title: 'Success:',
         events: {
             'click a.closer': 'close'
         },
         initialize: function (options) {
           this.options = (options || {});
+          _.bindAll(this, 'close', 'render', 'remove');
         },
-        title: 'Success:',
-        close: function() {
-            var self = this;
-            this.$el.hide('slow', function() {self.remove()});
+        close: function(e) {
+          if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          this.$el.hide('slow', this.remove);
         },
         render: function() {
-            var self = this, remAfter = self.options.autoRemove;
+            if (!canShow) return;
             this.$el.append('<a class="closer" href="#">Hide</a>');
             this.$el.append('<p><span><b>' + this.title + '</b></span></p>');
             
             this.appendContent();
             this.$el.prependTo('#pagecontentcontainer');
             
-            if (remAfter != null) {
-                _.delay(function() {self.close();}, (remAfter === true) ? 3000 : remAfter);
+            if (this.options.autoRemove) {
+              // _.delay(this.close, (remAfter === true) ? 3000 : remAfter);
             }
             return this;
         },
         appendContent: function() {
-        	 this.$el.append(this.options.message);
-        },
-        initialize: function() {
-            _.bindAll(this);
+             this.$el.append(this.options.message);
         }
     } );
-	
-	var FailureNotification = Notification.extend( {
+    
+    var FailureNotification = Notification.extend( {
         className: "im-event-notification topBar errors",
         title: 'Oops!'
     } );
@@ -77,7 +86,7 @@
         new FailureNotification({message: error, autoRemove: true}).render();
     };
 
-	this.Notification = Notification;
-	this.FailureNotification = FailureNotification;
-	
+    this.Notification = Notification;
+    this.FailureNotification = FailureNotification;
+    
 }).call(window, jQuery, Backbone);

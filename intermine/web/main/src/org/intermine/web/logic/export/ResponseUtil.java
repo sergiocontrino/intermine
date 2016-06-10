@@ -1,7 +1,7 @@
 package org.intermine.web.logic.export;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -70,7 +70,7 @@ public final class ResponseUtil
         setPlainTextContentType(response);
         setFileName(response, fileName);
     }
-    
+
     /**
      * Sets response header and content type for gzipped output.
      *
@@ -110,6 +110,11 @@ public final class ResponseUtil
         }
     }
 
+    /**
+     * Set the header for a JSON-schema response.
+     * @param response The response.
+     * @param filename The file-name.
+     */
     public static void setJSONSchemaHeader(HttpServletResponse response,
             String filename) {
         setJSONSchemaContentType(response);
@@ -200,7 +205,7 @@ public final class ResponseUtil
      * @param response response
      */
     public static void setXMLContentType(HttpServletResponse  response) {
-        response.setContentType("text/xml");
+        response.setContentType("application/xml");
         response.setCharacterEncoding("UTF-8");
     }
 

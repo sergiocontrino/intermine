@@ -1,7 +1,7 @@
 package org.intermine.webservice.server.query.result;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -21,8 +21,9 @@ import org.intermine.api.profile.BagState;
 import org.intermine.api.profile.InterMineBag;
 import org.intermine.pathquery.PathQuery;
 import org.intermine.pathquery.PathQueryBinding;
+import org.intermine.webservice.server.core.Producer;
 import org.intermine.webservice.server.exceptions.BadRequestException;
-import org.intermine.webservice.server.exceptions.InternalErrorException;
+import org.intermine.webservice.server.exceptions.ServiceException;
 
 
 /**
@@ -48,20 +49,25 @@ public class PathQueryBuilder
      * PathQueryBuilder constructor.
      * @param xml xml string from which will be PathQuery constructed
      * @param schemaUrl url of XML Schema file, validation is performed according this file
-     * @param savedBags previously saved bags
+     * @param bagSource previously saved bags
      */
-    public PathQueryBuilder(String xml, String schemaUrl, Map<String, InterMineBag> savedBags) {
-        buildQuery(xml, schemaUrl, savedBags);
+    public PathQueryBuilder(
+            String xml,
+            String schemaUrl,
+            Producer<Map<String, InterMineBag>> bagSource) {
+        buildQuery(xml, schemaUrl, bagSource);
     }
 
     /**
      * Perform the build operation.
      * @param xml xml string from which will be PathQuery constructed
      * @param schemaUrl url of XML Schema file, validation is performed according this file
-     * @param savedBags previously saved bags.
+     * @param bagSource previously saved bags.
      */
-    void buildQuery(String xml, String schemaUrl,
-            Map<String, InterMineBag> savedBags) {
+    void buildQuery(
+            String xml,
+            String schemaUrl,
+            Producer<Map<String, InterMineBag>> bagSource) {
         XMLValidator validator = new XMLValidator();
         validator.validate(xml, schemaUrl);
         if (validator.getErrorsAndWarnings().size() == 0) {
@@ -82,6 +88,9 @@ public class PathQueryBuilder
             Set<String> missingBags = new HashSet<String>();
             Set<String> toUpgrade = new HashSet<String>();
             for (String bagName : pathQuery.getBagNames()) {
+                // Use a producer so we only have to hit the userprofile if there
+                // actually are any bags to query.
+                Map<String, InterMineBag> savedBags = bagSource.produce();
                 if (!savedBags.containsKey(bagName)) {
                     missingBags.add(bagName);
                 } else {
@@ -98,14 +107,14 @@ public class PathQueryBuilder
                         + formatMessage(missingBags));
             }
             if (!toUpgrade.isEmpty()) {
-                throw new InternalErrorException(
+                throw new ServiceException(
                         "The query XML is well formatted, but the following lists"
                         + " are not 'current', and need to be manually upgraded:\n"
                         + formatMessage(toUpgrade));
             }
         } else {
             logger.debug("Received invalid xml: " + xml);
-            throw new BadRequestException("Query does not pass XML validation:\n" 
+            throw new BadRequestException("Query does not pass XML validation. "
                     + formatMessage(validator.getErrorsAndWarnings()));
         }
     }

@@ -1,7 +1,7 @@
 package org.intermine.bio.web.displayer;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -16,7 +16,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.intermine.api.InterMineAPI;
 import org.intermine.api.profile.InterMineBag;
 import org.intermine.api.profile.Profile;
@@ -24,6 +23,7 @@ import org.intermine.api.query.PathQueryExecutor;
 import org.intermine.bio.web.logic.CytoscapeNetworkDBQueryRunner;
 import org.intermine.bio.web.logic.CytoscapeNetworkUtil;
 import org.intermine.metadata.Model;
+import org.intermine.metadata.StringUtil;
 import org.intermine.model.InterMineObject;
 import org.intermine.model.bio.BioEntity;
 import org.intermine.model.bio.Gene;
@@ -32,8 +32,8 @@ import org.intermine.objectstore.ObjectStore;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.pathquery.Constraints;
 import org.intermine.pathquery.OrderDirection;
+import org.intermine.pathquery.OuterJoinStatus;
 import org.intermine.pathquery.PathQuery;
-import org.intermine.util.StringUtil;
 import org.intermine.web.displayer.ReportDisplayer;
 import org.intermine.web.logic.config.ReportDisplayerConfig;
 import org.intermine.web.logic.results.ReportObject;
@@ -45,8 +45,6 @@ import org.intermine.web.logic.session.SessionMethods;
  */
 public class CytoscapeNetworkDisplayer extends ReportDisplayer
 {
-    @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(CytoscapeNetworkDisplayer.class);
 
     private static final String DATA_NOT_INTEGRATED = "Interaction data is not integrated.";
     private static final String EXCEPTION_OCCURED = "An exception occured";
@@ -72,8 +70,12 @@ public class CytoscapeNetworkDisplayer extends ReportDisplayer
         String featureType = "";
 
         //=== Get Interaction information ===
-        Map<String, Set<String>> interactionInfoMap = CytoscapeNetworkUtil
-                .getInteractionInfo(model, executor);
+        Map<String, Set<String>> interactionInfoMap;
+        try {
+            interactionInfoMap = CytoscapeNetworkUtil.getInteractionInfo(model, executor);
+        } catch (ObjectStoreException e) {
+            throw new RuntimeException(e);
+        }
 
         if (interactionInfoMap == null) {
             request.setAttribute("dataNotIncludedMessage", DATA_NOT_INTEGRATED);
@@ -130,24 +132,36 @@ public class CytoscapeNetworkDisplayer extends ReportDisplayer
 
         //=== Query a full set of interacting genes ===
         CytoscapeNetworkDBQueryRunner queryRunner = new CytoscapeNetworkDBQueryRunner();
-        Set<Integer> fullInteractingGeneSet = queryRunner.getInteractingGenes(
-                featureType, startingFeatureSet, model, executor);
+        Set<Integer> fullInteractingGeneSet;
+        try {
+            fullInteractingGeneSet = queryRunner.getInteractingGenes(featureType,
+                    startingFeatureSet, model, executor);
+        } catch (ObjectStoreException e) {
+            throw new RuntimeException(e);
+        }
 
         // set fullInteractingGeneSet in request
         request.setAttribute("fullInteractingGeneSet",
                 StringUtil.join(fullInteractingGeneSet, ","));
 
+
         // === Create inline table query ===
         PathQuery q = new PathQuery(model);
         q.addViews("Gene.symbol",
                 "Gene.primaryIdentifier",
-                "Gene.interactions.details.type",
-                "Gene.interactions.gene2.symbol",
-                "Gene.interactions.gene2.primaryIdentifier",
-                "Gene.interactions.details.dataSets.dataSource.name",
-                "Gene.interactions.details.experiment.publication.title",
+//                "Gene.interactions.details.role1",
+//                "Gene.interactions.details.type",
+//                "Gene.interactions.gene2.symbol",
+//                "Gene.interactions.gene2.primaryIdentifier",
+                //"Gene.interactions.details.role2",
+//                "Gene.interactions.details.experiment.interactionDetectionMethods.name",
+                //"Gene.interactions.details.dataSets.dataSource.name",
+//                "Gene.interactions.gene1.interactions.details.experiment.interactionDetectionMethods.name",
+//                "Gene.interactions.details.experiment.publication.title",
                 "Gene.interactions.details.experiment.publication.pubMedId");
 
+        q.setOuterJoinStatus("Gene.interactions.details.experiment.publication",
+                OuterJoinStatus.OUTER);
         q.addOrderBy("Gene.symbol", OrderDirection.ASC);
         q.addConstraint(Constraints.inIds("Gene", fullInteractingGeneSet), "B");
         q.addConstraint(Constraints.inIds("Gene.interactions.gene2",

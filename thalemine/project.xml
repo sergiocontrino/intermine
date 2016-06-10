@@ -1,40 +1,276 @@
 <project type="bio">
-  <property name="target.model" value="genomic"/>
-  <property name="source.location" location="../bio/sources/"/>
-  <property name="common.os.prefix" value="common"/>
-  <property name="intermine.properties.file" value="thalemine.properties"/>
-  <property name="default.intermine.properties.file" location="../default.intermine.integrate.properties"/>
-  <sources>
+    <property name="target.model" value="genomic"/>
+    <property name="source.location" location="../bio/sources/"/>
+    <property name="common.os.prefix" value="common"/>
+    <property name="intermine.properties.file" value="thalemine.properties"/>
+    <property name="default.intermine.properties.file" location="../default.intermine.integrate.properties"/>
+    <sources>
+        <source name="araport-locus-history" type="intermine-items-xml-file">
+            <property name="src.data.file" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/locushistory/araport-locus-history.xml" />
+        </source>
 
-  <source name="aip-gff" type="aip-gff" dump="true">
-    <property name="gff3.taxonId" value="3702"/>
-    <property name="gff3.seqDataSourceName" value="JCVI"/>
-    <property name="gff3.dataSourceName" value="JCVI"/>
-    <property name="gff3.seqClsName" value="Chromosome"/>
-    <property name="gff3.dataSetTitle" value="Arabidopsis thaliana gff general annotation"/>
-    <property name="src.data.dir" location="/usr/local/projects/AIP/ThaleMineData/TAIR10_refined/gff/" />
-  </source>
+        <source name="aip-gff" type="aip-gff">
+            <property name="gff3.taxonId" value="3702"/>
+            <property name="gff3.seqDataSourceName" value="TAIR"/>
+            <property name="gff3.dataSourceName" value="Araport"/>
+            <property name="gff3.seqClsName" value="Chromosome"/>
+            <property name="gff3.dataSetTitle" value="Genome Annotation"/>
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/genome/gff/" />
+        </source>
 
-  <source name="at-agi" type="bar-lookups" dump="true">
-    <property name="source.db.name" value="bar-lu"/>
-  </source>
+        <source name="rnaseq-expression" type="rnaseq-expression">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/rnaseq_expression/current"/>
+	    <property name="src.data.dir.includes" value="*RNAseq-expression*"/>
+            <property name="rnaseq.organisms" value="3702"/>
+            <property name="dataSourceName" value="RNASeq"/>
+            <property name="dataSetName" value="RNASeq data set"/>
+        </source>
 
-  <source name="hormone-expressions" type="bar-expressions" dump="true">
-    <property name="source.db.name" value="bar-he"/>
-  </source>
+        <source name="psi-mi-ontology" type="psi-mi-ontology">
+            <property name="src.data.file" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/psi/psi-mi.obo"/>
+        </source>
 
-  <source name="tissue-expressions" type="bar-expressions" dump="true">
-    <property name="source.db.name" value="bar-te"/>
-    <property name="dataSourceName" value="atgenexp"/>
-    <property name="dataSetTitle" value="BAR Expression Data: tissue"/>
-  </source>
+        <source name="pubmed-gene" type="pubmed-gene" >
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/pubmed"/>
+            <property name="pubmed.organisms" value="3702"/>
+            <property name="src.data.dir.includes" value="gene2pubmed"/>
+            <property name="infoFile" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/ncbi-gene/gene_info"/>
+        </source>
 
-  <source name="pathogen-expressions" type="bar-expressions" dump="true">
-    <property name="source.db.name" value="bar-pe"/>
-    <property name="dataSourceName" value="atgenexp_pathogen"/>
-    <property name="dataSetTitle" value="BAR Expression Data: pathogen"/>
-  </source>
+        <source name="at-agi" type="bar-lookups">
+            <property name="source.db.name" value="bar-lu"/>
+        </source>
 
+        <source name="hormone-expressions" type="bar-expressions">
+            <property name="source.db.name" value="bar-he"/>
+            <property name="dataSourceName" value="atgenexp_hormone"/>
+            <property name="dataSetTitle" value="BAR Expression Data: hormones"/>
+        </source>
 
-  </sources>
+        <source name="tissue-expressions" type="bar-expressions">
+            <property name="source.db.name" value="bar-te"/>
+            <property name="dataSourceName" value="atgenexp"/>
+            <property name="dataSetTitle" value="BAR Expression Data: tissue"/>
+        </source>
+
+        <source name="pathogen-expressions" type="bar-expressions">
+            <property name="source.db.name" value="bar-pe"/>
+            <property name="dataSourceName" value="atgenexp_pathogen"/>
+            <property name="dataSetTitle" value="BAR Expression Data: pathogen"/>
+        </source>
+
+        <source name="plus-expressions" type="bar-expressions">
+            <property name="source.db.name" value="bar-ple"/>
+            <property name="dataSourceName" value="atgenexp_plus"/>
+            <property name="dataSetTitle" value="BAR Expression Data: plus"/>
+        </source>
+
+        <source name="stress-expressions" type="bar-expressions">
+            <property name="source.db.name" value="bar-se"/>
+            <property name="dataSourceName" value="atgenexp_stress"/>
+            <property name="dataSetTitle" value="BAR Expression Data: stress"/>
+        </source>
+
+        <source name="light_series-expressions" type="bar-expressions">
+            <property name="source.db.name" value="bar-lse"/>
+            <property name="dataSourceName" value="light_series"/>
+            <property name="dataSetTitle" value="BAR Expression Data: light_series"/>
+        </source>
+
+        <source name="root-expressions" type="bar-expressions">
+            <property name="source.db.name" value="bar-re"/>
+            <property name="dataSourceName" value="root"/>
+            <property name="dataSetTitle" value="BAR Expression Data: root"/>
+        </source>
+
+        <source name="seed_db-expressions" type="bar-expressions">
+            <property name="source.db.name" value="bar-sde"/>
+            <property name="dataSourceName" value="seed_db"/>
+            <property name="dataSetTitle" value="BAR Expression Data: seed_db"/>
+        </source>
+
+        <source name="ecotypes-expressions" type="bar-expressions">
+            <property name="source.db.name" value="bar-ee"/>
+            <property name="dataSourceName" value="arabidopsis_ecotypes"/>
+            <property name="dataSetTitle" value="BAR Expression Data: arabidopsis_ecotypes"/>
+        </source>
+
+        <source name="affy-expressions" type="bar-expressions">
+            <property name="source.db.name" value="bar-ae"/>
+            <property name="dataSourceName" value="affydb"/>
+            <property name="dataSetTitle" value="BAR Expression Data: affydb"/>
+        </source>
+
+        <source name="so" type="so">
+            <property name="src.data.file" location="../../bio/sources/so/so.obo"/>
+        </source>
+
+        <source name="go" type="go">
+            <property name="src.data.file" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/go/gene_ontology.obo"/>
+        </source>
+
+        <source name="go-annotation" type="go-annotation">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/go_annotation/" />
+            <property name="dataSourceName" value="GO Annotation from TAIR"/>
+            <property name="ontologyPrefix" value="GO"/>
+        </source>
+
+        <source name="po" type="po">
+            <property name="src.data.file" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/po/plant_ontology.obo"/>
+        </source>
+
+        <source name="po-annotation" type="po-annotation">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/po_annotation/" />
+            <property name="dataSourceName" value="PO Annotation from TAIR"/>
+            <property name="ontologyPrefix" value="PO"/>
+        </source>
+
+        <source name="uniprot" type="uniprot">
+            <property name="uniprot.organisms" value="3702"/>
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
+        </source>
+
+        <source name="uniprot-fasta" type="fasta">
+            <property name="fasta.taxonId" value="3702"/>
+            <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
+            <property name="fasta.classAttribute" value="primaryAccession"/>
+            <property name="fasta.dataSetTitle" value="UniProt FASTA dataset"/>
+            <property name="fasta.dataSourceName" value="UniProt"/>
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
+            <property name="fasta.includes" value="uniprot_sprot_varsplic.fasta"/>
+            <property name="fasta.sequenceType" value="protein" />
+            <property name="fasta.loaderClassName"
+                value="org.intermine.bio.dataconversion.UniProtFastaLoaderTask"/>
+        </source>
+
+        <source name="uniprot-keywords" type="uniprot-keywords">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/uniprot/uniprot/current"/>
+            <property name="src.data.dir.includes" value="keywlist.xml"/>
+        </source>
+
+        <source name="aip-chromosome-fasta" type="fasta">
+            <property name="fasta.className" value="org.intermine.model.bio.Chromosome"/>
+            <property name="fasta.dataSourceName" value="TAIR"/>
+            <property name="fasta.dataSetTitle" value="Genome Assembly"/>
+            <property name="fasta.taxonId" value="3702"/>
+            <property name="fasta.includes" value="*Chr*"/>
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/genome/fasta/"/>
+        </source>
+
+        <source name="aip-cds-fasta" type="fasta">
+            <property name="fasta.loaderClassName"
+                value="org.intermine.bio.dataconversion.AIPCDSFastaLoaderTask"/>
+            <property name="fasta.taxonId" value="3702"/>
+            <property name="fasta.className" value="org.intermine.model.bio.CDS"/>
+            <property name="fasta.classAttribute" value="primaryIdentifier"/>
+            <property name="fasta.includes" value="*cds*"/>
+            <property name="fasta.dataSetTitle" value="Coding Sequence FASTA"/>
+            <property name="fasta.dataSourceName" value="Araport"/>
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/genome/fasta/"/>
+        </source>
+
+        <source name="aip-pep-fasta" type="fasta">
+            <property name="fasta.loaderClassName"
+                value="org.intermine.bio.dataconversion.AIPProteinFastaLoaderTask"/>
+            <property name="fasta.skipIfProteinLoaded" value="true"/>
+            <property name="fasta.taxonId" value="3702"/>
+            <property name="fasta.sequenceType" value="protein"/>
+            <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
+            <property name="fasta.classAttribute" value="primaryIdentifier"/>
+            <property name="fasta.includes" value="*pep*"/>
+            <property name="fasta.dataSetTitle" value="Protein Sequence FASTA"/>
+            <property name="fasta.dataSourceName" value="Araport"/>
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/genome/fasta/"/>
+        </source>
+
+        <source name="panther" type="panther">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/orthologs/panther"/>
+            <property name="panther.organisms" value="3702 4932 9606"/>
+        </source>
+
+        <source name="interpro" type="interpro">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/interpro/current"/>
+            <property name="src.data.dir.includes" value="interpro.xml"/>
+        </source>
+
+        <source name="protein2ipr" type="protein2ipr">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/interpro/current"/>
+            <property name="src.data.dir.includes" value="protein2ipr.dat"/>
+            <property name="protein2ipr.organisms" value="3702"/>
+        </source>
+
+        <source name="kegg-pathway" type="kegg-pathway">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/kegg/current"/>
+            <property name="kegg.organisms" value="3702"/>
+        </source>
+
+        <source name="generif" type="generif">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/generif/current"/>
+            <property name="generif.organisms" value="3702"/>
+            <property name="generif.datasourcename" value="GeneRIF"/>
+            <property name="generif.datasetname" value="GeneRIF data set"/>
+        </source>
+
+    	<!--
+        <source name="bar-psi-interactions" type="bar-psi-interactions">
+            <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/bar-interactions/current"/>
+            <property name="bar.organisms" value="3702"/>
+            <property name="dataSourceName" value="BAR"/>
+            <property name="dataSetName" value="BAR interactions data set"/>
+        </source> -->
+
+        <source name="psi-intact" type="psi" >
+          <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/psi/intact/current"/>
+          <property name="intact.organisms" value="3702"/>
+        </source>
+
+        <source name="biogrid" type="biogrid">
+          <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/biogrid/current"/>
+          <property name="src.data.dir.includes" value="*Arabidopsis_thaliana*"/>
+          <property name="biogrid.organisms" value="3702"/>
+        </source>
+
+        <source name="araport-chado-stock" type="araport-chado-db">
+            <property name="source.db.name" value="araport"/>
+            <property name="organisms" value="3702"/>
+            <property name="dataSourceName" value="TAIR"/>
+            <property name="dataSetTitle" value="TAIR Stock"/>
+            <property name="processors"
+            value="org.intermine.bio.dataconversion.StockProcessor"/>
+                 <property name="converter.class"
+                  value="org.intermine.bio.dataconversion.ChadoDBConverter"/>
+        </source>
+
+        <source name="entrez-organism" type="entrez-organism">
+            <property name="src.data.file" location="build/organisms.xml"/>
+        </source>
+
+        <source name="thalemine-static" type="intermine-items-xml-file">
+            <property name="src.data.file" location="datasets.xml"/>
+        </source>
+
+        <source name="update-publications" type="update-publications">
+            <property name="src.data.file" location="build/publications.xml"/>
+        </source>
+
+    </sources>
+
+    <post-processing>
+        <post-process name="create-references" />
+        <post-process name="create-chromosome-locations-and-lengths"/>
+        <post-process name="create-gene-flanking-features" />
+        <post-process name="do-sources" />
+        <post-process name="create-intron-features">
+            <property name="organisms" value="3702"/>
+        </post-process>
+        <post-process name="create-intergenic-region-features"/>
+        <post-process name="transfer-sequences"/>
+        <post-process name="populate-child-features"/>
+        <post-process name="create-overlap-view" />
+        <post-process name="create-location-overlap-index"/>
+        <post-process name="create-attribute-indexes"/>
+        <post-process name="summarise-objectstore"/>
+        <post-process name="create-autocomplete-index"/>
+        <post-process name="create-search-index"/>
+    </post-processing>
 </project>

@@ -1,7 +1,7 @@
 package org.intermine.bio.web.displayer;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -23,7 +23,7 @@ import org.intermine.metadata.Model;
 import org.intermine.model.InterMineObject;
 import org.intermine.model.bio.Publication;
 import org.intermine.objectstore.ObjectStore;
-import org.intermine.objectstore.query.ConstraintOp;
+import org.intermine.metadata.ConstraintOp;
 import org.intermine.objectstore.query.ConstraintSet;
 import org.intermine.objectstore.query.ContainsConstraint;
 import org.intermine.objectstore.query.Query;
@@ -128,7 +128,8 @@ public class PublicationCountsDisplayer extends ReportDisplayer
         q.addToGroupBy(qfDate);
 
         q.addToSelect(qfDate);
-        q.addToOrderBy(qf);
+        // removed to order by date instead
+        //  q.addToOrderBy(qf);
         q.addToOrderBy(qfDate, "desc");
         return q;
     }

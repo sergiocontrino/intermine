@@ -1,0 +1,43 @@
+DataSource	TAIR	The Arabidopsis Information Resource	http://www.arabidopsis.org	Publication:26201819
+DataSet	Genome Assembly	TAIR9 Genome assembly (5 chromosomes plus chloroplast and mitochondrial assemblies)	http://www.arabidopsis.org/portals/genAnnotation/gene_structural_annotation/agicomplete.jsp	DataSource:TAIR,Publication:11130711	TAIR9
+DataSet	Gene Summary	TAIR-curated Arabidopsis gene symbol(s), curator summary and links between loci & publications	https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/Public_Data_Releases/TAIR_Data_20150331	DataSource:TAIR,Publication:26201819	03/31/2015
+DataSource	Araport	Arabidopsis Information Portal	https://www.araport.org	Publication:25414324
+DataSet	Genome Annotation	Araport11 protein coding genes supplemented with TAIR10 non-coding RNA and transposable elements	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 (04/2016)
+DataSet	Coding Sequence FASTA	Araport11 coding sequences	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 (04/2016)
+DataSet	Protein Sequence FASTA	Araport11 protein sequences	https://www.araport.org/data/araport11	DataSource:Araport	Araport11 (04/2016)
+DataSet	PO Annotation from TAIR	Literature-based annotations of genes to Plant Ontology (PO) terms	https://www.arabidopsis.org/download/index-auto.jsp?dir=/download_files/GO_and_PO_Annotations/Plant_Ontology_Annotations	DataSource:TAIR,Publication:26201819	03/31/2015
+DataSource	GO	Gene Ontology Consortium	http://geneontology.org	Publication:25428369
+DataSet	GO Annotation from GOC	GO annotations assigned by the GO Consortium	http://www.geneontology.org	DataSource:GO,Publication:25428369	4/01/2016
+DataSet	GO Annotation from IntAct	GO annotations assigned by IntAct	http://www.geneontology.org	DataSource:GO,Publication:25428369	4/01/2015
+DataSet	GO Annotation from RefGenome	GO annotations assigned by RefGenome	http://www.geneontology.org	DataSource:GO,Publication:19578431	4/01/2016
+DataSet	GO Annotation from TAIR	GO annotations assigned by TAIR	http://www.geneontology.org	DataSource:GO,Publication:25428369	4/01/2016
+DataSet	GO Annotation from TIGR	GO annotations assigned by TIGR Arabidopsis annotation effort	http://www.geneontology.org	DataSource:GO,Publication:25428369	4/01/2016
+DataSet	GO Annotation from UniProt	GO annotations assigned by UniProt	http://www.geneontology.org	DataSource:GO,Publication:25428369	4/01/2016
+DataSource	UniProt	Universal Protein Resource	http://www.uniprot.org	Publication:24253303
+DataSet	Swiss-Prot data set	High-quality, manually annotated, non-redundant protein sequence database	http://web.expasy.org/docs/swiss-prot_guideline.html	DataSource:UniProt,Publication:24253303	2016_02
+DataSet	TrEMBL data set	Computationally analysed records, enriched with automatic annotation	http://www.ebi.ac.uk/uniprot/TrEMBLstats	DataSource:UniProt,Publication:24253303	2016_02
+DataSet	UniProt FASTA dataset	Protein sequences and alternative splice forms generated using VARSPLIC	ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/README.varsplic	DataSource:UniProt,Publication:24253303	2016_02
+DataSet	UniProt keywords data set	Keywords and categories used in UniProtKB	http://www.uniprot.org/docs/keywlist	DataSource:UniProt,Publication:24253303	2016_02
+DataSource	InterPro	Protein sequence analysis & classification	http://www.ebi.ac.uk/interpro	Publication:25428371
+DataSet	InterPro data set	Protein family and domain assignments to proteins	http://www.ebi.ac.uk/interpro	DataSource:InterPro,Publication:25428371	v56.0
+DataSource	Panther	Protein ANalysis THrough Evolutionary Relationships	https://www.pantherdb.org	Publication:23193289
+DataSet	Panther data set	PANTHER paralogs from Arabidopsis	https://www.pantherdb.org	DataSource:Panther,Publication:23193289	10.0
+DataSource	BAR	The Bio-Analaytic Resource for Plant Biology	http://bar.utoronto.ca	Publication:19401381
+DataSet	BAR Annotations Lookup	Mapping(s) between AGI locus and Affy Probeset identifier	http://bar.urotonto.ca	DataSource:BAR	10/08/2013
+DataSet	Arabidopsis eFP	Electronic Fluorescent Pictographic representations of gene expression patterns via BAR web services	http://bar.utoronto.ca/webservices/	DataSource:BAR,Publication:17684564	real-time
+DataSet	BAR interactions data set	Predicted and experimentally-determined protein-protein interactions (PPIs) in Arabidopsis	http://bar.utoronto.ca/interactions/	DataSource:BAR,Publication:17675552	11/9/2015
+DataSource	NCBI	National Center for Biotechnology Information	http://www.ncbi.nlm.nih.gov	Publication:16381840
+DataSet	PubMed to gene mapping	Curated associations between publications and NCBI Gene records	ftp://ftp.ncbi.nlm.nih.gov/gene/DATA	DataSource:NCBI,Publication:17148475	3/15/2016
+DataSet	GeneRIF	Concise phrase describing gene function and publication associated with NCBI Gene records	http://www.ncbi.nlm.nih.gov/gene/about-generif	DataSource:NCBI,Publication:17148475	3/15/2016
+DataSource	GenomeNet	Japanese network of database and computational services for genome research	http://www.genome.jp	Publication:9397687
+DataSet	KEGG pathways data set	Wiring diagrams of molecular interactions, reactions, and relations	http://www.kegg.jp/kegg/pathway.html	DataSource:GenomeNet,Publication:24214961	77.1
+DataSource	BioGRID	The Biological General Repository for Interaction Datasets	http://thebiogrid.org	Publication:25428363
+DataSet	BioGRID interaction data set	Curated set of genetic and physical interactions for Arabidopsis thaliana	http://thebiogrid.org	DataSource:BioGRID,Publication:25428363	3.4.134
+DataSource	IntAct	Molecular Interaction Database	http://www.ebi.ac.uk/intact/	Publication:22121220
+DataSet	IntAct interactions data set	Curated binary and complex protein-protein interactions for Arabidopsis thaliana	http://www.ebi.ac.uk/intact/	DataSource:IntAct,Publication:22121220	3/15/2015
+DataSource	Phytozome	Plant Comparative Genomics portal	http://phytozome.jgi.doe.gov/	Publication:22110026
+DataSet	Phytozome Orthologs	Gene families representing clade-specific orthology/paralogy relationships via PhytoMine web services	http://phytozome.jgi.doe.gov/phytomine/	DataSource:Phytozome,Publication:22110026	real-time
+DataSource	ATTED-II	Arabidopsis thaliana trans-factor and cis-element prediction database	http://atted.jp/	Publication:24334350
+DataSet	ATTED-II Co-expression	Co-regulated gene relationships deduced from microarray and RNA-seq data via ATTED-II web services 	http://atted.jp/help/API.shtml	DataSource:ATTED-II,Publication:24334350	real-time
+DataSet	RNA-seq expression	Measure of gene expression levels (Transcripts per Million, TPM) quantified by Salmon	https://www.araport.org/data/araport11/methods	DataSource:Araport	Araport11 (04/2016)
+DataSet	SRA	NCBI Sequence Read Archive (SRA) stores raw sequencing data; Published Arabidopsis thaliana Col-0 RNA-seq datasets retrieved from NCBI SRA	https://www.araport.org/113-rna-seq-sets-used-araport11	DataSource:NCBI	09/2014

@@ -1,7 +1,7 @@
 package org.intermine.webservice.server.template;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -50,7 +50,7 @@ public class TemplateUploadService extends WebService
     public TemplateUploadService(InterMineAPI im) {
         super(im);
     }
-    
+
     @Override
     protected void validateState() {
         if (!isAuthenticated()) {
@@ -69,7 +69,8 @@ public class TemplateUploadService extends WebService
             case HTML:
             case XML:
                 return true;
-            default: return false;
+            default:
+                return false;
         }
     }
 
@@ -77,7 +78,8 @@ public class TemplateUploadService extends WebService
     protected void execute() throws Exception {
 
         String templatesXML = "";
-        if ("application/x-www-form-urlencoded".equals(request.getContentType())
+        String contentType = StringUtils.defaultString(request.getContentType(), "");
+        if (contentType.contains("application/x-www-form-urlencoded")
                 || "GET".equalsIgnoreCase(request.getMethod())) {
             templatesXML = getRequiredParameter(TEMPLATES_PARAMETER);
         } else {
@@ -96,7 +98,7 @@ public class TemplateUploadService extends WebService
         }
         for (TemplateQuery t: templates.values()) {
             if (!t.isValid()) {
-                String message = String.format("Query %s contains errors: %s",
+                String message = String.format("Template %s contains errors: %s",
                     StringUtils.defaultIfBlank(t.getName(), "NO-NAME"),
                     formatMessage(t.verifyQuery()));
                 throw new BadRequestException(message);

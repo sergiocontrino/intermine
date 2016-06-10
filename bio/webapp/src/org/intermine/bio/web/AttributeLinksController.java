@@ -1,7 +1,7 @@
 package org.intermine.bio.web;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,13 +37,13 @@ import org.intermine.api.util.PathUtil;
 import org.intermine.bio.util.BioUtil;
 import org.intermine.metadata.ClassDescriptor;
 import org.intermine.metadata.Model;
+import org.intermine.metadata.TypeUtil;
 import org.intermine.model.InterMineObject;
 import org.intermine.model.bio.Organism;
 import org.intermine.objectstore.ObjectStore;
 import org.intermine.pathquery.Path;
 import org.intermine.pathquery.PathException;
 import org.intermine.util.DynamicUtil;
-import org.intermine.util.TypeUtil;
 import org.intermine.web.logic.Constants;
 import org.intermine.web.logic.bag.BagHelper;
 import org.intermine.web.logic.results.ReportObject;
@@ -123,12 +124,13 @@ public class AttributeLinksController extends TilesAction
 
         // map from eg. 'Gene.Drosophila.melanogaster' to map from configName (eg. "flybase")
         // to the configuration
-        Map<String, ConfigMap> linkConfigs = new HashMap<String, ConfigMap>();
+        // using tree map to keep the links in order
+        Map<String, ConfigMap> linkConfigs = new TreeMap<String, ConfigMap>();
         Properties webProperties =
             (Properties) servletContext.getAttribute(Constants.WEB_PROPERTIES);
         final String regexp = "attributelink\\.([^.]+)\\." + geneOrgKey
             + "\\.([^.]+)(\\.list)?\\"
-            + ".(url|text|imageName|usePost|delimiter|enctype|dataset|useCheckbox)";
+            + ".(url|text|imageName|title|usePost|delimiter|enctype|dataset|useCheckbox)";
         Pattern p = Pattern.compile(regexp);
         String className = null;
         String taxId = null;
@@ -176,7 +178,8 @@ public class AttributeLinksController extends TilesAction
                         } else { //it's a bag!
                             attrValue = BagHelper.getAttributesFromBag(bag, os, dbName, attrName);
                             if (!"*".equalsIgnoreCase(taxId)) {
-                                taxIds = BioUtil.getOrganisms(os, bag, false, "taxonId");
+                                taxIds = BioUtil.getOrganisms(os, bag.getType(),
+                                        bag.getContentsAsIds(), false, "taxonId");
 
                                 //don't display link if
                                 // a) not a bioentity (no reference to organism)
@@ -225,10 +228,12 @@ public class AttributeLinksController extends TilesAction
                 } else if ("useCheckbox".equals(propType)) {
                     config.put("useCheckbox", value);
                 } else if ("text".equals(propType)) {
-                    config.put("title", value.replaceAll("[^A-Za-z0-9 ]", "")
-                            .replaceFirst("attributeValue", ""));
+                    //config.put("title", value.replaceAll("[^A-Za-z0-9 ]", "")
+                    //        .replaceFirst("attributeValue", ""));
                     String text = value.replaceAll(ATTR_MARKER_RE, String.valueOf(attrValue));
                     config.put("text", text);
+                } else if ("title".equals(propType)) {
+                    config.put("title", value);
                 }
             }
         }
@@ -303,7 +308,7 @@ public class AttributeLinksController extends TilesAction
         return linkConfigs;
     }
 
-    private boolean hasDataset(InterMineAPI im, ReportObject reportObject,
+    private static boolean hasDataset(InterMineAPI im, ReportObject reportObject,
             String datasetToMatch) throws PathException {
         boolean isValidDataset = false;
         InterMineObject imo = reportObject.getObject();
@@ -328,7 +333,7 @@ public class AttributeLinksController extends TilesAction
         return isValidDataset;
     }
 
-    private void modifyIdString(ConfigMap config) {
+    private static void modifyIdString(ConfigMap config) {
 
         String delim = (String) config.get("delimiter");
         String urlString = (String) config.get("url");
@@ -346,7 +351,7 @@ public class AttributeLinksController extends TilesAction
         config.put("attributeValue", idString);
     }
 
-    private void modifyConfigToPost(ConfigMap config) {
+    private static void modifyConfigToPost(ConfigMap config) {
         String urlString = (String) config.get("url");
         AttributeLinkURL link;
         try {

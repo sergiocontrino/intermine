@@ -1,7 +1,7 @@
 package org.intermine.pathquery;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -12,7 +12,7 @@ package org.intermine.pathquery;
 
 import java.util.Collection;
 
-import org.intermine.objectstore.query.ConstraintOp;
+import org.intermine.metadata.ConstraintOp;
 
 /**
  * Builds constraints for the PathQuery.
@@ -33,6 +33,21 @@ public final class Constraints
      */
     public static PathConstraintAttribute eq(String path, String value) {
         return new PathConstraintAttribute(path, ConstraintOp.EQUALS, value);
+    }
+
+    /**
+     * Creates a constraint for a path to be exactly equal to a value.
+     *
+     * This does not provide any benefit for numbers, but strings are always lower-cased for
+     * equality comparison - this operator means that the user wants to perform strict equals
+     * comparison.
+     *
+     * @param path the path to apply the constraint to
+     * @param value the value to constrain to
+     * @return a new PathConstraint object
+     */
+    public static PathConstraintAttribute equalsExactly(String path, String value) {
+        return new PathConstraintAttribute(path, ConstraintOp.EXACT_MATCH, value);
     }
 
     /**
@@ -254,5 +269,16 @@ public final class Constraints
      */
     public static PathConstraintAttribute contains(String path, String contained) {
         return new PathConstraintAttribute(path, ConstraintOp.CONTAINS, contained);
+    }
+
+    /**
+     * Creates a constraint for a path to not contain a value.
+     *
+     * @param path the path that the constraint is attached to
+     * @param contained the value this path's field should not contain.
+     * @return a new PathConstraint object
+     */
+    public static PathConstraintAttribute doesNotContain(String path, String contained) {
+        return new PathConstraintAttribute(path, ConstraintOp.DOES_NOT_CONTAIN, contained);
     }
 }

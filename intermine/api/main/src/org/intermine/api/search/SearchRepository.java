@@ -1,7 +1,7 @@
 package org.intermine.api.search;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -93,6 +93,7 @@ public abstract class SearchRepository implements WebSearchWatcher
 
     /**
      * Get the search repository registered as global repositories for the user specified in input.
+     * @param profile user profile
      * @return the global search repositories.
      */
     public static SearchRepository getGlobalSearchRepository(Profile profile) {
@@ -104,10 +105,16 @@ public abstract class SearchRepository implements WebSearchWatcher
         return null;
     }
 
+    /**
+     * clear global repositories
+     */
     static void clearGlobalRepositories() {
         GLOBALS.clear();
     }
 
+    /**
+     * Add a global repository
+     */
     public void addGlobalRepository() {
         GLOBALS.add(this);
     }
@@ -149,7 +156,7 @@ public abstract class SearchRepository implements WebSearchWatcher
 
     @Override
     public void receiveEvent(ChangeEvent e) {
-        LOG.info("Received " + e);
+        LOG.debug("Received " + e);
         if (e instanceof PropertyChangeEvent) {
             handlePropertyChange((PropertyChangeEvent) e);
         } else if (e instanceof DeletionEvent) {
@@ -207,7 +214,6 @@ public abstract class SearchRepository implements WebSearchWatcher
      */
     public Directory getSearchIndex(String type) {
         if (!(indexes.containsKey(type) && indexes.get(type) != null)) {
-
             indexes.put(type, index(type, searchItems, profile));
         }
         return indexes.get(type);
@@ -293,7 +299,7 @@ public abstract class SearchRepository implements WebSearchWatcher
         }
 
         time = System.currentTimeMillis() - time;
-        LOG.info("Indexed " + indexed + " webSearchables in " + time + " milliseconds");
+        LOG.debug("Indexed " + indexed + " webSearchables in " + time + " milliseconds");
 
         return ram;
     }

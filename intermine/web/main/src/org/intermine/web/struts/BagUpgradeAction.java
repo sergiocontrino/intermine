@@ -1,7 +1,7 @@
 package org.intermine.web.struts;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -9,8 +9,6 @@ package org.intermine.web.struts;
  * information or http://www.gnu.org/copyleft/lesser.html.
  *
  */
-
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +18,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.intermine.api.InterMineAPI;
-import org.intermine.api.bag.BagQueryResult;
 import org.intermine.api.bag.BagQueryRunner;
 import org.intermine.api.bag.BagQueryUpgrade;
 import org.intermine.api.idresolution.IDResolver;
@@ -38,7 +35,8 @@ import org.intermine.web.logic.session.SessionMethods;
 
 public class BagUpgradeAction extends InterMineAction
 {
-    private static final String JOB_ID_PREFIX = "idresolutionjobid_";
+
+    private static final String WS_JOB_ID_KEY = "idresolutionjobid";
 
     /**
      * Action for creating BagQueryResult for a specific bag not yet current
@@ -56,17 +54,16 @@ public class BagUpgradeAction extends InterMineAction
             HttpServletResponse response) throws Exception {
         String bagName = (String) request.getParameter("bagName");
         HttpSession session = request.getSession();
-        String jobId = (String) session.getAttribute(JOB_ID_PREFIX + bagName);
 
         final InterMineAPI im = SessionMethods.getInterMineAPI(session);
         Profile profile = SessionMethods.getProfile(session);
         InterMineBag savedBag = profile.getSavedBags().get(bagName);
-        if (jobId == null) {
-            BagQueryRunner bagRunner = im.getBagQueryRunner();
-            BagQueryUpgrade bagQueryUpgrade = new BagQueryUpgrade(bagRunner, savedBag);
-            Job job = IDResolver.getInstance().submit(bagQueryUpgrade);
-            session.setAttribute(JOB_ID_PREFIX + bagName, job.getUid());
-        }
+
+        BagQueryRunner bagRunner = im.getBagQueryRunner();
+        BagQueryUpgrade bagQueryUpgrade = new BagQueryUpgrade(bagRunner, savedBag);
+        Job job = IDResolver.getInstance().submit(bagQueryUpgrade);
+        session.setAttribute(WS_JOB_ID_KEY, job.getUid());
+
         request.setAttribute("newBagName", bagName);
         request.setAttribute("bagType", savedBag.getType());
         return mapping.findForward("bagUploadConfirm");

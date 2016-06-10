@@ -1,5 +1,15 @@
 package org.intermine.webservice.server.core;
 
+/*
+ * Copyright (C) 2002-2015 FlyMine
+ *
+ * This code may be freely distributed and modified under the
+ * terms of the GNU Lesser General Public Licence.  This should
+ * be distributed with the code.  See the LICENSE file for more
+ * information or http://www.gnu.org/copyleft/lesser.html.
+ *
+ */
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -11,7 +21,13 @@ import org.apache.commons.lang.StringUtils;
 import org.intermine.api.InterMineAPI;
 import org.intermine.webservice.server.WebService;
 
-public class ConfigurableWebServiceServlet extends WebServiceServlet {
+/**
+ * A servlet that can be configured entirely in XML.
+ * @author Alex Kalderimis
+ *
+ */
+public class ConfigurableWebServiceServlet extends WebServiceServlet
+{
 
     private static final long serialVersionUID = 1943972842080907136L;
 

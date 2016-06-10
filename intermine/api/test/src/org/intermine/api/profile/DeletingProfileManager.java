@@ -1,7 +1,6 @@
 package org.intermine.api.profile;
 
 import org.intermine.api.bag.SharedBagManager;
-import org.intermine.api.bag.SharingInvite;
 import org.intermine.model.userprofile.SavedBag;
 import org.intermine.model.userprofile.SavedTemplateQuery;
 import org.intermine.model.userprofile.Tag;
@@ -44,7 +43,7 @@ public class DeletingProfileManager extends ProfileManager {
                 SharedBagManager sbm = SharedBagManager.getInstance(this);
                 sbm.removeAllSharesInvolving(userId);
                 sbm.removeAllInvitesBy(userId);
-                
+
                 uosw.delete(userProfile);
             }
         } catch (ObjectStoreException e) {

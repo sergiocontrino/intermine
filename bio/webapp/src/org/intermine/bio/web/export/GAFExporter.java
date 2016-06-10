@@ -1,7 +1,7 @@
 package org.intermine.bio.web.export;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -15,9 +15,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.intermine.api.results.ResultElement;
+import org.intermine.model.bio.SequenceFeature;
 import org.intermine.pathquery.Path;
+import org.intermine.web.logic.export.ExportHelper;
 import org.intermine.web.logic.export.Exporter;
 
 /**
@@ -29,20 +30,20 @@ public class GAFExporter implements Exporter
 {
     // Format guide: http://www.geneontology.org/GO.format.gaf-2_0.shtml
 
-    private static final Logger LOG = Logger.getLogger(GAFExporter.class);
-
     PrintWriter out;
+    private int writtenCount = 0;
     private List<Integer> featureIndexes;
-    private String taxonIds;
+    private Collection<String> taxonIds;
 
-    private static final String HEADER ="!gaf-version: 2.0";
+    private static final String HEADER = "!gaf-version: 2.0";
 
     /**
      * Constructor.
      * @param out output stream
      * @param featureIndexes index of column with exported sequence
+     * @param taxonIds taxonIDs to export
      */
-    public GAFExporter(PrintWriter out, List<Integer> featureIndexes, String taxonIds) {
+    public GAFExporter(PrintWriter out, List<Integer> featureIndexes, Collection<String> taxonIds) {
         this.out = out;
         this.featureIndexes = featureIndexes;
         this.taxonIds = taxonIds;
@@ -64,14 +65,22 @@ public class GAFExporter implements Exporter
 
     @Override
     public boolean canExport(List<Class<?>> clazzes) {
-        // TODO Auto-generated method stub
-        return false;
+        return canExportStatic(clazzes);
+    }
+
+    /* Method must have different name than canExport because canExport() method
+     * is inherited from Exporter interface */
+    /**
+     * @param clazzes classes of result row
+     * @return true if this exporter can export result composed of specified classes
+     */
+    public static boolean canExportStatic(List<Class<?>> clazzes) {
+        return ExportHelper.getClassIndex(clazzes, SequenceFeature.class) >= 0;
     }
 
     @Override
     public int getWrittenResultsCount() {
-        // TODO Auto-generated method stub
-        return 0;
+        return writtenCount;
     }
 
 }

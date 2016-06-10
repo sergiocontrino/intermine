@@ -24,6 +24,12 @@
 <action path="/galaxyExportAction" name="galaxyExportForm"
         type="org.intermine.bio.web.struts.GalaxyExportAction" parameter="method"/>
 
+<action path="/cytoscapeNetworkExport"
+        type="org.intermine.bio.web.struts.CytoscapeNetworkExportAction"/>
+
+<action path="/cytoscapeNetworkAjax"
+        type="org.intermine.bio.web.struts.CytoscapeNetworkAjaxAction"/>
+
 <!-- Beginning of Genomic Region Search configuration -->
 
 <action path="/initGenomicRegionSearchOptions"
@@ -44,3 +50,15 @@
 <!-- End of Genomic Region Search configuration -->
 
 <action path="/initFriendlyMineLinkDisplayer" type="org.intermine.bio.web.FriendlyMineLinkController"/>
+
+<action path="/displayProjectsSummary"
+  type="org.thalemine.web.controller.DataCategoriesController" />
+
+<action path="/dataCategories" forward="dataSummary.page" />
+<action path="/dataSummary" forward="dataSummary.page" />
+
+<action path="/geneRifLinks"
+        type="org.thalemine.web.controller.GeneRifSubmissionController">
+     <forward name="links" path="/model/geneRifLinks.jsp"/>   
+</action>
+     

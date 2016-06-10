@@ -1,7 +1,7 @@
 package org.intermine.bio.dataconversion;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -30,8 +30,8 @@ import org.intermine.dataconversion.ItemWriter;
 import org.intermine.metadata.Model;
 import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.util.SAXParser;
-import org.intermine.util.StringUtil;
-import org.intermine.util.Util;
+import org.intermine.metadata.StringUtil;
+import org.intermine.metadata.Util;
 import org.intermine.xml.full.Item;
 import org.intermine.xml.full.ReferenceList;
 import org.xml.sax.Attributes;
@@ -61,12 +61,13 @@ public class PsiConverter extends BioFileConverter
     private Set<String> taxonIds = null;
     private Map<String, String> genes = new HashMap<String, String>();
     private Map<MultiKey, Item> interactions = new HashMap<MultiKey, Item>();
-    private static final String ALIAS_TYPE = "gene name";
+    private String ALIAS_TYPE = "gene name";
     private static final String SPOKE_MODEL = "prey";   // don't store if all roles prey
     private static final String DEFAULT_IDENTIFIER = "symbol";
     private static final String DEFAULT_DATASOURCE = "";
     private static final String BINDING_SITE = "MI:0117";
     private static final Set<String> INTERESTING_COMMENTS = new HashSet<String>();
+    private static final String ATH_TAXONID = "3702";
 
     protected IdResolver rslv;
 
@@ -102,10 +103,20 @@ public class PsiConverter extends BioFileConverter
      */
     @Override
     public void process(Reader reader) throws Exception {
+        Boolean noResolver  = false;
+        if (taxonIds.size() == 1 && taxonIds.contains(ATH_TAXONID)) {
+            LOG.debug("ORGANISM Arabidopsis " + taxonIds + ", not using Id Resolver.");
+            noResolver  = true;
+        } else {
+            // init reslover
+            if (rslv == null) {
+                rslv = IdResolverService.getIdResolverByOrganism(taxonIds);
+            }
+        }
 
-        // init reslover
-        if (rslv == null) {
-            rslv = IdResolverService.getIdResolverByOrganism(taxonIds);
+        // ath uses locus names instead of gene name
+        if (noResolver == true) {
+            ALIAS_TYPE = "locus name";
         }
 
         PsiHandler handler = new PsiHandler();
@@ -137,16 +148,18 @@ public class PsiConverter extends BioFileConverter
             }
             String organism = attributes[0];
 
-            if (config.get(organism) == null) {
-                String[] configs = new String[2];
+            String[] configs = config.get(organism);
+            if (configs == null) {
+                configs = new String[2];
                 configs[0] = DEFAULT_IDENTIFIER;
                 configs[1] = DEFAULT_DATASOURCE;
                 config.put(organism, configs);
             }
+
             if ("identifier".equals(attributes[1])) {
-                config.get(organism)[0] = value;
+                configs[0] = value;
             } else if ("datasource".equals(attributes[1])) {
-                config.get(organism)[1] = value.toLowerCase();
+                configs[1] = value.toLowerCase();
             } else {
                 String msg = "Problem processing properties '" + PROP_FILE + "' on line " + key
                     + ".  This line has not been processed.";
@@ -259,7 +272,8 @@ public class PsiConverter extends BioFileConverter
             // <interactorList><interactor id="4"><organism ncbiTaxId="7227">
             } else if ("organism".equals(qName) && "interactor".equals(stack.peek())) {
                 String taxId = attrs.getValue("ncbiTaxId");
-                if ((taxonIds == null || taxonIds.isEmpty()) || taxonIds.contains(taxId))  {
+                if (StringUtils.isNotEmpty(taxId) && ((taxonIds == null || taxonIds.isEmpty())
+                        || taxonIds.contains(taxId)))  {
                     try {
                         processGene(taxId, interactorId);
                     } catch (ObjectStoreException e) {
@@ -331,12 +345,9 @@ public class PsiConverter extends BioFileConverter
             } else if ("end".equals(qName) && "featureRange".equals(stack.peek())
                             && interactorHolder != null && interactorHolder.isRegionFeature) {
                 interactorHolder.setEnd(attrs.getValue("position"));
-            //<interactorType><xref><primaryRef db="psi-mi" dbAc="MI:0488" id="MI:0326"
-            } else if ("primaryRef".equals(qName) && stack.search("interactionType") == 2) {
-                String term = attrs.getValue("id");
-                if (term != null) {
-                    holder.setType(getTerm(term));
-                }
+                //<interaction><interactionType><names><shortLabel>physical association
+            } else if ("shortLabel".equals(qName) && stack.search("interactionType") == 2) {
+                attName = "relationshipType";
             }
             super.startElement(uri, localName, qName, attrs);
             stack.push(qName);
@@ -464,7 +475,12 @@ public class PsiConverter extends BioFileConverter
             } else if ("shortLabel".equals(qName) && stack.search("feature") == 2
                             && attName != null && "regionName".equals(attName)) {
                 regionName  = attValue.toString();
-                //<interactionList><interaction>
+
+            //<interaction><interactionType><names><shortLabel>physical association
+            } else if (attName != null && "relationshipType".equals(attName)
+                    && "shortLabel".equals(qName) && stack.search("interactionType") == 2) {
+                holder.setRelationshipType(attValue.toString());
+            // <interactionList><interaction>
             } else if ("interaction".equals(qName) && holder != null) {
                 if (holder.isValid) {
                     try {
@@ -483,8 +499,8 @@ public class PsiConverter extends BioFileConverter
             Item interaction = interactions.get(key);
             if (interaction == null) {
                 interaction = createItem("Interaction");
-                interaction.setReference("gene1", refId);
-                interaction.setReference("gene2", gene2RefId);
+                interaction.setReference("participant1", refId);
+                interaction.setReference("participant2", gene2RefId);
                 interactions.put(key, interaction);
                 store(interaction);
             }
@@ -561,7 +577,9 @@ public class PsiConverter extends BioFileConverter
                     if (h.confidenceText != null) {
                         interactionDetail.setAttribute("confidenceText", h.confidenceText);
                     }
-                    interactionDetail.setReference("relationshipType", h.termRefId);
+                    if (StringUtils.isNotEmpty(h.relationshipType)) {
+                        interactionDetail.setAttribute("relationshipType", h.relationshipType);
+                    }
                     interactionDetail.setReference("experiment", h.eh.experiment.getIdentifier());
                     interactionDetail.setReference("interaction", interaction);
                     processRegions(h, interactionDetail, gene1Interactor, shortName, gene1RefId);
@@ -683,7 +701,9 @@ public class PsiConverter extends BioFileConverter
                 identifier = rslv.resolveId(taxonId, identifier).iterator().next();
                 return identifier;
             }
-
+            if (taxonId.equals(ATH_TAXONID)) {
+                return id.toUpperCase();
+            }
             return id;
         }
 
@@ -754,7 +774,6 @@ public class PsiConverter extends BioFileConverter
                     location.setAttribute("end", ih.end);
                     location.setReference("locatedOn", geneRefId);
                     location.setReference("feature", refId);
-                    region.setReference("location", location);
                     store(location);
                 }
                 store(region);
@@ -826,7 +845,7 @@ public class PsiConverter extends BioFileConverter
             private Set<InteractorHolder> interactors = new LinkedHashSet<InteractorHolder>();
             boolean isValid = true;
             private Set<String> regionIds = new HashSet<String>();
-            private String termRefId;
+            private String relationshipType;
 
             /**
              * Constructor
@@ -872,10 +891,10 @@ public class PsiConverter extends BioFileConverter
             }
 
             /**
-             * @param refId id representing a term object
+             * @param interactionType type of interaction, e.g. physical association
              */
-            protected void setType(String refId) {
-                termRefId = refId;
+            protected void setRelationshipType(String interactionType) {
+                this.relationshipType = interactionType;
             }
         }
 

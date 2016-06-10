@@ -1,7 +1,7 @@
 package org.intermine.web.task;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -28,6 +28,7 @@ import org.intermine.api.profile.SavedQuery;
 import org.intermine.api.profile.TagManager;
 import org.intermine.api.profile.TagManagerFactory;
 import org.intermine.api.template.ApiTemplate;
+import org.intermine.api.xml.ProfileBinding;
 import org.intermine.model.userprofile.Tag;
 import org.intermine.objectstore.ObjectStore;
 import org.intermine.objectstore.ObjectStoreException;
@@ -36,7 +37,6 @@ import org.intermine.objectstore.ObjectStoreWriter;
 import org.intermine.objectstore.ObjectStoreWriterFactory;
 import org.intermine.pathquery.PathQuery;
 import org.intermine.template.TemplateQuery;
-import org.intermine.web.ProfileBinding;
 
 /**
  * Load template queries form an XML file into a given user profile.
@@ -103,6 +103,7 @@ public class LoadDefaultTemplatesTask extends Task
      * Load templates from an xml file into a userprofile account.
      * {@inheritDoc}
      */
+    @SuppressWarnings("deprecation")
     @Override
     public void execute() {
         log("Loading default templates and tags into profile " + username);

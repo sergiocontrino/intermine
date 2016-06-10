@@ -1,7 +1,7 @@
 package org.intermine.webservice.server.user;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -21,14 +21,16 @@ import org.intermine.webservice.server.core.WebServiceServlet;
  */
 public class NewUserServlet extends WebServiceServlet
 {
-
     private static final long serialVersionUID = 2247791931782821682L;
 
     @Override
     protected WebService getService(Method method) throws NoServiceException {
         switch (method) {
-            case POST: return new NewUserService(api);
-            default: throw new NoServiceException();
+            case POST:
+                return new NewUserService(api);
+            default:
+                throw new NoServiceException();
         }
     }
+
 }

@@ -17,10 +17,10 @@
 <%
 /* In Safari, loading a css that doesnt exist causes weirdness */
 String pageName = (String) request.getAttribute("pageName");
-if(new java.io.File(application.getRealPath("css")+"/"+pageName+".css").exists()) {
+if(new java.io.File(application.getRealPath("/css")+"/"+pageName+".css").exists()) {
         request.setAttribute("pageCSS","true");
 }
-if(new java.io.File(application.getRealPath("js")+"/"+pageName+".js").exists()) {
+if(new java.io.File(application.getRealPath("/js")+"/"+pageName+".js").exists()) {
     request.setAttribute("pageJS","true");
 }
 %>
@@ -92,4 +92,16 @@ if(new java.io.File(application.getRealPath("js")+"/"+pageName+".js").exists()) 
 
 <c:set var="theme" value="${WEB_PROPERTIES['theme']}"/>
 <link rel="stylesheet" type="text/css" href="<html:rewrite page='/themes/${theme}/theme.css'/>"/>
+
+<!-- propagate cdn.location to runtime -->
+<script type="text/javascript">
+jQuery && jQuery(function() {
+    if (typeof intermine !== 'undefined' && intermine.options) {
+        intermine.options.CDN.server = "${WEB_PROPERTIES['head.cdn.location']}";
+
+	intermine.options.thalemine_url = "${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}";
+	intermine.options.phytomine_url = "${WEB_PROPERTIES['intermines.phytomine.url']}";
+    }
+});
+</script>
 <!-- /htmlHead.jsp -->

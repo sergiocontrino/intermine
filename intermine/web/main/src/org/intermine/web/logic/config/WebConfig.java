@@ -1,7 +1,7 @@
 package org.intermine.web.logic.config;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -124,6 +124,7 @@ public class WebConfig
         digester.addSetProperties("webconfig/class/fields/fieldconfig", "fieldExpr", "fieldExpr");
         digester.addSetProperties("webconfig/class/fields/fieldconfig", "name", "name");
         digester.addSetProperties("webconfig/class/fields/fieldconfig", "displayer", "displayer");
+        digester.addSetProperties("webconfig/class/fields/fieldconfig", "showInQB", "showInQB");
         digester.addSetProperties("webconfig/class/fields/fieldconfig",
                 "showInListAnalysisPreviewTable", "showInListAnalysisPreviewTable");
         digester.addSetNext("webconfig/class/fields/fieldconfig", "addFieldConfig");
@@ -219,8 +220,7 @@ public class WebConfig
      */
     private static List<String> getMappingFileNames(final Properties props, final String prefix) {
         final List<String> returnVal = new ArrayList<String>();
-        for (@SuppressWarnings("rawtypes")
-        final Enumeration e = props.propertyNames(); e.hasMoreElements();) {
+        for (final Enumeration<?> e = props.propertyNames(); e.hasMoreElements();) {
             final String key = (String) e.nextElement();
             if (key.startsWith(prefix)) {
                 returnVal.add(props.getProperty(key));
@@ -255,8 +255,7 @@ public class WebConfig
                 throw new Error("Problem reading from " + fileName, e);
             }
             if (!props.isEmpty()) {
-                for (@SuppressWarnings("rawtypes")
-                final Enumeration e = props.propertyNames(); e.hasMoreElements();) {
+                for (Enumeration<?> e = props.propertyNames(); e.hasMoreElements();) {
                     final String key = (String) e.nextElement();
                     if (theseProps.containsKey(key)) {
                         throw new IllegalStateException(
@@ -340,6 +339,7 @@ public class WebConfig
                     fc.setShowInSummary(false);
                     fc.setShowInInlineCollection(false);
                     fc.setShowInResults(false);
+                    fc.setShowInQB(true);
                     classConfig.addFieldConfig(fc);
                 }
                 if (fc.getLabel() == null) {
@@ -761,6 +761,13 @@ public class WebConfig
 
                     if (thisClassType.getTableDisplayer() == null) {
                         thisClassType.setTableDisplayer(superClassType.getTableDisplayer());
+                    }
+
+                    if (thisClassType.getInlineListConfig() == null
+                         || thisClassType.getInlineListConfig().isEmpty()) {
+                        for (InlineListConfig cfg: superClassType.getInlineListConfig()) {
+                            thisClassType.addInlineList(cfg);
+                        }
                     }
 
                     if (thisClassType.getWidgets().size() == 0

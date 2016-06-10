@@ -1,7 +1,7 @@
 package org.intermine.web.struts;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -12,7 +12,6 @@ package org.intermine.web.struts;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,12 +24,11 @@ import org.intermine.api.InterMineAPI;
 import org.intermine.api.bag.BagManager;
 import org.intermine.api.profile.InterMineBag;
 import org.intermine.api.profile.Profile;
+import org.intermine.api.template.TemplateHelper;
 import org.intermine.pathquery.PathQuery;
-import org.intermine.pathquery.PathQueryBinding;
 import org.intermine.template.TemplateQuery;
 import org.intermine.template.xml.TemplateQueryBinding;
 import org.intermine.web.logic.session.SessionMethods;
-import org.intermine.web.logic.template.TemplateHelper;
 
 /**
  * Form bean representing template import form.
@@ -138,7 +136,9 @@ public class TemplatesImportForm extends ImportXMLForm
 
     /**
      * Return a Map from template name to Template object.
-     * @return the Map
+     * @param bagManager An object capable of getting bags for a profile.
+     * @param profile The current user's profile.
+     * @return a Map from template name to Template object.
      * @throws Exception if a problem parsing query XML
      */
     public Map<String, TemplateQuery> getQueryMap(BagManager bagManager, Profile profile)

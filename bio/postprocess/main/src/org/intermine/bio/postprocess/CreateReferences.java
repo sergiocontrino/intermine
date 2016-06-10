@@ -1,7 +1,7 @@
 package org.intermine.bio.postprocess;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -26,7 +26,7 @@ import org.intermine.objectstore.ObjectStore;
 import org.intermine.objectstore.ObjectStoreWriter;
 import org.intermine.objectstore.intermine.ObjectStoreInterMineImpl;
 import org.intermine.objectstore.intermine.ObjectStoreWriterInterMineImpl;
-import org.intermine.objectstore.query.ConstraintOp;
+import org.intermine.metadata.ConstraintOp;
 import org.intermine.objectstore.query.ConstraintSet;
 import org.intermine.objectstore.query.ContainsConstraint;
 import org.intermine.objectstore.query.Query;
@@ -81,6 +81,17 @@ public class CreateReferences
         LOG.info("insertReferences stage 4");
         // CDS.gene / Gene.CDSs
         insertReferenceField("Gene", "transcripts", "Transcript", "CDSs", "CDS", "gene");
+
+        // added for thalemine TODO: more testing (webapp)
+        LOG.info("insertReferences stage 5: 5' -> gene");
+        insertReferenceField("Gene", "transcripts", "MRNA", "fivePrimeUTRs", "UTR", "gene");
+        LOG.info("insertReferences stage 6: 3' -> gene");
+        insertReferenceField("Gene", "transcripts", "MRNA", "threePrimeUTRs", "UTR", "gene");
+        // check
+        LOG.info("insertReferences stage 7: gene -> 5's");
+        insertCollectionField("FivePrimeUTR", "mRNAs", "Transcript", "gene", "Gene", "UTRs", false);
+        LOG.info("insertReferences stage 8: gene -> 3's");
+        insertCollectionField("ThreePrimeUTR", "mRNAs", "Transcript", "gene", "Gene", "UTRs", false);
     }
 
     /**

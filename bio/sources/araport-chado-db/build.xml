@@ -1,0 +1,8 @@
+<project name="araport-chado-db" default="default" basedir=".">
+
+  <description>build, test, package Araport Chado database source</description>
+
+  <import file="../../../imbuild/source.xml"/>
+
+</project>
+

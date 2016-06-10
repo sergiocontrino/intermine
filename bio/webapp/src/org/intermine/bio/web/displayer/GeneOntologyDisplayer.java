@@ -1,7 +1,7 @@
 package org.intermine.bio.web.displayer;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -29,6 +29,7 @@ import org.intermine.model.InterMineObject;
 import org.intermine.model.bio.BioEntity;
 import org.intermine.model.bio.OntologyTerm;
 import org.intermine.model.bio.Organism;
+import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.pathquery.Constraints;
 import org.intermine.pathquery.OrderDirection;
 import org.intermine.pathquery.PathQuery;
@@ -107,7 +108,7 @@ public class GeneOntologyDisplayer extends ReportDisplayer
             Model model = im.getModel();
             PathQueryExecutor executor = im.getPathQueryExecutor(profile);
 
-            InterMineObject object = (InterMineObject) reportObject.getObject();
+            InterMineObject object = reportObject.getObject();
             String primaryIdentifier = null;
             try {
                 primaryIdentifier = (String) object.getFieldValue("primaryIdentifier");
@@ -119,7 +120,12 @@ public class GeneOntologyDisplayer extends ReportDisplayer
             }
 
             PathQuery query = buildQuery(model, new Integer(reportObject.getId()));
-            ExportResultsIterator result = executor.execute(query);
+            ExportResultsIterator result;
+            try {
+                result = executor.execute(query);
+            } catch (ObjectStoreException e) {
+                throw new RuntimeException(e);
+            }
 
             Map<String, Map<OntologyTerm, Set<String>>> goTermsByOntology =
                 new HashMap<String, Map<OntologyTerm, Set<String>>>();
@@ -145,7 +151,8 @@ public class GeneOntologyDisplayer extends ReportDisplayer
         }
     }
 
-    private void addToOntologyMap(Map<String, Map<OntologyTerm, Set<String>>> goTermsByOntology,
+    private static void addToOntologyMap(
+            Map<String, Map<OntologyTerm, Set<String>>> goTermsByOntology,
             String namespace, OntologyTerm term, String evidenceCode) {
         Map<OntologyTerm, Set<String>> termToEvidence = goTermsByOntology.get(namespace);
         if (termToEvidence == null) {
@@ -160,7 +167,7 @@ public class GeneOntologyDisplayer extends ReportDisplayer
         codes.add(evidenceCode);
     }
 
-    private PathQuery buildQuery(Model model, Integer geneId) {
+    private static PathQuery buildQuery(Model model, Integer geneId) {
         PathQuery q = new PathQuery(model);
         q.addViews("Gene.goAnnotation.ontologyTerm.parents.name",
                 "Gene.goAnnotation.ontologyTerm.name",
@@ -181,7 +188,7 @@ public class GeneOntologyDisplayer extends ReportDisplayer
         return q;
     }
 
-    private String getOrganismName(ReportObject reportObject) {
+    private static String getOrganismName(ReportObject reportObject) {
         Organism organism = ((BioEntity) reportObject.getObject()).getOrganism();
         if (organism != null) {
             if (!StringUtils.isBlank(organism.getName())) {
@@ -203,7 +210,12 @@ public class GeneOntologyDisplayer extends ReportDisplayer
                 q.addConstraint(Constraints.eq("Gene.organism.name", organismField));
             }
             PathQueryExecutor executor = im.getPathQueryExecutor(profile);
-            ExportResultsIterator result = executor.execute(q, 0, 1);
+            ExportResultsIterator result;
+            try {
+                result = executor.execute(q, 0, 1);
+            } catch (ObjectStoreException e) {
+                throw new RuntimeException(e);
+            }
             organismCache.put(organismField, Boolean.valueOf(result.hasNext()));
         }
         return organismCache.get(organismField).booleanValue();

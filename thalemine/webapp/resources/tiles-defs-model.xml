@@ -35,3 +35,11 @@
 <!-- End of Genomic Region Search configuration -->
 
 <definition name="friendlyMineLinkDisplayer.tile" path="/model/friendlyMineLinkDisplayer.jsp" controllerUrl="/initFriendlyMineLinkDisplayer.do"/>
+
+<definition name="dataSummary.tile" path="/model/dataSummary.jsp"
+        controllerUrl="/displayProjectsSummary.do"/>
+        
+<definition name="dataSummary.page" extends="layout.template">
+    <put name="body" value="dataSummary.tile"/>
+    <put name="pageName" value="dataSummary"/>
+</definition>

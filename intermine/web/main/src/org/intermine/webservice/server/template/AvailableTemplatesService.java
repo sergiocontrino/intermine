@@ -1,7 +1,7 @@
 package org.intermine.webservice.server.template;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -20,12 +20,13 @@ import java.util.TreeSet;
 import org.intermine.api.InterMineAPI;
 import org.intermine.api.profile.Profile;
 import org.intermine.api.template.ApiTemplate;
+import org.intermine.api.template.TemplateHelper;
 import org.intermine.api.template.TemplateManager;
 import org.intermine.pathquery.PathQuery;
 import org.intermine.web.logic.export.ResponseUtil;
-import org.intermine.web.logic.template.TemplateHelper;
 import org.intermine.webservice.server.Format;
 import org.intermine.webservice.server.WebService;
+import org.intermine.webservice.server.exceptions.NotAcceptableException;
 import org.intermine.webservice.server.exceptions.ServiceException;
 import org.intermine.webservice.server.output.JSONFormatter;
 import org.intermine.webservice.server.output.Output;
@@ -84,26 +85,29 @@ public class AvailableTemplatesService extends WebService
         }
 
         switch (getFormat()) {
-        case XML:
-            output.addResultItem(Arrays.asList(TemplateHelper.apiTemplateMapToXml(templates,
-                    PathQuery.USERPROFILE_VERSION)));
-            break;
-        case JSON:
-            Map<String, Object> attributes = new HashMap<String, Object>();
-            if (formatIsJSONP()) {
-                attributes.put(JSONFormatter.KEY_CALLBACK, getCallback());
-            }
-            attributes.put(JSONFormatter.KEY_INTRO, "\"templates\":");
-            output.setHeaderAttributes(attributes);
-            output.addResultItem(Arrays.asList(TemplateHelper.apiTemplateMapToJson(templates)));
-            break;
-        case TEXT:
-            Set<String> templateNames = new TreeSet<String>(templates.keySet());
-            for (String templateName : templateNames) {
-                output.addResultItem(Arrays.asList(templateName));
-            }
-        case HTML:
-            throw new ServiceException("Not implemented: " + Format.HTML);
+            case XML:
+                output.addResultItem(Arrays.asList(TemplateHelper.apiTemplateMapToXml(templates,
+                        PathQuery.USERPROFILE_VERSION)));
+                break;
+            case JSON:
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                if (formatIsJSONP()) {
+                    attributes.put(JSONFormatter.KEY_CALLBACK, getCallback());
+                }
+                attributes.put(JSONFormatter.KEY_INTRO, "\"templates\":");
+                output.setHeaderAttributes(attributes);
+                output.addResultItem(Arrays.asList(
+                        TemplateHelper.apiTemplateMapToJson(im, templates)));
+                break;
+            case TEXT:
+                Set<String> templateNames = new TreeSet<String>(templates.keySet());
+                for (String templateName : templateNames) {
+                    output.addResultItem(Arrays.asList(templateName));
+                }
+            case HTML:
+                throw new ServiceException("Not implemented: " + Format.HTML);
+            default:
+                throw new NotAcceptableException();
         }
     }
 }

@@ -1,7 +1,7 @@
 package org.intermine.bio.dataconversion;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -24,9 +24,9 @@ import org.intermine.sql.Database;
 
 import com.mockobjects.sql.MockMultiRowResultSet;
 
-public class BarInteractionsConverterTest extends ItemsTestCase
+public class BarExpressionsConverterTest extends ItemsTestCase
 {
-    public BarInteractionsConverterTest(String arg) {
+    public BarExpressionsConverterTest(String arg) {
         super(arg);
     }
 
@@ -37,29 +37,29 @@ public class BarInteractionsConverterTest extends ItemsTestCase
 
     public void testProcess() throws Exception {
         MockItemWriter itemWriter = new MockItemWriter(new LinkedHashMap<String, Item>());
-        BarInteractionsConverter converter =
-            new TestBarInteractionsConverter(null, Model.getInstanceByName("genomic"), itemWriter);
+        BarExpressionsConverter converter =
+                new TestBarExpressionsConverter(null, Model.getInstanceByName("genomic"),
+                        itemWriter);
         converter.process();
         itemWriter.close();
         // uncomment this to create an XML file of the items created
         //writeItemsFile(itemWriter.getItems(), "bar-interactions.xml");
-        assertEquals(readItemSet("BarInteractionsConverterTest.xml"), itemWriter.getItems());
+        assertEquals(readItemSet("BarExpressionsConverterTest.xml"), itemWriter.getItems());
     }
 
-    private class TestBarInteractionsConverter extends BarInteractionsConverter
+    private class TestBarExpressionsConverter extends BarExpressionsConverter
     {
-        public TestBarInteractionsConverter(Database database, Model tgtModel, ItemWriter writer)
-        throws ObjectStoreException {
+        public TestBarExpressionsConverter(Database database, Model tgtModel, ItemWriter writer)
+            throws ObjectStoreException {
             super(database, tgtModel, writer);
         }
-        @Override
-        protected ResultSet runInteractionsQuery(@SuppressWarnings("unused") Connection connection) {
+        protected ResultSet runExpressionsQuery(Connection connection) {
             Object[][] resObjects = new Object[][] {
                 {
-                    "At2g41090", "At4g23810", 84,1,0.415,"PubMed17360592","0063","1110"
+                    "At2g41090", "At4g23810", 84, 1, 0.415, "PubMed17360592", "0063", "1110"
                 },
                 {
-                	"At4g23810", "At2g41090", 84,1,0.415,"PubMed17360592","0063","1110"
+                    "At4g23810", "At2g41090", 84, 1, 0.415, "PubMed17360592", "0063", "1110"
                 }
             };
             MockMultiRowResultSet res = new MockMultiRowResultSet();

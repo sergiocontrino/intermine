@@ -1,7 +1,7 @@
 package org.intermine.web.struts;
 
 /*
- * Copyright (C) 2002-2013 FlyMine
+ * Copyright (C) 2002-2015 FlyMine
  *
  * This code may be freely distributed and modified under the
  * terms of the GNU Lesser General Public Licence.  This should
@@ -28,6 +28,7 @@ import org.intermine.api.profile.InterMineBag;
 import org.intermine.api.profile.Profile;
 import org.intermine.api.query.WebResultsExecutor;
 import org.intermine.api.results.WebResults;
+import org.intermine.api.template.TemplateHelper;
 import org.intermine.api.template.TemplateManager;
 import org.intermine.api.template.TemplatePopulator;
 import org.intermine.model.InterMineObject;
@@ -40,13 +41,13 @@ import org.intermine.web.logic.results.PagedTable;
 import org.intermine.web.logic.results.ReportObject;
 import org.intermine.web.logic.results.ReportObjectFactory;
 import org.intermine.web.logic.session.SessionMethods;
-import org.intermine.web.logic.template.TemplateHelper;
 
 /**
  * Action to handle events related to displaying Report templates and displayers
  *
  * @author Mark Woodbridge
  */
+@SuppressWarnings("deprecation")
 public class ModifyDetails extends DispatchAction
 {
     private static final Logger LOG = Logger.getLogger(ModifyDetails.class);
@@ -259,42 +260,51 @@ public class ModifyDetails extends DispatchAction
         return mapping.findForward("reportTemplateTable");
     }
 
+    /**
+     * Show a displayer in response to an AJAX request.
+     * @param mapping The mapping.
+     * @param form The form.
+     * @param request The request.
+     * @param response The response.
+     * @return An action forward, possibly null.
+     */
     public ActionForward ajaxShowDisplayer(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) {
-		// fetch params from request
-		String displayerName = request.getParameter("name");
-        String reportObjectID = request.getParameter("id");    	
-    	
-    	// get ReportObject
+        // fetch params from request
+        String displayerName = request.getParameter("name");
+        String reportObjectID = request.getParameter("id");
+
+        // get ReportObject
         HttpSession session = request.getSession();
         final InterMineAPI im = SessionMethods.getInterMineAPI(session);
         ObjectStore os = im.getObjectStore();
-        
-		try {
-			InterMineObject o = os.getObjectById(new Integer(reportObjectID));
-			
-	        ReportObjectFactory reportObjects = SessionMethods.getReportObjects(session);
-	        ReportObject reportObject = reportObjects.get(o);			
-			
-	    	// get ReportDisplayer
-	    	ReportDisplayer d = reportObject.getReportDisplayer(displayerName);
-	    	
-	    	// forward
-	    	ComponentContext cc = new ComponentContext();
-	    	cc.putAttribute("reportObject", reportObject);
-	    	cc.putAttribute("displayer", d);
-	    	
-	        new ReportDisplayerController().execute(cc, mapping, form, request, response);
-	        request.setAttribute("org.apache.struts.taglib.tiles.CompContext", cc);
-	    	
-	    	return mapping.findForward("reportDisplayer");
-		
-		} catch (ObjectStoreException e) {
-			e.printStackTrace();
-		}
-		return null;
+
+        try {
+            InterMineObject o = os.getObjectById(new Integer(reportObjectID));
+
+            ReportObjectFactory reportObjects = SessionMethods.getReportObjects(session);
+            ReportObject reportObject = reportObjects.get(o);
+
+            // get ReportDisplayer
+            ReportDisplayer d = reportObject.getReportDisplayer(displayerName);
+
+            // forward
+            ComponentContext cc = new ComponentContext();
+            cc.putAttribute("reportObject", reportObject);
+            cc.putAttribute("displayer", d);
+
+            new ReportDisplayerController().execute(cc, mapping, form, request, response);
+            request.setAttribute("org.apache.struts.taglib.tiles.CompContext", cc);
+
+            return mapping.findForward("reportDisplayer");
+
+        } catch (ObjectStoreException e) {
+            LOG.error("Failing while creating " + displayerName + " for object " + reportObjectID);
+            e.printStackTrace();
+        }
+        return null;
     }
-    
+
     /**
      * Construct an ActionForward to the object details page.
      */

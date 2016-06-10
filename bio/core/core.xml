@@ -51,6 +51,7 @@
     <attribute name="description" type="java.lang.String"/>
     <attribute name="version" type="java.lang.String"/>
     <reference name="dataSource" referenced-type="DataSource" reverse-reference="dataSets"/>
+    <reference name="publication" referenced-type="Publication"/>
     <collection name="bioEntities" referenced-type="BioEntity" reverse-reference="dataSets"/>
   </class>
 
@@ -106,7 +107,6 @@
     <attribute name="qualifier" type="java.lang.String"/>
     <reference name="subject" referenced-type="BioEntity" reverse-reference="ontologyAnnotations"/>
     <collection name="dataSets" referenced-type="DataSet" />
-    <collection name="publications" referenced-type="Publication" />
     <reference name="ontologyTerm" referenced-type="OntologyTerm" reverse-reference="ontologyAnnotations"/>
   </class>
 
@@ -171,6 +171,7 @@
     <reference name="chromosomeLocation" referenced-type="Location" />
     <reference name="sequenceOntologyTerm" referenced-type="SOTerm"/>
     <collection name="overlappingFeatures" referenced-type="SequenceFeature" />
+    <collection name="childFeatures" referenced-type="SequenceFeature" />
   </class>
 
   <class name="Synonym" is-interface="true">
