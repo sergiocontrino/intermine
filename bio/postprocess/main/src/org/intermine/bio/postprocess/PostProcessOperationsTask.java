@@ -126,6 +126,9 @@ public class PostProcessOperationsTask extends DynamicAttributeTask
                 ts = new TransferSequences(getObjectStoreWriter());
                 LOGGER.info("Starting TransferSequences.transferToTranscripts()");
                 ts.transferToTranscripts();
+                ts = new TransferSequences(getObjectStoreWriter());
+                LOGGER.info("Starting TransferSequences.transferToPseudogenicTranscripts()");
+                ts.transferToPseudogenicTranscripts();
             } else if ("make-spanning-locations".equals(operation)) {
                 CalculateLocations cl = new CalculateLocations(getObjectStoreWriter());
                 LOGGER.info("Starting CalculateLocations.createSpanningLocations()");
