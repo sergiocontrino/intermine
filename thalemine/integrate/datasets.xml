@@ -41,21 +41,21 @@
       </collection>
    </item>
    <item id="0_8" class="DataSet" implements="">
-      <attribute name="version" value="Araport11 (04/2016)" />
+      <attribute name="version" value="Araport11 (06/2016)" />
       <reference name="dataSource" ref_id="0_7" />
       <attribute name="name" value="Genome Annotation" />
-      <attribute name="description" value="Araport11 protein coding genes supplemented with TAIR10 non-coding RNA and transposable elements" />
+      <attribute name="description" value="Araport11 protein-coding, non-coding and transposable element genes" />
       <attribute name="url" value="https://www.araport.org/data/araport11" />
    </item>
    <item id="0_9" class="DataSet" implements="">
-      <attribute name="version" value="Araport11 (04/2016)" />
+      <attribute name="version" value="Araport11 (06/2016)" />
       <reference name="dataSource" ref_id="0_7" />
       <attribute name="name" value="Coding Sequence FASTA" />
       <attribute name="description" value="Araport11 coding sequences" />
       <attribute name="url" value="https://www.araport.org/data/araport11" />
    </item>
    <item id="0_10" class="DataSet" implements="">
-      <attribute name="version" value="Araport11 (04/2016)" />
+      <attribute name="version" value="Araport11 (06/2016)" />
       <reference name="dataSource" ref_id="0_7" />
       <attribute name="name" value="Protein Sequence FASTA" />
       <attribute name="description" value="Araport11 protein sequences" />
@@ -381,7 +381,7 @@
       <reference name="publication" ref_id="0_58" />
    </item>
    <item id="0_61" class="DataSet" implements="">
-      <attribute name="version" value="Araport11 (04/2016)" />
+      <attribute name="version" value="Araport11 (06/2016)" />
       <reference name="dataSource" ref_id="0_7" />
       <attribute name="name" value="RNA-seq expression" />
       <attribute name="description" value="Measure of gene expression levels (Transcripts per Million, TPM) quantified by Salmon" />
