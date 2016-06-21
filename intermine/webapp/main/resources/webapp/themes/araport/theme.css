@@ -201,13 +201,13 @@ div.datasummarytitle {
  color: #2A65D2;
  font-weight: bold;
  }
- 
+
 .datasummarytabletitle {
   font-size: 16px;
   color: #2A65D2;
   font-weight: bold;
   margin:10px 20px 10px 20px}
-  
+
 table.dbsources {
   padding:0px;
   margin:10px 20px 10px 20px;}
@@ -229,11 +229,11 @@ table.dbsources td {
 table.dbsources td.leftcol {
   border-left: 1px solid #6BC354;
   }
-  
+
 table.dbsources td.rightcol {
   border-right: 1px solid #6BC354;
   }
-  
+
 table.dbsources th.rightcol {
   border-right: 1px solid #6BC354;
   }
@@ -290,7 +290,7 @@ div.heading.results #tool_bar_div li { border:1px solid #D2D2D2; background:#EEE
 #templates #tab-content #ribbon { background: url("../../themes/purple/homepage/ribbon-duke.png") no-repeat scroll right top transparent; }
 
 /* report page */
-#pagecontentcontainer.report-page #header_wrap { background-color:#F0FCEC; background-image:url("report/header-bg.png"); }
+#pagecontentcontainer.report-page #header_wrap { background-color:#F0FCEC; }
 #pagecontentcontainer.report-page #object_header h1.title span { color:#5E665C; }
 #pagecontentcontainer.report-page #object_header div.box h3 { background:#E3F2DF; }
 #pagecontentcontainer.report-page #object_header div.list.box span { color:#5E665C; }
