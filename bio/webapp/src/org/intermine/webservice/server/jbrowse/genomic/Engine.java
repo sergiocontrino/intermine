@@ -457,11 +457,24 @@ public class Engine extends CommandRunner
             }
             if (includeSubfeatures) {
                 List<Map<String, Object>> subFeatures = new ArrayList<Map<String, Object>>();
+                @SuppressWarnings("unchecked")
                 Collection<FastPathObject> childFeatures = (Collection<FastPathObject>)
                         fpo.getFieldValue("childFeatures");
-                if (childFeatures != null) {
+                LOG.info("PARENT FEATURE?!: " + feature.get("type"));
+                // there are exons parents of mRNA -> loop
+                if (childFeatures != null && !feature.get("type").toString().contains("Exon")) {
                     for (FastPathObject child: childFeatures) {
-                        subFeatures.add(makeFeatureWithSubFeatures(child));
+                        LOG.info("CFLOOP " + feature.get("type") + " p of -> "
+                                + child.getClass().getSimpleName());
+                        // don't consider introns
+                        if (!child.getClass().getSimpleName().startsWith("Intron")) {
+                        // and don't consider exons as subfeatures of gene
+                            if (!(child.getClass().getSimpleName().startsWith("Exon")
+                                    && feature.get("type").toString().contains("Gene"))){
+                                subFeatures.add(makeFeatureWithSubFeatures(child));
+                            }
+                        }
+//                        subFeatures.add(makeFeatureWithSubFeatures(child));
                     }
                 }
                 feature.put("subfeatures", subFeatures);
