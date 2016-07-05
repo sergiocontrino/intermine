@@ -195,7 +195,7 @@ public class TransferSequences
                 if (PostProcessUtil.isInstance(model, feature, "SNP")) {
                     continue;
                 }
-                
+
                 // if we set here the transcripts, using start and end locations,
                 // we won't be using the transferToTranscripts method (collating the exons)
                 if (PostProcessUtil.isInstance(model, feature, "Transcript")) {
@@ -451,4 +451,142 @@ public class TransferSequences
 
         osw.commitTransaction();
     }
+
+
+    /**
+     * For each Transcript, join and transfer the sequences from the child Exons to a new Sequence
+     * object for the Transcript.  Uses the ObjectStoreWriter that was passed to the constructor
+     * @throws Exception if there are problems with the transfer
+     */
+    public void transferToPseudogenicTranscripts()
+        throws Exception {
+
+        try {
+            String message = "Not performing TransferSequences.transferToTranscripts ";
+            PostProcessUtil.checkFieldExists(model, "PseudogenicTranscript", "pseudogenicExons", message);
+            PostProcessUtil.checkFieldExists(model, "PseudogenicExon", null, message);
+        } catch (MetaDataException e) {
+            return;
+        }
+
+        long startTime = System.currentTimeMillis();
+
+        osw.beginTransaction();
+
+        ObjectStore os = osw.getObjectStore();
+        Query q = new Query();
+        q.setDistinct(false);
+
+        // Transcript
+        QueryClass qcTranscript =
+            new QueryClass(model.getClassDescriptorByName("PseudogenicTranscript").getType());
+        q.addFrom(qcTranscript);
+        q.addToSelect(qcTranscript);
+        q.addToOrderBy(qcTranscript);
+
+        // Exon
+        QueryClass qcExon = new QueryClass(model.getClassDescriptorByName("PseudogenicExon").getType());
+        q.addFrom(qcExon);
+        q.addToSelect(qcExon);
+
+        // Sequence
+        QueryClass qcExonSequence = new QueryClass(Sequence.class);
+        q.addFrom(qcExonSequence);
+        q.addToSelect(qcExonSequence);
+
+        // Location
+        QueryClass qcExonLocation = new QueryClass(Location.class);
+        q.addFrom(qcExonLocation);
+        q.addToSelect(qcExonLocation);
+
+        // Exon.location.start
+        QueryField qfExonStart = new QueryField(qcExonLocation, "start");
+        q.addToSelect(qfExonStart);
+        q.addToOrderBy(qfExonStart);
+
+        ConstraintSet cs = new ConstraintSet(ConstraintOp.AND);
+
+        // Transcript.exons
+        QueryCollectionReference exonsRef =
+            new QueryCollectionReference(qcTranscript, "pseudogenicExons");
+        ContainsConstraint cc1 =
+            new ContainsConstraint(exonsRef, ConstraintOp.CONTAINS, qcExon);
+        cs.addConstraint(cc1);
+
+        // exon.chromosomeLocation
+        QueryObjectReference locRef =
+            new QueryObjectReference(qcExon, "chromosomeLocation");
+        ContainsConstraint cc2 =
+            new ContainsConstraint(locRef, ConstraintOp.CONTAINS, qcExonLocation);
+        cs.addConstraint(cc2);
+
+        // Exon.sequence
+        QueryObjectReference sequenceRef = new QueryObjectReference(qcExon, "sequence");
+        ContainsConstraint cc3 =
+            new ContainsConstraint(sequenceRef, ConstraintOp.CONTAINS, qcExonSequence);
+        cs.addConstraint(cc3);
+
+        // Transcript.sequence IS NULL
+        QueryObjectReference transcriptSeqRef = new QueryObjectReference(qcTranscript, "sequence");
+        ContainsConstraint lsfSeqRefNull =
+            new ContainsConstraint(transcriptSeqRef, ConstraintOp.IS_NULL);
+
+        cs.addConstraint(lsfSeqRefNull);
+
+        q.setConstraint(cs);
+
+        ((ObjectStoreInterMineImpl) os).precompute(q, Constants
+                                                   .PRECOMPUTE_CATEGORY);
+        Results res = os.execute(q, 1000, true, true, true);
+
+        Iterator<?> resIter = res.iterator();
+
+        SequenceFeature currentTranscript = null;
+        StringBuffer currentTranscriptBases = new StringBuffer();
+
+        long start = System.currentTimeMillis();
+        int i = 0;
+        while (resIter.hasNext()) {
+            ResultsRow<?> rr = (ResultsRow<?>) resIter.next();
+            SequenceFeature transcript =  (SequenceFeature) rr.get(0);
+
+            if (currentTranscript == null || !transcript.equals(currentTranscript)) {
+                if (currentTranscript != null) {
+                    // copy sequence to transcript
+                    storeNewSequence(currentTranscript,
+                            new PendingClob(currentTranscriptBases.toString()));
+                    i++;
+                    if (i % 100 == 0) {
+                        long now = System.currentTimeMillis();
+                        LOG.info("Set sequences for " + i + " pseudogenic Transcripts"
+                                + " (avg = " + ((60000L * i) / (now - start)) + " per minute)");
+                    }
+                }
+                currentTranscriptBases = new StringBuffer();
+                currentTranscript = transcript;
+            }
+
+            Sequence exonSequence = (Sequence) rr.get(2);
+            Location  location = (Location) rr.get(3);
+
+            // add exon
+            if (location.getStrand() != null && "-1".equals(location.getStrand())) {
+                currentTranscriptBases.insert(0, exonSequence.getResidues().toString());
+            } else {
+                currentTranscriptBases.append(exonSequence.getResidues().toString());
+            }
+        }
+        if (currentTranscript == null) {
+            LOG.error("in transferToTranscripts(): no Transcripts found");
+        } else {
+            storeNewSequence(currentTranscript, new PendingClob(currentTranscriptBases.toString()));
+        }
+
+        LOG.info("Finished setting " + i + " pTrascript sequences - took "
+                 + (System.currentTimeMillis() - startTime) + " ms.");
+
+        osw.commitTransaction();
+    }
+
+
 }

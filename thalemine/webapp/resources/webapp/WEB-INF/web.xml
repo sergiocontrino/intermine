@@ -13,7 +13,6 @@
   <listener>
     <listener-class>org.intermine.web.logic.session.SessionListener</listener-class>
   </listener>
->>>>>>> parent of 2861597... attempts to clean up configuration (MINE-1004)
 
   <listener>
     <listener-class>org.thalemine.web.context.AppContextListener</listener-class>
@@ -35,8 +34,8 @@
     <servlet-name>action</servlet-name>
     <url-pattern>*.do</url-pattern>
   </servlet-mapping>
-<!-- ================================================================================= -->
 
+<!-- ================================================================================= -->
 <!-- DWR mapping -->
 <!-- ================================================================================= -->
 

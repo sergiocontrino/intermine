@@ -185,10 +185,10 @@
 
         <source name="panther" type="panther">
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/orthologs/panther"/>
-            <property name="panther.organisms" value="3702"/>
+            <property name="panther.organisms" value="3702 4932 9606"/>
         </source>
 
-        <source name="interpro" type="interpro">
+        <source name="interpro" type="interpro" dump="true">
             <property name="src.data.dir" location="/usr/local/projdata/0611/projects/AIP/ThaleMineData/interpro/current"/>
             <property name="src.data.dir.includes" value="interpro.xml"/>
         </source>
