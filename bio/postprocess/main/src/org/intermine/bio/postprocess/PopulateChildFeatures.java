@@ -50,8 +50,6 @@ public class PopulateChildFeatures
     private Map<String, Set<CollectionHolder>> parentToChildren
         = new HashMap<String, Set<CollectionHolder>>();
 
-    private Map<String,String> parNochild = new HashMap<String, String>();
-
     /**
      * Construct with an ObjectStoreWriter, read and write from same ObjectStore
      * @param osw an ObjectStore to write to
@@ -68,9 +66,7 @@ public class PopulateChildFeatures
      */
     @SuppressWarnings("unchecked")
     public void populateCollection() throws Exception {
-        LOG.info("B4  populateSOT..-------------------");
         Map<String, SOTerm> soTerms = populateSOTermMap(osw);
-        LOG.info("B4  getAllPar..-------------------");
         Query q = getAllParents();
         Results res = osw.getObjectStore().execute(q);
         LOG.info("PP parent size " + res.size());
@@ -78,46 +74,11 @@ public class PopulateChildFeatures
         osw.beginTransaction();
         int parentCount = 0;
         int childCount = 0;
-        int skipCountSO = 0;
-        int skipCountPA = 0;
 
         while (resIter.hasNext()) {
             ResultsRow<InterMineObject> rr = (ResultsRow<InterMineObject>) resIter.next();
             InterMineObject parent = rr.get(0);
             SOTerm soTerm = (SOTerm) rr.get(1);
-            if (soTerm.getClass().getSimpleName().toLowerCase().equals("probe")) {
-                skipCountSO++;
-                continue;
-            }
-            if (soTerm.getClass().getSimpleName().toLowerCase().equals("genotype")) {
-                skipCountSO++;
-                continue;
-            }
-            if (soTerm.getClass().getSimpleName().toLowerCase().equals("allele")) {
-                skipCountSO++;
-                continue;
-            }
-            if (soTerm.getClass().getSimpleName().toLowerCase().equals("intron")) {
-                skipCountSO++;
-                continue;
-            }
-
-            if (parent.getClass().getSimpleName().toLowerCase().equals("probe")) {
-                skipCountPA++;
-                continue;
-            }
-            if (soTerm.getClass().getSimpleName().toLowerCase().equals("genotype")) {
-                skipCountPA++;
-                continue;
-            }
-            if (soTerm.getClass().getSimpleName().toLowerCase().equals("allele")) {
-                skipCountPA++;
-                continue;
-            }
-            if (soTerm.getClass().getSimpleName().toLowerCase().equals("intron")) {
-                skipCountPA++;
-                continue;
-            }
 
             InterMineObject o = PostProcessUtil.cloneInterMineObject(parent);
             Set<InterMineObject> newCollection = getChildFeatures(soTerms, soTerm, o);
@@ -131,15 +92,12 @@ public class PopulateChildFeatures
         osw.commitTransaction();
         LOG.info("Stored " + childCount + " child features for " + parentCount
                 + " parent features. ");
-        //+ skipCountSO + " records skipped + " + skipCountPA);
-        LOG.info("lonely parents map: " + parNochild);
     }
 
     // for each collection in this class (e.g. Gene), test if it's a child feature
     @SuppressWarnings("unchecked")
     private Set<InterMineObject> getChildFeatures(Map<String, SOTerm> soTerms, SOTerm soTerm,
             InterMineObject o) {
-        //LOG.info("IN getChildFeatures ================");
         // e.g. gene
         String parentSOTerm = soTerm.getName();
 
@@ -192,20 +150,14 @@ public class PopulateChildFeatures
 
             // TODO use same method as in the oboparser
             // is this a child collection? e.g. transcript
-//            LOG.info("CHILD CLASS pre " + childClassName + " toLower -> "
-//                    + childClassName.toLowerCase());
-
             SOTerm childSOTerm = null;
 
             if (childClassName.contains("CDS")) {
                 childSOTerm = soTerms.get(childClassName);
             } else {
-            //SOTerm childSOTerm = soTerms.get(childClassName.toLowerCase());
                 childSOTerm = soTerms.get(childClassName.toLowerCase());
             }
             if (childSOTerm == null) {
-//                parNochild.put(parentClsName, childClassName);
-                //LOG.warn("NULL child! " + childClassName);
                 // for testing
                 continue;
             }
@@ -265,9 +217,8 @@ public class PopulateChildFeatures
             ResultsRow<InterMineObject> rr = (ResultsRow<InterMineObject>) it.next();
             SOTerm soTerm = (SOTerm) rr.get(0);
             soTerms.put(soTerm.getName(), soTerm);
-            LOG.info("PPthis: " + soTerm.getName());
+            LOG.debug("Added SO term: " + soTerm.getName());
         }
-        LOG.info("PP populateSOTermMap: " + soTerms.keySet() + " size " + soTerms.keySet().size());
         return soTerms;
     }
 
@@ -296,8 +247,6 @@ public class PopulateChildFeatures
 
         // Set the constraint of the query
         q.setConstraint(cs);
-
-//        forCheck.put(qcFeature.getClass().getSimpleName(), qcSOTerm.getClass().getSimpleName());
 
         return q;
     }

@@ -468,23 +468,12 @@ public class Engine extends CommandRunner
                                 + child.getClass().getSimpleName());
                         // don't consider introns
                         if (!child.getClass().getSimpleName().startsWith("Intron")) {
-                        // and don't consider exons or CDS as subfeatures of gene
-// WORKS
-//                            if (!(child.getClass().getSimpleName().startsWith("Exon")
-//                                    && feature.get("type").toString().contains("Gene"))) {
-
-                            // not(A or B) and not(C or B)
-//                            if ( !( child.getClass().getSimpleName().startsWith("Exon")
-//                                    && feature.get("type").toString().contains("Gene") )
-//                                    && !( child.getClass().getSimpleName().startsWith("CDS")
-//                                            && feature.get("type").toString().contains("Gene") )
-//                                            ) {
-                            // notB or (notA and notC)  (same as above)
-//                            if (!feature.get("type").toString().contains("Gene")
+                            // and don't consider exons or CDS as subfeatures of gene
+                            // not(A and B) and not(A and C) = (notA or notB) and (notA or notC) =
+                            // notA or (notB and notC)
                             if (!feature.get("type").toString().endsWith(".Gene")
                                     || (!child.getClass().getSimpleName().startsWith("Exon")
-                                            && !child.getClass().getSimpleName().startsWith("CDS"))) {
-
+                                    && !child.getClass().getSimpleName().startsWith("CDS"))) {
                                 subFeatures.add(makeFeatureWithSubFeatures(child));
                             }
                         }
