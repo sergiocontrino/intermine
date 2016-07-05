@@ -455,16 +455,20 @@ public class Engine extends CommandRunner
                 feature.put("end",    chrLoc.getFieldValue("end"));
                 feature.put("strand", chrLoc.getFieldValue("strand"));
             }
+            /* This section has been changed to
+             *  - avoid a loop caused by exon resulting as parents of mRNA.
+             *    TODO: check PopulateChildFeatures.
+             *  - exclude Exon and CDS as children of Gene
+             */
             if (includeSubfeatures) {
                 List<Map<String, Object>> subFeatures = new ArrayList<Map<String, Object>>();
                 @SuppressWarnings("unchecked")
                 Collection<FastPathObject> childFeatures = (Collection<FastPathObject>)
                         fpo.getFieldValue("childFeatures");
-                LOG.info("PARENT FEATURE?!: " + feature.get("type"));
                 // there are exons parents of mRNA -> loop
                 if (childFeatures != null && !feature.get("type").toString().contains("Exon")) {
                     for (FastPathObject child: childFeatures) {
-                        LOG.info("CFLOOP " + feature.get("type") + " p of -> "
+                        LOG.debug("CF " + feature.get("type") + " p of -> "
                                 + child.getClass().getSimpleName());
                         // don't consider introns
                         if (!child.getClass().getSimpleName().startsWith("Intron")) {
