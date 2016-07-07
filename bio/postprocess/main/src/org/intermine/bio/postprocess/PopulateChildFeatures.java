@@ -69,7 +69,6 @@ public class PopulateChildFeatures
         Map<String, SOTerm> soTerms = populateSOTermMap(osw);
         Query q = getAllParents();
         Results res = osw.getObjectStore().execute(q);
-        LOG.info("PP parent size " + res.size());
         Iterator<Object> resIter = res.iterator();
         osw.beginTransaction();
         int parentCount = 0;
@@ -130,7 +129,7 @@ public class PopulateChildFeatures
 
     private void populateParentChildMap(Map<String, SOTerm> soTerms, String parentSOTermName) {
         String parentClsName = TypeUtil.javaiseClassName(parentSOTermName);
-        LOG.info("PARENT CLASS " + parentClsName + " (" + parentSOTermName + ")");
+        LOG.debug("PARENT CLASS " + parentClsName + " (" + parentSOTermName + ")");
         ClassDescriptor cd = model.getClassDescriptorByName(parentClsName);
         if (cd == null) {
             LOG.error("couldn't find class in model:" + parentClsName);
@@ -152,17 +151,13 @@ public class PopulateChildFeatures
             // is this a child collection? e.g. transcript
             SOTerm childSOTerm = null;
 
-            if (childClassName.contains("CDS")) {
-                childSOTerm = soTerms.get(childClassName);
-            } else {
-                childSOTerm = soTerms.get(childClassName.toLowerCase());
-            }
+            childSOTerm = lookUpChild(soTerms, childClassName);
             if (childSOTerm == null) {
                 // for testing
                 continue;
             }
 
-            LOG.info("CHILD CLASS " + childClassName + " (" + childSOTerm.getName() + ") :"
+            LOG.debug("CHILD CLASS " + childClassName + " (" + childSOTerm.getName() + ") :"
                     + childCollectionName);
 
             // is gene in transcript parents collection
@@ -190,9 +185,52 @@ public class PopulateChildFeatures
         if (children.size() > 0) {
             LOG.info("Adding " + children.size() + " children to parent class "
                     + parentSOTermName);
+            // don't do it if parent exon or transposon fragment, see Engine.java
             parentToChildren.put(parentSOTermName, children);
         }
     }
+
+    /**
+     * @param soTerms  the map of SO terms (name, SOterm)
+     * @param childClassName the name of the class
+     * @return the SO term object
+     */
+    private SOTerm lookUpChild(Map<String, SOTerm> soTerms,
+            String childClassName) {
+        // some specific translations
+        if (childClassName.contains("CDS")) {
+            return soTerms.get(childClassName);
+        }
+        if (childClassName.contentEquals("PseudogenicTranscript")) {
+            return soTerms.get("pseudogenic_transcript");
+        }
+        if (childClassName.contentEquals("PseudogenicExon")) {
+            return soTerms.get("pseudogenic_exon");
+        }
+        if (childClassName.contentEquals("TransposableElement")) {
+            return soTerms.get("transposable_element");
+        }
+        if (childClassName.contentEquals("TransposonFragment")) {
+            return soTerms.get("transposon_fragment");
+        }
+        // don't bother
+        if (childClassName.contentEquals("Probe")) {
+            return null;
+        }
+        if (childClassName.contentEquals("Allele")) {
+            return null;
+        }
+        if (childClassName.contentEquals("Genotype")) {
+            return null;
+        }
+        if (childClassName.contentEquals("Intron")) {
+            return null;
+        }
+        // deafult
+        return soTerms.get(childClassName.toLowerCase());
+    }
+
+
 
     /**
      * @param os object store

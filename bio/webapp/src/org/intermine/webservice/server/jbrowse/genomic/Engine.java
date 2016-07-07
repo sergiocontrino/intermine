@@ -457,6 +457,7 @@ public class Engine extends CommandRunner
             }
             /* This section has been changed to
              *  - avoid a loop caused by exon resulting as parents of mRNA.
+             *    similar issue for transposon fragment
              *    TODO: check PopulateChildFeatures.
              *  - exclude Exon and CDS as children of Gene
              */
@@ -466,7 +467,9 @@ public class Engine extends CommandRunner
                 Collection<FastPathObject> childFeatures = (Collection<FastPathObject>)
                         fpo.getFieldValue("childFeatures");
                 // there are exons parents of mRNA -> loop
-                if (childFeatures != null && !feature.get("type").toString().contains("Exon")) {
+                if (childFeatures != null
+                        && !feature.get("type").toString().contains("Exon")
+                        && !feature.get("type").toString().contains("TransposonFragment")) {
                     for (FastPathObject child: childFeatures) {
                         LOG.debug("CF " + feature.get("type") + " p of -> "
                                 + child.getClass().getSimpleName());
@@ -481,15 +484,35 @@ public class Engine extends CommandRunner
                                 subFeatures.add(makeFeatureWithSubFeatures(child));
                             }
                         }
-//                        subFeatures.add(makeFeatureWithSubFeatures(child));
                     }
                 }
+                String soType = getSOType(feature);
+                feature.put("type", soType);
                 feature.put("subfeatures", subFeatures);
             }
             return feature;
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Error reading results", e);
         }
+    }
+
+    /**
+     * @param feature
+     * @return the feature.type, SO style
+     */
+    private String getSOType(Map<String, Object> feature) {
+        String path = "org.intermine.model.bio.";
+        String camelName = feature.get("type").toString().replace(path, "");
+        StringBuffer so = new StringBuffer();
+        int i = 0;
+        for (String w : camelName.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+            if (i > 0) {
+                so.append("_");
+            }
+            so.append(w);
+            i++;
+        }
+        return so.toString().toLowerCase();
     }
 
     private Query getReferenceQuery(Command command) {
