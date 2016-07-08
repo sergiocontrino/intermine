@@ -503,6 +503,23 @@ public class Engine extends CommandRunner
     private String getSOType(Map<String, Object> feature) {
         String path = "org.intermine.model.bio.";
         String camelName = feature.get("type").toString().replace(path, "");
+
+        if (camelName.contentEquals("MiRNA")) {
+            return "miRNA";
+        }
+        if (camelName.contentEquals("SnRNA")) {
+            return "snRNA";
+        }
+        if (camelName.contentEquals("SnoRNA")) {
+            return "snoRNA";
+        }
+        if (camelName.contentEquals("NcRNA")) {
+            return "ncRNA";
+        }
+        if (camelName.contentEquals("LncRNA")) {
+            return "lncRNA";
+        }
+
         StringBuffer so = new StringBuffer();
         int i = 0;
         for (String w : camelName.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
@@ -512,7 +529,25 @@ public class Engine extends CommandRunner
             so.append(w);
             i++;
         }
-        return so.toString().toLowerCase();
+        LOG.info("SOwhat " + camelName + " -> " + so.toString());
+
+        if (so.toString().contentEquals("CDS")) {
+            return so.toString();
+        }
+
+        String sosmall = so.toString().toLowerCase();
+        if (sosmall.contains("rna")) {
+            return sosmall.replace("rna", "RNA");
+        }
+        if (sosmall.contains("orf")) {
+            return sosmall.replace("orf", "ORF");
+        }
+        if (sosmall.contains("utr")) {
+            return sosmall.replace("utr", "UTR");
+        }
+        // default
+        return sosmall;
+//        return so.toString().toLowerCase();
     }
 
     private Query getReferenceQuery(Command command) {
