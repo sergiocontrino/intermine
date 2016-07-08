@@ -129,7 +129,7 @@ public class PopulateChildFeatures
 
     private void populateParentChildMap(Map<String, SOTerm> soTerms, String parentSOTermName) {
         String parentClsName = TypeUtil.javaiseClassName(parentSOTermName);
-        LOG.debug("PARENT CLASS " + parentClsName + " (" + parentSOTermName + ")");
+        LOG.info("PARENT CLASS " + parentClsName + " (" + parentSOTermName + ")");
         ClassDescriptor cd = model.getClassDescriptorByName(parentClsName);
         if (cd == null) {
             LOG.error("couldn't find class in model:" + parentClsName);
@@ -156,8 +156,7 @@ public class PopulateChildFeatures
                 // for testing
                 continue;
             }
-
-            LOG.debug("CHILD CLASS " + childClassName + " (" + childSOTerm.getName() + ") :"
+            LOG.info("CHILD CLASS " + childClassName + " (" + childSOTerm.getName() + ") :"
                     + childCollectionName);
 
             // is gene in transcript parents collection
@@ -194,13 +193,18 @@ public class PopulateChildFeatures
      * @param soTerms  the map of SO terms (name, SOterm)
      * @param childClassName the name of the class
      * @return the SO term object
+     *
+     * TODO: add utility for the translation className -> so_term
      */
     private SOTerm lookUpChild(Map<String, SOTerm> soTerms,
             String childClassName) {
         // some specific translations
-        if (childClassName.contains("CDS")) {
+        if (childClassName.contentEquals("CDS")) {
             return soTerms.get(childClassName);
         }
+//        if (childClassName.contentEquals("MiRNA")) {
+//            return soTerms.get("miRNA");
+//        }
         if (childClassName.contentEquals("PseudogenicTranscript")) {
             return soTerms.get("pseudogenic_transcript");
         }
@@ -212,6 +216,12 @@ public class PopulateChildFeatures
         }
         if (childClassName.contentEquals("TransposonFragment")) {
             return soTerms.get("transposon_fragment");
+        }
+        if (childClassName.contentEquals("FivePrimeUTR")) {
+            return soTerms.get("five_prime_UTR");
+        }
+        if (childClassName.contentEquals("ThreePrimeUTR")) {
+            return soTerms.get("three_prime_UTR");
         }
         // don't bother
         if (childClassName.contentEquals("Probe")) {
@@ -230,8 +240,6 @@ public class PopulateChildFeatures
         return soTerms.get(childClassName.toLowerCase());
     }
 
-
-
     /**
      * @param os object store
      * @return map of name to so term
@@ -248,9 +256,7 @@ public class PopulateChildFeatures
         q.addToOrderBy(qcSOTerm);
 
         Results res = os.execute(q);
-
         Iterator it = res.iterator();
-
         while (it.hasNext()) {
             ResultsRow<InterMineObject> rr = (ResultsRow<InterMineObject>) it.next();
             SOTerm soTerm = (SOTerm) rr.get(0);
