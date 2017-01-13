@@ -220,7 +220,7 @@
                                     <p class="more"><a target="new" href="${WEB_PROPERTIES['links.blog']}">More news</a></p>
                                 </c:if>
                         </div>
-
+<!--
                         <div id="api">
                                 <h4>Perl, Python, Ruby and Java API</h4>
                                 <img src="images/begin/java-perl-python-ruby-2.png" alt="perl java python ruby" />
@@ -238,6 +238,7 @@
                         </div>
 
                         <div style="clear:both;"></div>
+-->
                 </div>
         </div>
 </div>

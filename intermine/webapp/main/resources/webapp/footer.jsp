@@ -82,7 +82,7 @@
 
     </ul>
 
-    <!-- mines -->
+    <!-- mines 
     <ul class="footer-links">
         <li><a href="http://www.intermine.org" target="_blank">InterMine</a></li>
         <li><a href="http://www.flymine.org" target="_blank">FlyMine</a></li>
@@ -96,7 +96,7 @@
 
     <p class="footer-copy">&copy; 2002 - 2016 Department of Genetics, University of Cambridge, Downing Street,<br />
         Cambridge CB2 3EH, United Kingdom</p>
-
+-->
     <div style="clear:both"></div>
 </div>
 <!-- /footer.jsp -->
