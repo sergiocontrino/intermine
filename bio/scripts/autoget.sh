@@ -6,8 +6,21 @@
 #
 #
 
-#DATADIR=/home/contrino/data
+#
+# check the host
+#
+ABHOST="rumenmine-dev"
+DATADIR=/home/contrino/data   # default datadir (on rumenmine-dev)
+
+HOST=`hostname`
+#echo $HOST
+
+if [ "$HOST" != "$ABHOST" ]
+then
 DATADIR=/micklem/data/rumine/data
+fi
+#echo $DATADIR
+
 SRCDIR=$DATADIR/uniprot
 LOGDIR=$SRCDIR/logs
 
@@ -15,6 +28,8 @@ FTPURL=http://www.uniprot.org/uniprot
 
 PROPDIR=$HOME/.intermine
 SCRIPTDIR=./scripts
+
+ARKDIR=/micklem/releases/modmine
 
 RECIPIENTS=contrino@intermine.org
 
@@ -44,8 +59,8 @@ $progname [-f file_name] [-i] [-v] [-s] [-t] taxId
 
 
 Parameters: you can process
-            a single submission                   (e.g. automine.sh 204 )
-            a list of submission in an input file (e.g. automine.sh -V -f infile )
+            a single organism (taxId)                    (e.g. automine.sh 9913 )
+            a list of organisms (taxId) in an input file (e.g. automine.sh -V -f infile )
 
 examples:
 
@@ -54,10 +69,10 @@ EOF
 }
 
 
-while getopts ":If:ivst" opt; do
+while getopts ":if:vst" opt; do
   case $opt in
 
-  f )  INFILE=$OPTARG; echo "- Using given list of taxids: "; SHOW="`cat $INFILE|tr '[\n]' '[,]'`"; echo $SHOW;;
+  f )  INFILE=$OPTARG;;
   i )  echo "- Interactive mode" ; INTERACT=y;;
   v )  echo "- Verbose mode" ; V=v;;
   s )  echo "- Only Swiss-Prot" ; DB=s;;
@@ -69,11 +84,25 @@ done
 
 shift $(($OPTIND - 1))
 
+# some input checking
+
+if [ -n "$INFILE" ]
+then
+if [ ! -s "$INFILE" ]
+then
+echo "ERROR, $INFILE: no such file?"
+echo
+exit 1;
+fi
+SHOW="`cat $INFILE|tr '[\n]' '[,]'`"; echo -n "- Using given list of taxids: "; echo $SHOW;
+fi
+
 
 echo "==================================="
-echo "GETTING UNIPROT FILES"
+echo "GETTING UNIPROT FILES "
 echo "==================================="
 echo
+
 
 if [ -n "$1" ]
 then
@@ -108,12 +137,12 @@ then
 # use the list provided in a file
 LOOPVAR=`cat $INFILE`
 else
-echo "ERROR!"
+echo "ERROR: please enter input file location."
 fi
 
 cd $SRCDIR
 
-interact "START WGET NOW"
+#interact "START WGET NOW"
 
 for sub in $LOOPVAR
 do
@@ -144,10 +173,9 @@ interact
 # get the xml files
 #---------------------------------------
 #
-if [ "$WGET" = "y" ] # new fz checkFtp ?
+if [ "$WGET" = "y" ]
 then
 getFiles
 echo bye!
-interact
+#interact
 fi #if $WGET=y
-
