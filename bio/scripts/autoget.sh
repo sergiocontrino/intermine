@@ -44,7 +44,7 @@ INFILE=          # not using a given list of submissions
 INTERACT=n       # y: step by step interaction
 WGET=y           # use wget to get files from ftp
 DB=a             # no db specified (do them all)
-
+S=uniprot        # default source
 
 progname=$0
 
@@ -52,10 +52,11 @@ function usage () {
   cat <<EOF
 
 Usage:
-$progname [-f file_name] [-i] [-v] [-s] [-t] taxId
+$progname [-S source ] [-f file_name] [-i] [-v] [-s] [-t] taxId
   -f file_name: using a given list of submissions
   -i: interactive mode
   -v: verbode mode
+  -S: source [uniprot]
 
 
 Parameters: you can process
@@ -69,7 +70,7 @@ EOF
 }
 
 
-while getopts ":if:vst" opt; do
+while getopts ":if:vS:st" opt; do
   case $opt in
 
   f )  INFILE=$OPTARG;;
@@ -77,6 +78,7 @@ while getopts ":if:vst" opt; do
   v )  echo "- Verbose mode" ; V=v;;
   s )  echo "- Only Swiss-Prot" ; DB=s;;
   t )  echo "- Only TrEMBL" ; DB=t;;
+  S )  S=$OPTARG; echo "- using source $S";;
   h )  usage ;;
   \?)  usage ;;
   esac
@@ -98,11 +100,10 @@ SHOW="`cat $INFILE|tr '[\n]' '[,]'`"; echo -n "- Using given list of taxids: "; 
 fi
 
 
-echo "==================================="
-echo "GETTING UNIPROT FILES "
-echo "==================================="
-echo
 
+echo "==================================="
+echo "GETTING $S FILES "
+echo "==================================="
 
 if [ -n "$1" ]
 then
@@ -137,7 +138,7 @@ then
 # use the list provided in a file
 LOOPVAR=`cat $INFILE`
 else
-echo "ERROR: please enter input file location."
+echo "ERROR: please enter input file location or desired taxon Id."
 fi
 
 cd $SRCDIR
@@ -173,9 +174,12 @@ interact
 # get the xml files
 #---------------------------------------
 #
-if [ "$WGET" = "y" ]
+if [ "$S" = "uniprot" ]
 then
 getFiles
 echo bye!
 #interact
+else
+echo "At the moment the program support only uniprot as a source, farewell.."
+echo
 fi #if $WGET=y
