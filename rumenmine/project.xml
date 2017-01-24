@@ -11,8 +11,8 @@
       <property name="creatego" value="true"/>
       <property name="src.data.dir" location="/home/contrino/data/uniprot/"/>
     </source>
-
-    <source name="successional-gff" type="rumen-gff">
+    <source name="successional-gff" type="gff">
+      <property name="gff3.taxonId" value="344734"/>
       <property name="gff3.seqDataSourceName" value="Aber"/>
       <property name="gff3.dataSourceName" value="Aber"/>
       <property name="gff3.seqClsName" value="CDS"/>
@@ -20,10 +20,11 @@
       <property name="src.data.dir" location="/home/contrino/data/rumen"/>
     </source>
     <source name="successional-fasta" type="fasta" >
-      <property name="fasta.className" value="org.intermine.model.bio.Chromosome"/> ***
+      <property name="fasta.className" value="org.intermine.model.bio.CDS"/>
       <property name="fasta.dataSourceName" value="Aber"/>
-      <property name="fasta.dataSetTitle" value="PlasmoDB chromosome sequence"/>
+      <property name="fasta.dataSetTitle" value="Unclassified Bacteria CDS sequence"/>
       <property name="fasta.includes" value="*.fna"/>
+      <property name="fasta.taxonId" value="344734"/>
       <property name="src.data.dir" location="/home/contrino/data/rumen"/>
     </source>
 
@@ -51,8 +52,8 @@
       <property name="createrelations" value="false"/>
     </source>
     <source name="go-annotation" type="go-annotation" dump="true">
-      <property name="ontologyfile" location="/home/contrino/malaria/malaria/go/gene_ontology.obo"/>
-      <property name="src.data.dir" location="/home/contrino/malaria/go-annotation/"/>
+     <property name="ontologyfile" location="/home/contrino/malaria/go/gene_ontology.obo"/>
+     <property name="src.data.dir" location="/home/contrino/data/go-annotation/"/>
     </source>
     <source name="update-publications" type="update-publications">
       <property name="src.data.file" location="build/publications.xml"/>
@@ -63,8 +64,8 @@
   </sources>
 
   <post-processing>
-    <post-process name="create-references"/>
-    <post-process name="transfer-sequences" dump="true"/>
+    <post-process name="create-references" />
+<!--    <post-process name="transfer-sequences"/> -->
 
     <!-- this runs the postprocessing steps in all sources -->
     <post-process name="do-sources"/>
