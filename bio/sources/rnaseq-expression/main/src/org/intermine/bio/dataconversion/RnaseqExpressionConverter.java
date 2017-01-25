@@ -258,7 +258,7 @@ public class RnaseqExpressionConverter extends BioFileConverter
                 + "for your data files?");
         Item e = createItem("RnaseqExperiment");
         e.setAttribute("SRAaccession", name);
-        e.setAttribute("category", CATEGORY);
+        //e.setAttribute("category", CATEGORY);
         e.setReference("dataSet", dataSetRef);
         store(e);
         return e;

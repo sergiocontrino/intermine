@@ -5,6 +5,11 @@
   <collection name="RNASeqExpressions" referenced-type="RnaseqExpression" reverse-reference="expressionOf" />
 </class>
 
+<class name="DataSet" is-interface="true">
+  <collection name="experiments" referenced-type="Experiment" />
+</class>
+
+
 <class name="Experiment" is-interface="true">
 </class>
 
@@ -12,8 +17,8 @@
   <attribute name="description" type="java.lang.String" />
   <attribute name="tissue" type="java.lang.String" />
   <attribute name="SRAaccession" type="java.lang.String" />
+  <reference name="dataSet" referenced-type="DataSet" reverse-reference="experiments" />
 <!--
-  <reference name="dataSet" referenced-type="DataSet" reverse-reference="experiments" /
   <collection name="properties" referenced-type="SampleProperty" reverse-reference="experiments"/>
 -->
 </class>
