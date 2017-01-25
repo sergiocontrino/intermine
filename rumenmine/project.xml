@@ -6,6 +6,13 @@
   <property name="default.intermine.properties.file" location="../default.intermine.integrate.properties"/>
 
   <sources>
+    <source name="rnaseq-expression" type="rnaseq-expression">
+      <property name="src.data.dir" location="/home/contrino/data/rumen"/>
+      <property name="src.data.dir.includes" value="*.txt"/>
+      <property name="rnaseq.organisms" value="344734"/>
+      <property name="dataSourceName" value="Aber"/>
+      <property name="dataSetName" value="Succesional expression"/>
+    </source>
     <source name="uniprot-rumen" type="uniprot">
       <property name="uniprot.organisms" value="9913"/>
       <property name="creatego" value="true"/>
