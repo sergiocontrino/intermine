@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package org.intermine.bio.dataconversion;
 
 /*
@@ -301,7 +302,6 @@ public class RnaseqExpressionConverter extends BioFileConverter
 
         dataSetRef = dataSet.getIdentifier(); // used in experiment
     }
-
 
 }
 
