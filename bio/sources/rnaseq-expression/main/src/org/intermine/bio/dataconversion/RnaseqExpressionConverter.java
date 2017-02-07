@@ -145,6 +145,10 @@ public class RnaseqExpressionConverter extends BioFileConverter
                 if (StringUtils.isEmpty(primaryId)) {
                     break;
                 }
+                // to rm summary lines
+                if (!StringUtils.startsWithIgnoreCase(primaryId,"p")) {
+                    break;
+                }
                 if ("gene".equalsIgnoreCase(type)) {
                     createFeature(primaryId, "Gene");
                 }
@@ -258,7 +262,9 @@ public class RnaseqExpressionConverter extends BioFileConverter
                 + "for your data files?");
         Item e = createItem("RnaseqExperiment");
         e.setAttribute("SRAaccession", name);
-        //e.setAttribute("category", CATEGORY);
+       // e.setAttribute("category", name);     // tmp instead of CATEGORY
+        e.setAttribute("tissue", name);         // tmp added
+        e.setAttribute("description", name);    // tmp added
         e.setReference("dataSet", dataSetRef);
         store(e);
         return e;
