@@ -22,7 +22,7 @@
       <property name="gff3.taxonId" value="344734"/>
       <property name="gff3.seqDataSourceName" value="Aber"/>
       <property name="gff3.dataSourceName" value="Aber"/>
-      <property name="gff3.seqClsName" value="CDS"/>
+      <property name="gff3.seqClsName" value="Gene"/>
       <property name="gff3.dataSetTitle" value="Successional Colonisation metatranscriptome"/>
       <property name="src.data.dir" location="/home/contrino/data/rumen"/>
     </source>
