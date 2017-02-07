@@ -346,8 +346,6 @@
 <c:set var="TYPE" value="Gene" />
 </c:if>
 
-<h2>${TYPE} nn </h2>
-
 <c:if test="${aspect eq 'Genomics' && (TYPE eq 'Gene' || TYPE eq 'Transcript')}">
 <div id="domainregion" class="collection-table column-border" style="margin-bottom: 0px"></div>
   <c:set var="QUERYID" value="${fn:substringAfter(stableLink, 'externalids=')}" />
