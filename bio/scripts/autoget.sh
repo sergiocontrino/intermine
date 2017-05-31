@@ -2,8 +2,11 @@
 #
 # default usage: automine.sh
 #
-# sc 09/08
+# sc 02/17
 #
+# TODO:- timestamp downloads?
+#      - allow cs list of taxid?
+#      - rm empty files?
 #
 
 #
@@ -12,7 +15,7 @@
 ABHOST="rumenmine-dev"
 DATADIR=/home/contrino/data   # default datadir (on rumenmine-dev)
 
-HOST=`hostname`
+HOST=`hostname -s`
 #echo $HOST
 
 if [ "$HOST" != "$ABHOST" ]
