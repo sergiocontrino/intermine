@@ -41,7 +41,7 @@ echo $L5
 echo $L6
 echo $L7
 echo $L8
-echo $L9$DIR$SPECIES$LE
+echo $L9$DIRprokka_$SPECIES$LE
 }
 
 function printF {
@@ -53,7 +53,7 @@ F5="<property name=\"fasta.seqDataSourceName\" value=\"Aber\"/>"
 F6="<property name=\"fasta.dataSourceName\" value=\"Aber\"/>"
 F7="<property name=\"fasta.className\" value=\"org.intermine.model.bio.CDS\"/>"
 F8="<property name=\"fasta.dataSetTitle\" value=\"prokka output\"/>"
-FF="<property name=\"fasta.includes\" value=\"*.fna,*.faa\"/>"
+FF="<property name=\"fasta.includes\" value=\"*.fna\"/>"
 F9="<property name=\"src.data.dir\" location=\""
 FE="\"/></source>"
 
@@ -65,7 +65,7 @@ echo $F6
 echo $F7
 echo $F8
 echo $FF
-echo $F9$DIR$SPECIES$FE
+echo $F9$DIRprokka_$SPECIES$FE
 }
 
 
