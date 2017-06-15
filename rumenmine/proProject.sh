@@ -10,9 +10,11 @@
 
 URL="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=taxonomy&term="
 SPECIES=
-#DIR="/home/contrino/data/rumen/genomes/"
-DIR="/micklem/data/rumine/genomes/test/"
-OUT="/micklem/data/rumine/genomes/out"
+DIR="/home/contrino/data/genomes/"
+OUT="/home/contrino/rumen/"
+#DIR="/micklem/data/rumine/genomes/test/"
+#OUT="/micklem/data/rumine/genomes/out"
+
 ERR=NOtaxid
 IN=xproject
 
@@ -27,7 +29,7 @@ L6="<property name=\"gff3.dataSourceName\" value=\"Aber\"/>"
 L7="<property name=\"gff3.seqClsName\" value=\"Chromosome\"/>"
 L8="<property name=\"gff3.dataSetTitle\" value=\"prokka output\"/>"
 L9="<property name=\"src.data.dir\" location=\""
-LE="/></source>"
+LE="\"/></source>"
 
 LH=$(echo "<!-- " $SPECIES " == " $TAXID " -->")
 
@@ -53,7 +55,7 @@ F7="<property name=\"fasta.className\" value=\"org.intermine.model.bio.CDS\"/>"
 F8="<property name=\"fasta.dataSetTitle\" value=\"prokka output\"/>"
 FF="<property name=\"fasta.includes\" value=\"*.fna,*.faa\"/>"
 F9="<property name=\"src.data.dir\" location=\""
-FE="/></source>"
+FE="\"/></source>"
 
 echo
 echo $F1$SPECIES$F2
