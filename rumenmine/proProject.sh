@@ -17,6 +17,7 @@ OUT="/home/contrino/rumen/"
 
 ERR=NOtaxid
 IN=xproject
+UNI=xuniprot
 
 function printG {
 
@@ -102,7 +103,12 @@ then
 rm $OUT/$IN
 fi
 
-touch $OUT/$ERR $OUT/$IN
+if [ -a $OUT/$UNI ]
+then
+rm $OUT/$UNI
+fi
+
+touch $OUT/$ERR $OUT/$IN $OUT/$UNI
 
 cd $DIR
 
@@ -118,6 +124,7 @@ if [ -n "$TAXID" ]
 then
 printG >> $OUT/$IN
 printF >> $OUT/$IN
+echo $SPECIES >> $OUT/$UNI
 else
 echo $SPECIES >> $OUT/$ERR
 fi
