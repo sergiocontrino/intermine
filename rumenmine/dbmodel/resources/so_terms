@@ -32,6 +32,7 @@ point_mutation
 primer
 rRNA
 regulatory_region
+repeat_region
 reverse_primer
 sequence_collection
 sequence_feature
@@ -40,6 +41,7 @@ snRNA
 snoRNA
 TF_binding_site
 tRNA
+tmRNA
 three_prime_UTR
 transcript
 transposable_element
