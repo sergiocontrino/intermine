@@ -130,7 +130,7 @@ if [ -n "$TAXID" ]
 then
 printG >> $OUT/$IN
 printF >> $OUT/$IN
-echo $SPECIES >> $OUT/$UNI
+echo $TAXID >> $OUT/$UNI
 else
 echo $SPECIES >> $OUT/$ERR
 fi
