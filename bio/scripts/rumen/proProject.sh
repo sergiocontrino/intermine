@@ -86,12 +86,7 @@ TAXID=$(grep -m1 '<Id>' $SPECIES.xml | cut -c 5- | cut -d\< -f1)
 rm $SPECIES.xml
 }
 
-
-########################################
-#
-# MAIN
-#
-########################################
+function setFiles {
 
 if [ -a $OUT/$ERR ]
 then
@@ -109,6 +104,17 @@ rm $OUT/$UNI
 fi
 
 touch $OUT/$ERR $OUT/$IN $OUT/$UNI
+
+}
+
+
+########################################
+#
+# MAIN
+#
+########################################
+
+setFiles
 
 cd $DIR
 
