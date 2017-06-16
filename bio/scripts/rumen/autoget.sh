@@ -64,7 +64,7 @@ $progname [-S source ] [-f file_name] [-i] [-v] [-s] [-t] taxId
 
 Parameters: you can process
             a single organism (taxId)                    (e.g. automine.sh 9913 )
-            a list of organisms (taxId) in an input file (e.g. automine.sh -V -f infile )
+            a list of organisms (taxId) in an input file (e.g. automine.sh -v -f infile )
 
 examples:
 
@@ -159,6 +159,22 @@ fi
 if [ "$DB" = "a" -o "$DB" = "t" ]
 then
 wget -O $sub\_uniprot_trembl.xml -$V --progress=dot:mega --no-use-server-timestamps "http://www.uniprot.org/uniprot/?compress=no&query=organism:$sub%20AND%20reviewed:no&fil=&format=xml"
+fi
+
+
+#
+# rm files if empty
+#
+if [ ! -s $sub\_uniprot_sprot.xml ]
+then
+rm $sub\_uniprot_sprot.xml
+# add log
+fi
+
+if [ ! -s $sub\_uniprot_trembl.xml ]
+then
+rm $sub\_uniprot_trembl.xml
+# add log
 fi
 
 done

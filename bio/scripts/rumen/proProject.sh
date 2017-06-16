@@ -135,5 +135,7 @@ else
 echo $SPECIES >> $OUT/$ERR
 fi
 
+#./autoget -v -f $OUT/$UNI
+
 done
 
