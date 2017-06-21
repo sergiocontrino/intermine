@@ -185,8 +185,6 @@ do
 getName $dir
 getTaxid $SPECIES
 
-#echo $TAXID
-
 if [ -n "$TAXID" ]
 then
 printG $SPECIES $TAXID >> $OUT/$IN
@@ -194,35 +192,47 @@ printF $SPECIES $TAXID >> $OUT/$IN
 echo $TAXID
 echo $TAXID >> $OUT/$UNI
 else
-  echo $SPECIES
+#  echo $SPECIES
 echo $SPECIES >> $OUT/$STR
-fi
-
-done
-
-LOOPVAR=$(cat $OUT/$STR)
-# second pass
-for s in $LOOPVAR
-do
-echo $s
-# cut
-SPECU=$(echo $s | rev | cut -d'_' -f1 --complement | rev)
-echo $SPECU
-
-getTaxid $SPECU
-
-echo $TAXID
+SPE=$(echo $SPECIES | rev | cut -d'_' -f1 --complement | rev)
+getTaxid $SPE
+echo $SPECIES" -> "$SPE":"$TAXID
 
 if [ -n "$TAXID" ]
 then
-printG $s $TAXID >> $OUT/$IN
-printF $s $TAXID >> $OUT/$IN
+printG $SPECIES $TAXID >> $OUT/$IN
+printF $SPECIES $TAXID >> $OUT/$IN
 echo $TAXID >> $OUT/$UNI
 else
-echo $s >> $OUT/$ERR
+echo $SPECIES >> $OUT/$ERR
+fi
+
 fi
 
 done
+
+# LOOPVAR=$(cat $OUT/$STR)
+# # second pass
+# for s in $LOOPVAR
+# do
+# # cut
+# SPECU=$(echo $s | rev | cut -d'_' -f1 --complement | rev)
+# echo $SPECU
+#
+# getTaxid $SPECU
+#
+# echo $TAXID
+#
+# if [ -n "$TAXID" ]
+# then
+# printG $s $TAXID >> $OUT/$IN
+# printF $s $TAXID >> $OUT/$IN
+# echo $TAXID >> $OUT/$UNI
+# else
+# echo $s >> $OUT/$ERR
+# fi
+#
+# done
 
 sort -u $OUT/$UNI > $OUT/uni.taxid
 
