@@ -25,10 +25,14 @@ DOU="$DATADIR/rumen"
 ERR=NOtaxid
 IN=proGenomes
 UNI=xuniprot
+STR=strains
 
 DLOG=$DOU/logs  # unused
 
 function printG {
+# printG species taxid
+spec="$1"
+id="$2"
 
 L1="<source name=\""
 L2="-gff\" type=\"gff\">"
@@ -42,21 +46,25 @@ L8="<property name=\"gff3.dataSetTitle\" value=\"prokka output\"/>"
 L9="<property name=\"src.data.dir\" location=\""
 LE="</source>"
 
-LH=$(echo "<!-- " $SPECIES " == " $TAXID " -->")
+LH=$(echo "<!-- " $spec " == " $id " -->")
 
 echo
 echo $LH
-echo $L1$SPECIES$L2
-echo $LT$TAXID$L4
-echo $LS$SPECIES$L4
+echo $L1$spec$L2
+echo $LT$id$L4
+echo $LS$spec$L4
 echo $L5
 echo $L6
 echo $L7
 echo $L8
-echo $L9$DGE/prokka_$SPECIES$L4$LE
+echo $L9$DGE/prokka_$spec$L4$LE
 }
 
 function printF {
+# printF species taxid
+  spec="$1"
+  id="$2"
+
 F1="<source name=\""
 F2="-fasta\" type=\"fasta\">"
 FT="<property name=\"fasta.taxonId\" value=\""
@@ -71,15 +79,15 @@ F9="<property name=\"src.data.dir\" location=\""
 FE="</source>"
 
 echo
-echo $F1$SPECIES$F2
-echo $FT$TAXID$F4
-echo $FS$SPECIES$F4
+echo $F1$spec$F2
+echo $FT$id$F4
+echo $FS$spec$F4
 echo $F5
 echo $F6
 echo $F7
 echo $F8
 echo $FF
-echo $F9$DGE/prokka_$SPECIES$F4$FE
+echo $F9$DGE/prokka_$spec$F4$FE
 }
 
 function doUniprotList {
@@ -113,13 +121,14 @@ SPECIES=`echo $1 | cut -c 8-`
 }
 
 function getTaxid {
-wget -q $TAXURL$SPECIES -O $SPECIES.xml
+  # getTaxid species
+wget -q $TAXURL$1 -O $1.xml
 
 #TAXID=`grep -m1 '<Id>' $SPECIES.xml | cut -c 5- | cut -d\< -f1`
 
-TAXID=$(grep -m1 '<Id>' $SPECIES.xml | cut -c 5- | cut -d\< -f1)
+TAXID=$(grep -m1 '<Id>' $1.xml | cut -c 5- | cut -d\< -f1)
 
-rm $SPECIES.xml
+rm $1.xml
 }
 
 function setFiles {
@@ -139,7 +148,12 @@ then
 rm $DOU/$UNI
 fi
 
-touch $DOU/$ERR $DOU/$IN $DOU/$UNI
+if [ -a $DOU/$STR ]
+then
+rm $DOU/$STR
+fi
+
+touch $DOU/$ERR $DOU/$IN $DOU/$UNI $DOU/$STR
 
 }
 
@@ -158,7 +172,10 @@ cat $DOU/proStart $DOU/proUniprot $DOU/proGenomes $DOU/proEnd > $DOU/project.xml
 
 setFiles
 
+
+# first round
 cd $DGE
+
 
 for dir in *
 do
@@ -166,21 +183,49 @@ do
 getName $dir
 getTaxid $SPECIES
 
-echo $TAXID
+#echo $TAXID
 
 if [ -n "$TAXID" ]
 then
-printG >> $DOU/$IN
-printF >> $DOU/$IN
+printG $SPECIES $TAXID >> $DOU/$IN
+printF $SPECIES $TAXID >> $DOU/$IN
+echo $TAXID
 echo $TAXID >> $DOU/$UNI
 else
-echo $SPECIES >> $DOU/$ERR
+  echo $SPECIES
+echo $SPECIES >> $DOU/$STR
 fi
 
 done
 
+LOOPVAR=$(cat $DOU/$STR)
+# second pass
+for s in $LOOPVAR
+do
+echo $s
+# cut
+SPECU=$(echo $s | rev | cut -d'_' -f1 --complement | rev)
+echo $SPECU
+
+getTaxid $SPECU
+
+echo $TAXID
+
+if [ -n "$TAXID" ]
+then
+printG $s $TAXID >> $DOU/$IN
+printF $s $TAXID >> $DOU/$IN
+echo $TAXID >> $DOU/$UNI
+else
+echo $s >> $DOU/$ERR
+fi
+
+done
+
+sort -u $DOU/$UNI > $DOU/uni.taxid
+
 cd $MINEDIR
-./autoget -v -f $DOU/$UNI
+./autoget -v -f $DOU/uni.taxid
 
 writeUniprot > $DOU/proUniprot
 
