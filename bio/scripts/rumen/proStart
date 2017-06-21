@@ -12,7 +12,7 @@
       <property name="gff3.dataSourceName" value="Aber"/>
       <property name="gff3.seqClsName" value="Gene"/>
       <property name="gff3.dataSetTitle" value="Successional Colonisation metatranscriptome"/>
-      <property name="src.data.dir" location="/micklem/data/rumine/rumen"/>
+      <property name="src.data.dir" location="LOCATION/successional"/>
     </source>
     <source name="successional-fasta" type="fasta" >
       <property name="fasta.className" value="org.intermine.model.bio.CDS"/>
@@ -20,5 +20,5 @@
       <property name="fasta.dataSetTitle" value="Unclassified Bacteria CDS sequence"/>
       <property name="fasta.includes" value="*.fna"/>
       <property name="fasta.taxonId" value="344734"/>
-      <property name="src.data.dir" location="/micklem/data/rumine/rumen"/>
+      <property name="src.data.dir" location="LOCATION/successional"/>
     </source>

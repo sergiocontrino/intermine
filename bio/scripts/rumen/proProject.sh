@@ -12,10 +12,12 @@ TAXURL="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=taxonomy&t
 MINEDIR=$PWD
 SPECIES=
 DATADIR="/home/contrino/data"    # default in aber
+DDSED="\/home\/contrino\/data"
 
 if [ "$HOST" != "$ABHOST" ]
 then
 DATADIR=/micklem/data/rumine     # test env in cam
+DDSED="\/micklem\/data\/rumine"
 fi
 
 DGE="$DATADIR/genomes"
@@ -27,12 +29,6 @@ IN=proGenomes
 UNI=xuniprot
 STR=strains
 
-DATE=$(date "+%y%m%d.%H%M")
-
-DLOG=$DOU/logs  # unused
-
-mkdir $DOU/$DATE
-OUT="$DOU/$DATE"
 
 
 
@@ -134,6 +130,13 @@ rm $1.xml
 
 function setFiles {
 
+DATE=$(date "+%y%m%d.%H%M")
+
+DLOG=$DOU/logs  # unused
+
+mkdir $DOU/$DATE
+OUT="$DOU/$DATE"
+
 if [ -a $OUT/$ERR ]
 then
 rm $OUT/$ERR
@@ -162,7 +165,12 @@ touch $OUT/$ERR $OUT/$IN $OUT/$UNI $OUT/$STR
 
 function doProject {
 SCRIPTDIR=$MINEDIR/../bio/scripts/rumen
-cat $SCRIPTDIR/proStart $OUT/proUniprot $OUT/proGenomes $SCRIPTDIR/proEnd > $OUT/project.xml
+
+sed "s/LOCATION/$DDSED/g" $SCRIPTDIR/proStart > $OUT/p1
+
+cat $OUT/p1 $OUT/proUniprot $OUT/proGenomes $SCRIPTDIR/proEnd > $OUT/project.xml
+
+rm $OUT/p1
 
 }
 
@@ -211,28 +219,6 @@ fi
 
 done
 
-# LOOPVAR=$(cat $OUT/$STR)
-# # second pass
-# for s in $LOOPVAR
-# do
-# # cut
-# SPECU=$(echo $s | rev | cut -d'_' -f1 --complement | rev)
-# echo $SPECU
-#
-# getTaxid $SPECU
-#
-# echo $TAXID
-#
-# if [ -n "$TAXID" ]
-# then
-# printG $s $TAXID >> $OUT/$IN
-# printF $s $TAXID >> $OUT/$IN
-# echo $TAXID >> $OUT/$UNI
-# else
-# echo $s >> $OUT/$ERR
-# fi
-#
-# done
 
 sort -u $OUT/$UNI > $OUT/uni.taxid
 
