@@ -153,12 +153,14 @@ do
 echo "Processing taxon $sub.."
 if [ "$DB" = "a" -o "$DB" = "s" ]
 then
-wget -O $sub\_uniprot_sprot.xml -$V  --no-use-server-timestamps "http://www.uniprot.org/uniprot/?compress=no&query=organism:$sub%20AND%20reviewed:yes&fil=&format=xml"
+#wget -O $sub\_uniprot_sprot.xml -$V  --progress=dot:mega --no-use-server-timestamps "http://www.uniprot.org/uniprot/?compress=no&query=organism:$sub%20AND%20reviewed:yes&fil=&format=xml"
+wget -O $sub\_uniprot_sprot.xml -$V  --progress=dot:giga "http://www.uniprot.org/uniprot/?compress=no&query=organism:$sub%20AND%20reviewed:yes&fil=&format=xml"
 fi
 
 if [ "$DB" = "a" -o "$DB" = "t" ]
 then
-wget -O $sub\_uniprot_trembl.xml -$V --progress=dot:mega --no-use-server-timestamps "http://www.uniprot.org/uniprot/?compress=no&query=organism:$sub%20AND%20reviewed:no&fil=&format=xml"
+#wget -O $sub\_uniprot_trembl.xml -$V --progress=dot:mega --no-use-server-timestamps "http://www.uniprot.org/uniprot/?compress=no&query=organism:$sub%20AND%20reviewed:no&fil=&format=xml"
+wget -O $sub\_uniprot_trembl.xml -$V --progress=dot:giga "http://www.uniprot.org/uniprot/?compress=no&query=organism:$sub%20AND%20reviewed:no&fil=&format=xml"
 fi
 
 
