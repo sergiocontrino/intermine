@@ -27,7 +27,15 @@ IN=proGenomes
 UNI=xuniprot
 STR=strains
 
+DATE=$(date "+%y%m%d.%H%M")
+
 DLOG=$DOU/logs  # unused
+
+mkdir $DOU/$DATE
+OUT="$DOU/$DATE"
+
+
+
 
 function printG {
 # printG species taxid
@@ -90,13 +98,9 @@ echo $FF
 echo $F9$DGE/prokka_$spec$F4$FE
 }
 
-function doUniprotList {
-LIST=$(cat $1 | tr '\n' ','| head -c -1)
-#echo $LIST
-}
 
 function writeUniprot {
-doUniprotList $DOU/$UNI
+LIST=$(cat $OUT/uni.taxid | tr '\n' ','| head -c -1)
 
 #echo $LIST
 
@@ -117,14 +121,11 @@ echo $U5$DUN/$U3$U6
 function getName {
 # rm prokka_ from the file name
 SPECIES=`echo $1 | cut -c 8-`
-#echo $SPECIES
 }
 
 function getTaxid {
   # getTaxid species
 wget -q $TAXURL$1 -O $1.xml
-
-#TAXID=`grep -m1 '<Id>' $SPECIES.xml | cut -c 5- | cut -d\< -f1`
 
 TAXID=$(grep -m1 '<Id>' $1.xml | cut -c 5- | cut -d\< -f1)
 
@@ -133,34 +134,35 @@ rm $1.xml
 
 function setFiles {
 
-if [ -a $DOU/$ERR ]
+if [ -a $OUT/$ERR ]
 then
-rm $DOU/$ERR
+rm $OUT/$ERR
 fi
 
-if [ -a $DOU/$IN ]
+if [ -a $OUT/$IN ]
 then
-rm $DOU/$IN
+rm $OUT/$IN
 fi
 
-if [ -a $DOU/$UNI ]
+if [ -a $OUT/$UNI ]
 then
-rm $DOU/$UNI
+rm $OUT/$UNI
 fi
 
-if [ -a $DOU/$STR ]
+if [ -a $OUT/$STR ]
 then
-rm $DOU/$STR
+rm $OUT/$STR
 fi
 
-touch $DOU/$ERR $DOU/$IN $DOU/$UNI $DOU/$STR
+#
+touch $OUT/$ERR $OUT/$IN $OUT/$UNI $OUT/$STR
 
 }
 
 
 function doProject {
-
-cat $DOU/proStart $DOU/proUniprot $DOU/proGenomes $DOU/proEnd > $DOU/project.xml
+SCRIPTDIR=$MINEDIR/../bio/scripts/rumen
+cat $SCRIPTDIR/proStart $OUT/proUniprot $OUT/proGenomes $SCRIPTDIR/proEnd > $OUT/project.xml
 
 }
 
@@ -187,18 +189,18 @@ getTaxid $SPECIES
 
 if [ -n "$TAXID" ]
 then
-printG $SPECIES $TAXID >> $DOU/$IN
-printF $SPECIES $TAXID >> $DOU/$IN
+printG $SPECIES $TAXID >> $OUT/$IN
+printF $SPECIES $TAXID >> $OUT/$IN
 echo $TAXID
-echo $TAXID >> $DOU/$UNI
+echo $TAXID >> $OUT/$UNI
 else
   echo $SPECIES
-echo $SPECIES >> $DOU/$STR
+echo $SPECIES >> $OUT/$STR
 fi
 
 done
 
-LOOPVAR=$(cat $DOU/$STR)
+LOOPVAR=$(cat $OUT/$STR)
 # second pass
 for s in $LOOPVAR
 do
@@ -213,25 +215,25 @@ echo $TAXID
 
 if [ -n "$TAXID" ]
 then
-printG $s $TAXID >> $DOU/$IN
-printF $s $TAXID >> $DOU/$IN
-echo $TAXID >> $DOU/$UNI
+printG $s $TAXID >> $OUT/$IN
+printF $s $TAXID >> $OUT/$IN
+echo $TAXID >> $OUT/$UNI
 else
-echo $s >> $DOU/$ERR
+echo $s >> $OUT/$ERR
 fi
 
 done
 
-sort -u $DOU/$UNI > $DOU/uni.taxid
+sort -u $OUT/$UNI > $OUT/uni.taxid
 
 cd $MINEDIR
-./autoget -v -f $DOU/uni.taxid
+./autoget -v -f $OUT/uni.taxid
 
-writeUniprot > $DOU/proUniprot
+writeUniprot > $OUT/proUniprot
 
 doProject
 
-if [ -a $DOU/project.xml ]
+if [ -a $OUT/project.xml ]
 then
-mv $DOU/project.xml $MINEDIR
+mv $OUT/project.xml $MINEDIR
 fi

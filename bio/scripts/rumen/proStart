@@ -1,0 +1,24 @@
+<project type="bio">
+  <property name="target.model" value="genomic"/>
+  <property name="source.location" location="../bio/sources/"/>
+  <property name="common.os.prefix" value="common"/>
+  <property name="intermine.properties.file" value="rumenmine.properties"/>
+  <property name="default.intermine.properties.file" location="../default.intermine.integrate.properties"/>
+
+  <sources>
+    <source name="successional-gff" type="gff">
+      <property name="gff3.taxonId" value="344734"/>
+      <property name="gff3.seqDataSourceName" value="Aber"/>
+      <property name="gff3.dataSourceName" value="Aber"/>
+      <property name="gff3.seqClsName" value="Gene"/>
+      <property name="gff3.dataSetTitle" value="Successional Colonisation metatranscriptome"/>
+      <property name="src.data.dir" location="/micklem/data/rumine/rumen"/>
+    </source>
+    <source name="successional-fasta" type="fasta" >
+      <property name="fasta.className" value="org.intermine.model.bio.CDS"/>
+      <property name="fasta.dataSourceName" value="Aber"/>
+      <property name="fasta.dataSetTitle" value="Unclassified Bacteria CDS sequence"/>
+      <property name="fasta.includes" value="*.fna"/>
+      <property name="fasta.taxonId" value="344734"/>
+      <property name="src.data.dir" location="/micklem/data/rumine/rumen"/>
+    </source>
