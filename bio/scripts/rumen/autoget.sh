@@ -20,7 +20,7 @@ HOST=`hostname -s`
 
 if [ "$HOST" != "$ABHOST" ]
 then
-DATADIR=/micklem/data/rumine/data
+DATADIR=/micklem/data/rumine
 fi
 #echo $DATADIR
 
