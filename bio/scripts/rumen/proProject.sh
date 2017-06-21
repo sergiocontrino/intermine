@@ -7,6 +7,7 @@
 #
 # sc 09/08
 #
+ABHOST="rumenmine-dev"
 HOST=`hostname -s`
 TAXURL="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=taxonomy&term="
 MINEDIR=$PWD
