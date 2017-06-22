@@ -6,6 +6,13 @@
   <property name="default.intermine.properties.file" location="../default.intermine.integrate.properties"/>
 
   <sources>
+    <source name="rnaseq-expression" type="rnaseq-expression">
+      <property name="src.data.dir" location="LOCATION/successional"/>
+      <property name="src.data.dir.includes" value="*.txt"/>
+      <property name="rnaseq.organisms" value="344734"/>
+      <property name="dataSourceName" value="Aber"/>
+      <property name="dataSetName" value="Successional expression"/>
+    </source>
     <source name="successional-gff" type="gff">
       <property name="gff3.taxonId" value="344734"/>
       <property name="gff3.seqDataSourceName" value="Aber"/>
