@@ -764,7 +764,7 @@ public class UniprotConverter extends BioDirectoryConverter
                     if (pubRefId != null) {
                         pubRefIds.add(pubRefId);
                     } else {
-                        LOG.error("bad evidence code:" + code + " for "
+                        LOG.debug("bad evidence code:" + code + " for "
                                 + uniprotEntry.getPrimaryAccession());
                     }
                 }
@@ -984,7 +984,7 @@ public class UniprotConverter extends BioDirectoryConverter
             String uniqueIdentifierField = getUniqueField(taxId);
             Set<String> geneIdentifiers = getGeneIdentifiers(uniprotEntry, uniqueIdentifierField);
             if (geneIdentifiers == null || geneIdentifiers.isEmpty()) {
-                LOG.error("no valid gene identifiers found for "
+                LOG.debug("no valid gene identifiers found for "
                         + uniprotEntry.getPrimaryAccession());
                 return;
             }
