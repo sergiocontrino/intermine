@@ -97,7 +97,7 @@ echo $F9$DGE/prokka_$spec$F4$FE
 
 
 function writeUniprot {
-LIST=$(cat $OUT/uni.taxid | tr '\n' ','| head -c -1)
+LIST=$(cat $OUT/uni.taxid | tr '\n' ' ')
 
 #echo $LIST
 
