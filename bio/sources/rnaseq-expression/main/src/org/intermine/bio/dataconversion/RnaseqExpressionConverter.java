@@ -132,10 +132,10 @@ public class RnaseqExpressionConverter extends BioFileConverter
             String[] line = (String[]) tsvIter.next();
             LOG.debug("BIOENTITY " + line[0]);
             // skip comments
-//            if (line[0].startsWith(COMMENT)) {
-//                LOG.info("AA just a comment: " + line[0]);
-//                continue;
-//            }
+            if (line[0].startsWith(COMMENT)) {
+                LOG.info("AA just a comment: " + line[0]);
+                continue;
+            }
             if (lineNumber == 0) {
                 // column headers - strip off any extra columns
                 int end = 0;
