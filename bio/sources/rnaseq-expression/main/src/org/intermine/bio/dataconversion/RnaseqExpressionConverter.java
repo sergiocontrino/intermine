@@ -43,9 +43,13 @@ public class RnaseqExpressionConverter extends BioFileConverter
     private static final String EXP_DATASOURCE = "Aber";
 
     private static final Logger LOG = Logger.getLogger(RnaseqExpressionConverter.class);
-    private static final String CATEGORY = "RNA-Seq";
+//    private static final String CATEGORY = "RNA-Seq";
     private static final String UNIT = "n/a";
     private static final String REDUN = ".htseqcount.out.onlycounts";
+    private static final String COMMENT = "#";
+    private static final String
+    DESCRIPTION = "expression time-course of the microbes attached to grass and consumed by a cow";
+
 
 
     private Item org;
@@ -127,6 +131,10 @@ public class RnaseqExpressionConverter extends BioFileConverter
         while (tsvIter.hasNext()) {
             String[] line = (String[]) tsvIter.next();
             LOG.debug("BIOENTITY " + line[0]);
+            // skip comments
+            if (line[0].startsWith(COMMENT)) {
+                break;
+            }
             if (lineNumber == 0) {
                 // column headers - strip off any extra columns
                 int end = 0;
@@ -278,13 +286,14 @@ public class RnaseqExpressionConverter extends BioFileConverter
      * @param description the title of the experiment
      * @return an Item representing the Experiment
      */
-    private Item createExperiment(String name, String tissue, String description)
+    private Item createExperiment(String name, String tissue, String timepoint)
         throws ObjectStoreException {
         LOG.debug("EXPE: " + name);
         Item e = createItem("RnaseqExperiment");
         e.setAttribute("SRAaccession", name);
         e.setAttribute("tissue", tissue);
-        e.setAttribute("description", description);
+        e.setAttribute("category", timepoint);
+        e.setAttribute("description", DESCRIPTION);
         e.setReference("dataSet", dataSetRef);
         store(e);
         return e;
