@@ -133,7 +133,8 @@ public class RnaseqExpressionConverter extends BioFileConverter
             LOG.debug("BIOENTITY " + line[0]);
             // skip comments
             if (line[0].startsWith(COMMENT)) {
-                break;
+                LOG.info("AA just a comment: " + line[0]);
+                continue;
             }
             if (lineNumber == 0) {
                 // column headers - strip off any extra columns
