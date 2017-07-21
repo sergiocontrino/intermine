@@ -342,7 +342,7 @@ public class OboParser
                     term.setDescription(unescape(synMatcher.group(1)));
                 }
             } else {
-                LOG.warn("Failed to parse def of term " + id + " def: " + def);
+                LOG.debug("Failed to parse def of term " + id + " def: " + def);
             }
 
         } else {
