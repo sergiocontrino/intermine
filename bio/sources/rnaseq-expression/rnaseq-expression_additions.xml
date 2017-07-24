@@ -17,6 +17,7 @@
   <attribute name="description" type="java.lang.String" />
   <attribute name="tissue" type="java.lang.String" />
   <attribute name="SRAaccession" type="java.lang.String" />
+  <attribute name="timePoint" type="java.lang.String" />
   <reference name="dataSet" referenced-type="DataSet" reverse-reference="experiments" />
 <!--
   <collection name="properties" referenced-type="SampleProperty" reverse-reference="experiments"/>

@@ -154,10 +154,6 @@ public class RnaseqExpressionConverter extends BioFileConverter
                 if (StringUtils.isEmpty(primaryId)) {
                     break;
                 }
-                // to rm summary lines
-                if (!StringUtils.startsWithIgnoreCase(primaryId,"p")) {
-                    break;
-                }
                 if ("gene".equalsIgnoreCase(type)) {
                     createFeature(primaryId, "Gene");
                 }
@@ -166,7 +162,7 @@ public class RnaseqExpressionConverter extends BioFileConverter
                 }
                 if ("experiment".equalsIgnoreCase(type)) {
                     // file has the format
-                    // SRA accession Category Sample Description
+                    // Label time stamp sample
                     // in our model
                     // SRA accession, tissue, description
 
@@ -287,13 +283,13 @@ public class RnaseqExpressionConverter extends BioFileConverter
      * @param description the title of the experiment
      * @return an Item representing the Experiment
      */
-    private Item createExperiment(String name, String tissue, String timepoint)
+    private Item createExperiment(String name, String timepoint, String tissue)
         throws ObjectStoreException {
         LOG.debug("EXPE: " + name);
         Item e = createItem("RnaseqExperiment");
         e.setAttribute("SRAaccession", name);
         e.setAttribute("tissue", tissue);
-        e.setAttribute("category", timepoint);
+        e.setAttribute("timePoint", timepoint);
         e.setAttribute("description", DESCRIPTION);
         e.setReference("dataSet", dataSetRef);
         store(e);
