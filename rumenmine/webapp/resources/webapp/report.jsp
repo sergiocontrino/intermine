@@ -351,9 +351,6 @@
 <div id="domainregion" class="collection-table column-border" style="margin-bottom: 0px"></div>
   <c:set var="QUERYID" value="${fn:substringAfter(stableLink, 'externalids=')}" />
   <c:set var="MINEURL" value="${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}" />
-<!--
-    <c:set var="MINEURL" value="http://localhost:8080" />
--->
 <svg id="eChart" class="eChart" style="width: 100%;"></svg>
 
 <script type="text/javascript" charset="utf-8">
