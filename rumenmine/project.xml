@@ -26,12 +26,12 @@
     <source name="rnaseq-expression" type="rnaseq-expression">
       <property name="src.data.dir" location="/home/contrino/data/successional"/>
       <property name="src.data.dir.includes" value="*.txt"/>
-      <property name="rnaseq.organisms" value="344734"/>
+      <property name="rnaseq.organisms" value="506599"/>
       <property name="dataSourceName" value="Aber"/>
       <property name="dataSetName" value="Successional expression"/>
     </source>
     <source name="successional-gff" type="gff">
-      <property name="gff3.taxonId" value="344734"/>
+      <property name="gff3.taxonId" value="506599"/>
       <property name="gff3.seqDataSourceName" value="Aber"/>
       <property name="gff3.dataSourceName" value="Aber"/>
       <property name="gff3.seqClsName" value="Gene"/>
@@ -41,9 +41,9 @@
     <source name="successional-fasta" type="fasta" >
       <property name="fasta.className" value="org.intermine.model.bio.CDS"/>
       <property name="fasta.dataSourceName" value="Aber"/>
-      <property name="fasta.dataSetTitle" value="Unclassified Bacteria CDS sequence"/>
+      <property name="fasta.dataSetTitle" value="Bovine gut metagenome CDS sequence"/>
       <property name="fasta.includes" value="*.fna"/>
-      <property name="fasta.taxonId" value="344734"/>
+      <property name="fasta.taxonId" value="506599"/>
       <property name="src.data.dir" location="/home/contrino/data/successional"/>
     </source>
 
