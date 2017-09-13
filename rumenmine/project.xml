@@ -6,6 +6,23 @@
   <property name="default.intermine.properties.file" location="../default.intermine.integrate.properties"/>
 
   <sources>
+
+    <source name="ncbitaxon" type="ncbitaxon" dump="true">
+      <property name="src.data.file" location="/home/contrino/data/ncbitaxon/ncbitaxon.obo" dump="true" />
+      <property name="ontologyPrefix" value="NCBITaxon"/>
+    </source>
+    
+ <!--
+    <source name="go" type="go">
+      <property name="src.data.file" location="/home/contrino/data/go/gene_ontology.obo"/>
+      <property name="createrelations" value="false"/>
+    </source>
+
+    <source name="go-annotation" type="go-annotation" dump="true">
+     <property name="ontologyfile" location="/home/contrino/data/go/gene_ontology.obo"/>
+     <property name="src.data.dir" location="/home/contrino/data/go-annotation/"/>
+    </source>
+-->
     <source name="rnaseq-expression" type="rnaseq-expression">
       <property name="src.data.dir" location="/home/contrino/data/successional"/>
       <property name="src.data.dir.includes" value="*.txt"/>
@@ -30,11 +47,7 @@
       <property name="src.data.dir" location="/home/contrino/data/successional"/>
     </source>
 
-<source name="ncbitaxon" type="ncbitaxon">
-      <property name="src.data.file" location="/home/contrino/data/ncbitaxon/ncbitaxon.obo"/>
-      <property name="ontologyPrefix" value="NCBITaxon"/>
-    </source>
-
+<!-- =================== -->
 
 
 
@@ -8134,7 +8147,7 @@
 <property name="gff3.dataSetTitle" value="prokka output"/>
 <property name="src.data.dir" location="/home/contrino/data/genomes/prokka_Selenomonas_ruminantium_AC2024"/></source>
 
-<source name="Selenomonas_ruminantium_AC2024-fasta" type="fasta" dump="true">
+<source name="Selenomonas_ruminantium_AC2024-fasta" type="fasta">
 <property name="fasta.taxonId" value="1392501"/>
 <property name="fasta.name" value="Selenomonas_ruminantium_AC2024"/>
 <property name="fasta.seqDataSourceName" value="Aber"/>
@@ -9474,7 +9487,7 @@
 <property name="gff3.dataSetTitle" value="prokka output"/>
 <property name="src.data.dir" location="/home/contrino/data/genomes/prokka_Treponema_bryantii_XBD1002"/></source>
 
-<source name="Treponema_bryantii_XBD1002-fasta" type="fasta" dump="true">
+<source name="Treponema_bryantii_XBD1002-fasta" type="fasta">
 <property name="fasta.taxonId" value="163"/>
 <property name="fasta.name" value="Treponema_bryantii_XBD1002"/>
 <property name="fasta.seqDataSourceName" value="Aber"/>
@@ -9534,7 +9547,7 @@
 <property name="gff3.dataSetTitle" value="prokka output"/>
 <property name="src.data.dir" location="/home/contrino/data/genomes/prokka_Wolinella_succinogenes_DSM_1740"/></source>
 
-<source name="Wolinella_succinogenes_DSM_1740-fasta" type="fasta">
+<source name="Wolinella_succinogenes_DSM_1740-fasta" type="fasta" dump="true">
 <property name="fasta.taxonId" value="273121"/>
 <property name="fasta.name" value="Wolinella_succinogenes_DSM_1740"/>
 <property name="fasta.seqDataSourceName" value="Aber"/>
@@ -9545,15 +9558,7 @@
 <property name="src.data.dir" location="/home/contrino/data/genomes/prokka_Wolinella_succinogenes_DSM_1740"/></source>
     
 
-
-<source name="go" type="go">
-      <property name="src.data.file" location="/home/contrino/data/go-annotation/gene_ontology.obo"/>
-      <property name="createrelations" value="false"/>
-    </source>
-    <source name="go-annotation" type="go-annotation" dump="true">
-     <property name="ontologyfile" location="/home/contrino/data/go-annotation/gene_ontology.obo"/>
-     <property name="src.data.dir" location="/home/contrino/data/go-annotation/"/>
-    </source>
+<!-- ============================== -->
 
 
     <source name="update-publications" type="update-publications">
@@ -9573,8 +9578,10 @@
     <post-process name="do-sources"/>
 
     <post-process name="summarise-objectstore"/>
+<!--
     <post-process name="create-autocomplete-index"/>
-    <post-process name="create-search-index"/>
+-->
+<post-process name="create-search-index"/>
   </post-processing>
 
 </project>
