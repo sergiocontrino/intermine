@@ -159,6 +159,20 @@
       <property name="src.data.dir" location="/micklem/data/human/orphanet/current" />
     </source>
 
+<!-- ========   STORM  ========================================== -->
+
+        <source name="pancancer-expression" type="pancancer-expression" dump="true">
+            <property name="src.data.dir" location="/micklem/data/storm/pancancer"/>
+            <property name="src.data.dir.includes" value="*.tsv"/>
+            <property name="rnaseq.organisms" value="9606"/>
+            <property name="dataSourceName" value="ICGC"/>
+            <property name="dataSetName" value="PCAWG - Pancancer Analysis of Whole Genomes"/>
+        </source>
+
+
+<!-- ========   /STORM  ========================================== -->
+
+
     <source name="pubmed-gene" type="pubmed-gene">
       <property name="src.data.dir" location="/micklem/data/pubmed/current" />
       <property name="pubmed.organisms" value="9606 10090" />
