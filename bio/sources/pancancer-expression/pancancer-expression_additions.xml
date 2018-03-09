@@ -4,30 +4,33 @@
 <classes>
 
 <class name="SequenceFeature" is-interface="true">
-  <collection name="RNASeqExpressions" referenced-type="RnaseqExpression" reverse-reference="expressionOf" />
+  <collection name="PanCancerExpressions" referenced-type="PanCancerExpression" reverse-reference="expressionOf" />
 </class>
 
 <class name="Experiment" is-interface="true">
 </class>
 
-<class name="RnaseqExperiment" extends="Experiment" is-interface="true">
+<class name="PanCancerExperiment" extends="Experiment" is-interface="true">
   <attribute name="description" type="java.lang.String" />
   <attribute name="tissue" type="java.lang.String" />
-  <attribute name="SRAaccession" type="java.lang.String" />
 <!--
   <reference name="dataSet" referenced-type="DataSet" reverse-reference="experiments" /
   <collection name="properties" referenced-type="SampleProperty" reverse-reference="experiments"/>
 -->
-</class>
-
-<class name="RnaseqExpression" is-interface="true">
-  <attribute name="expressionLevel" type="java.lang.Double" />
-  <attribute name="unit" type="java.lang.String" />
-  <attribute name="type" type="java.lang.String" />
-  <reference name="expressionOf" referenced-type="SequenceFeature" reverse-reference="RNASeqExpressions" />
-  <reference name="experiment" referenced-type="RnaseqExperiment" />
   <reference name="dataSet" referenced-type="DataSet" />
   <reference name="organism" referenced-type="Organism" />
+</class>
+
+<class name="PanCancerExpression" is-interface="true">
+  <attribute name="expressionLevel" type="java.lang.Double" />
+  <attribute name="unit" type="java.lang.String" />
+  <reference name="expressionOf" referenced-type="SequenceFeature" reverse-reference="PanCancerExpressions" />
+  <reference name="experiment" referenced-type="PanCancerExperiment" />
+<!--
+  <attribute name="type" type="java.lang.String" />
+  <reference name="dataSet" referenced-type="DataSet" />
+  <reference name="organism" referenced-type="Organism" />
+-->
 </class>
 
 

@@ -10,7 +10,6 @@ package org.intermine.bio.dataconversion;
  *
  */
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -27,7 +26,6 @@ import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.util.FormattedTextParser;
 import org.intermine.xml.full.Item;
 
-
 /**
  *
  * @author sc
@@ -35,15 +33,15 @@ import org.intermine.xml.full.Item;
 public class PanCancerExpressionConverter extends BioFileConverter
 {
     // TODO get those from project file?
-    private static final String TAX_ID = "3702";
-    private static final String DATASET_TITLE = "RNA-seq expression";
-    private static final String DATASOURCE_NAME = "Araport";
+    private static final String TAX_ID = "9606";
+    private static final String DATASET_TITLE = "PanCancer expression";
+    private static final String DATASOURCE_NAME = "PCAWG";
 
-    private static final String EXP_DATASET = "SRA";
-    private static final String EXP_DATASOURCE = "NCBI";
+    private static final String EXP_DATASET = "PanCancer expression";
+    private static final String EXP_DATASOURCE = "PCAWG";
 
-    private static final Logger LOG = Logger.getLogger(RnaseqExpressionConverter.class);
-    private static final String CATEGORY = "RNA-Seq";
+    private static final Logger LOG = Logger.getLogger(PanCancerExpressionConverter.class);
+//    private static final String CATEGORY = "PanCancer";
     private static final String TPM = "TPM";
 
     private Item org;
@@ -68,7 +66,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
     }
 
     /**
-     * 
+     *
      *
      * {@inheritDoc}
      */
@@ -85,15 +83,15 @@ public class PanCancerExpressionConverter extends BioFileConverter
         // TODO: impose order(e/g/t) here?
         //
         File currentFile = getCurrentFile();
-        if (currentFile.getName().contains("gene")) {
-            LOG.info("Loading RNAseq expressions for GENES");
+        if (currentFile.getName().contains("query-results")) {
+            LOG.info("Loading PanCancer expressions");
             processFile(reader, "gene", org);
-        } else if (currentFile.getName().contains("transcript")) {
-            LOG.info("Loading RNAseq expressions for TRANSCRIPTS");
-            processFile(reader, "transcript", org);
-        } else if (currentFile.getName().contains("experiment")) {
-            LOG.info("Loading RNAseq expressions METADATA");
-            processFile(reader, "experiment", org);
+        } else if (currentFile.getName().contains("experiment-design")) {
+            LOG.info("Not yet implemented");
+            //processFile(reader, "transcript", org);
+//        } else if (currentFile.getName().contains("experiment")) {
+//            LOG.info("Loading RNAseq expressions METADATA");
+//            processFile(reader, "experiment", org);
         } else {
             throw new IllegalArgumentException("Unexpected file: "
                     + currentFile.getName());
@@ -124,7 +122,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
 
         while (tsvIter.hasNext()) {
             String[] line = (String[]) tsvIter.next();
-            LOG.debug("BIOENTITY " + line[0]);
+            LOG.info("LINE " + line[0]);
             if (lineNumber == 0) {
                 // column headers - strip off any extra columns
                 int end = 0;
@@ -143,6 +141,9 @@ public class PanCancerExpressionConverter extends BioFileConverter
                 if (StringUtils.isEmpty(primaryId)) {
                     break;
                 }
+                String symbol = line[1]; //Gene symbol, possible alt for merge
+
+                LOG.info("BIOENTITY " + line[1]);
                 if ("gene".equalsIgnoreCase(type)) {
                     createFeature(primaryId, "Gene");
                 }
@@ -166,9 +167,10 @@ public class PanCancerExpressionConverter extends BioFileConverter
                     }
                     continue; // experiment file: no info on bioentity
                 }
-                // scores start from column 2 and end at totHeaders which is headers[1,SampleNumber]
-                for (int i = 1; i < totHeaders; i++) {
-                    String col = headers[i].replace("_TPM", "");
+                // scores start from column 3 and end at totHeaders which is headers[1,SampleNumber]
+                for (int i = 2; i < totHeaders; i++) {
+                    String col = headers[i];
+                    LOG.info("datum  " + col + " | " + line[i]);
                     if (!experiments.containsKey(col)) {
                         Item experiment = createExperiment(col);
                         experiments.put(col, experiment.getIdentifier());
@@ -181,7 +183,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
                         score.setReference("expressionOf", transcriptItems.get(primaryId));
                     }
                     score.setReference("experiment", experiments.get(col));
-                    score.setReference("organism", organism);
+                    //score.setReference("organism", organism);
                     store(score);
                 }
             }
@@ -197,10 +199,13 @@ public class PanCancerExpressionConverter extends BioFileConverter
      * @return an Item representing the GeneExpressionScore
      */
     private Item createRNASeqExpression(String score, String type) throws ObjectStoreException {
-        Item expression = createItem("RnaseqExpression");
+        Item expression = createItem("PanCancerExpression");
+        if (score.isEmpty()) {
+            score = "0";
+        }
         expression.setAttribute("expressionLevel", score);
         expression.setAttribute("unit", TPM);
-        expression.setAttribute("type", type);
+//        expression.setAttribute("type", type);
         return expression;
     }
 
@@ -251,12 +256,12 @@ public class PanCancerExpressionConverter extends BioFileConverter
      * @return an Item representing the Experiment
      */
     private Item createExperiment(String name) throws ObjectStoreException {
-        LOG.warn("EXPERIMENT " + name
-                + " missing tissue information: should you check the consistency of naming "
-                + "for your data files?");
-        Item e = createItem("RnaseqExperiment");
-        e.setAttribute("SRAaccession", name);
-        e.setAttribute("category", CATEGORY);
+        LOG.warn("EXPERIMENT " + name);
+//                + " missing tissue information: should you check the consistency of naming "
+//                + "for your data files?");
+        Item e = createItem("PanCancerExperiment");
+        e.setAttribute("tissue", name);
+//        e.setAttribute("category", CATEGORY);
         e.setReference("dataSet", dataSetRef);
         store(e);
         return e;
@@ -273,8 +278,8 @@ public class PanCancerExpressionConverter extends BioFileConverter
     private Item createExperiment(String name, String tissue, String description)
         throws ObjectStoreException {
         LOG.debug("EXPE: " + name);
-        Item e = createItem("RnaseqExperiment");
-        e.setAttribute("SRAaccession", name);
+        Item e = createItem("PanCancerExperiment");
+        //e.setAttribute("SRAaccession", name);
         e.setAttribute("tissue", tissue);
         e.setAttribute("description", description);
         e.setReference("dataSet", dataSetRef);
