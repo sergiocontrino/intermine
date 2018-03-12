@@ -62,7 +62,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
         throws ObjectStoreException {
         super(writer, model, DATASOURCE_NAME, DATASET_TITLE);
         createOrganismItem();
-        createDataSource();
+        //createDataSource();
     }
 
     /**
@@ -87,8 +87,9 @@ public class PanCancerExpressionConverter extends BioFileConverter
             LOG.info("Loading PanCancer expressions");
             processFile(reader, "gene", org);
         } else if (currentFile.getName().contains("experiment-design")) {
-            LOG.info("Not yet implemented");
-            //processFile(reader, "transcript", org);
+//            LOG.info("Not yet implemented");
+            LOG.info("(sic) Loading PanCancer METADATA");
+            processFile(reader, "experiment", org);
 //        } else if (currentFile.getName().contains("experiment")) {
 //            LOG.info("Loading RNAseq expressions METADATA");
 //            processFile(reader, "experiment", org);
@@ -122,7 +123,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
 
         while (tsvIter.hasNext()) {
             String[] line = (String[]) tsvIter.next();
-            LOG.info("LINE " + line[0]);
+            //LOG.info("LINE " + line[0]);
             if (lineNumber == 0) {
                 // column headers - strip off any extra columns
                 int end = 0;
@@ -143,7 +144,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
                 }
                 String symbol = line[1]; //Gene symbol, possible alt for merge
 
-                LOG.info("BIOENTITY " + line[1]);
+                //LOG.info("BIOENTITY " + line[1]);
                 if ("gene".equalsIgnoreCase(type)) {
                     createFeature(primaryId, "Gene");
                 }
@@ -152,25 +153,40 @@ public class PanCancerExpressionConverter extends BioFileConverter
                 }
                 if ("experiment".equalsIgnoreCase(type)) {
                     // file has the format
-                    // SRA accession Category Sample Description
-                    // in our model
-                    // SRA accession, tissue, description
+                    // run# {characteristic - ontology}
+                    // [0] run
+                    // [1] clinicalInformation
+                    // [3] disease
+                    // [5] histology]
+                    // [7] individual
+                    // [9] organism
+                    // [11] organismPart
+                    // [13] sex
+                    // [15] FV disease
+                    // [17] FV individual
+                    // [19] FV organismPart
+                    // [21] analysed
+
+                    // even fields are occupied by the ontology reference for the preciding field
+
+                    // doing a simplistic load to check data:
+                    // no clear link with the expressions file.
 
                     currentExp = new String[totHeaders];
                     System.arraycopy(line, 0, currentExp, 0, totHeaders);
-                    LOG.info("EEE " + currentExp[0] + ": " + currentExp[1]);
+                    //LOG.info("EEE " + currentExp[0] + ": " + currentExp[1]);
 
-                    String expId = currentExp[0];
-                    if (!experiments.containsKey(expId)) {
-                        Item experiment = createExperiment(expId, currentExp[1], currentExp[2]);
-                        experiments.put(expId, experiment.getIdentifier());
+                    String sampleId = currentExp[0];
+                    if (!experiments.containsKey(sampleId)) {
+                        Item sample = createSample(currentExp);
+                        experiments.put(sampleId, sample.getIdentifier());
                     }
                     continue; // experiment file: no info on bioentity
                 }
                 // scores start from column 3 and end at totHeaders which is headers[1,SampleNumber]
                 for (int i = 2; i < totHeaders; i++) {
                     String col = headers[i];
-                    LOG.info("datum  " + col + " | " + line[i]);
+                    //LOG.info("datum  " + col + " | " + line[i]);
                     if (!experiments.containsKey(col)) {
                         Item experiment = createExperiment(col);
                         experiments.put(col, experiment.getIdentifier());
@@ -275,6 +291,36 @@ public class PanCancerExpressionConverter extends BioFileConverter
      * @param description the title of the experiment
      * @return an Item representing the Experiment
      */
+    private Item createSample(String[] currentExp)
+        throws ObjectStoreException {
+        LOG.info("SAMPLE: " + currentExp[0]);
+        Item e = createItem("Sample");
+        e.setAttribute("name", currentExp[0]);
+        e.setAttribute("clinicalInformation", currentExp[1]);
+        e.setAttribute("disease", currentExp[3]);
+        e.setAttribute("histology", currentExp[5]);
+        e.setAttribute("individual", currentExp[7]);
+        e.setAttribute("organismPart", currentExp[11]);
+        e.setAttribute("sex", currentExp[13]);
+        e.setAttribute("diseaseFV", currentExp[15]);
+        e.setAttribute("individualFV", currentExp[17]);
+        e.setAttribute("organismPartFV", currentExp[19]);
+        e.setAttribute("analysed", currentExp[21]);
+
+        //e.setReference("dataSet", dataSetRef);
+        store(e);
+        return e;
+    }
+
+
+    /**
+     * Create and store an Experiment item on the first time called.
+     *
+     * @param name the experiment name (SRA accession)
+     * @param tissue the tissue/organ
+     * @param description the title of the experiment
+     * @return an Item representing the Experiment
+     */
     private Item createExperiment(String name, String tissue, String description)
         throws ObjectStoreException {
         LOG.debug("EXPE: " + name);
@@ -286,6 +332,10 @@ public class PanCancerExpressionConverter extends BioFileConverter
         store(e);
         return e;
     }
+
+
+
+
 
     /**
      * create the experiments datasource and dataset

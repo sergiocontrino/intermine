@@ -33,6 +33,22 @@
 -->
 </class>
 
+    <class name="Sample" is-interface="true">
+        <attribute name="name" type="java.lang.String" />
+        <attribute name="clinicalInformation" type="java.lang.String" />
+        <attribute name="disease" type="java.lang.String" />
+        <attribute name="histology" type="java.lang.String" />
+        <attribute name="individual" type="java.lang.String" />
+        <attribute name="organismPart" type="java.lang.String" />
+        <attribute name="sex" type="java.lang.String" />
+        <attribute name="diseaseFV" type="java.lang.String" />
+        <attribute name="individualFV" type="java.lang.String" />
+        <attribute name="organismPartFV" type="java.lang.String" />
+        <attribute name="analysed" type="java.lang.String" />
+
+        <reference name="organism" referenced-type="Organism" />
+    </class>
+
 
 <!--
     <class name="Sample" is-interface="true">
