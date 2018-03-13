@@ -324,6 +324,7 @@
 
   </div>
 
+
   <c:forEach items="${categories}" var="aspect" varStatus="status">
     <div id="${fn:replace(aspect, " ", "_")}Category" class="aspectBlock">
       <tiles:insert name="reportAspect.tile">
@@ -334,6 +335,52 @@
         <tiles:put name="aspectId" value="${templateIdPrefix}${status.index}" />
         <tiles:put name="opened" value="${status.index == 0}" />
       </tiles:insert>
+
+
+
+
+      <!-- RNASEQ EXPRESSION -->
+
+<c:set var="TYPE" value="none" />
+
+<c:if test="${fn:contains(object.type, 'RNA') || fn:contains(object.type, 'Transcript')}">
+<c:set var="TYPE" value="Transcript" />
+</c:if>
+<c:if test="${object.type == 'Gene' || object.type == 'Pseudogene' || object.type == 'TransposableElementGene'}">
+<c:set var="TYPE" value="Gene" />
+</c:if>
+
+<!--  TEMP instead of Expression -->
+<c:if test="${aspect eq 'Function' && (TYPE eq 'Gene' || TYPE eq 'Transcript')}">
+<div id="domainregion" class="collection-table column-border" style="margin-bottom: 0px"></div>
+  <c:set var="QUERYID" value="${fn:substringAfter(stableLink, 'externalids=')}" />
+  <c:set var="MINEURL" value="${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}" />
+
+<svg id="eChart" class="eChart" style="width: 100%;"></svg>
+
+<script type="text/javascript" charset="utf-8">
+var queryId="${QUERYID}";
+var mineUrl="${MINEURL}/";
+var svgId="eChart";
+var token="${token}"; // not needed for report, but for temporary lists
+var type="${TYPE}";   // the root for the ws query
+</script>
+
+<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3-legend/1.8.0/d3-legend.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.2/expression.css">
+<script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.2/expression.min.js"></script>
+<br>
+</c:if>
+<br>
+<!--  /RNASEQ EXPRESSION -->
+
+
+
+
+
+
+
   </div>
   </c:forEach>
 
