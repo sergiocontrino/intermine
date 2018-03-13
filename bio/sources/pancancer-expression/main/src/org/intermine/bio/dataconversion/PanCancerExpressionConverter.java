@@ -62,7 +62,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
         throws ObjectStoreException {
         super(writer, model, DATASOURCE_NAME, DATASET_TITLE);
         createOrganismItem();
-        //createDataSource();
+        createDataSource();
     }
 
     /**
