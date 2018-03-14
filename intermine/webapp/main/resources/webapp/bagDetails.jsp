@@ -362,6 +362,65 @@
 
 <!-- /templates -->
 </c:if>
+
+<!-- RNASEQ EXPRESSION -->
+
+<c:if test="${bag.type == 'Gene' || bag.type == 'Pseudogene' || bag.type == 'TransposableElementGene' || fn:contains(bag.type, 'RNA') || fn:contains(bag.type, 'Transcript')}">
+
+<div class="heading" style="clear:both;margin-top:15px">
+     <a id="widgets">RNA Seq Expression heat map for '${bag.name}'</a> &nbsp;
+</div>
+
+  <script type="text/javascript" charset="utf-8">
+    jQuery(document).ready(function () {
+// uncomment if you want default open/close according to size of list
+//    var feature_count = parseInt(${bag.size});
+//    if (feature_count > 40) {
+//    jQuery("#expr").hide();
+//    } else {
+    jQuery("#expr").show();
+//    }
+    jQuery("#bro").click(function () {
+    if(jQuery("#expr").is(":hidden")) {
+    jQuery("#oc").attr("src", "images/icons/toggle-collapse-16.png");
+    } else {
+    jQuery("#oc").attr("src", "images/icons/toggle-expand-16.png");
+    }
+    jQuery("#expr").toggle("slow");
+    });
+    })
+    </script>
+
+  <a name="#" id="bro" style="cursor:pointer">
+    Click to see/hide the RNA-Seq expression map <img src="images/icons/toggle-collapse-16.png" id="oc"></a><div id="expr" style="display: block">
+
+  <div id="expr" class="collection-table column-border" style="margin-bottom: 0px">
+  <c:set var="QUERYID" value="${bag.name}" />
+  <c:set var="MINEURL" value="${WEB_PROPERTIES['webapp.baseurl']}/${WEB_PROPERTIES['webapp.path']}" />
+
+  <svg id="eChart" class="eChart" style="width: 100%;"></svg>
+  <script type="text/javascript" charset="utf-8">
+    var mineUrl="${MINEURL}/";
+    var svgId="eChart";
+    var listName="${bag.name}";
+    var token="${token}";
+    var type="${bag.type}";
+  </script>
+  <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3/3.5.5/d3.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.2/expression.css">
+  <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/d3-legend/1.8.0/d3-legend.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/expression/1.0.2/expression.min.js"></script>
+  </div>
+</div>
+
+</c:if>
+<!--  /RNASEQ EXPRESSION -->
+
+
+
+
+
+
 </c:when>
 <c:otherwise>
 <!--  No list found with this name -->
