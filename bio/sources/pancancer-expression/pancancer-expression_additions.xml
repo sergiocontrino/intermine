@@ -13,6 +13,9 @@
 <class name="PanCancerExperiment" extends="Experiment" is-interface="true">
   <attribute name="description" type="java.lang.String" />
   <attribute name="tissue" type="java.lang.String" />
+  <attribute name="tissueType" type="java.lang.String" />
+  <attribute name="location" type="java.lang.String" />
+
 <!--
   <reference name="dataSet" referenced-type="DataSet" reverse-reference="experiments" /
   <collection name="properties" referenced-type="SampleProperty" reverse-reference="experiments"/>

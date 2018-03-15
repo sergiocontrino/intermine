@@ -13,8 +13,10 @@ package org.intermine.bio.dataconversion;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -87,7 +89,6 @@ public class PanCancerExpressionConverter extends BioFileConverter
             LOG.info("Loading PanCancer expressions");
             processFile(reader, "gene", org);
         } else if (currentFile.getName().contains("experiment-design")) {
-//            LOG.info("Not yet implemented");
             LOG.info("(sic) Loading PanCancer METADATA");
             processFile(reader, "experiment", org);
 //        } else if (currentFile.getName().contains("experiment")) {
@@ -195,9 +196,9 @@ public class PanCancerExpressionConverter extends BioFileConverter
                     if (type.equalsIgnoreCase("gene")) {
                         score.setReference("expressionOf", geneItems.get(primaryId));
                     }
-                    if (type.equalsIgnoreCase("transcript")) {
-                        score.setReference("expressionOf", transcriptItems.get(primaryId));
-                    }
+//                    if (type.equalsIgnoreCase("transcript")) {
+//                        score.setReference("expressionOf", transcriptItems.get(primaryId));
+//                    }
                     score.setReference("experiment", experiments.get(col));
                     //score.setReference("organism", organism);
                     store(score);
@@ -276,12 +277,54 @@ public class PanCancerExpressionConverter extends BioFileConverter
 //                + " missing tissue information: should you check the consistency of naming "
 //                + "for your data files?");
         Item e = createItem("PanCancerExperiment");
-        e.setAttribute("tissue", name);
+
+        String[] tinfo = parse(name);
+
+        e.setAttribute("tissueType", tinfo[0]);
+        e.setAttribute("tissue", tinfo[2]);
+        if (tinfo[1] != null) {
+            e.setAttribute("location", tinfo[1]);
+        }
+//        e.setAttribute("tissue", name);
 //        e.setAttribute("category", CATEGORY);
         e.setReference("dataSet", dataSetRef);
         store(e);
         return e;
     }
+
+    private String[] parse(String name) {
+        // TODO Auto-generated method stub
+        if (name.isEmpty()) {
+            LOG.warn("NO experiment data!");
+            return null;
+        }
+        List<String> ret = new ArrayList<String>();
+        String[] back = new String[3];
+        String[] slt = name.split(" - ");
+
+        if (slt.length == 1) {
+            // glioblastoma multiforme, brain
+            String[] st = slt[0].split(", ");
+            ret.add(st[0]);    // state    -> glioblastoma multiforme
+            ret.add(null);       // location ->
+            ret.add(st[1]);    // tissue   -> brain
+
+            return ret.toArray(back);
+        }
+        if (slt.length == 2) {
+            // normal - amygdala (GTEx), brain
+            String[] sp = slt[1].split(", ");
+
+            ret.add(slt[0]);   // state    -> normal
+            ret.add(sp[0]);    // location -> amygdala (GTEx)
+            ret.add(sp[1]);    // tissue   -> brain
+
+            return ret.toArray(back);
+        }
+        LOG.error("Missing/badly formatted tissue info! " + name);
+        return null;
+    }
+
 
     /**
      * Create and store an Experiment item on the first time called.
