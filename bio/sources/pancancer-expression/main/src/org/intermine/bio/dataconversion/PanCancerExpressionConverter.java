@@ -45,6 +45,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
     private static final Logger LOG = Logger.getLogger(PanCancerExpressionConverter.class);
 //    private static final String CATEGORY = "PanCancer";
     private static final String TPM = "TPM";
+    protected IdResolver rslv;
 
     private Item org;
     private Map<String, String> experiments = new HashMap<String, String>();
@@ -112,6 +113,11 @@ public class PanCancerExpressionConverter extends BioFileConverter
      */
     private void processFile(Reader reader, String type, Item organism)
         throws IOException, ObjectStoreException {
+
+        if (rslv == null) {
+            rslv = IdResolverService.getIdResolverByOrganism(TAX_ID);
+        }
+
         Iterator<?> tsvIter;
         try {
             tsvIter = FormattedTextParser.parseTabDelimitedReader(reader);
@@ -138,20 +144,28 @@ public class PanCancerExpressionConverter extends BioFileConverter
                 System.arraycopy(line, 0, headers, 0, end);
                 totHeaders = headers.length;
             } else {
-                String primaryId = line[0]; //Gene id
+                String ensemblId = line[0]; //Gene id
                 // if empty lines at the end of the file
-                if (StringUtils.isEmpty(primaryId)) {
+                if (StringUtils.isEmpty(ensemblId)) {
                     break;
                 }
-                String symbol = line[1]; //Gene symbol, possible alt for merge
+
+                String primaryId = null;
+                //String symbol = line[1]; //Gene symbol, possible alt for merge
 
                 //LOG.info("BIOENTITY " + line[1]);
                 if ("gene".equalsIgnoreCase(type)) {
-                    createFeature(primaryId, "Gene");
+                  primaryId = resolveGene(ensemblId);
+                  if (primaryId == null) {
+                      continue;
+                  }
+                  createFeature(primaryId, "Gene");
                 }
-                if ("transcript".equalsIgnoreCase(type)) {
-                    createFeature(primaryId, "Transcript");
-                }
+//                if ("transcript".equalsIgnoreCase(type)) {
+//                    if (createFeature(resolveGene(ensemblId), "Transcript") == null) {
+//                    	continue;
+//                    };
+//                }
                 if ("experiment".equalsIgnoreCase(type)) {
                     // file has the format
                     // run# {characteristic - ontology}
@@ -306,7 +320,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
             // glioblastoma multiforme, brain
             String[] st = slt[0].split(", ");
             ret.add(st[0]);    // state    -> glioblastoma multiforme
-            ret.add(null);       // location ->
+            ret.add(null);     // location ->
             ret.add(st[1]);    // tissue   -> brain
 
             return ret.toArray(back);
@@ -398,5 +412,27 @@ public class PanCancerExpressionConverter extends BioFileConverter
         dataSetRef = dataSet.getIdentifier(); // used in experiment
     }
 
+
+    /**
+    * resolve old human symbol
+    * @param identifier ensembl id for this gene
+    * @return the ncbi id
+    */
+    private String resolveGene(String identifier) {
+        String id = identifier;
+        // ENSG00000225880
+        if (rslv != null && rslv.hasTaxon(TAX_ID)) {
+            int resCount = rslv.countResolutions(TAX_ID, identifier);
+            if (resCount != 1) {
+                LOG.info("RESOLVER: failed to resolve gene to one identifier, ignoring gene: "
+                        + identifier + " count: " + resCount + " Human identifier: "
+                        + rslv.resolveId(TAX_ID, identifier));
+                LOG.warn("FAILED: " + identifier);
+                return null;
+            }
+            id = rslv.resolveId(TAX_ID, identifier).iterator().next();
+        }
+        return id;
+    }
 
 }
