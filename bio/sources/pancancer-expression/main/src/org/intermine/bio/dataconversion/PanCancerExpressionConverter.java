@@ -55,6 +55,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
     private int totHeaders = 0;
 
     private String dataSetRef = null;
+    private String organismRef = null;
     /**
      * Constructor
      * @param writer the ItemWriter used to handle the resultant items
@@ -254,6 +255,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
             if (!geneItems.containsKey(primaryId)) {
                 feature = createItem("Gene");
                 feature.setAttribute("primaryIdentifier", primaryId);
+                feature.addToCollection("dataSets", dataSetRef);
                 store(feature);
                 geneItems.put(primaryId, feature.getIdentifier());
             }
@@ -276,6 +278,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
         org = createItem("Organism");
         org.setAttribute("taxonId", TAX_ID);
         store(org);
+        organismRef = org.getIdentifier(); // used in experiment
     }
 
     /**
@@ -302,6 +305,7 @@ public class PanCancerExpressionConverter extends BioFileConverter
 //        e.setAttribute("tissue", name);
 //        e.setAttribute("category", CATEGORY);
         e.setReference("dataSet", dataSetRef);
+        e.setReference("organism", organismRef);
         store(e);
         return e;
     }
@@ -389,10 +393,6 @@ public class PanCancerExpressionConverter extends BioFileConverter
         store(e);
         return e;
     }
-
-
-
-
 
     /**
      * create the experiments datasource and dataset
