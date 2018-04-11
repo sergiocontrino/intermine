@@ -413,7 +413,7 @@
 <script type="text/javascript" charset="utf-8" src="http://localhost:9003/expression.js"></script>
 
 -->
-  <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/pancancerED/1.0.0/expression.js"></script>
+  <script type="text/javascript" charset="utf-8" src="${WEB_PROPERTIES['head.cdn.location']}/js/intermine/pancancerED/1.0.2/expression.js"></script>
 
   </div>
 </div>
