@@ -32,13 +32,16 @@
     <source name="arrayexpress-atlas" type="arrayexpress-atlas">
       <property name="src.data.dir" location="/micklem/data/metabolic/array-express/E-MTAB-62-wrong-p-value/" />
     </source>
-    <source name="protein-atlas" type="protein-atlas">
+    <source name="protein-atlas" type="protein-atlas" dump="true">
       <property name="src.data.dir" location="/micklem/data/metabolic/protein-atlas/current" />
     </source>
+    
+    
     <source name="atlas-express" type="atlas-express">
       <property name="src.data.dir" location="/micklem/data/atlas-express/" />
     </source>
-    <source name="uniprot" type="uniprot">
+    
+    <source name="uniprot" type="uniprot" >
       <property name="uniprot.organisms" value="9606 10090" />
       <property name="src.data.dir" location="/micklem/data/uniprot/current/" />
     </source>
@@ -48,7 +51,6 @@
     </source>
 
     <source name="uniprot-fasta" type="fasta">
-     <!-- <property name="fasta.taxonId" value="7227 6239 7165 4932 9606 10090 10116 46245 7230 7240 7244 7245 7217 7220 7222 7234 7260 7238"/>-->
       <property name="fasta.taxonId" value="9606 10090 10116"/>
       <property name="fasta.className" value="org.intermine.model.bio.Protein"/>
       <property name="fasta.classAttribute" value="primaryAccession"/>
@@ -67,9 +69,11 @@
      <property name="src.data.dir.includes" value="protein2ipr.dat"/>
      <property name="protein2ipr.organisms" value="9606"/>
     </source>
+    <!--
     <source name="signor" type="signor">
       <property name="src.data.dir" location="/micklem/data/signor/current" />
     </source>
+    -->
     <source name="interpro" type="interpro">
       <property name="src.data.dir" location="/micklem/data/interpro/current" />
     </source>
@@ -79,7 +83,7 @@
     <source name="mammalian-phenotype-ontology" type="mammalian-phenotype-ontology">
       <property name="src.data.file" location="/micklem/data/metabolic/mouse-pheno/current/MPheno_OBO.obo" />
     </source>
-    <source name="go" type="go">
+    <source name="go" type="go" dump="true">
       <property name="src.data.file" location="/micklem/data/go-annotation/current/go.obo" />
     </source>
     <source name="go-annotation" type="go-annotation">
@@ -90,10 +94,13 @@
       <property name="src.data.dir" location="/micklem/data/human/clinvar/current" />
       <property name="src.data.includes" value="variant_summary.txt" />
     </source>
+    
+    <!--
     <source name="pdb" type="pdb">
       <property name="src.data.dir" location="/micklem/data/pdb"/>
       <property name="pdb.organisms" value="9606"/>
     </source>
+    -->
     <source name="psi-intact" type="psi">
       <property name="src.data.dir" location="/micklem/data/psi/intact/current" />
       <property name="intact.organisms" value="9606" />
@@ -179,10 +186,11 @@
       <property name="src.data.dir.includes" value="gene2pubmed" />
     </source>
 
+<!--
     <source name="gtex" type="gtex">
       <property name="src.data.dir" location="/micklem/data/human/GTEx/current" />
     </source>
-
+-->
     <source name="update-publications" type="update-publications">
       <property name="src.data.file" location="build/publications.xml" />
       <property name="loadFullRecord" value="true"/>
