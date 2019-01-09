@@ -9,14 +9,7 @@ buildscript {
         classpath "net.researchgate:gradle-release:2.6.0"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.6.2"
-    }
-    configurations {
-        all{
-            resolutionStrategy {
-                force 'org.apache.logging.log4j:log4j-1.2-api:2.8.2'
-            }
-        }
-    }    
+    } 
 }
 
 subprojects {
@@ -45,6 +38,14 @@ subprojects {
             dirs '../libs'
         }
     }
+    
+    configurations {
+        all{
+            resolutionStrategy {
+                force 'org.apache.logging.log4j:log4j-1.2-api:2.8.2'
+            }
+        }
+    }   
 
     if (it.name != 'intermine-resources') {
         dependencies {
