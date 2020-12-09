@@ -16,5 +16,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: '11'
-    - name: List InterMine gradle projects
+    - name: Set up python 3.5
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.5'
+    - name: Java version
       run: java -version
+    - name: Python version
+      run: python3 --version
