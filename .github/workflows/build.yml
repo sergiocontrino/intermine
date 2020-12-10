@@ -7,8 +7,11 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+      TESTMODEL_URL: http://localhost:8080/intermine-demo
+      TESTMODEL_PATH: intermine-demo
+      TERM: dumb
 
     steps:
     - uses: actions/checkout@v2
@@ -20,7 +23,13 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.5'
-    - name: Java version
-      run: java -version
-    - name: Python version
-      run: python3 --version
+    - name: Install Solr
+      run: ./config/travis/init-solr.sh
+    - name: Run intermine unit tests
+      env:
+        TEST_SUITE: intermine 
+      run: ./config/travis/init.sh && ./config/travis/run.sh
+    - name: Run bio unit tests
+      env:
+        TEST_SUITE: bio
+      run: ./config/travis/init.sh && ./config/travis/run.sh
