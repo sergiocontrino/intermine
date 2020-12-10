@@ -19,10 +19,14 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: '11'
-    - name: Set up python 3.5
+    - name: Set up python 2.7
       uses: actions/setup-python@v2
       with:
-        python-version: '3.5'
+        python-version: '2.7'
+    - name: pip test 
+      run: pip --version
+    - name: pip3 test 
+      run: pip3 --version
     - name: Install Solr
       run: ./config/travis/init-solr.sh
     - name: Run intermine unit tests
