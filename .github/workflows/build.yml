@@ -47,10 +47,10 @@ jobs:
       run: |
         sudo apt-get update -y
         sudo apt-get install -y libpq-dev postgresql-client
-    #- name: Run intermine unit tests
-     # env:
-        #TEST_SUITE: intermine 
-      #run: ./config/travis/init.sh && ./config/travis/run.sh
+    - name: Run intermine unit tests
+      env:
+        TEST_SUITE: intermine 
+      run: ./config/travis/init.sh && ./config/travis/run.sh
     #- name: Run bio unit tests
      # env:
       #  TEST_SUITE: bio
