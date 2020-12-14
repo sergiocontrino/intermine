@@ -15,8 +15,8 @@ jobs:
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
-        env:
-          POSTGRES_PASSWORD: postgres
+        #env:
+          #POSTGRES_PASSWORD: postgres
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -43,10 +43,12 @@ jobs:
         python-version: '2.7'  
     #- name: Install Solr
     #  run: ./config/travis/init-solr.sh
-    - name: Run intermine unit tests
-      env:
-        TEST_SUITE: intermine 
-      run: ./config/travis/init.sh && ./config/travis/run.sh
+    - name: test db
+      run: createdb -U postgres -c danitest 
+    -# name: Run intermine unit tests
+     # env:
+        #TEST_SUITE: intermine 
+      #run: ./config/travis/init.sh && ./config/travis/run.sh
     #- name: Run bio unit tests
      # env:
       #  TEST_SUITE: bio
