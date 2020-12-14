@@ -45,10 +45,11 @@ jobs:
         python-version: '2.7'  
     #- name: Install Solr
     #  run: ./config/travis/init-solr.sh
-    - name: Install PostgreSQL 12 client required for loading structure.sql
+    - name: Install PostgreSQL 12 client
       run: |
         sudo apt-get update -y
         sudo apt-get install -y libpq-dev postgresql-client
+        sudo service postgresql start
     - name: Run intermine unit tests
       env:
         TEST_SUITE: intermine 
