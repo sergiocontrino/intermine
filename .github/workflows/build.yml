@@ -45,7 +45,7 @@ jobs:
     #  run: ./config/travis/init-solr.sh
     - name: test db
       run: createdb -U postgres -c danitest 
-    -# name: Run intermine unit tests
+    #- name: Run intermine unit tests
      # env:
         #TEST_SUITE: intermine 
       #run: ./config/travis/init.sh && ./config/travis/run.sh
