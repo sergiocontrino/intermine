@@ -53,7 +53,7 @@ jobs:
     - name: test postgres
       run: |
         pg_isready
-        postgresql://postgres:postgres@localhost:5432/postgres -c "create database imtest;"
+        ./config/travis/testDB.sh
     #- name: Run intermine unit tests
      # env:
         #TEST_SUITE: intermine 
