@@ -53,7 +53,7 @@ jobs:
     - name: test postgres
       run: |
         pg_isready
-        psql -d postgres -c "create database imtest";
+        psql -v --username postgres --dbname postgres -l
     #- name: Run intermine unit tests
      # env:
         #TEST_SUITE: intermine 
