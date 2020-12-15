@@ -27,7 +27,7 @@ jobs:
           --health-retries 5
         ports:
           # Maps tcp port 5432 on service container to the host
-          - 5432:5432
+          - 5432/tcp
     env:
       TESTMODEL_URL: http://localhost:8080/intermine-demo
       TESTMODEL_PATH: intermine-demo
@@ -50,10 +50,14 @@ jobs:
         sudo apt-get update -y
         sudo apt-get install -y libpq-dev postgresql-client
         sudo service postgresql start
-    - name: Run intermine unit tests
-      env:
-        TEST_SUITE: intermine 
-      run: ./config/travis/init.sh && ./config/travis/run.sh
+    - name: test postgres
+      run: |
+        pg_isready
+        psql -d postgres -c "create database imtest";
+    #- name: Run intermine unit tests
+     # env:
+        #TEST_SUITE: intermine 
+     # run: ./config/travis/init.sh && ./config/travis/run.sh
     #- name: Run bio unit tests
      # env:
       #  TEST_SUITE: bio
