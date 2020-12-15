@@ -50,6 +50,7 @@ jobs:
       run: |
         sudo apt-get update -y
         sudo apt-get install -y libpq-dev postgresql-client
+        echo "host all all all trust" >> pg_hba.conf
         sudo service postgresql start
     - name: test postgres
       run: psql -h localhost -p 5432 -U postgres -c "create database imtest;"
