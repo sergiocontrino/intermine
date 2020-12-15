@@ -53,7 +53,7 @@ jobs:
         echo "host all all all trust" >> pg_hba.conf
         sudo service postgresql start
     - name: test postgres
-      run: psql -h localhost -p 5432 -U postgres -c "create database imtest;"
+      run: psql -U postgres -c "create database imtest;"
     #- name: Run intermine unit tests
      # env:
         #TEST_SUITE: intermine 
