@@ -53,7 +53,7 @@ jobs:
     - name: test postgres
       run: |
         pg_isready
-        psql -v --username postgres --dbname postgres --password postgres -l
+        PGPASSWORD=postgres psql -v --username postgres --dbname postgres -l
     #- name: Run intermine unit tests
      # env:
         #TEST_SUITE: intermine 
