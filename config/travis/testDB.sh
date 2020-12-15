@@ -1,4 +1,5 @@
 echo 'tesdtDD....'
 export PGPASSWORD=postgres
 echo "${PGPASSWORD}"
-psql -h localhost -U postgres -d postgres -c "create database imtest;"
+echo "host all all all md5" >> pg_hba.conf
+psql -U postgres -c "create database imtest;"
