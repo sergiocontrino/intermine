@@ -52,7 +52,7 @@ jobs:
         sudo apt-get install -y libpq-dev postgresql-client
         sudo service postgresql start
     - name: test postgres
-      run: psql -U postgres -c "create database imtest;"
+      run: psql -v -d postgres -c "create database imtest;"
     #- name: Run intermine unit tests
      # env:
         #TEST_SUITE: intermine 
