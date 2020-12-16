@@ -50,7 +50,7 @@ jobs:
       run: |
         sudo apt-get update -y
         sudo apt-get install -y libpq-dev postgresql-client
-        locate pg_hba.conf
+        echo "host all all all trust" >> /etc/postgresql/13/main/pg_hba.conf
         #sudo echo "host all all all trust" >> pg_hba.conf
         sudo service postgresql restart
     - name: test postgres
