@@ -13,7 +13,7 @@ jobs:
       # Label used to access the service container
       postgres:
         # Docker Hub image
-        image: postgres:11
+        image: postgres:9.6
         # Provide the password for postgres
         env: 
            POSTGRES_USER: postgres
@@ -50,9 +50,9 @@ jobs:
       run: |
         sudo apt-get update -y
         sudo apt-get install -y libpq-dev postgresql-client
-        sudo echo "host all all all trust" >> /etc/postgresql/13/main/pg_hba.conf
+        #sudo echo "host all all all trust" >> /etc/postgresql/13/main/pg_hba.conf
         #sudo echo "host all all all trust" >> pg_hba.conf
-        sudo service postgresql restart
+        sudo service postgresql start
     - name: test postgres
       run: psql -U postgres -c "create database imtest;"
     #- name: Run intermine unit tests
