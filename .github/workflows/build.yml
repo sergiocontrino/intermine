@@ -46,12 +46,12 @@ jobs:
         python-version: '2.7'  
     #- name: Install Solr
     #  run: ./config/travis/init-solr.sh
-    - name: Install PostgreSQL 12 client
+    - name: Install PostgreSQL client
       run: |
         sudo apt-get update -y
         sudo apt-get install -y libpq-dev postgresql-client
         sudo echo "host all all all trust" >> pg_hba.conf
-        sudo service postgresql start
+        sudo service postgresql restart
     - name: test postgres
       run: psql -U postgres -c "create database imtest;"
     #- name: Run intermine unit tests
