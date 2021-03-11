@@ -118,7 +118,11 @@ public class IsaConverter extends BioFileConverter
 
         // TODO: decide if to use blunt ids or not
 
-        //File file = getFiles();
+//        File file = getFiles();
+        File f = getCurrentFile();
+        LOG.info("======================================");
+        LOG.info("READING " + f.getName());
+        LOG.info("======================================");
 
         JsonNode root = new ObjectMapper().readTree(reader);
         //otherAccess(root);
@@ -142,7 +146,7 @@ public class IsaConverter extends BioFileConverter
 
 
             LOG.info("STUDY " + identifier);
-            LOG.warn(title + " -- " + filename + " | " + subDate);
+            LOG.info(title + " -- " + filename + " | " + subDate);
 
             Item studyItem = createStudy("Study", identifier, title, description, pubDate, subDate);
             // there could be no investigation defined (e.g. single study experiments)
@@ -198,7 +202,7 @@ public class IsaConverter extends BioFileConverter
         String subDate = investigation.path("submissionDate").asText();
 
         if (identifier == null || identifier == "") {
-            LOG.warn("AAAAA");
+            LOG.warn("No investigation for " + getCurrentFile().getName());
             return;
         }
 
@@ -221,7 +225,7 @@ public class IsaConverter extends BioFileConverter
 
             // get also protocolType (term)..
             createProtocol(id, name, description, uri, version);
-            LOG.warn("PROT " + name + " #pars: " + protocol.path("parameters").size());
+            LOG.info("PROT " + name + " #pars: " + protocol.path("parameters").size());
 
             JsonNode parameterNode = protocol.path("parameters");
 
@@ -331,7 +335,7 @@ public class IsaConverter extends BioFileConverter
             String termAccession = term.getTermAccession();
             String termSource = term.getTermSource();
 
-            LOG.warn("SDD: " + annotationValue);
+            LOG.info("SDD: " + annotationValue);
 
             Item sddItem = createStudyData("study", "descriptor", annotationValue, "");
             Integer sddoid = store(sddItem);
@@ -369,7 +373,7 @@ public class IsaConverter extends BioFileConverter
             String fileName = assay.path("filename").asText();
             String technologyPlatform = assay.path("technologyPlatform").asText();
 
-            LOG.warn("ASSAY " + fileName + " on: " + technologyPlatform);
+            LOG.info("ASSAY " + fileName + " on: " + technologyPlatform);
             String mtValue = null;
             // GET characteristicCategories
             JsonNode characteristicCategoriesNode = assay.get("characteristicCategories");
@@ -441,7 +445,7 @@ public class IsaConverter extends BioFileConverter
 
         getSampleFactors(source.path(innerLevel), name, id, type); // characteristics for SOURCES
         Integer cSize = source.path(innerLevel).size();
-        LOG.warn(type.toUpperCase() + " " + id + ": " + name + " with " + cSize + " " + innerLevel);
+        LOG.info(type.toUpperCase() + " " + id + ": " + name + " with " + cSize + " " + innerLevel);
 
         // empty for sample! is it general?
         JsonNode characteristicNode = source.path("characteristics");
@@ -464,7 +468,7 @@ public class IsaConverter extends BioFileConverter
     private void storeSource(String sourceName) throws ObjectStoreException {
         Item sdItem = createStudyData(sourceName);
 
-        LOG.warn("STORING SOURCE " + sourceName);
+        LOG.info("STORING SOURCE " + sourceName);
         Integer sdoid = store(sdItem);
         store(studyReference, sdoid);
     }
@@ -551,14 +555,14 @@ public class IsaConverter extends BioFileConverter
             store(studyReference, protocoloid);
 
             String pid = entry.getKey();
-            LOG.warn("STORING " + pid + " (" + protocoloid + ")");
+            LOG.info("STORING " + pid + " (" + protocoloid + ")");
             // store protocol parameters
             List<String> pparid = protocolParameterList.get(pid);
             // sometime no parameters (TO CHECK)
             if (pparid != null) {
                 for (String ppid : pparid) {
 
-                    LOG.warn("STORE par " + ppid);
+                    LOG.info("STORE par " + ppid);
                     Reference reference = new Reference();
                     reference.setName("protocol");
                     reference.setRefId(entry.getValue().getIdentifier());
