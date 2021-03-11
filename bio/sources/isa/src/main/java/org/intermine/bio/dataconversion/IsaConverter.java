@@ -732,18 +732,10 @@ public class IsaConverter extends BioFileConverter
         Item item = createItem("StudyData");
         item.setAttribute("name", name);
 
-        if (!type.isEmpty()) {
-            item.setAttribute("type", type);
-        }
-        //if (!value.isEmpty()) {
-            item.setAttributeIfNotNull("value", value);
-        //}
-        if (!measurement.isEmpty()) {
-            item.setAttribute("measurement", measurement);
-        }
-        if (!technology.isEmpty()) {
-            item.setAttribute("technology", technology);
-        }
+        item.setAttributeIfNotNull("type", type);
+        item.setAttributeIfNotNull("value", value);
+        item.setAttributeIfNotNull("measurement", measurement);
+        item.setAttributeIfNotNull("technology", technology);
         return item;
     }
 
