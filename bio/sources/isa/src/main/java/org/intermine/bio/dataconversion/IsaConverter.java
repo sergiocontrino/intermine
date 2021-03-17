@@ -21,6 +21,8 @@ import org.intermine.objectstore.ObjectStoreException;
 import org.intermine.xml.full.Item;
 import org.intermine.xml.full.Reference;
 import org.intermine.xml.full.ReferenceList;
+import org.apache.commons.io.FilenameUtils;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,6 +39,8 @@ import java.util.Iterator;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Set;
+
+import static org.apache.commons.io.FilenameUtils.removeExtension;
 
 
 /**
@@ -78,7 +82,7 @@ public class IsaConverter extends BioFileConverter
 
     private Reference investigationReference;
     private Reference studyReference;
-
+    private String currentFile;
 
     /**
      * Constructor
@@ -120,8 +124,10 @@ public class IsaConverter extends BioFileConverter
 
 //        File file = getFiles();
         File f = getCurrentFile();
+        currentFile = f.getName();
+
         LOG.info("======================================");
-        LOG.info("READING " + f.getName());
+        LOG.info("READING " + currentFile);
         LOG.info("======================================");
 
         JsonNode root = new ObjectMapper().readTree(reader);
@@ -202,8 +208,8 @@ public class IsaConverter extends BioFileConverter
         String subDate = investigation.path("submissionDate").asText();
 
         if (identifier == null || identifier == "") {
-            LOG.warn("No investigation for " + getCurrentFile().getName());
-            return;
+            identifier = removeExtension(currentFile);
+            LOG.warn("No investigation for " + currentFile);
         }
 
         Item investigationItem = createStudy("Investigation", identifier, title,
